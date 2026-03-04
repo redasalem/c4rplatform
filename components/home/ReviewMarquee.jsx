@@ -54,7 +54,7 @@ export default function ReviewMarquee() {
         </div>
 
         <div className="relative w-full overflow-hidden no-scrollbar">
-          <Marquee gradient={false} speed={35} pauseOnHover className="py-10">
+          <Marquee gradient={false} speed={30} pauseOnHover className="py-10">
             {reviews.map((review, index) => (
               <div
                 key={review._id || index}

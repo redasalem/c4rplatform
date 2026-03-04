@@ -14,6 +14,9 @@ const Partners = () => {
     { id: 5, img: "/images/p5.JPEG", name: "Partner 5" },
   ];
 
+  // مضاعفة البيانات لإنشاء تأثير التكرار المستمر
+  const duplicatedPartners = [...partners, ...partners, ...partners, ...partners];
+
   return (
     <section
       className="py-24 bg-transparent relative overflow-hidden"
@@ -29,25 +32,17 @@ const Partners = () => {
         </div>
       </div>
 
-      <div className="relative group overflow-hidden">
-        {/* Edge Gradients - Unified with Midnight */}
-
-
-        <Marquee
-          gradient={false}
-          speed={40}
-          direction="left"
-          pauseOnHover={true}
-        >
-          {partners.map((partner) => (
-            <div key={partner.id} className="mx-3 md:mx-12 group/item">
-              <div className="relative w-[90vw] max-w-xs md:w-80 h-32 md:h-40 bg-white rounded-4xl shadow-xl border border-white/10 flex items-center justify-center p-6 transition-all duration-300 hover:scale-105">
+      <div className="relative overflow-hidden w-full">
+        <Marquee gradient={false} speed={30} pauseOnHover>
+          {duplicatedPartners.map((partner, index) => (
+            <div key={`${partner.id}-${index}`} className="px-3 sm:px-4 group/item flex-shrink-0">
+              <div className="relative w-56 sm:w-72 md:w-80 h-32 md:h-40 bg-white rounded-4xl shadow-xl border border-white/10 flex items-center justify-center p-6 transition-all duration-300 hover:scale-105">
                 <div className="relative w-full h-full">
                   <Image
                     src={partner.img}
                     alt={partner.name}
                     fill
-                    className="object-contain transition-all duration-500" // Removed grayscale and opacity
+                    className="object-contain transition-all duration-500"
                   />
                 </div>
               </div>
