@@ -57,6 +57,11 @@
     "bookNow": "Book Now",
     "details": "Details",
     "fallbackImage": "Car Image",
+    "categories": {
+      "regular": "Individual",
+      "with_driver": "With Driver",
+      "corporate": "Corporate"
+    },
     "specs": {
       "auto": "Automatic",
       "petrol": "Petrol",
@@ -133,6 +138,7 @@
     "companies": "Corporate",
     "bookingLocations": "Booking Locations",
     "jeddah": "Jeddah Booking",
+    "sharqiya": "Eastern Region Booking",
     "riyadh": "Riyadh Booking",
     "allCars": "Cars",
     "contactInfo": "Contact Information",
@@ -309,7 +315,7 @@
         "success": "Car added successfully",
         "error": "Failed to add car",
         "categories": {
-          "regular": "Regular (Self-drive)",
+          "regular": "Individual (Self-drive)",
           "with_driver": "With Driver",
           "corporate": "Corporate"
         },

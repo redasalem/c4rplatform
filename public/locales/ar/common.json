@@ -57,6 +57,11 @@
     "bookNow": "احجز الآن",
     "details": "التفاصيل",
     "fallbackImage": "صورة السيارة",
+    "categories": {
+      "regular": "للأفراد",
+      "with_driver": "بسائق",
+      "corporate": "للشركات"
+    },
     "specs": {
       "auto": "أوتوماتيك",
       "petrol": "بنزين",
@@ -310,9 +315,9 @@
         "success": "تم إضافة السيارة بنجاح",
         "error": "فشل إضافة السيارة",
         "categories": {
-          "regular": "عادي (بدون سائق)",
+          "regular": "للأفراد (بدون سائق)",
           "with_driver": "بسائق",
-          "corporate": "شركات"
+          "corporate": "للشركات"
         },
         "regions": {
           "riyadh": "الرياض",

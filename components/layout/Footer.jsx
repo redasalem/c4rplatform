@@ -137,7 +137,7 @@ const Footer = () => {
             <ul className="space-y-3 md:space-y-4 text-sm md:text-lg font-bold">
               {[
                 { label: t("footer.jeddah"), href: "/jeddah" },
-                { label: t("footer.jeddah"), href: "/jeddah" },
+                { label: t("footer.sharqiya"), href: "/eastern" },
                 { label: t("footer.riyadh"), href: "/riyadh" },
                 { label: t("footer.allCars"), href: "/cars" },
               ].map((link, index) => (

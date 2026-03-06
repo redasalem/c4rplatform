@@ -44,11 +44,23 @@ const CarCard = ({ car }) => {
           </span>
         </div>
         {car.region && (
-          <div className="absolute top-4 left-4">
+          <div className="absolute top-4 left-4 flex flex-col gap-1.5">
             <span className="bg-orange-500/90 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-lg flex items-center gap-1 shadow-lg">
               <LocationOn style={{ fontSize: 16 }} />
               {t(`regions.${car.region}`) || car.region}
             </span>
+            {car.category && (
+              <span
+                className={`backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-lg shadow-lg ${car.category === "with_driver"
+                    ? "bg-purple-600/90"
+                    : car.category === "corporate"
+                      ? "bg-green-600/90"
+                      : "bg-sky-600/90"
+                  }`}
+              >
+                {t(`carCard.categories.${car.category}`) || car.category}
+              </span>
+            )}
           </div>
         )}
         {/* Overlays for premium feel */}
