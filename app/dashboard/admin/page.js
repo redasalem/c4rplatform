@@ -54,6 +54,7 @@ import {
   Visibility,
   VisibilityOff,
   Settings as SettingsIcon,
+  Edit,
 } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import Image from "next/image";
@@ -244,7 +245,7 @@ function ManageBookings() {
     onError: (err) =>
       toast.error(
         err.response?.data?.message ||
-          t("dashboard.admin.bookings.approveError"),
+        t("dashboard.admin.bookings.approveError"),
       ),
   });
 
@@ -257,7 +258,7 @@ function ManageBookings() {
     onError: (err) =>
       toast.error(
         err.response?.data?.message ||
-          t("dashboard.admin.bookings.rejectError"),
+        t("dashboard.admin.bookings.rejectError"),
       ),
   });
 
@@ -298,23 +299,21 @@ function ManageBookings() {
           >
             {/* Status Strip Mobile */}
             <div
-              className={`absolute top-0 right-0 w-1 sm:hidden h-full ${
-                booking.status === "approved"
-                  ? "bg-green-500"
-                  : booking.status === "rejected"
-                    ? "bg-red-500"
-                    : "bg-primary"
-              }`}
+              className={`absolute top-0 right-0 w-1 sm:hidden h-full ${booking.status === "approved"
+                ? "bg-green-500"
+                : booking.status === "rejected"
+                  ? "bg-red-500"
+                  : "bg-primary"
+                }`}
             />
             {/* Status Strip */}
             <div
-              className={`absolute top-0 right-0 w-2 h-full ${
-                booking.status === "approved"
-                  ? "bg-green-500"
-                  : booking.status === "rejected"
-                    ? "bg-red-500"
-                    : "bg-primary"
-              }`}
+              className={`absolute top-0 right-0 w-2 h-full ${booking.status === "approved"
+                ? "bg-green-500"
+                : booking.status === "rejected"
+                  ? "bg-red-500"
+                  : "bg-primary"
+                }`}
             />
 
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
@@ -347,8 +346,8 @@ function ManageBookings() {
                       <span className="text-[9px] sm:text-xs text-white">
                         {booking.startDate
                           ? new Date(booking.startDate).toLocaleDateString(
-                              i18n.language,
-                            )
+                            i18n.language,
+                          )
                           : "---"}
                       </span>
                     </div>
@@ -365,8 +364,8 @@ function ManageBookings() {
                       <span className="text-[9px] sm:text-xs text-white">
                         {booking.endDate
                           ? new Date(booking.endDate).toLocaleDateString(
-                              i18n.language,
-                            )
+                            i18n.language,
+                          )
                           : "---"}
                       </span>
                     </div>
@@ -669,6 +668,7 @@ function ManageCars() {
   });
 
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [editingCar, setEditingCar] = useState(null);
 
   if (isLoading) return <CircularProgress className="m-auto block" />;
 
@@ -775,6 +775,19 @@ function ManageCars() {
                   <div className="flex gap-1">
                     <IconButton
                       size="small"
+                      color="primary"
+                      onClick={() => setEditingCar(car)}
+                      sx={{
+                        bgcolor: "rgba(249, 115, 22, 0.1)",
+                        width: { xs: 24, sm: 32 },
+                        height: { xs: 24, sm: 32 },
+                        "&:hover": { bgcolor: "rgba(249, 115, 22, 0.2)" },
+                      }}
+                    >
+                      <Edit sx={{ fontSize: { xs: 12, sm: 16 } }} />
+                    </IconButton>
+                    <IconButton
+                      size="small"
                       color="error"
                       onClick={() => setDeleteId(car._id)}
                       sx={{
@@ -822,6 +835,11 @@ function ManageCars() {
       )}
 
       <AddCarDialog open={isAddOpen} onClose={() => setIsAddOpen(false)} />
+      <EditCarDialog
+        open={!!editingCar}
+        car={editingCar}
+        onClose={() => setEditingCar(null)}
+      />
 
       {/* Delete Confirmation Dialog */}
       <Dialog
@@ -1227,11 +1245,10 @@ function AddCarDialog({ open, onClose }) {
         <div className="flex flex-col gap-8 pt-2">
           {/* Image Upload Area */}
           <div
-            className={`border-2 border-dashed rounded-[2rem] p-8 transition-all cursor-pointer relative group overflow-hidden ${
-              file
-                ? "border-primary/50 bg-primary/5"
-                : "border-white/10 hover:border-primary/30 hover:bg-white/5"
-            }`}
+            className={`border-2 border-dashed rounded-[2rem] p-8 transition-all cursor-pointer relative group overflow-hidden ${file
+              ? "border-primary/50 bg-primary/5"
+              : "border-white/10 hover:border-primary/30 hover:bg-white/5"
+              }`}
           >
             <input
               type="file"
@@ -1430,6 +1447,375 @@ function AddCarDialog({ open, onClose }) {
     </Dialog>
   );
 }
+
+function EditCarDialog({ open, car, onClose }) {
+  const { t, i18n } = useTranslation("common");
+  const queryClient = useQueryClient();
+  const [formData, setFormData] = useState({
+    name: "",
+    year: new Date().getFullYear(),
+    region: "riyadh",
+    category: "regular",
+    pricePerDay: "",
+    imageUrl: "",
+    description: "",
+  });
+  const [file, setFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    if (car) {
+      setFormData({
+        name: car.name || "",
+        year: car.year || new Date().getFullYear(),
+        region: car.region || "riyadh",
+        category: car.category || "regular",
+        pricePerDay: car.pricePerDay || "",
+        imageUrl: car.imageUrl || car.image || "",
+        description: car.description || "",
+      });
+    }
+  }, [car]);
+
+  const inputStyle = {
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "1.25rem",
+      bgcolor: "rgba(255,255,255,0.03)",
+      color: "white",
+      fontWeight: "bold",
+      "& fieldset": { borderColor: "rgba(255,255,255,0.08)" },
+      "&:hover fieldset": { borderColor: "rgba(255,255,255,0.2)" },
+      "&.Mui-focused fieldset": { borderColor: "#f97316" },
+      transition: "all 0.3s ease",
+    },
+    "& .MuiInputLabel-root": {
+      color: "rgba(255,255,255,0.4)",
+      fontWeight: "bold",
+    },
+    "& .MuiInputLabel-root.Mui-focused": { color: "#f97316" },
+  };
+
+  const menuProps = {
+    PaperProps: {
+      sx: {
+        bgcolor: "#0f172a",
+        border: "1px solid rgba(255,255,255,0.1)",
+        color: "white",
+        borderRadius: "1.25rem",
+        marginTop: "8px",
+        "& .MuiMenuItem-root": {
+          fontSize: "1rem",
+          fontWeight: "bold",
+          py: 1.5,
+          "&:hover": { bgcolor: "rgba(255,255,255,0.05)" },
+          "&.Mui-selected": {
+            bgcolor: "rgba(249, 115, 22, 0.2)",
+            color: "#f97316",
+            "&:hover": { bgcolor: "rgba(249, 115, 22, 0.3)" },
+          },
+        },
+      },
+    },
+  };
+
+  const updateMutation = useMutation({
+    mutationFn: (data) => carService.update(car._id, data),
+    onSuccess: () => {
+      toast.success(t("dashboard.admin.editCar.success"));
+      queryClient.invalidateQueries(["allCars"]);
+      onClose();
+    },
+    onError: (err) => {
+      toast.error(
+        err.response?.data?.message || t("dashboard.admin.editCar.error"),
+      );
+    },
+  });
+
+  const handleSubmit = async () => {
+    if (!formData.name || !formData.pricePerDay || !formData.description) {
+      toast.warning(t("dashboard.admin.editCar.warningFill"));
+      return;
+    }
+
+    setUploading(true);
+    try {
+      let currentImageUrl = formData.imageUrl;
+
+      if (file) {
+        const uploadData = new FormData();
+        uploadData.append("file", file);
+
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: uploadData,
+        });
+
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || "فشل رفع الصورة");
+        currentImageUrl = result.url;
+      }
+
+      updateMutation.mutate({
+        ...formData,
+        imageUrl: currentImageUrl,
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message || t("dashboard.admin.editCar.error"));
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="sm"
+      dir={i18n.dir()}
+      PaperProps={{
+        sx: {
+          borderRadius: "2.5rem",
+          overflow: "hidden",
+          bgcolor: "#020617",
+          backgroundImage:
+            "radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(30, 27, 75, 0.2) 0px, transparent 50%)",
+          border: "1px solid rgba(255,255,255,0.1)",
+          boxShadow: "0 25px 50px -12px rgba(0,0,0,0.8)",
+        },
+      }}
+    >
+      <div className="bg-white/5 p-8 px-10 border-b border-white/5 flex justify-between items-center relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <div className="relative z-10">
+          <h2 className="text-2xl font-black text-white flex items-center gap-3 tracking-tight">
+            <div className="bg-primary/20 p-3 rounded-2xl text-primary shadow-2xl border border-primary/20">
+              <Edit sx={{ fontSize: 24 }} />
+            </div>
+            {t("dashboard.admin.editCar.title")}
+          </h2>
+          <p className="text-sm text-slate-400 mr-14 mt-2 font-bold uppercase tracking-widest">
+            {t("dashboard.admin.editCar.subtitle")}
+          </p>
+        </div>
+        <IconButton
+          onClick={onClose}
+          size="small"
+          className="text-slate-500 hover:text-white transition-colors relative z-10"
+        >
+          <Close />
+        </IconButton>
+      </div>
+
+      <DialogContent className="p-10 custom-scrollbar">
+        <div className="flex flex-col gap-8 pt-2">
+          {/* Image Upload Area */}
+          <div
+            className={`border-2 border-dashed rounded-[2rem] p-8 transition-all cursor-pointer relative group overflow-hidden ${file || formData.imageUrl
+                ? "border-primary/50 bg-primary/5"
+                : "border-white/10 hover:border-primary/30 hover:bg-white/5"
+              }`}
+          >
+            <input
+              type="file"
+              accept="image/*"
+              className="absolute inset-0 opacity-0 cursor-pointer z-10"
+              onChange={(e) => setFile(e.target.files[0])}
+            />
+
+            {file || formData.imageUrl ? (
+              <div className="relative w-full h-56 rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                <Image
+                  src={file ? URL.createObjectURL(file) : formData.imageUrl}
+                  alt="Preview"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-midnight/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm">
+                  <div className="bg-primary px-6 py-2.5 rounded-full text-white font-black flex items-center gap-2 shadow-2xl">
+                    <UploadFile /> {t("dashboard.admin.editCar.changeImage")}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-10 gap-5 text-slate-400">
+                <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center text-primary mb-1 group-hover:scale-110 transition-transform duration-500 border border-white/5 shadow-2xl">
+                  <UploadFile fontSize="large" />
+                </div>
+                <div className="text-center">
+                  <span className="block font-black text-2xl text-white mb-2 tracking-tight">
+                    {t("dashboard.admin.editCar.uploadImage")}
+                  </span>
+                  <span className="text-xs text-slate-500 font-bold uppercase tracking-widest">
+                    {t("dashboard.admin.editCar.uploadHint")}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Form Inputs */}
+          <div className="grid grid-cols-1 gap-6">
+            <TextField
+              label={t("dashboard.admin.editCar.nameLabel")}
+              placeholder={t("dashboard.admin.editCar.namePlaceholder")}
+              fullWidth
+              variant="outlined"
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
+              sx={inputStyle}
+            />
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <FormControl fullWidth sx={inputStyle}>
+                <InputLabel>
+                  {t("dashboard.admin.editCar.regionLabel")}
+                </InputLabel>
+                <Select
+                  label={t("dashboard.admin.editCar.regionLabel")}
+                  value={formData.region}
+                  onChange={(e) =>
+                    setFormData({ ...formData, region: e.target.value })
+                  }
+                  MenuProps={menuProps}
+                >
+                  <MenuItem value="riyadh">
+                    {t("dashboard.admin.addCar.regions.riyadh")}
+                  </MenuItem>
+                  <MenuItem value="jeddah">
+                    {t("dashboard.admin.addCar.regions.jeddah")}
+                  </MenuItem>
+                  <MenuItem value="eastern">
+                    {t("dashboard.admin.addCar.regions.eastern")}
+                  </MenuItem>
+                </Select>
+              </FormControl>
+
+              <TextField
+                label={t("dashboard.admin.editCar.yearLabel")}
+                fullWidth
+                type="number"
+                variant="outlined"
+                value={formData.year}
+                onChange={(e) =>
+                  setFormData({ ...formData, year: e.target.value })
+                }
+                sx={inputStyle}
+              />
+            </div>
+
+            <FormControl fullWidth sx={inputStyle}>
+              <InputLabel>
+                {t("dashboard.admin.editCar.categoryLabel")}
+              </InputLabel>
+              <Select
+                label={t("dashboard.admin.editCar.categoryLabel")}
+                value={formData.category}
+                onChange={(e) =>
+                  setFormData({ ...formData, category: e.target.value })
+                }
+                MenuProps={menuProps}
+              >
+                <MenuItem value="regular">
+                  {t("dashboard.admin.addCar.categories.regular")}
+                </MenuItem>
+                <MenuItem value="with_driver">
+                  {t("dashboard.admin.addCar.categories.with_driver")}
+                </MenuItem>
+                <MenuItem value="corporate">
+                  {t("dashboard.admin.addCar.categories.corporate")}
+                </MenuItem>
+              </Select>
+            </FormControl>
+
+            <TextField
+              label={t("dashboard.admin.editCar.priceLabel")}
+              placeholder="0.00"
+              fullWidth
+              type="number"
+              variant="outlined"
+              value={formData.pricePerDay}
+              onChange={(e) =>
+                setFormData({ ...formData, pricePerDay: e.target.value })
+              }
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AttachMoney className="text-primary" />
+                  </InputAdornment>
+                ),
+              }}
+              sx={inputStyle}
+            />
+
+            <TextField
+              label={t("dashboard.admin.editCar.descLabel")}
+              placeholder={t("dashboard.admin.editCar.descPlaceholder")}
+              fullWidth
+              multiline
+              rows={3}
+              variant="outlined"
+              value={formData.description}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
+              sx={inputStyle}
+            />
+          </div>
+        </div>
+      </DialogContent>
+
+      <DialogActions className="p-8 bg-white/5 border-t border-white/5 flex gap-4">
+        <Button
+          onClick={onClose}
+          variant="text"
+          color="inherit"
+          disabled={uploading}
+          sx={{
+            borderRadius: "1.25rem",
+            px: 4,
+            fontWeight: "900",
+            color: "rgba(255,255,255,0.4)",
+            fontSize: "1rem",
+          }}
+        >
+          {t("dashboard.admin.editCar.cancel")}
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          disabled={uploading || updateMutation.isPending}
+          fullWidth
+          sx={{
+            backgroundColor: "var(--primary)",
+            "&:hover": { backgroundColor: "var(--primary-hover)" },
+            borderRadius: "1.25rem",
+            py: 2,
+            fontWeight: "900",
+            fontSize: "1.1rem",
+            boxShadow: "0 15px 30px rgba(249, 115, 22, 0.3)",
+          }}
+        >
+          {uploading ? (
+            <div className="flex items-center gap-3">
+              <CircularProgress size={20} color="inherit" />{" "}
+              {t("dashboard.admin.editCar.uploading")}
+            </div>
+          ) : updateMutation.isPending ? (
+            t("dashboard.admin.editCar.saving")
+          ) : (
+            t("dashboard.admin.editCar.submit")
+          )}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
 function ProfileSection({ user }) {
   const { t } = useTranslation("common");
   const [isEditing, setIsEditing] = useState(false);
@@ -1457,7 +1843,7 @@ function ProfileSection({ user }) {
       console.error("Profile update error:", error);
       toast.error(
         error.response?.data?.message ||
-          t("dashboard.user.profile.updateError"),
+        t("dashboard.user.profile.updateError"),
       );
     } finally {
       setLoading(false);
