@@ -33,7 +33,7 @@ const Departments = () => {
             {/* Background Image */}
             <div className="absolute inset-0">
               <Image
-                src="/images/individuals.jpg"
+                src="/images/car-indevadulals.jpg"
                 alt="Individuals Car Rentals"
                 fill
                 className="object-cover transition-transform duration-1000 group-hover:scale-110"
