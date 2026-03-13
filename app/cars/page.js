@@ -18,7 +18,7 @@ export default function AllCarsPage() {
     error,
   } = useQuery({
     queryKey: ["allCars"],
-    queryFn: () => carService.getAll(),
+    queryFn: () => carService.getAll().catch(() => ({ data: { cars: [] } })),
   });
 
   const cars = carsData?.data?.cars || [];

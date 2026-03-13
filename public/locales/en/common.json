@@ -81,6 +81,9 @@
   "departments": {
     "titlePart1": "Explore",
     "titlePart2": "Our Sections",
+    "regularTitle": "Individuals Section",
+    "regularDesc": "Daily and diverse car rentals for individuals with the best prices and latest models.",
+    "regularAction": "Rent Now",
     "driverTitle": "Cars with Driver",
     "driverDesc": "Enjoy a comfortable journey with a professional driver. Premium service for business and families.",
     "driverAction": "Book Now",

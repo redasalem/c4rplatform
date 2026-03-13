@@ -1,0 +1,2629 @@
+[
+  {
+    "id": "TC001",
+    "title": "Home page loads hero banner and primary sections",
+    "description": "Verifies the home page renders the hero area and key discovery sections (departments, reviews, partners, FAQ).",
+    "category": "Home Page Hero & Sections",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Hero banner\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Call to action button\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Departments section\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Customer reviews marquee\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Partners section\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"FAQ section\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "FAQ accordion item expands to show answer content",
+    "description": "Verifies that expanding an FAQ accordion item reveals its answer text on the home page.",
+    "category": "Home Page Hero & Sections",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"FAQ section\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first FAQ question/accordion header"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"FAQ answer content\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the same FAQ question/accordion header"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"FAQ answer content\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Departments: Regular rentals card navigates to Cars listing",
+    "description": "Verifies clicking the regular rentals department card takes the user to the /cars listing page.",
+    "category": "Home Page Hero & Sections",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Departments section\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the department card labeled \"Regular\" or \"Regular rentals\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/cars\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Cars listing grid\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Departments: With Driver card navigates to With Driver page",
+    "description": "Verifies clicking the With Driver department card takes the user to the /with-driver page.",
+    "category": "Home Page Hero & Sections",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Departments section\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the department card labeled \"With Driver\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/with-driver\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"With Driver\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Departments: Corporate card navigates to Corporate page",
+    "description": "Verifies clicking the Corporate department card takes the user to the /corporate page.",
+    "category": "Home Page Hero & Sections",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Departments section\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the department card labeled \"Corporate\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/corporate\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Corporate\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Cars list loads and displays a populated grid of car cards",
+    "description": "Verifies the cars listing page shows a loading state and then renders a grid with key summary fields on car cards.",
+    "category": "Cars Browsing",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /cars"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"loading spinner\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"cars grid\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"car card\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a car card shows a visible car image"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a car card shows visible text for the car name"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a car card shows visible text for the price per day in SAR"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a car card shows a visible rating value"
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Open a car detail page from the cars grid",
+    "description": "Verifies a user can click a car card from the cars grid and land on the car detail page.",
+    "category": "Cars Browsing",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /cars"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"cars grid\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first visible car card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/cars/\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"car details section\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"car name\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Cars page shows loading spinner during data fetch and then removes it",
+    "description": "Verifies the loading spinner appears initially and is no longer visible once results render.",
+    "category": "Cars Browsing",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /cars"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"loading spinner\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"cars grid\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"loading spinner\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Car cards display key summary metadata (name, year, region, price/day, rating)",
+    "description": "Verifies a car card contains the expected summary fields for quick comparison.",
+    "category": "Cars Browsing",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /cars"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"car card\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a car card shows visible text for the car name"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a car card shows visible text for the year"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a car card shows visible text for the region"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a car card shows visible text for the price per day in SAR"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a car card shows a visible rating value"
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Cars list empty state is displayed when no cars are available",
+    "description": "Verifies the cars listing page shows an empty state message when the catalog returns no cars.",
+    "category": "Cars Browsing",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /cars"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"loading spinner\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"No cars\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"cars grid\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Cars page remains usable after scrolling the grid",
+    "description": "Verifies the cars grid continues to render correctly when the user scrolls through listings.",
+    "category": "Cars Browsing",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /cars"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"cars grid\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the bottom of the cars grid"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"car card\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the top of the cars grid"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"cars grid\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Car detail page renders key information and reviews",
+    "description": "Verifies that a car detail page shows the main image, key specs, pricing, availability, and a reviews section.",
+    "category": "Car Detail View",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /cars"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Cars\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first car card in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"large car image\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Book Now\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"customer reviews\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Car detail shows name/year/region/price/availability/category fields",
+    "description": "Verifies the car detail page surfaces the expected primary attributes for the car.",
+    "category": "Car Detail View",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /cars"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first car card in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"car name\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"year\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"region\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"price per day\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"availability status\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"category\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Reviews section displays rating and comment content when present",
+    "description": "Verifies that the reviews area includes visible ratings and comment text for at least one review (when reviews exist).",
+    "category": "Car Detail View",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /cars"
+      },
+      {
+        "type": "action",
+        "description": "Click on a car card that indicates it has reviews (if labeled) or select the first car card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"customer reviews\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"review rating\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"review comment\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Authenticated user can proceed from car detail to booking flow entry (route contains /booking/)",
+    "description": "Verifies that an authenticated user clicking Book Now proceeds toward the booking page for that car.",
+    "category": "Car Detail View",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Cars\" in the site navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first car card in the list"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Book Now\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/booking/\""
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "Car detail page provides a visible loading or stable layout before content appears",
+    "description": "Verifies that the car detail page shows a stable, visible state while data is being loaded, then displays the main content.",
+    "category": "Car Detail View",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /cars"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first car card in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"car detail page content area\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"large car image\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Book Now\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "Successful login redirects user away from login page and shows Arabic success toast",
+    "description": "Verifies that a user can log in with valid credentials, sees an Arabic success toast, and is redirected to a post-login page.",
+    "category": "User Login",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"تسجيل الدخول\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an Arabic success toast message is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/\""
+      }
+    ]
+  },
+  {
+    "id": "TC018",
+    "title": "Login fails with incorrect password and shows Arabic error toast",
+    "description": "Verifies that login with a valid email and wrong password is rejected and an Arabic error toast is shown while staying on the login page.",
+    "category": "User Login",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"تسجيل الدخول\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"WrongPassword123!\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an Arabic error toast message is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/auth/login\""
+      }
+    ]
+  },
+  {
+    "id": "TC019",
+    "title": "Login fails with non-existent email and shows Arabic error toast",
+    "description": "Verifies that login fails for an unregistered email and shows an Arabic error toast.",
+    "category": "User Login",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"تسجيل الدخول\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"nonexistent.user.987654@example.com\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"AnyPassword123!\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an Arabic error toast message is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/auth/login\""
+      }
+    ]
+  },
+  {
+    "id": "TC020",
+    "title": "Attempt login with empty email shows validation and prevents submission",
+    "description": "Verifies that the email field is required and the user is not logged in when email is missing.",
+    "category": "User Login",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"تسجيل الدخول\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Email\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/auth/login\""
+      }
+    ]
+  },
+  {
+    "id": "TC021",
+    "title": "Attempt login with empty password shows validation and prevents submission",
+    "description": "Verifies that the password field is required and the user is not logged in when password is missing.",
+    "category": "User Login",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"تسجيل الدخول\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Password\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/auth/login\""
+      }
+    ]
+  },
+  {
+    "id": "TC022",
+    "title": "Navigate from Login to Register via link",
+    "description": "Verifies that the Register link on the login page routes the user to the registration page.",
+    "category": "User Login",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"تسجيل الدخول\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Register\" link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/auth/register\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"إنشاء حساب\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC023",
+    "title": "Navigate from Login to Forgot Password via link",
+    "description": "Verifies that the Forgot Password link on the login page routes the user to the forgot-password page.",
+    "category": "User Login",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"تسجيل الدخول\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Forgot Password\" link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/auth/forgot-password\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"نسيت كلمة المرور\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC024",
+    "title": "Register successfully with valid name, email, and matching password",
+    "description": "Verifies a new user can register and is redirected to the login page with a success toast.",
+    "category": "User Registration",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to \"/auth/register\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Register\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test User\" into the name field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"newuser_automation_001@example.com\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"secret12\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"secret12\" into the confirm password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Register\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/auth/login\""
+      }
+    ]
+  },
+  {
+    "id": "TC025",
+    "title": "Registration validation: name too short prevents submission",
+    "description": "Verifies the form shows a visible validation error/toast when name is shorter than minimum length.",
+    "category": "User Registration",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to \"/auth/register\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Register\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"A\" into the name field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"newuser_automation_002@example.com\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"secret12\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"secret12\" into the confirm password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Register\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"error\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC026",
+    "title": "Registration validation: password too short shows validation failure",
+    "description": "Verifies a too-short password triggers a visible validation error/toast and does not redirect to login.",
+    "category": "User Registration",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to \"/auth/register\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Register\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test User\" into the name field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"newuser_automation_003@example.com\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"123\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"123\" into the confirm password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Register\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/auth/register\""
+      }
+    ]
+  },
+  {
+    "id": "TC027",
+    "title": "Registration validation: confirm password mismatch blocks registration",
+    "description": "Verifies mismatched password and confirm password produces a visible error and remains on registration page.",
+    "category": "User Registration",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to \"/auth/register\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Register\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test User\" into the name field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"newuser_automation_004@example.com\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"secret12\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"secret13\" into the confirm password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Register\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"error\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC028",
+    "title": "Navigate from Register to Login using the login link",
+    "description": "Verifies the login link on the registration page routes the user to the login page.",
+    "category": "User Registration",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to \"/auth/register\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Register\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/auth/login\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Login\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC029",
+    "title": "Registration validation: empty required fields show errors",
+    "description": "Verifies submitting an empty form triggers visible validation feedback and does not navigate away.",
+    "category": "User Registration",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to \"/auth/register\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Register\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Register\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/auth/register\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"error\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC030",
+    "title": "Forgot Password - Successful reset link request with a registered email",
+    "description": "Verifies a user can submit a valid email and sees a visible confirmation message indicating a reset link request was received.",
+    "category": "Forgot Password",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/forgot-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Forgot\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"{{LOGIN_USER}}\" into the email input field"
+      },
+      {
+        "type": "action",
+        "description": "Click the submit button to request the reset link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a confirmation message after submission is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"email\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC031",
+    "title": "Forgot Password - Submit with an unregistered email shows an error toast",
+    "description": "Verifies submitting an unregistered email results in a visible error toast indicating the reset link could not be sent.",
+    "category": "Forgot Password",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/forgot-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Forgot\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"not.a.real.user.987654@example.com\" into the email input field"
+      },
+      {
+        "type": "action",
+        "description": "Click the submit button to request the reset link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"error\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"reset\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC032",
+    "title": "Forgot Password - Invalid email format is blocked by validation",
+    "description": "Verifies the form prevents submission and shows a visible validation message when the email format is invalid.",
+    "category": "Forgot Password",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/forgot-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Forgot\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"invalid-email-format\" into the email input field"
+      },
+      {
+        "type": "action",
+        "description": "Click the submit button to request the reset link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"valid\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"email\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC033",
+    "title": "Forgot Password - Submit with empty email shows required-field validation",
+    "description": "Verifies the email field is required and an appropriate visible validation message is shown when submitting an empty form.",
+    "category": "Forgot Password",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/forgot-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Forgot\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the submit button to request the reset link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"required\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"email\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC034",
+    "title": "Forgot Password - Trim whitespace around email and submit successfully",
+    "description": "Verifies leading/trailing spaces in the email input do not prevent a successful reset link request and confirmation message is shown.",
+    "category": "Forgot Password",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/forgot-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Forgot\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"  {{LOGIN_USER}}  \" into the email input field"
+      },
+      {
+        "type": "action",
+        "description": "Click the submit button to request the reset link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a confirmation message after submission is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"email\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC035",
+    "title": "Forgot Password - Page loads with expected email field and submit control visible",
+    "description": "Verifies the Forgot Password page renders the primary form controls needed to request a reset link.",
+    "category": "Forgot Password",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/forgot-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Forgot\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Email\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Submit\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC036",
+    "title": "Reset password successfully with a valid token",
+    "description": "Verifies a user can set a new password using a valid reset token and sees a success confirmation.",
+    "category": "Reset Password",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/reset-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"Reset\""
+      },
+      {
+        "type": "action",
+        "description": "Type \"VALID_RESET_TOKEN\" into the reset token field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"newpass1\" into the new password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the submit/reset password button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Password reset\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Login\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC037",
+    "title": "Reset password fails with an invalid token",
+    "description": "Verifies an invalid reset token is rejected and an error message is shown.",
+    "category": "Reset Password",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/reset-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Reset token\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"INVALID_TOKEN_123\" into the reset token field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"newpass1\" into the new password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the submit/reset password button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"invalid\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Reset token\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC038",
+    "title": "Reset password fails with an expired token",
+    "description": "Verifies an expired reset token is rejected with an appropriate error message.",
+    "category": "Reset Password",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/reset-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Reset token\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"EXPIRED_TOKEN_123\" into the reset token field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"newpass1\" into the new password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the submit/reset password button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"expired\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC039",
+    "title": "Client-side validation: new password shorter than 6 characters is blocked",
+    "description": "Verifies the form prevents submission and shows validation when the new password is too short.",
+    "category": "Reset Password",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/reset-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"New password\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"SOME_TOKEN\" into the reset token field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"12345\" into the new password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the submit/reset password button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"6\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"New password\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC040",
+    "title": "Required field validation: submitting with empty token shows an error",
+    "description": "Verifies the reset token is required and the user is prompted when it is missing.",
+    "category": "Reset Password",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/reset-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Reset token\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"newpass1\" into the new password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the submit/reset password button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"token\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"required\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC041",
+    "title": "Required field validation: submitting with empty new password shows an error",
+    "description": "Verifies the new password is required and the user is prompted when it is missing.",
+    "category": "Reset Password",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/reset-password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"New password\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"SOME_TOKEN\" into the reset token field"
+      },
+      {
+        "type": "action",
+        "description": "Click the submit/reset password button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"password\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"required\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC042",
+    "title": "Successful reset provides a clear path to login page",
+    "description": "Verifies that after a successful reset, the user can navigate to the login page using the provided login action.",
+    "category": "Reset Password",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/reset-password"
+      },
+      {
+        "type": "action",
+        "description": "Type \"VALID_RESET_TOKEN\" into the reset token field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"newpass1\" into the new password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the submit/reset password button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Login\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" link or button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/auth/login\""
+      }
+    ]
+  },
+  {
+    "id": "TC043",
+    "title": "Authenticated user can open a car details page and start booking via Book Now",
+    "description": "Verifies that a logged-in user can reach a car details page from the cars listing and initiate the booking flow via the Book Now CTA.",
+    "category": "Car Booking",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Cars\" link in the site navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first car card in the cars grid"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Book Now\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC044",
+    "title": "Booking form shows calculated total price before submission",
+    "description": "Verifies that the booking page displays a calculated total price after entering the main rental parameters.",
+    "category": "Car Booking",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /cars"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first car card in the cars grid"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Book Now\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Total\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC045",
+    "title": "Booking validation error for invalid phone number format",
+    "description": "Verifies that entering an invalid phone number and attempting to submit shows a validation failure toast/message.",
+    "category": "Car Booking",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /cars"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first car card in the cars grid"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Book Now\" button"
+      },
+      {
+        "type": "action",
+        "description": "Type \"123\" into the phone number field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"error\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC046",
+    "title": "User dashboard loads and shows bookings with status",
+    "description": "Verifies an authenticated user can open the dashboard and see their bookings list with visible status values.",
+    "category": "User Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"User Dashboard\" link or menu item"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard/user\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Bookings\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify at least one booking status label is visible (for example: \"pending\", \"approved\", or \"rejected\")"
+      }
+    ]
+  },
+  {
+    "id": "TC047",
+    "title": "User can view own reviews section in dashboard",
+    "description": "Verifies an authenticated user can access and view the reviews area showing their own reviews.",
+    "category": "User Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"User Dashboard\" link or menu item"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Reviews\" tab or section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"My Reviews\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a reviews list element is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC048",
+    "title": "Update profile information successfully",
+    "description": "Verifies an authenticated user can edit profile details and sees a success confirmation after saving.",
+    "category": "User Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"User Dashboard\" link or menu item"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Profile\" tab or section"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Updated\" into the name field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Save\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Profile updated\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC049",
+    "title": "Profile update validation prevents saving invalid email",
+    "description": "Verifies profile form shows a visible validation error when an invalid email is entered and save is attempted.",
+    "category": "User Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"User Dashboard\" link or menu item"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Profile\" tab or section"
+      },
+      {
+        "type": "action",
+        "description": "Type \"not-an-email\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Save\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Invalid email\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC050",
+    "title": "Change password succeeds with correct current password",
+    "description": "Verifies an authenticated user can change password by providing current and new password and sees a success message.",
+    "category": "User Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"User Dashboard\" link or menu item"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Change Password\" button or link"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the current password field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"NewPassword123!\" into the new password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Password changed\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC051",
+    "title": "Change password fails with wrong current password",
+    "description": "Verifies an authenticated user sees an error message when attempting to change password with an incorrect current password.",
+    "category": "User Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"User Dashboard\" link or menu item"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Change Password\" button or link"
+      },
+      {
+        "type": "action",
+        "description": "Type \"WrongCurrentPassword!\" into the current password field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"NewPassword123!\" into the new password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Current password is incorrect\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC052",
+    "title": "Change password validation: missing required fields",
+    "description": "Verifies the change password form shows visible required-field errors when submitting with empty fields.",
+    "category": "User Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"User Dashboard\" link or menu item"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Change Password\" button or link"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Current password is required\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"New password is required\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC053",
+    "title": "Admin adds a new car and sees it in the cars list",
+    "description": "Verifies the end-to-end flow to add a new car from the Admin Dashboard and confirm it appears in the list.",
+    "category": "Admin Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Admin\" in the dashboard navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Add new car\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Add\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"E2E Test Car\" into the Name field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"2024\" into the Year field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Riyadh\" into the Region field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"199\" into the Price Per Day field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"https://example.com/e2e-car.jpg\" into the Image URL field"
+      },
+      {
+        "type": "action",
+        "description": "Select \"SUV\" from the Category dropdown"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"E2E Test Car\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC054",
+    "title": "Admin edits an existing car and sees updated details in the list",
+    "description": "Verifies that an admin can edit a car’s details and the updated value is visible in the cars list.",
+    "category": "Admin Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Admin\" in the dashboard navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first car in the cars list"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Edit\" button"
+      },
+      {
+        "type": "action",
+        "description": "Type \"E2E Updated\" into the Name field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Save\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"E2E Updated\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC055",
+    "title": "Admin approves a pending booking and sees status change to approved",
+    "description": "Verifies that a pending booking can be approved and the booking status visibly updates.",
+    "category": "Admin Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Admin\" in the dashboard navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Bookings\" in the Admin Dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Select \"Pending\" from the Status filter dropdown"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Pending\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Approve\" button for the first booking in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Approved\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC056",
+    "title": "Admin rejects a pending booking and sees status change to rejected",
+    "description": "Verifies that a pending booking can be rejected and the booking status visibly updates.",
+    "category": "Admin Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Admin\" in the dashboard navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Bookings\" in the Admin Dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Select \"Pending\" from the Status filter dropdown"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Reject\" button for the first booking in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Rejected\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC057",
+    "title": "Admin deletes a car and confirms it is removed from the list",
+    "description": "Verifies that an admin can delete a car and it no longer appears in the cars list afterward.",
+    "category": "Admin Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Admin\" in the dashboard navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first car in the cars list"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Delete\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Deleted\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC058",
+    "title": "Admin toggles car availability and sees the availability state update",
+    "description": "Verifies that an admin can toggle a car’s availability and the UI reflects the changed state.",
+    "category": "Admin Dashboard",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Admin\" in the dashboard navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first car in the cars list"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Availability\" toggle"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Unavailable\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC059",
+    "title": "Admin moderates reviews by deleting an inappropriate review",
+    "description": "Verifies that an admin can view customer reviews in the admin area and delete a review.",
+    "category": "Admin Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Admin\" in the dashboard navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Reviews\" in the Admin Dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Reviews\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Delete\" button for the first review in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Deleted\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC060",
+    "title": "Non-admin user cannot access the Admin Dashboard",
+    "description": "Verifies that a non-admin account is blocked from the Admin Dashboard (access denied message or redirect away).",
+    "category": "Admin Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"notadmin@example.com\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"WrongPassword123!\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Admin\" in the dashboard navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Access denied\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC061",
+    "title": "Navbar logo navigates to Home",
+    "description": "Verifies that clicking the navbar logo returns the user to the Home page from another static route.",
+    "category": "Navigation & Layout",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /about"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/about\""
+      },
+      {
+        "type": "action",
+        "description": "Click the logo in the navbar"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Home page hero section\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC062",
+    "title": "Navbar 'Cars' link navigates to Cars listing",
+    "description": "Verifies that the Cars link in the navbar navigates to the cars listing page.",
+    "category": "Navigation & Layout",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"navbar\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Cars\" link in the navbar"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/cars\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"cars listing grid\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC063",
+    "title": "Navbar links navigate to About and FAQ pages",
+    "description": "Verifies primary navbar links (About, FAQ) work and load the correct pages.",
+    "category": "Navigation & Layout",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"About\" link in the navbar"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/about\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"FAQ\" link in the navbar"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/faq\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Frequently asked questions\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC064",
+    "title": "Language toggle updates UI language (English <-> Arabic)",
+    "description": "Verifies that toggling the language changes visible UI text direction/language on the page.",
+    "category": "Navigation & Layout",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"language toggle\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the language toggle"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Arabic UI text\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the language toggle"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"English UI text\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC065",
+    "title": "Mobile hamburger menu opens and navigates to a selected route",
+    "description": "Verifies the mobile hamburger menu can open and a menu link navigates to a static route.",
+    "category": "Navigation & Layout",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"hamburger menu button\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the hamburger menu button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"mobile navigation menu\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"FAQ\" link in the mobile navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/faq\""
+      }
+    ]
+  },
+  {
+    "id": "TC066",
+    "title": "Bottom navigation tab navigates to Cars (mobile)",
+    "description": "Verifies the bottom navigation can be used to navigate to the Cars listing page.",
+    "category": "Navigation & Layout",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"bottom navigation\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Cars\" tab in the bottom navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/cars\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"cars listing grid\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC067",
+    "title": "Breadcrumbs navigate back to Home from Cars page",
+    "description": "Verifies breadcrumb segments are clickable and navigate to the corresponding route.",
+    "category": "Navigation & Layout",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /cars"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"breadcrumbs\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Cars\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Home\" breadcrumb segment"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/\""
+      }
+    ]
+  },
+  {
+    "id": "TC068",
+    "title": "Logout successfully from the navbar user dropdown",
+    "description": "Verifies an authenticated user can log out, see an Arabic success toast, and be redirected to the public home page.",
+    "category": "Logout",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/\""
+      },
+      {
+        "type": "action",
+        "description": "Click the user/account dropdown in the navbar"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Logout\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an Arabic success toast confirming logout is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/\""
+      }
+    ]
+  },
+  {
+    "id": "TC069",
+    "title": "After logout, user dashboard is no longer accessible without re-login",
+    "description": "Verifies that logging out ends the authenticated session by ensuring the user is not able to access the user dashboard without logging in again.",
+    "category": "Logout",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/\""
+      },
+      {
+        "type": "action",
+        "description": "Click the user/account dropdown in the navbar"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Logout\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an Arabic success toast confirming logout is visible"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"email\" field is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC070",
+    "title": "Logout is available from the navbar when authenticated",
+    "description": "Verifies that the Logout option is discoverable in the navbar user dropdown for an authenticated user.",
+    "category": "Logout",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/\""
+      },
+      {
+        "type": "action",
+        "description": "Click the user/account dropdown in the navbar"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Logout\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC071",
+    "title": "Logout redirects to public home content",
+    "description": "Verifies that after a successful logout redirect, the public home page content is visible (not an authenticated dashboard view).",
+    "category": "Logout",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /auth/login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/\""
+      },
+      {
+        "type": "action",
+        "description": "Click the user/account dropdown in the navbar"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Logout\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"hero\" section on the home page is visible"
+      }
+    ]
+  }
+]

@@ -38,7 +38,8 @@ export default function ForgotPasswordPage() {
       }
     } catch (error) {
       console.error("Forgot password error:", error);
-      toast.error(error.response?.data?.message || t("auth.resetLinkError"));
+      const msg = error?.response?.data?.message || error?.message || t("auth.resetLinkError");
+      toast.error(msg);
     } finally {
       setLoading(false);
     }

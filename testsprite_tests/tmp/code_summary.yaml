@@ -1,0 +1,343 @@
+version: "2"
+type: frontend
+tech_stack:
+  - javascript
+  - nextjs
+  - material-ui
+  - tailwindcss
+  - react-query
+  - framer-motion
+  - i18next
+  - axios
+  - react-toastify
+  - react-hook-form
+  - react-fast-marquee
+routes:
+  - path: /
+    file: app/page.js
+    auth_required: false
+    description: Home page with hero banner, departments, reviews marquee, partners, and FAQ sections
+  - path: /cars
+    file: app/cars/page.js
+    auth_required: false
+    description: Cars listing page showing all available cars in a responsive grid with filtering
+  - path: /cars/[id]
+    file: app/cars/[id]/page.js
+    auth_required: false
+    description: Single car detail page with full info, reviews, and booking CTA
+  - path: /booking/[id]
+    file: app/booking/[id]/page.js
+    auth_required: true
+    description: Booking form for a specific car requiring document uploads and rental details
+  - path: /auth/login
+    file: app/auth/login/page.js
+    auth_required: false
+    description: User login page with email and password
+  - path: /auth/register
+    file: app/auth/register/page.js
+    auth_required: false
+    description: User registration page with name, email, password, confirm password
+  - path: /auth/forgot-password
+    file: app/auth/forgot-password/page.js
+    auth_required: false
+    description: Forgot password page to request a password reset email
+  - path: /auth/reset-password
+    file: app/auth/reset-password/page.js
+    auth_required: false
+    description: Reset password page using the emailed reset token
+  - path: /dashboard/admin
+    file: app/dashboard/admin/page.js
+    auth_required: true
+    description: Admin dashboard with car CRUD, booking management (approve/reject), review management, and statistics
+  - path: /dashboard/user
+    file: app/dashboard/user/page.js
+    auth_required: true
+    description: User dashboard showing own bookings, reviews, and profile management
+  - path: /about
+    file: app/about/page.js
+    auth_required: false
+    description: About us page with company information
+  - path: /faq
+    file: app/faq/page.js
+    auth_required: false
+    description: Frequently asked questions page
+  - path: /corporate
+    file: app/corporate/page.js
+    auth_required: false
+    description: Corporate fleet rental services information page
+  - path: /with-driver
+    file: app/with-driver/page.js
+    auth_required: false
+    description: Car rental with private driver service page
+  - path: /policy
+    file: app/policy/page.js
+    auth_required: false
+    description: Platform general policies page
+  - path: /privacy
+    file: app/privacy/page.js
+    auth_required: false
+    description: Privacy policy page in Arabic
+  - path: /terms
+    file: app/terms/page.js
+    auth_required: false
+    description: Terms and conditions page in Arabic
+  - path: /[city]
+    file: app/[city]/page.js
+    auth_required: false
+    description: Dynamic city-specific car rental information pages
+features:
+  - name: Home Page Hero & Sections
+    description: Landing page with animated hero banner, car category departments, scrolling review marquee, partner logos, and FAQ accordion
+    files:
+      - app/page.js
+      - components/home/HeroAd.jsx
+      - components/home/Departments.jsx
+      - components/home/ReviewMarquee.jsx
+      - components/home/Partners.jsx
+      - components/home/FAQ.jsx
+    entry_route: /
+    user_interactions:
+      - View animated hero banner with CTA
+      - Click department cards to navigate to category pages (regular, with-driver, corporate)
+      - See auto-scrolling customer reviews marquee
+      - See auto-scrolling partner logos
+      - Expand and collapse FAQ accordion items
+    api_calls:
+      - method: GET
+        endpoint: /api/reviews/recent
+    auth_required: false
+  - name: Cars Browsing
+    description: Browse all available cars in a responsive grid with car cards showing image, name, year, region, price, and rating
+    files:
+      - app/cars/page.js
+      - components/cards/CarCard.jsx
+    entry_route: /cars
+    user_interactions:
+      - View cars grid layout
+      - See car image, name, year, region, price per day in SAR, and average rating on each card
+      - Click a car card to navigate to car detail page
+      - See loading spinner while data loads
+      - See empty state message when no cars available
+    api_calls:
+      - method: GET
+        endpoint: /api/cars
+    auth_required: false
+  - name: Car Detail View
+    description: View full details of a single car including large image, specifications, pricing, and customer reviews
+    files:
+      - app/cars/[id]/page.js
+    entry_route: /cars/[id]
+    user_interactions:
+      - View large car image
+      - See car name, year, region, price per day, availability status, category
+      - Read customer reviews with ratings and comments
+      - Click Book Now button to navigate to booking page
+    api_calls:
+      - method: GET
+        endpoint: /api/cars/:id
+      - method: GET
+        endpoint: /api/reviews/car/:carId
+    auth_required: false
+  - name: User Login
+    description: Login with email and password to access authenticated features
+    files:
+      - app/auth/login/page.js
+      - context/AuthContext.js
+      - services/api.js
+    entry_route: /auth/login
+    user_interactions:
+      - Fill email input field
+      - Fill password input field
+      - Click Login button to submit
+      - See Arabic success toast on successful login
+      - See Arabic error toast on failed login
+      - Get redirected to home page or returnUrl after login
+      - Click link to navigate to register page
+      - Click link to navigate to forgot password page
+    api_calls:
+      - method: POST
+        endpoint: /api/auth/login
+    auth_required: false
+  - name: User Registration
+    description: Register a new account with name, email, password, and password confirmation
+    files:
+      - app/auth/register/page.js
+      - context/AuthContext.js
+      - services/api.js
+    entry_route: /auth/register
+    user_interactions:
+      - Fill name input field (min 2 characters)
+      - Fill email input field
+      - Fill password input field (min 6 characters)
+      - Fill confirm password input field
+      - Click Register button to submit
+      - See success toast and redirect to login page
+      - See error toast on validation failure or duplicate email
+      - Click link to navigate to login page
+    api_calls:
+      - method: POST
+        endpoint: /api/auth/register
+    auth_required: false
+  - name: Forgot Password
+    description: Request a password reset link sent to email
+    files:
+      - app/auth/forgot-password/page.js
+      - services/api.js
+    entry_route: /auth/forgot-password
+    user_interactions:
+      - Fill email input field
+      - Click submit button to request reset link
+      - See confirmation message after submission
+    api_calls:
+      - method: POST
+        endpoint: /api/auth/forgot-password
+    auth_required: false
+  - name: Reset Password
+    description: Reset password using the token received via email
+    files:
+      - app/auth/reset-password/page.js
+      - services/api.js
+    entry_route: /auth/reset-password
+    user_interactions:
+      - Enter reset token from email
+      - Enter new password (min 6 characters)
+      - Click submit to reset password
+      - See success or error message
+    api_calls:
+      - method: POST
+        endpoint: /api/auth/reset-password
+    auth_required: false
+  - name: Car Booking
+    description: Create a booking for a specific car by filling rental details and uploading documents
+    files:
+      - app/booking/[id]/page.js
+      - services/api.js
+    entry_route: /booking/[id]
+    user_interactions:
+      - Fill phone number (Saudi or Egyptian format)
+      - Select start date
+      - Select end date
+      - Enter kilometers per day
+      - Enter number of days
+      - Upload ID card image
+      - Upload driver license image
+      - See calculated total price
+      - Click submit to create booking
+      - See success toast on booking creation
+      - See error toast on validation failure
+    api_calls:
+      - method: POST
+        endpoint: /api/bookings
+      - method: GET
+        endpoint: /api/cars/:id
+    auth_required: true
+  - name: User Dashboard
+    description: Authenticated user dashboard showing own bookings with status, own reviews, and profile management
+    files:
+      - app/dashboard/user/page.js
+      - app/dashboard/layout.js
+      - services/api.js
+    entry_route: /dashboard/user
+    user_interactions:
+      - View list of own bookings with status (pending, approved, rejected)
+      - View own reviews
+      - Update profile information
+      - Change password
+    api_calls:
+      - method: GET
+        endpoint: /api/bookings
+      - method: GET
+        endpoint: /api/reviews/user
+      - method: GET
+        endpoint: /api/users/profile
+      - method: PUT
+        endpoint: /api/users/profile
+      - method: PUT
+        endpoint: /api/auth/change-password
+    auth_required: true
+  - name: Admin Dashboard
+    description: Admin panel with full management of cars, bookings, reviews, and platform statistics
+    files:
+      - app/dashboard/admin/page.js
+      - app/dashboard/layout.js
+      - services/api.js
+    entry_route: /dashboard/admin
+    user_interactions:
+      - View statistics overview (total cars, bookings, reviews, users)
+      - Add new car with name, year, region, pricePerDay, imageUrl, category
+      - Edit existing car details
+      - Delete a car
+      - Toggle car availability
+      - View all bookings with filters by status
+      - Approve a pending booking
+      - Reject a pending booking
+      - Delete a booking
+      - View all customer reviews
+      - Delete inappropriate reviews
+    api_calls:
+      - method: GET
+        endpoint: /api/admin/stats
+      - method: GET
+        endpoint: /api/cars
+      - method: POST
+        endpoint: /api/cars
+      - method: PUT
+        endpoint: /api/cars/:id
+      - method: DELETE
+        endpoint: /api/cars/:id
+      - method: GET
+        endpoint: /api/bookings
+      - method: PATCH
+        endpoint: /api/bookings/:id/approve
+      - method: PATCH
+        endpoint: /api/bookings/:id/reject
+      - method: DELETE
+        endpoint: /api/bookings/:id
+      - method: GET
+        endpoint: /api/reviews/admin/all
+      - method: DELETE
+        endpoint: /api/reviews/:id
+    auth_required: true
+  - name: Navigation & Layout
+    description: Global layout with responsive navbar, mobile bottom navigation, floating contact icons, footer, and breadcrumbs
+    files:
+      - app/layout.js
+      - components/layout/Navbar.jsx
+      - components/layout/BottomNav.jsx
+      - components/layout/Footer.jsx
+      - components/layout/FooterWrapper.jsx
+      - components/layout/FloatingContact.jsx
+      - components/layout/MainLayoutWrapper.jsx
+      - components/layout/Breadcrumbs.jsx
+    entry_route: /
+    user_interactions:
+      - Click logo to navigate to home
+      - Click navbar links (Home, Cars, About, FAQ)
+      - Toggle language between Arabic and English
+      - See user avatar or initials when logged in
+      - Click user dropdown for Dashboard and Logout
+      - Click Login/Register buttons when not logged in
+      - Use mobile hamburger menu on small screens
+      - Use bottom navigation on mobile
+      - Click floating WhatsApp icon for quick contact
+      - Click floating email icon for quick contact
+      - Navigate using breadcrumbs
+      - See footer with social links and company info
+    api_calls: []
+    auth_required: false
+  - name: Logout
+    description: Log out the current user, clear session, and redirect to home
+    files:
+      - context/AuthContext.js
+      - services/api.js
+      - components/layout/Navbar.jsx
+    entry_route: /
+    user_interactions:
+      - Click Logout from user dropdown in navbar
+      - See Arabic success toast confirming logout
+      - Get redirected to home page
+    api_calls:
+      - method: GET
+        endpoint: /api/auth/logout
+    auth_required: true
+known_limitations: []

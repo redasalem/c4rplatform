@@ -17,7 +17,7 @@ export default function WithDriverPage() {
     error,
   } = useQuery({
     queryKey: ["cars", "with_driver"],
-    queryFn: () => carService.getAll({ category: "with_driver" }),
+    queryFn: () => carService.getAll({ category: "with_driver" }).catch(() => ({ data: { cars: [] } })),
   });
 
   const cars = carsData?.data?.cars || [];

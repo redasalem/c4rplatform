@@ -42,12 +42,12 @@ export default function CarDetailsPage() {
 
   const { data: carResponse, isLoading: carLoading } = useQuery({
     queryKey: ["car", id],
-    queryFn: () => carService.getOne(id),
+    queryFn: () => carService.getOne(id).catch(() => null),
   });
 
   const { data: reviewsResponse, isLoading: reviewsLoading } = useQuery({
     queryKey: ["carReviews", id],
-    queryFn: () => reviewService.getAllCarReviews(id),
+    queryFn: () => reviewService.getAllCarReviews(id).catch(() => ({ data: { reviews: [], pagination: { total: 0 } } })),
   });
 
   const car = carResponse?.data?.car || carResponse?.data || carResponse;

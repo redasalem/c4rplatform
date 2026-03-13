@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const data = await authService.login(credentials);
-      if (data.success) {
+      if (data && data.success) {
         const { token, user } = data.data;
         Cookies.set("token", token, { expires: 7 }); // Store token for 7 days
         setUser(user);
@@ -72,8 +72,8 @@ export const AuthProvider = ({ children }) => {
         toast.success("تم تسجيل الدخول بنجاح");
 
         // Handle redirection
-        const searchParams = new URLSearchParams(window.location.search);
-        const returnUrl = searchParams.get("returnUrl");
+        const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+        const returnUrl = searchParams ? searchParams.get("returnUrl") : null;
 
         if (returnUrl) {
           router.push(returnUrl);
@@ -81,10 +81,13 @@ export const AuthProvider = ({ children }) => {
           router.push("/");
         }
         return true;
+      } else {
+        toast.error(data?.message || "فشل تسجيل الدخول");
+        return false;
       }
     } catch (error) {
       console.error("Login error:", error);
-      const msg = error.response?.data?.message || "فشل تسجيل الدخول";
+      const msg = error?.response?.data?.message || error?.message || "تعذر الاتصال بالخادم. الرجاء المحاولة لاحقاً.";
       toast.error(msg);
       return false;
     }
@@ -93,14 +96,17 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const data = await authService.register(userData);
-      if (data.success) {
+      if (data && data.success) {
         toast.success("تم إنشاء الحساب بنجاح. يرجى تسجيل الدخول.");
         router.push("/auth/login");
         return true;
+      } else {
+        toast.error(data?.message || "فشل إنشاء الحساب");
+        return false;
       }
     } catch (error) {
       console.error("Register error:", error);
-      const msg = error.response?.data?.message || "فشل إنشاء الحساب";
+      const msg = error?.response?.data?.message || error?.message || "تعذر الاتصال بالخادم. الرجاء المحاولة لاحقاً.";
       toast.error(msg);
       return false;
     }

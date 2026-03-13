@@ -47,9 +47,8 @@ function ResetPasswordForm() {
       }
     } catch (error) {
       console.error("Reset password error:", error);
-      toast.error(
-        error.response?.data?.message || t("auth.passwordChangeError"),
-      );
+      const msg = error?.response?.data?.message || error?.message || t("auth.passwordChangeError");
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
