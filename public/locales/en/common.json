@@ -520,6 +520,7 @@
   },
   "common": {
     "loading": "Loading...",
+    "currency": "SAR",
     "error": "An error occurred",
     "retry": "Retry",
     "save": "Save",
