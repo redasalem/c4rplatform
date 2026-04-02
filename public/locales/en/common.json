@@ -232,6 +232,7 @@
         "approved": "Approved",
         "rejected": "Rejected",
         "noBookings": "No bookings found",
+        "empty": "No bookings available currently",
         "approve": "Approve",
         "reject": "Reject",
         "delete": "Delete",
@@ -273,6 +274,8 @@
         "edit": "Edit",
         "delete": "Delete",
         "noCars": "No cars found",
+        "emptyTitle": "No cars are currently available.",
+        "emptyAction": "Add the first car",
         "brand": "Brand",
         "model": "Model",
         "year": "Year",
@@ -294,7 +297,7 @@
       },
       "addCar": {
         "title": "Add New Car",
-        "subtitle": "Enter the details of the new car to add to the fleet",
+        "subtitle": "Enter the details of the new car",
         "nameLabel": "Car Name",
         "namePlaceholder": "e.g., Mercedes S500",
         "brandLabel": "Brand",
@@ -330,7 +333,7 @@
       },
       "editCar": {
         "title": "Edit Car Details",
-        "subtitle": "Update the car details in the fleet",
+        "subtitle": "Update the car details",
         "nameLabel": "Car Name",
         "namePlaceholder": "e.g., Mercedes S500",
         "yearLabel": "Year",
@@ -353,6 +356,7 @@
       "reviews": {
         "title": "Manage Reviews",
         "noReviews": "No reviews found",
+        "empty": "No reviews available currently",
         "delete": "Delete",
         "customer": "Customer",
         "rating": "Rating",
@@ -535,6 +539,14 @@
     "cars": "Cars",
     "booking": "Booking",
     "dashboard": "Dashboard"
+  },
+  "individuals": {
+    "pageTitle": "Individuals Section",
+    "heroBadge": "Individuals",
+    "heroTitlePart1": "Diverse Cars",
+    "heroTitlePart2": "for Daily Rent",
+    "heroDesc": "A wide range of economic, family, and luxury cars to meet all your daily needs at the best prices.",
+    "empty": "No cars are currently available in the individuals section."
   },
   "corporate": {
     "pageTitle": "Corporate Section",
