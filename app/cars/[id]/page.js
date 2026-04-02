@@ -288,8 +288,8 @@ export default function CarDetailsPage() {
                   <h3 className="font-black text-white mb-2 sm:mb-3 uppercase tracking-widest text-xs sm:text-sm">
                     {t("carDetails.descTitle")}
                   </h3>
-                  <p className="text-slate-400 leading-relaxed text-xs sm:text-sm font-bold">
-                    {t("hero.description")}
+                  <p className="text-slate-400 leading-relaxed text-xs sm:text-sm font-bold whitespace-pre-wrap">
+                    {car.description || t("hero.description")}
                   </p>
                 </div>
 

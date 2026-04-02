@@ -30,6 +30,7 @@ import {
   WhatsApp,
   UploadFile,
 } from "@mui/icons-material";
+import { MuiTelInput } from "mui-tel-input";
 import Image from "next/image";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { toast } from "react-toastify";
@@ -123,13 +124,7 @@ export default function BookingPage() {
 
     // Phone Validation (WhatsApp)
     // Supports: 05xxxxxxxx, 9665xxxxxxxx, +9665xxxxxxxx, or any international format (min 8 digits)
-    const phoneRegex = /^[+]?[\d]{8,15}$/;
-    if (!phoneNumber) {
-      toast.error(t("booking.validation.whatsapp"));
-      return;
-    }
-
-    if (!phoneRegex.test(phoneNumber.replace(/\s/g, ""))) {
+    if (!phoneNumber || phoneNumber.replace(/\s/g, "").length < 9) {
       toast.error(t("booking.validation.invalidPhone"));
       return;
     }
@@ -325,15 +320,17 @@ export default function BookingPage() {
                       {t("booking.contactTitle")}
                     </h3>
                   </div>
-                  <TextField
+                  <MuiTelInput
+                    defaultCountry="SA"
                     label={t("booking.whatsappLabel")}
                     fullWidth
                     size="small"
                     value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    onChange={(newPhone) => setPhoneNumber(newPhone)}
                     placeholder={t("booking.whatsappPlaceholder")}
                     helperText={t("booking.whatsappHelper")}
                     required
+                    dir="ltr"
                     sx={{
                       "& .MuiOutlinedInput-root": {
                         borderRadius: 3,
@@ -342,6 +339,7 @@ export default function BookingPage() {
                         "& fieldset": { borderColor: "rgba(255,255,255,0.1)" },
                         "&.Mui-focused fieldset": { borderColor: "#22c55e" },
                       },
+                      "& .intl-tel-input": { width: "100%" },
                       "& .MuiInputLabel-root": {
                         color: "rgba(255,255,255,0.4)",
                         fontWeight: "bold",

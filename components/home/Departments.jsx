@@ -27,7 +27,7 @@ const Departments = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {/* Card 1: Regular Rentals */}
           <Link
-            href="/cars"
+            href="/individuals"
             className="group relative h-[300px] sm:h-[350px] md:h-[450px] rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-500 active:scale-95 border border-white/10"
           >
             {/* Background Image */}
