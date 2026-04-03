@@ -15,10 +15,7 @@ const Partners = () => {
   ];
 
   return (
-    <section
-      className="py-24 bg-transparent relative overflow-hidden"
-      dir={i18n.dir()}
-    >
+    <section className="py-24 bg-transparent relative overflow-hidden">
       <div className="container mx-auto px-6 mb-16" dir={i18n.dir()}>
         <div className="text-center">
           <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tighter">
@@ -29,12 +26,12 @@ const Partners = () => {
         </div>
       </div>
 
-      <div className="relative overflow-hidden w-full">
+      <div className="relative overflow-hidden w-full" dir="ltr">
         <Marquee
           gradient={false}
           speed={40}
           pauseOnHover
-          direction={i18n.dir() === "rtl" ? "right" : "left"}
+          direction="left"
           autoFill={true}
         >
           {[...partners, ...partners, ...partners].map((partner, index) => (

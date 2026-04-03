@@ -72,11 +72,8 @@ export default function ReviewMarquee() {
   }
 
   return (
-    <section
-      className="py-24 bg-transparent relative overflow-hidden w-full max-w-full"
-      dir={i18n.dir()}
-    >
-      <div className="container mx-auto px-4 md:px-6 relative z-10 overflow-hidden">
+    <section className="py-24 bg-transparent relative overflow-hidden w-full max-w-full">
+      <div className="container mx-auto px-4 md:px-6 relative z-10 overflow-hidden" dir={i18n.dir()}>
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-4 md:mb-6 leading-tight tracking-tighter">
             {t("reviews.titlePart1")}{" "}
@@ -87,8 +84,8 @@ export default function ReviewMarquee() {
           <div className="w-16 md:w-24 h-1.5 md:h-2 bg-linear-to-r from-primary to-transparent mx-auto rounded-full"></div>
         </div>
 
-        <div className="relative w-full overflow-hidden no-scrollbar">
-          <Marquee gradient={false} speed={30} pauseOnHover autoFill={true} className="py-10">
+        <div className="relative w-full overflow-hidden no-scrollbar" dir="ltr">
+          <Marquee gradient={false} speed={30} pauseOnHover autoFill={true} direction="left" className="py-10">
             {[...reviews, ...reviews, ...reviews].map((review, index) => (
               <div
                 key={review._id || index}
