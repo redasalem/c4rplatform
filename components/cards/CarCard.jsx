@@ -33,7 +33,7 @@ const CarCard = ({ car }) => {
       <div className="absolute inset-0 bg-gradient-to-br from-orange-50/50 via-white to-orange-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
 
       {/* Image Section */}
-      <div className="relative h-60 w-full overflow-hidden z-10 m-2 rounded-[1.5rem] shadow-inner">
+      <div className="relative h-64 w-full flex-shrink-0 overflow-hidden z-10 rounded-t-[2rem]">
         <Image
           src={imageUrl}
           alt={car.name || t("carCard.fallbackImage")}
