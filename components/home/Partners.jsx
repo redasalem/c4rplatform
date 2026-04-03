@@ -35,9 +35,9 @@ const Partners = () => {
           speed={40}
           pauseOnHover
           direction={i18n.dir() === "rtl" ? "right" : "left"}
-          autoFill
+          autoFill={true}
         >
-          {partners.map((partner, index) => (
+          {[...partners, ...partners, ...partners].map((partner, index) => (
             <div key={`${partner.id}-${index}`} className="mx-3 sm:mx-4 group/item inline-block">
               <div className="relative w-56 sm:w-72 md:w-80 h-32 md:h-40 bg-white rounded-[2rem] shadow-xl border border-white/10 flex items-center justify-center p-6 transition-all duration-300 hover:scale-105">
                 <div className="relative w-full h-full flex items-center justify-center">
