@@ -22,7 +22,7 @@ import {
   Home,
   Business,
   EventNote,
-} from "@mui/icons-material";
+  Group,
 import { useAuth } from "@/context/AuthContext";
 import Tooltip from "@/components/ui/Tooltip";
 
@@ -77,6 +77,17 @@ const Navbar = () => {
           {/* Right Side: Exact Text from Reference */}
           {/* Right Side: Optimized for Mobile */}
           <div className="flex items-center gap-2 sm:gap-6 h-full">
+            <Link
+              href="/individuals"
+              className="hover:text-orange-200 transition-all duration-300 border-l border-orange-700/30 pl-3 sm:pl-6 h-full flex items-center active:scale-95"
+            >
+              <Tooltip text={t("navbar.individuals")} position="bottom">
+                <Group className="md:hidden ml-2" style={{ fontSize: 20 }} />
+                <span className="hidden md:inline">
+                  {t("navbar.individuals")}
+                </span>
+              </Tooltip>
+            </Link>
             <Link
               href="/corporate"
               className="hover:text-orange-200 transition-all duration-300 border-l border-orange-700/30 pl-3 sm:pl-6 h-full flex items-center active:scale-95"
@@ -366,6 +377,31 @@ const Navbar = () => {
             >
               <LocationOn className="text-primary" />
               {t("navbar.sharqiya")}
+            </Link>
+            <div className="h-px bg-white/10 w-full my-1" />
+            <Link
+              href="/individuals"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-lg font-bold text-white hover:text-primary transition-colors flex items-center gap-3 p-2 rounded-xl hover:bg-white/5"
+            >
+              <Group className="text-primary" />
+              {t("navbar.individuals")}
+            </Link>
+            <Link
+              href="/corporate"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-lg font-bold text-white hover:text-primary transition-colors flex items-center gap-3 p-2 rounded-xl hover:bg-white/5"
+            >
+              <Business className="text-primary" />
+              {t("navbar.corporate")}
+            </Link>
+            <Link
+              href="/with-driver"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-lg font-bold text-white hover:text-primary transition-colors flex items-center gap-3 p-2 rounded-xl hover:bg-white/5"
+            >
+              <Person className="text-primary" />
+              {t("navbar.withDriver")}
             </Link>
           </nav>
 

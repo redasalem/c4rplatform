@@ -111,6 +111,7 @@ const Footer = () => {
               {[
                 { label: t("footer.aboutUs"), href: "/about" },
                 { label: t("footer.faqShort"), href: "/faq" },
+                { label: t("footer.individuals"), href: "/individuals" },
                 { label: t("footer.withDriver"), href: "/with-driver" },
                 { label: t("footer.companies"), href: "/corporate" },
               ].map((link, index) => (
