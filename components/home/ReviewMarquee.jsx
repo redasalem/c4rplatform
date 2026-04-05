@@ -35,40 +35,8 @@ export default function ReviewMarquee() {
     );
   }
 
-  // Fallback to mock data if API fails or returns empty array
-  const mockReviews = [
-    {
-      _id: "m1",
-      user: { name: "Ahmed Khaled" },
-      rating: 5,
-      comment: "Excellent service and very clean cars. The process was smooth.",
-      car: { name: "Toyota Camry" },
-    },
-    {
-      _id: "m2",
-      user: { name: "Sara Ali" },
-      rating: 4.5,
-      comment: "Great experience, highly recommended for family trips.",
-      car: { name: "Hyundai Tucson" },
-    },
-    {
-      _id: "m3",
-      user: { name: "Mohammed Yasser" },
-      rating: 5,
-      comment: "The driver was very professional and on time.",
-      car: { name: "Mercedes S-Class" },
-    },
-    {
-      _id: "m4",
-      user: { name: "Fatimah Omar" },
-      rating: 4,
-      comment: "Good pricing compared to other rental companies.",
-      car: { name: "Kia Rio" },
-    },
-  ];
-
   if (!reviews || reviews.length === 0) {
-    reviews = mockReviews;
+    return null;
   }
 
   return (

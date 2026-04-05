@@ -82,7 +82,9 @@ export default function BookingPage() {
       setShowSuccessDialog(true);
     },
     onError: (err) => {
-      toast.error(err.response?.data?.message || t("booking.submitError"));
+      console.error("Booking Error:", err.response?.data || err);
+      // Fallback to translated generic error rather than exposing raw English backend strings
+      toast.error(t("booking.submitError"));
     },
   });
 
