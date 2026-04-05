@@ -562,13 +562,12 @@ export default function BookingPage() {
               <div className="bg-white/5 backdrop-blur-3xl p-3 sm:p-4 md:p-6 rounded-2xl sm:rounded-3xl shadow-2xl border border-white/10 overflow-hidden relative group">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
 
-                <div className="relative -mx-3 sm:-mx-4 md:-mx-6 -mt-3 sm:-mt-4 md:-mt-6 mb-3 sm:mb-4 overflow-hidden border-b border-white/10 bg-white/5 max-h-52">
+                <div className="relative -mx-3 sm:-mx-4 md:-mx-6 -mt-3 sm:-mt-4 md:-mt-6 mb-3 sm:mb-4 overflow-hidden border-b border-white/10 bg-white/5 h-48 sm:h-56">
                   <Image
                     src={imageUrl}
                     alt={car?.name || t("booking.carImageAlt")}
-                    width={800}
-                    height={800}
-                    className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-1000"
+                    fill
+                    className="object-contain group-hover:scale-105 transition-transform duration-1000"
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-midnight/80 via-transparent to-transparent pointer-events-none" />
                 </div>
