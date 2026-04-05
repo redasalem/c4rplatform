@@ -567,7 +567,7 @@ export default function BookingPage() {
                     src={imageUrl}
                     alt={car?.name || t("booking.carImageAlt")}
                     fill
-                    className="object-contain group-hover:scale-105 transition-transform duration-1000"
+                    className="object-cover group-hover:scale-105 transition-transform duration-1000"
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-midnight/80 via-transparent to-transparent pointer-events-none" />
                 </div>
