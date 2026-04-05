@@ -60,20 +60,15 @@ const Footer = () => {
             {/* Circular Logo Container */}
             <Link
               href="/"
-              className="inline-flex h-12 md:h-14 px-4 md:px-5 mx-auto md:mx-0 items-center justify-center rounded-full bg-white/10 border border-white/20 shadow-[0_0_8px_rgba(255,107,0,0.4)] group active:scale-95 transition-transform"
+              className="inline-flex mx-auto md:mx-0 group active:scale-95 transition-transform"
             >
               <Image
                 src="/images/logo.jpeg"
                 alt="C4R Logo"
-                width={120}
-                height={60}
+                width={160}
+                height={65}
                 priority
-                className="object-contain"
-                style={{
-                  filter: "brightness(1.2) contrast(1.1)",
-                  maxHeight: "60px",
-                  width: "auto",
-                }}
+                className="object-contain rounded-[15px]"
               />
             </Link>
             <p className="text-sm md:text-lg leading-relaxed text-gray-400 font-bold italic max-w-sm mx-auto md:mx-0">
