@@ -17,7 +17,7 @@ const HeroAd = () => {
           {/* Background Image - Restore Original */}
           <div className="absolute inset-0">
             <Image
-              src="/images/car1.jpeg"
+              src="/images/car1.png"
               alt="Luxury Car Fleet"
               fill
               className="object-cover object-center group-hover:scale-105 transition-transform duration-10000"

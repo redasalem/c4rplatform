@@ -58,6 +58,11 @@ const FAQ = () => {
       question: t("faq.q8.question"),
       answer: t("faq.q8.answer"),
     },
+    {
+      id: "panel9",
+      question: t("faq.q9.question"),
+      answer: t("faq.q9.answer"),
+    },
   ];
 
   return (

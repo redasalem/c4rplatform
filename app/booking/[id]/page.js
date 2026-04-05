@@ -32,6 +32,7 @@ import {
 } from "@mui/icons-material";
 import { MuiTelInput } from "mui-tel-input";
 import Image from "next/image";
+import Link from "next/link";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
@@ -48,7 +49,7 @@ export default function BookingPage() {
     endDate: "",
   });
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [kmPerDay, setKmPerDay] = useState(200);
+  const [kmPerDay, setKmPerDay] = useState(300);
   const [idCardFile, setIdCardFile] = useState(null);
   const [licenseFile, setLicenseFile] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -228,7 +229,7 @@ export default function BookingPage() {
                   <div className="flex items-center gap-2 mb-3 sm:mb-5 text-white">
                     <div className="p-1.5 sm:p-2 bg-primary/20 rounded-lg border border-primary/30">
                       <CalendarMonth
-                        className="text-primary"
+                        className="text-white"
                         sx={{ fontSize: { xs: 18, sm: 20 } }}
                       />
                     </div>
@@ -240,7 +241,12 @@ export default function BookingPage() {
                     <Grid item xs={12} sm={6}>
                       <TextField
                         label={t("booking.pickupDate")}
-                        type="date"
+                        type={dates.startDate ? "date" : "text"}
+                        onFocus={(e) => (e.target.type = "date")}
+                        onBlur={(e) => {
+                          if (!e.target.value) e.target.type = "text";
+                        }}
+                        placeholder="يوم / شهر / سنة"
                         fullWidth
                         size="small"
                         InputLabelProps={{ shrink: true }}
@@ -275,7 +281,12 @@ export default function BookingPage() {
                     <Grid item xs={12} sm={6}>
                       <TextField
                         label={t("booking.dropoffDate")}
-                        type="date"
+                        type={dates.endDate ? "date" : "text"}
+                        onFocus={(e) => (e.target.type = "date")}
+                        onBlur={(e) => {
+                          if (!e.target.value) e.target.type = "text";
+                        }}
+                        placeholder="يوم / شهر / سنة"
                         fullWidth
                         size="small"
                         InputLabelProps={{ shrink: true }}
@@ -402,17 +413,8 @@ export default function BookingPage() {
                       },
                     }}
                   >
-                    <MenuItem value={100}>
-                      {t("booking.kmOption", { km: 100 })}
-                    </MenuItem>
-                    <MenuItem value={200}>
-                      {t("booking.kmOption", { km: 200 })}
-                    </MenuItem>
                     <MenuItem value={300}>
                       {t("booking.kmOption", { km: 300 })}
-                    </MenuItem>
-                    <MenuItem value={500}>
-                      {t("booking.kmOption", { km: 500 })}
                     </MenuItem>
                   </Select>
                 </FormControl>
@@ -506,7 +508,9 @@ export default function BookingPage() {
                   />
                   <div>
                     <p className="text-sm sm:text-base font-black text-white">
-                      {t("booking.policyTitle")}
+                      <Link href="/terms" className="hover:text-primary transition-colors underline decoration-white/20 underline-offset-4">
+                        {t("booking.policyTitle")}
+                      </Link>
                     </p>
                     <p className="text-[10px] sm:text-xs font-bold text-slate-500 leading-relaxed">
                       {t("booking.policyText")}
@@ -552,14 +556,14 @@ export default function BookingPage() {
               <div className="bg-white/5 backdrop-blur-3xl p-3 sm:p-4 md:p-6 rounded-2xl sm:rounded-3xl shadow-2xl border border-white/10 overflow-hidden relative group">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
 
-                <div className="relative h-32 sm:h-40 -mx-3 sm:-mx-4 md:-mx-6 -mt-3 sm:-mt-4 md:-mt-6 mb-3 sm:mb-4 overflow-hidden border-b border-white/10">
+                <div className="relative h-48 sm:h-56 md:h-64 -mx-3 sm:-mx-4 md:-mx-6 -mt-3 sm:-mt-4 md:-mt-6 mb-3 sm:mb-4 overflow-hidden border-b border-white/10 bg-white/5">
                   <Image
                     src={imageUrl}
                     alt={car?.name || t("booking.carImageAlt")}
                     fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-1000"
+                    className="object-contain p-4 group-hover:scale-110 transition-transform duration-1000"
                   />
-                  <div className="absolute inset-0 bg-linear-to-t from-midnight/80 to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-midnight/80 to-transparent pointer-events-none" />
                 </div>
 
                 <div className="mb-3 sm:mb-4 relative z-10">

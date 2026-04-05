@@ -126,8 +126,12 @@
       "answer": "Call us immediately on the emergency number. Our team is available 24/7 to assist you and send a replacement car."
     },
     "q8": {
-      "question": "Can I extend the rental period?",
-      "answer": "Yes, you can extend through the app or by calling us before the original period ends."
+      "question": "Can I extend my rental period?",
+      "answer": "Yes, you can extend your rental period through the app or by contacting us before the original period ends."
+    },
+    "q9": {
+      "question": "Car Condition Documentation",
+      "answer": "To ensure your peace of mind and protect your rights, we take a full comprehensive video of the car before handover, ensuring you are not held responsible for any pre-existing damages."
     }
   },
   "footer": {
