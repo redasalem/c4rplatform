@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import NextImage from "next/image";
 import { useRouter } from "next/navigation";
 import { authService } from "@/services/api";
 import {
@@ -14,6 +13,7 @@ import {
 import { Email, ArrowForward } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import Logo from "@/components/Logo";
 
 export default function ForgotPasswordPage() {
   const { t, i18n } = useTranslation("common");
@@ -51,13 +51,9 @@ export default function ForgotPasswordPage() {
         <div className="text-center mb-10">
           <Link href="/" className="inline-block mb-6 relative group">
             <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <NextImage
-              src="/images/logo.webp"
-              alt="C4R Logo"
-              width={120}
-              height={50}
-              className="h-12 w-auto mx-auto object-contain relative z-10 rounded-lg"
-            />
+            <div className="h-12 px-5 rounded-full bg-white/10 border border-white/20 inline-flex items-center justify-center shadow-[0_0_8px_rgba(255,107,0,0.4)] relative z-10">
+              <Logo size="md" />
+            </div>
           </Link>
           <h1 className="text-3xl font-black text-white tracking-tight">
             {t("auth.forgotTitle")}

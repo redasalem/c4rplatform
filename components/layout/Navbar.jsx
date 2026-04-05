@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { Select, MenuItem } from "@mui/material";
@@ -26,6 +25,7 @@ import {
 } from "@mui/icons-material";
 import { useAuth } from "@/context/AuthContext";
 import Tooltip from "@/components/ui/Tooltip";
+import Logo from "@/components/Logo";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -231,15 +231,9 @@ const Navbar = () => {
                 href="/"
                 className="group block transition-transform duration-300 ease-out hover:scale-[1.05] active:scale-95"
               >
-                <div className="relative h-11 w-11 sm:h-12 sm:w-12 md:h-16 md:w-16 rounded-full overflow-hidden flex items-center justify-center transition-all duration-300">
-                  <Image
-                    src="/images/logo.webp"
-                    alt="C4R Logo"
-                    fill
-                    className="object-contain brightness-110 contrast-110"
-                    priority
-                    sizes="(max-width: 640px) 44px, (max-width: 768px) 48px, 64px"
-                  />
+                <div className="h-10 sm:h-11 md:h-14 px-3 md:px-4 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shadow-[0_0_8px_rgba(255,107,0,0.4)] transition-all duration-300">
+                  <Logo size="sm" className="md:hidden" />
+                  <Logo size="md" className="hidden md:inline-flex" />
                 </div>
               </Link>
             </div>

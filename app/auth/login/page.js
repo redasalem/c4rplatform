@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
@@ -15,6 +14,7 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
+import Logo from "@/components/Logo";
 
 export default function LoginPage() {
   const { t, i18n } = useTranslation("common");
@@ -43,13 +43,10 @@ export default function LoginPage() {
         <div className="text-center mb-8 md:mb-10">
           <Link href="/" className="inline-block mb-4 md:mb-6 relative group">
             <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <Image
-              src="/images/logo.webp"
-              alt="C4R Logo"
-              width={100}
-              height={40}
-              className="h-10 md:h-12 w-auto mx-auto object-contain relative z-10 rounded-lg"
-            />
+            <div className="h-10 md:h-12 px-4 md:px-5 rounded-full bg-white/10 border border-white/20 inline-flex items-center justify-center shadow-[0_0_8px_rgba(255,107,0,0.4)] relative z-10">
+              <Logo size="sm" className="md:hidden" />
+              <Logo size="md" className="hidden md:inline-flex" />
+            </div>
           </Link>
           <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
             {t("auth.welcomeTitle")}
