@@ -252,9 +252,13 @@ function ManageBookings() {
       queryClient.invalidateQueries(["recentReviews"]);
     },
     onError: (err) => {
-      toast.error(
-        err.response?.data?.message || t("dashboard.user.reviews.error", "حدث خطأ أثناء التقييم"),
-      );
+      // Localize the "already reviewed" error or fallback to general error
+      const msg = err.response?.data?.message;
+      if (msg === "You have already reviewed this booking") {
+        toast.error(t("dashboard.user.reviews.alreadyReviewed", "لقد قمت بتقييم هذا الحجز مسبقاً"));
+      } else {
+        toast.error(t("dashboard.user.reviews.error", "حدث خطأ أثناء التقييم"));
+      }
     },
   });
 
@@ -265,6 +269,10 @@ function ManageBookings() {
 
   const handleSubmitReview = () => {
     if (!selectedBooking) return;
+    if (!comment.trim()) {
+      toast.warning(t("dashboard.user.reviews.emptyCommentError", "الرجاء كتابة تعليق مع التقييم"));
+      return;
+    }
     createReviewMutation.mutate({
       carId: selectedBooking.car._id,
       bookingId: selectedBooking._id,
