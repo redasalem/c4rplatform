@@ -44,7 +44,7 @@ export default function LoginPage() {
           <Link href="/" className="inline-block mb-4 md:mb-6 relative group">
             <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <Image
-              src="/images/logo.jpg"
+              src="/images/logo.webp"
               alt="C4R Logo"
               width={100}
               height={40}

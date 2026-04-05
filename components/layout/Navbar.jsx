@@ -229,16 +229,16 @@ const Navbar = () => {
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:relative md:left-auto md:top-auto md:translate-x-0 md:translate-y-0 shrink-0 px-2 sm:px-4">
               <Link
                 href="/"
-                className="block active:scale-95 transition-transform"
+                className="group block transition-transform duration-300 ease-out hover:scale-[1.05] active:scale-95"
               >
-                <div className="relative h-20 w-20 sm:h-22 sm:w-22 rounded-full overflow-hidden flex items-center justify-center transition-all duration-500 group-hover:scale-105">
+                <div className="relative h-11 w-11 sm:h-12 sm:w-12 md:h-16 md:w-16 rounded-full overflow-hidden flex items-center justify-center transition-all duration-300">
                   <Image
-                    src="/images/logo.jpeg"
+                    src="/images/logo.webp"
                     alt="C4R Logo"
                     fill
-                    className="object-contain"
+                    className="object-contain brightness-110 contrast-110"
                     priority
-                    sizes="(max-width: 640px) 80px, 88px"
+                    sizes="(max-width: 640px) 44px, (max-width: 768px) 48px, 64px"
                   />
                 </div>
               </Link>

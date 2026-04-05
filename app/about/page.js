@@ -87,7 +87,7 @@ const AboutPage = () => {
             <div className="relative">
               <div className="aspect-square rounded-[3rem] border border-white/10 overflow-hidden shadow-2xl relative">
                 <Image
-                  src="/images/logo.jpg"
+                  src="/images/logo.webp"
                   alt="About C4R"
                   fill
                   className="object-contain p-20 bg-white"
