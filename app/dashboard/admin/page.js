@@ -236,6 +236,43 @@ function ManageBookings() {
 
   const [deleteId, setDeleteId] = useState(null);
 
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
+
+  const createReviewMutation = useMutation({
+    mutationFn: reviewService.create,
+    onSuccess: () => {
+      toast.success(t("dashboard.user.reviews.success", "تم التقييم بنجاح!"));
+      setReviewOpen(false);
+      setComment("");
+      setRating(5);
+      queryClient.invalidateQueries(["allBookings"]);
+      queryClient.invalidateQueries(["recentReviews"]);
+    },
+    onError: (err) => {
+      toast.error(
+        err.response?.data?.message || t("dashboard.user.reviews.error", "حدث خطأ أثناء التقييم"),
+      );
+    },
+  });
+
+  const handleOpenReview = (booking) => {
+    setSelectedBooking(booking);
+    setReviewOpen(true);
+  };
+
+  const handleSubmitReview = () => {
+    if (!selectedBooking) return;
+    createReviewMutation.mutate({
+      carId: selectedBooking.car._id,
+      bookingId: selectedBooking._id,
+      rating,
+      comment,
+    });
+  };
+
   const approveMutation = useMutation({
     mutationFn: bookingService.approve,
     onSuccess: () => {
@@ -573,8 +610,27 @@ function ManageBookings() {
                       </Button>
                     </>
                   ) : (
-                    <div className="w-full text-center py-2.5 sm:py-3.5 bg-white/5 text-slate-500 rounded-xl sm:rounded-2xl text-[10px] sm:text-sm font-black border border-white/5 italic">
-                      {t("dashboard.admin.bookings.finalAction")}
+                    <div className="w-full flex gap-3">
+                      <div className="flex-1 text-center py-2.5 sm:py-3.5 bg-white/5 text-slate-500 rounded-xl sm:rounded-2xl text-[10px] sm:text-sm font-black border border-white/5 italic flex items-center justify-center">
+                        {t("dashboard.admin.bookings.finalAction")}
+                      </div>
+                      {booking.status === "approved" && (
+                        <Button
+                          variant="contained"
+                          onClick={() => handleOpenReview(booking)}
+                          sx={{
+                            borderRadius: "1.25rem",
+                            fontWeight: "900",
+                            bgcolor: "var(--primary)",
+                            "&:hover": { bgcolor: "var(--primary-hover)" },
+                            px: 3,
+                            fontSize: "0.9rem",
+                            boxShadow: "0 10px 20px -5px rgba(249, 115, 22, 0.3)",
+                          }}
+                        >
+                          {t("dashboard.user.bookings.rateButton", "تقييم")}
+                        </Button>
+                      )}
                     </div>
                   )}
                 </div>
@@ -637,6 +693,103 @@ function ManageBookings() {
             {deleteMutation.isPending
               ? t("dashboard.user.reviews.posting")
               : t("dashboard.admin.bookings.deleteDialog.confirm")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Review Dialog */}
+      <Dialog
+        open={reviewOpen}
+        onClose={() => setReviewOpen(false)}
+        dir={i18n.dir()}
+        fullWidth
+        maxWidth="xs"
+        PaperProps={{
+          sx: {
+            borderRadius: { xs: "2rem", md: "2.5rem" },
+            padding: { xs: 1, md: 2 },
+            bgcolor: "rgba(15, 23, 42, 0.98)",
+            backdropFilter: "blur(20px)",
+            border: "1px solid rgba(255,255,255,0.1)",
+            color: "white",
+            margin: { xs: 2, md: 4 },
+          },
+        }}
+      >
+        <DialogTitle className="font-black text-2xl md:text-3xl text-center mb-1 md:mb-2">
+          {t("dashboard.user.reviews.dialogTitle", "تقييم السيارة")}
+        </DialogTitle>
+        <DialogContent className="flex flex-col items-center space-y-4 md:space-y-6 pt-4 md:pt-6">
+          <Typography
+            variant="body2"
+            className="text-slate-400 font-bold text-center mb-2"
+          >
+            {t("dashboard.user.reviews.dialogSubtitle", "كيف كانت تجربتك لسيارة")}{" "}
+            {selectedBooking?.car?.name}
+          </Typography>
+
+          <Rating
+            name="simple-controlled"
+            value={rating}
+            onChange={(event, newValue) => {
+              setRating(newValue);
+            }}
+            size="large"
+            precision={1}
+            dir={i18n.dir()}
+            sx={{
+              fontSize: { xs: "2.5rem", md: "3rem" },
+              "& .MuiRating-iconFilled": { color: "#f97316" },
+              "& .MuiRating-iconEmpty": { color: "rgba(255,255,255,0.1)" },
+            }}
+          />
+
+          <TextField
+            placeholder={t("dashboard.user.reviews.placeholder", "صِف لنا تجربتك...")}
+            multiline
+            rows={4}
+            fullWidth
+            variant="outlined"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: { xs: 3, md: 4 },
+                bgcolor: "rgba(255,255,255,0.03)",
+                color: "white",
+                fontSize: { xs: "0.85rem", md: "1rem" },
+                "& fieldset": { borderColor: "rgba(255,255,255,0.1)" },
+                "&:hover fieldset": { borderColor: "rgba(255,255,255,0.2)" },
+              },
+            }}
+          />
+        </DialogContent>
+        <DialogActions className="flex-col sm:flex-row justify-center gap-2 sm:gap-4 pb-8 pt-4 px-6">
+          <Button
+            onClick={() => setReviewOpen(false)}
+            className="text-slate-500 font-black px-8"
+            sx={{ width: { xs: "100%", sm: "auto" } }}
+          >
+            {t("dashboard.user.reviews.cancel", "إلغاء")}
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleSubmitReview}
+            disabled={createReviewMutation.isPending}
+            sx={{
+              fontWeight: "black",
+              borderRadius: "1.25rem",
+              px: { xs: 4, md: 8 },
+              py: 1.5,
+              width: { xs: "100%", sm: "auto" },
+              backgroundColor: "var(--primary)",
+              "&:hover": { backgroundColor: "var(--primary-hover)" },
+              boxShadow: "0 10px 20px -5px rgba(249, 115, 22, 0.3)",
+            }}
+          >
+            {createReviewMutation.isPending
+              ? t("dashboard.user.reviews.posting", "يتم التقييم...")
+              : t("dashboard.user.reviews.postButton", "أضف التقييم")}
           </Button>
         </DialogActions>
       </Dialog>

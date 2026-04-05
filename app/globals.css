@@ -91,3 +91,9 @@ input:-webkit-autofill:active {
   scrollbar-width: thin;
   scrollbar-color: #f43f5e var(--midnight);
 }
+
+/* Fix Date Picker Native Icon Color in Dark Mode */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}

@@ -12,6 +12,7 @@ const Partners = () => {
     { id: 3, img: "/images/p-3.jpeg", name: "Partner 3" },
     { id: 4, img: "/images/p-4.jpeg", name: "Partner 4" },
     { id: 5, img: "/images/p5.JPEG", name: "Partner 5" },
+    { id: 6, img: "/images/p6.jpeg", name: "Partner 6" },
   ];
 
   return (
