@@ -21,8 +21,8 @@ export const metadata = {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
   },
   icons: {
-    icon: "/logo1.jpg", // ← Favicon (Tab المتصفح)
-    apple: "/logo1.jpg", // ← iOS Home Screen
+    icon: "/favicon.ico", // Favicon (Browser Tab)
+    apple: "/logo1.jpg", // iOS Home Screen
   },
 };
 
@@ -41,7 +41,7 @@ export default function RootLayout({ children }) {
               "@context": "https://schema.org",
               "@type": "CarRental",
               "name": "C4R Platform | سي فور آر لتأجير السيارات",
-              "logo": "https://c4rplatform.com/images/logo.jpg",
+              "logo": "https://c4rplatform.com/images/logo.jpeg",
               "url": "https://c4rplatform.com",
               "telephone": "+966554118873",
               "address": {

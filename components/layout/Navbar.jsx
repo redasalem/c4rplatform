@@ -231,14 +231,14 @@ const Navbar = () => {
                 href="/"
                 className="block active:scale-95 transition-transform"
               >
-                <div className="relative h-14 w-14 sm:h-18 sm:w-18 md:h-20 md:w-20 rounded-full overflow-hidden border-2 sm:border-4 border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.3)] sm:shadow-[0_0_25px_rgba(249,115,22,0.4)] bg-white flex items-center justify-center group hover:shadow-[0_0_35px_rgba(249,115,22,0.6)] transition-all duration-500">
+                <div className="relative h-20 w-20 sm:h-22 sm:w-22 rounded-full overflow-hidden flex items-center justify-center transition-all duration-500 group-hover:scale-105">
                   <Image
-                    src="/images/logo.jpg"
+                    src="/images/logo.jpeg"
                     alt="C4R Logo"
                     fill
-                    className="object-contain p-1 sm:p-1.5 group-hover:scale-110 transition-transform duration-500"
+                    className="object-contain"
                     priority
-                    sizes="(max-width: 640px) 56px, (max-width: 768px) 72px, 112px"
+                    sizes="(max-width: 640px) 80px, 88px"
                   />
                 </div>
               </Link>
