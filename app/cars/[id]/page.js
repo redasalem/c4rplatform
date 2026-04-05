@@ -302,7 +302,6 @@ export default function CarDetailsPage() {
                       t("carDetails.includes.insurance"),
                       t("carDetails.includes.support"),
                       t("carDetails.includes.maintenance"),
-                      t("carDetails.includes.delivery"),
                     ].map((item, idx) => (
                       <div
                         key={idx}
