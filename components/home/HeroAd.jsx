@@ -24,8 +24,6 @@ const HeroAd = () => {
               priority
               sizes="100vw"
             />
-            {/* Dark Overlay for Contrast - Reduced for better image visibility */}
-            <div className="absolute inset-0 bg-black/25 backdrop-blur-[1px]"></div>
           </div>
 
           {/* Ad Content Overlay - Original Structure */}
