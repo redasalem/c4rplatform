@@ -8,7 +8,7 @@ import {
   LibraryAddCheck,
   DirectionsCar,
 } from "@mui/icons-material";
-import Logo from "@/components/Logo";
+import Image from "next/image";
 
 const AboutPage = () => {
   const breadcrumbItems = [{ label: "من نحن" }];
@@ -85,12 +85,20 @@ const AboutPage = () => {
 
             {/* Right Column: Image/Visual */}
             <div className="relative">
-              <div className="aspect-square rounded-[3rem] border border-white/10 overflow-hidden shadow-2xl relative">
-                <div className="absolute inset-0 bg-white/5 flex items-center justify-center">
-                  <div className="h-20 md:h-24 px-8 md:px-10 rounded-full bg-midnight/80 border border-white/20 inline-flex items-center justify-center shadow-[0_0_16px_rgba(255,107,0,0.4)]">
-                    <Logo size="lg" />
-                  </div>
-                </div>
+              <div className="aspect-square rounded-[3rem] border border-white/10 overflow-hidden shadow-2xl relative bg-white/5 flex items-center justify-center p-8">
+                <Image
+                  src="/images/logo.jpeg"
+                  alt="About C4R"
+                  width={120}
+                  height={60}
+                  priority
+                  className="object-contain"
+                  style={{
+                    filter: "brightness(1.2) contrast(1.1)",
+                    maxHeight: "60px",
+                    width: "auto",
+                  }}
+                />
               </div>
               {/* Floating Stat Card */}
               <div className="absolute -bottom-8 -right-8 bg-midnight/80 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-2xl max-w-xs md:max-w-none">

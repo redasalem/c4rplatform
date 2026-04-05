@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   WhatsApp,
   Email,
@@ -11,7 +12,6 @@ import {
   X,
 } from "@mui/icons-material";
 import { SiTiktok } from "react-icons/si";
-import Logo from "@/components/Logo";
 
 import { useTranslation } from "react-i18next";
 
@@ -62,8 +62,19 @@ const Footer = () => {
               href="/"
               className="inline-flex h-12 md:h-14 px-4 md:px-5 mx-auto md:mx-0 items-center justify-center rounded-full bg-white/10 border border-white/20 shadow-[0_0_8px_rgba(255,107,0,0.4)] group active:scale-95 transition-transform"
             >
-              <Logo size="sm" className="md:hidden" />
-              <Logo size="md" className="hidden md:inline-flex" />
+              <Image
+                src="/images/logo.jpeg"
+                alt="C4R Logo"
+                width={120}
+                height={60}
+                priority
+                className="object-contain"
+                style={{
+                  filter: "brightness(1.2) contrast(1.1)",
+                  maxHeight: "60px",
+                  width: "auto",
+                }}
+              />
             </Link>
             <p className="text-sm md:text-lg leading-relaxed text-gray-400 font-bold italic max-w-sm mx-auto md:mx-0">
               {t("footer.brandDesc")}

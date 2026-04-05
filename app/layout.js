@@ -24,7 +24,7 @@ export const metadata = {
   icons: {
     icon: [{ url: "/favicon.ico", type: "image/x-icon" }],
     shortcut: ["/favicon.ico"],
-    apple: [{ url: "/images/logo-optimized.jpeg", sizes: "180x180" }],
+    apple: [{ url: "/images/logo.jpeg", sizes: "180x180" }],
   },
   openGraph: {
     title: "C4R-Platform | تأجير سيارات في السعودية",
@@ -36,7 +36,7 @@ export const metadata = {
     type: "website",
     images: [
       {
-        url: "/images/logo-optimized.jpeg",
+        url: "/images/logo.jpeg",
         width: 400,
         height: 227,
         alt: "C4R Platform Logo",
@@ -48,7 +48,7 @@ export const metadata = {
     title: "C4R-Platform | تأجير سيارات في السعودية",
     description:
       "منصة C4R لتأجير السيارات الفاخرة والاقتصادية في المملكة العربية السعودية.",
-    images: ["/images/logo-optimized.jpeg"],
+    images: ["/images/logo.jpeg"],
   },
 };
 
@@ -67,7 +67,7 @@ export default function RootLayout({ children }) {
               "@context": "https://schema.org",
               "@type": "CarRental",
               "name": "C4R Platform | سي فور آر لتأجير السيارات",
-              "logo": "https://c4rplatform.com/images/logo-optimized.jpeg",
+              "logo": "https://c4rplatform.com/images/logo.jpeg",
               "url": "https://c4rplatform.com",
               "telephone": "+966554118873",
               "address": {
