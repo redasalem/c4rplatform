@@ -661,7 +661,7 @@ function BookingsSection() {
               </div>
 
               <div className="mt-auto grid grid-cols-2 gap-2 sm:gap-3 pt-4 border-t border-white/5">
-                {booking.status === "approved" ? (
+                {booking.status === "approved" && !booking.isReviewed ? (
                   <Button
                     variant="contained"
                     size="small"
@@ -676,6 +676,21 @@ function BookingsSection() {
                     }}
                   >
                     {t("dashboard.user.bookings.rateButton")}
+                  </Button>
+                ) : booking.status === "approved" && booking.isReviewed ? (
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    disabled
+                    sx={{
+                      borderRadius: "1rem sm:1.25rem",
+                      fontWeight: "black",
+                      fontSize: { xs: "0.7rem", sm: "0.8rem" },
+                      borderColor: "rgba(34, 197, 94, 0.2)",
+                      color: "#22c55e",
+                    }}
+                  >
+                    {t("dashboard.user.bookings.rated", "تم التقييم")}
                   </Button>
                 ) : (
                   <Button

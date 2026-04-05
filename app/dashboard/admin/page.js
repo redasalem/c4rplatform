@@ -614,7 +614,7 @@ function ManageBookings() {
                       <div className="flex-1 text-center py-2.5 sm:py-3.5 bg-white/5 text-slate-500 rounded-xl sm:rounded-2xl text-[10px] sm:text-sm font-black border border-white/5 italic flex items-center justify-center">
                         {t("dashboard.admin.bookings.finalAction")}
                       </div>
-                      {booking.status === "approved" && (
+                      {booking.status === "approved" && !booking.isReviewed && (
                         <Button
                           variant="contained"
                           onClick={() => handleOpenReview(booking)}
@@ -630,6 +630,11 @@ function ManageBookings() {
                         >
                           {t("dashboard.user.bookings.rateButton", "تقييم")}
                         </Button>
+                      )}
+                      {booking.status === "approved" && booking.isReviewed && (
+                        <div className="flex-1 text-center py-2.5 sm:py-3.5 bg-green-500/10 text-green-500 rounded-xl sm:rounded-2xl text-[10px] sm:text-sm font-black border border-green-500/20 italic flex items-center justify-center">
+                          {t("dashboard.user.bookings.rated", "تم التقييم بنجاح")}
+                        </div>
                       )}
                     </div>
                   )}
