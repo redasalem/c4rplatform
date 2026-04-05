@@ -266,6 +266,9 @@ export default function BookingPage() {
                             "&.Mui-focused fieldset": {
                               borderColor: "#f97316",
                             },
+                            "& input[type='date']::-webkit-calendar-picker-indicator": {
+                              filter: "invert(1)",
+                            },
                           },
                           "& .MuiInputLabel-root": {
                             color: "rgba(255,255,255,0.4)",
@@ -305,6 +308,9 @@ export default function BookingPage() {
                             },
                             "&.Mui-focused fieldset": {
                               borderColor: "#f97316",
+                            },
+                            "& input[type='date']::-webkit-calendar-picker-indicator": {
+                              filter: "invert(1)",
                             },
                           },
                           "& .MuiInputLabel-root": {
@@ -561,9 +567,9 @@ export default function BookingPage() {
                     src={imageUrl}
                     alt={car?.name || t("booking.carImageAlt")}
                     fill
-                    className="object-contain p-4 group-hover:scale-110 transition-transform duration-1000"
+                    className="object-contain group-hover:scale-105 transition-transform duration-1000"
                   />
-                  <div className="absolute inset-0 bg-linear-to-t from-midnight/80 to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-linear-to-t from-midnight/80 via-transparent to-transparent pointer-events-none" />
                 </div>
 
                 <div className="mb-3 sm:mb-4 relative z-10">
