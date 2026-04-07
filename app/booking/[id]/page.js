@@ -25,7 +25,6 @@ import {
   Payments,
   CheckCircleOutline,
   CheckCircle,
-  WhatsApp,
   UploadFile,
 } from "@mui/icons-material";
 import { MuiTelInput } from "mui-tel-input";
@@ -34,9 +33,6 @@ import Link from "next/link";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-
-const WHATSAPP_SUPPORT_NUMBER = "+966";
-const WHATSAPP_SUPPORT_LINK = "https://wa.me/966";
 
 const addDaysToDate = (startDate, numberOfDays) => {
   if (!startDate) {
@@ -757,15 +753,7 @@ export default function BookingPage() {
         </div>
       </Container>
 
-      <a
-        href={WHATSAPP_SUPPORT_LINK}
-        target="_blank"
-        rel="noreferrer"
-        aria-label={`WhatsApp ${WHATSAPP_SUPPORT_NUMBER}`}
-        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-[0_20px_40px_-10px_rgba(34,197,94,0.5)] transition-transform hover:scale-105"
-      >
-        <WhatsApp />
-      </a>
+
 
       <Dialog
         open={showSuccessDialog}
