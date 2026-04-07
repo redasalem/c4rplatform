@@ -92,19 +92,19 @@ export default function BookingPage() {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
   useEffect(() => {
-    if (!dates.startDate) {
-      if (dates.endDate) {
-        setDates((prev) => ({ ...prev, endDate: "" }));
-      }
+    if (!dates.startDate || !dates.endDate) {
       return;
     }
 
-    const nextEndDate = addDaysToDate(dates.startDate, numberOfDays);
+    const start = new Date(dates.startDate);
+    const end = new Date(dates.endDate);
+    const diffTime = end - start;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (dates.endDate !== nextEndDate) {
-      setDates((prev) => ({ ...prev, endDate: nextEndDate }));
+    if (diffDays > 0) {
+      setNumberOfDays(diffDays);
     }
-  }, [dates.startDate, dates.endDate, numberOfDays]);
+  }, [dates.startDate, dates.endDate]);
 
   // Redirect to login if NOT authenticated
   useEffect(() => {
@@ -391,7 +391,9 @@ export default function BookingPage() {
                         size="small"
                         InputLabelProps={{ shrink: true }}
                         value={dates.endDate}
-                        InputProps={{ readOnly: true }}
+                        onChange={(e) =>
+                          setDates({ ...dates, endDate: e.target.value })
+                        }
                         sx={{
                           "& .MuiOutlinedInput-root": {
                             borderRadius: 3,
