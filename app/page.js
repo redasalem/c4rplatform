@@ -10,7 +10,7 @@ export default function Home() {
       <HeroAd />
       <Departments />
       <ReviewMarquee />
-      <Partners />
+      {/* <Partners /> */}
       <FAQ />
     </main>
   );
