@@ -203,60 +203,53 @@ const AdminTabsContent = ({ user }) => {
 function AdminStatsSection() {
   const { i18n } = useTranslation("common");
 
-  const { data: usersData, isLoading: usersLoading } = useQuery({
-    queryKey: ["adminStatsUsers"],
-    queryFn: () => userService.getAll({ limit: 1 }),
-  });
+  const { data: statsData, isLoading: statsLoading } = useQuery({
+    queryKey: ["adminStats"],
+    queryFn: async () => {
+      const [usersResponse, adminStatsResponse] = await Promise.all([
+        userService.getAll({ limit: 1 }).catch(() => null),
+        api
+          .get("/admin/stats")
+          .then((response) => response.data)
+          .catch(() => null),
+      ]);
 
-  const { data: bookingsData, isLoading: bookingsLoading } = useQuery({
-    queryKey: ["adminStatsBookings"],
-    queryFn: () => bookingService.getAll({ limit: 1 }),
-  });
-
-  const { data: totalCarsData, isLoading: totalCarsLoading } = useQuery({
-    queryKey: ["adminStatsTotalCars"],
-    queryFn: () => carService.getAll({ limit: 1 }),
-  });
-
-  const { data: availableCarsData, isLoading: availableCarsLoading } = useQuery({
-    queryKey: ["adminStatsAvailableCars"],
-    queryFn: () => carService.getAll({ limit: 1, available: true }),
+      return {
+        totalUsers:
+          usersResponse?.data?.pagination?.total ??
+          usersResponse?.data?.users?.length ??
+          0,
+        totalBookings: adminStatsResponse?.data?.totalBookings ?? 0,
+        totalCars: adminStatsResponse?.data?.totalCars ?? 0,
+        availableCars: adminStatsResponse?.data?.availableCars ?? 0,
+      };
+    },
   });
 
   const stats = [
     {
       label: i18n.language === "ar" ? "إجمالي المستخدمين" : "Total Users",
-      value:
-        usersData?.data?.pagination?.total ?? usersData?.data?.users?.length ?? 0,
+      value: statsData?.totalUsers ?? 0,
       icon: <Person sx={{ fontSize: 26 }} />,
-      loading: usersLoading,
+      loading: statsLoading,
     },
     {
       label: i18n.language === "ar" ? "إجمالي الحجوزات" : "Total Bookings",
-      value:
-        bookingsData?.data?.pagination?.total ??
-        bookingsData?.data?.bookings?.length ??
-        0,
+      value: statsData?.totalBookings ?? 0,
       icon: <EventNote sx={{ fontSize: 26 }} />,
-      loading: bookingsLoading,
+      loading: statsLoading,
     },
     {
       label: i18n.language === "ar" ? "إجمالي السيارات" : "Total Cars",
-      value:
-        totalCarsData?.data?.pagination?.total ??
-        totalCarsData?.data?.cars?.length ??
-        0,
+      value: statsData?.totalCars ?? 0,
       icon: <DirectionsCar sx={{ fontSize: 26 }} />,
-      loading: totalCarsLoading,
+      loading: statsLoading,
     },
     {
       label: i18n.language === "ar" ? "السيارات المتاحة" : "Available Cars",
-      value:
-        availableCarsData?.data?.pagination?.total ??
-        availableCarsData?.data?.cars?.length ??
-        0,
+      value: statsData?.availableCars ?? 0,
       icon: <CheckCircle sx={{ fontSize: 26 }} />,
-      loading: availableCarsLoading,
+      loading: statsLoading,
     },
   ];
 
@@ -401,7 +394,7 @@ function ManageBookings() {
     onSuccess: () => {
       toast.success(t("dashboard.admin.bookings.deleteSuccess"));
       queryClient.invalidateQueries(["allBookings"]);
-      queryClient.invalidateQueries(["adminStatsBookings"]);
+      queryClient.invalidateQueries(["adminStats"]);
       setDeleteId(null);
     },
     onError: () => toast.error(t("dashboard.admin.bookings.deleteError")),
@@ -915,8 +908,7 @@ function ManageCars() {
     onSuccess: () => {
       toast.success(t("dashboard.admin.cars.deleteSuccess"));
       queryClient.invalidateQueries(["allCars"]);
-      queryClient.invalidateQueries(["adminStatsTotalCars"]);
-      queryClient.invalidateQueries(["adminStatsAvailableCars"]);
+      queryClient.invalidateQueries(["adminStats"]);
       setDeleteId(null);
     },
     onError: () => {
@@ -1408,8 +1400,7 @@ function AddCarDialog({ open, onClose }) {
     onSuccess: () => {
       toast.success(t("dashboard.admin.addCar.success"));
       queryClient.invalidateQueries(["allCars"]);
-      queryClient.invalidateQueries(["adminStatsTotalCars"]);
-      queryClient.invalidateQueries(["adminStatsAvailableCars"]);
+      queryClient.invalidateQueries(["adminStats"]);
       onClose();
       setFormData({
         name: "",
@@ -1897,6 +1888,7 @@ function EditCarDialog({ open, car, onClose }) {
     onSuccess: () => {
       toast.success(t("dashboard.admin.editCar.success"));
       queryClient.invalidateQueries(["allCars"]);
+      queryClient.invalidateQueries(["adminStats"]);
       onClose();
     },
     onError: (err) => {

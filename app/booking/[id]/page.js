@@ -35,8 +35,8 @@ import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
-const WHATSAPP_SUPPORT_NUMBER = "+20123456789";
-const WHATSAPP_SUPPORT_LINK = "https://wa.me/20123456789";
+const WHATSAPP_SUPPORT_NUMBER = "+966";
+const WHATSAPP_SUPPORT_LINK = "https://wa.me/966";
 
 const addDaysToDate = (startDate, numberOfDays) => {
   if (!startDate) {
@@ -68,6 +68,11 @@ const getTieredPricing = (car, numberOfDays, t) => {
   }
 
   return { label: t("booking.dailyPrice"), rate: dailyRate };
+};
+
+const getDayOptionLabel = (day, t) => {
+  const tierLabel = getTieredPricing(null, day, t).label;
+  return `${day} ${t("booking.days")} - ${tierLabel}`;
 };
 
 export default function BookingPage() {
@@ -380,7 +385,7 @@ export default function BookingPage() {
                           {Array.from({ length: 30 }, (_, index) => index + 1).map(
                             (day) => (
                               <MenuItem key={day} value={day}>
-                                {day} {t("booking.days")}
+                                {getDayOptionLabel(day, t)}
                               </MenuItem>
                             ),
                           )}
@@ -757,10 +762,9 @@ export default function BookingPage() {
         target="_blank"
         rel="noreferrer"
         aria-label={`WhatsApp ${WHATSAPP_SUPPORT_NUMBER}`}
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full bg-green-500 px-4 py-3 text-sm font-black text-white shadow-[0_20px_40px_-10px_rgba(34,197,94,0.5)] transition-transform hover:scale-105"
+        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-[0_20px_40px_-10px_rgba(34,197,94,0.5)] transition-transform hover:scale-105"
       >
-        <WhatsApp fontSize="small" />
-        <span className="hidden sm:inline">{WHATSAPP_SUPPORT_NUMBER}</span>
+        <WhatsApp />
       </a>
 
       <Dialog
