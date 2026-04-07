@@ -56,7 +56,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ar" dir="rtl">
       <body
-        className={`${almarai.variable} app-frame font-sans antialiased`}
+        className={`${almarai.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
         {/* JSON-LD Structured Data */}

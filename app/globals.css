@@ -39,23 +39,6 @@ body {
   min-height: 100vh;
 }
 
-.app-frame::before {
-  content: "";
-  position: fixed;
-  inset: 0.45rem;
-  border: 2px solid var(--app-frame-border);
-  border-radius: 1.2rem;
-  box-shadow: inset 0 0 0 1px var(--app-frame-shadow);
-  pointer-events: none;
-  z-index: 9999;
-}
-
-@media (min-width: 768px) {
-  .app-frame::before {
-    inset: 0.75rem;
-    border-radius: 1.6rem;
-  }
-}
 
 @keyframes scroll {
   0% {
