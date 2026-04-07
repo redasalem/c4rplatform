@@ -2,19 +2,15 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { LocalOffer } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 
 const HeroAd = () => {
   const { t, i18n } = useTranslation("common");
+
   return (
     <div className="w-full pt-18 md:pt-22 bg-transparent pb-8 overflow-hidden">
-      {" "}
-      {/* Container with overflow-hidden to prevent horizontal scroll */}
       <div className="container mx-auto px-4 md:px-6">
-        {/* Ad Container */}
         <div className="relative w-full h-[420px] md:h-[520px] rounded-[3rem] overflow-hidden shadow-2xl group border border-white/5">
-          {/* Background Image - Restore Original */}
           <div className="absolute inset-0">
             <Image
               src="/images/car1.png"
@@ -26,33 +22,26 @@ const HeroAd = () => {
             />
           </div>
 
-          {/* Ad Content Overlay - Original Structure */}
+          <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/20 to-black/35"></div>
+
           <div
             className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 md:px-12 text-white py-8 sm:py-10 md:py-12"
             dir={i18n.dir()}
           >
-            {/* Main Headlines with Glassmorphism for Clarity - Compact */}
-            <div className="bg-white/10 backdrop-blur-2xl p-4 sm:p-6 md:p-8 rounded-2xl md:rounded-3xl border border-white/20 mb-6 md:mb-8 max-w-xl shadow-2xl relative w-full">
-              <div className="mb-3 inline-flex items-center gap-2 font-black text-xs sm:text-sm md:text-base px-4 py-2 rounded-full animate-pulse">
-                <LocalOffer className="text-red-500" sx={{ fontSize: 16 }} />
-                <span className="tracking-wider font-bold text-red-500">{t("hero.discount")}</span>
-              </div>
-
-              <h1 className="text-xl sm:text-3xl md:text-5xl font-black leading-tight mb-3 tracking-tighter text-white">
+            <div className="mb-6 md:mb-8 max-w-3xl drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black leading-tight md:leading-snug tracking-tight text-white drop-shadow-[0_4px_18px_rgba(0,0,0,0.7)]">
                 <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">
                   {t("hero.titlePart1")}
                 </span>{" "}
                 <br />
                 {t("hero.titlePart2")}
               </h1>
-              <p className="text-sm sm:text-base md:text-lg font-bold text-slate-200 leading-relaxed">
+              <p className="mt-3 text-sm sm:text-base md:text-lg font-medium text-white/90 leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]">
                 {t("hero.description")}
               </p>
             </div>
 
-            {/* Distinct Region Cards - Optimized for Mobile (Stack on small) */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 md:gap-4 w-full max-w-3xl">
-              {/* Eastern Region */}
               <Link
                 href="/sharqiya"
                 className="group/card relative h-12 sm:h-16 md:h-20 rounded-xl md:rounded-2xl overflow-hidden shadow-lg border border-white/20 transition-all duration-300 active:scale-95 hover:border-primary/50"
@@ -66,7 +55,6 @@ const HeroAd = () => {
                 </div>
               </Link>
 
-              {/* Riyadh */}
               <Link
                 href="/riyadh"
                 className="group/card relative h-12 sm:h-16 md:h-20 rounded-xl md:rounded-2xl overflow-hidden shadow-lg border border-white/20 transition-all duration-300 active:scale-95 hover:border-primary/50"
@@ -80,7 +68,6 @@ const HeroAd = () => {
                 </div>
               </Link>
 
-              {/* Jeddah */}
               <Link
                 href="/jeddah"
                 className="group/card relative h-12 sm:h-16 md:h-20 rounded-xl md:rounded-2xl overflow-hidden shadow-lg border border-white/20 transition-all duration-300 active:scale-95 hover:border-primary/50"
