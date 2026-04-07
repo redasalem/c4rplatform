@@ -4,9 +4,6 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  DirectionsCar,
-  Speed,
-  Settings,
   AirlineSeatReclineExtra,
   LocalGasStation,
   ArrowBack,
@@ -99,27 +96,15 @@ const CarCard = ({ car }) => {
         {/* Specs Grid - Premium Pills */}
         <div className="grid grid-cols-2 gap-2.5 mb-6">
           <div className="flex items-center gap-2 bg-slate-50/80 px-3 py-2.5 rounded-xl border border-slate-100 group-hover:border-orange-200 group-hover:bg-white transition-all duration-300 flex-1">
-            <Settings sx={{ fontSize: 18 }} className="text-orange-500 shrink-0" />
-            <span className="text-[10px] md:text-xs font-bold text-slate-600 truncate">
-              {t("carCard.specs.auto")}
-            </span>
-          </div>
-          <div className="flex items-center gap-2 bg-slate-50/80 px-3 py-2.5 rounded-xl border border-slate-100 group-hover:border-orange-200 group-hover:bg-white transition-all duration-300 flex-1">
             <LocalGasStation sx={{ fontSize: 18 }} className="text-orange-500 shrink-0" />
             <span className="text-[10px] md:text-xs font-bold text-slate-600 truncate">
-              {t("carCard.specs.petrol")}
+              {car.fuelType || t("carCard.specs.petrol")}
             </span>
           </div>
           <div className="flex items-center gap-2 bg-slate-50/80 px-3 py-2.5 rounded-xl border border-slate-100 group-hover:border-orange-200 group-hover:bg-white transition-all duration-300 flex-1">
             <AirlineSeatReclineExtra sx={{ fontSize: 18 }} className="text-orange-500 shrink-0" />
             <span className="text-[10px] md:text-xs font-bold text-slate-600 truncate">
-              {t("carCard.specs.seats")}
-            </span>
-          </div>
-          <div className="flex items-center gap-2 bg-slate-50/80 px-3 py-2.5 rounded-xl border border-slate-100 group-hover:border-orange-200 group-hover:bg-white transition-all duration-300 flex-1">
-            <Speed sx={{ fontSize: 18 }} className="text-orange-500 shrink-0" />
-            <span className="text-[10px] md:text-xs font-bold text-slate-600 truncate">
-              {t("carCard.specs.limitedKm")}
+              {`${car.seats || 5} ${t("seats")}`}
             </span>
           </div>
         </div>

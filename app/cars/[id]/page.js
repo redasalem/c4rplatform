@@ -7,14 +7,10 @@ import { carService } from "@/services/api";
 import {
   CircularProgress,
   Container,
-  Button,
   Chip,
-  Grid,
   Divider,
 } from "@mui/material";
 import {
-  DirectionsCar,
-  Settings,
   AirlineSeatReclineExtra,
   LocalGasStation,
   CheckCircle,
@@ -119,7 +115,7 @@ export default function CarDetailsPage() {
                     icon={
                       <LocationOn style={{ color: "white", fontSize: 18 }} />
                     }
-                    label={t(`regions.${car.region}`) || car.region}
+                    label={t(`regions.${car.region}`) || regionNames[car.region] || car.region}
                     sx={{
                       bgcolor: "#f97316",
                       color: "white",
@@ -236,26 +232,15 @@ export default function CarDetailsPage() {
                   <h3 className="font-black text-white mb-5 uppercase tracking-widest text-sm">
                     {t("carDetails.specsTitle")}
                   </h3>
-                  <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
-                    <div className="flex items-center gap-2 sm:gap-3 md:gap-4 p-2 sm:p-3 md:p-4 bg-white/5 backdrop-blur-lg rounded-lg sm:rounded-xl md:rounded-2xl border border-white/5 hover:border-white/10 transition-colors">
-                      <Settings className="text-orange-500" />
-                      <div>
-                        <p className="text-[10px] text-slate-500 font-black uppercase tracking-tighter mb-1">
-                          {t("carDetails.transmission")}
-                        </p>
-                        <p className="text-xs font-black text-white">
-                          {t("carDetails.transmissionValue")}
-                        </p>
-                      </div>
-                    </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
                     <div className="flex items-center gap-2 sm:gap-3 md:gap-4 p-2 sm:p-3 md:p-4 bg-white/5 backdrop-blur-lg rounded-lg sm:rounded-xl md:rounded-2xl border border-white/5 hover:border-white/10 transition-colors">
                       <LocalGasStation className="text-primary" />
                       <div>
                         <p className="text-[10px] text-slate-500 font-black uppercase tracking-tighter mb-1">
-                          {t("carDetails.fuel")}
+                          {t("fuelType")}
                         </p>
                         <p className="text-xs font-black text-white">
-                          {t("carDetails.fuelValue")}
+                          {car.fuelType || t("carDetails.fuelValue")}
                         </p>
                       </div>
                     </div>
@@ -263,21 +248,10 @@ export default function CarDetailsPage() {
                       <AirlineSeatReclineExtra className="text-primary" />
                       <div>
                         <p className="text-[10px] text-slate-500 font-black uppercase tracking-tighter mb-1">
-                          {t("carDetails.passengers")}
+                          {t("seats")}
                         </p>
                         <p className="text-xs font-black text-white">
-                          5 {t("carDetails.passengersValue")}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4 p-4 bg-white/5 backdrop-blur-lg rounded-2xl border border-white/5 hover:border-white/10 transition-colors">
-                      <DirectionsCar className="text-primary" />
-                      <div>
-                        <p className="text-[10px] text-slate-500 font-black uppercase tracking-tighter mb-1">
-                          {t("carDetails.color")}
-                        </p>
-                        <p className="text-xs font-black text-white">
-                          {t("carDetails.colorValue")}
+                          {car.seats || 5}
                         </p>
                       </div>
                     </div>

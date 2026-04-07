@@ -200,6 +200,93 @@ const AdminTabsContent = ({ user }) => {
   );
 };
 
+function AdminStatsSection() {
+  const { i18n } = useTranslation("common");
+
+  const { data: usersData, isLoading: usersLoading } = useQuery({
+    queryKey: ["adminStatsUsers"],
+    queryFn: () => userService.getAll({ limit: 1 }),
+  });
+
+  const { data: bookingsData, isLoading: bookingsLoading } = useQuery({
+    queryKey: ["adminStatsBookings"],
+    queryFn: () => bookingService.getAll({ limit: 1 }),
+  });
+
+  const { data: totalCarsData, isLoading: totalCarsLoading } = useQuery({
+    queryKey: ["adminStatsTotalCars"],
+    queryFn: () => carService.getAll({ limit: 1 }),
+  });
+
+  const { data: availableCarsData, isLoading: availableCarsLoading } = useQuery({
+    queryKey: ["adminStatsAvailableCars"],
+    queryFn: () => carService.getAll({ limit: 1, available: true }),
+  });
+
+  const stats = [
+    {
+      label: i18n.language === "ar" ? "إجمالي المستخدمين" : "Total Users",
+      value:
+        usersData?.data?.pagination?.total ?? usersData?.data?.users?.length ?? 0,
+      icon: <Person sx={{ fontSize: 26 }} />,
+      loading: usersLoading,
+    },
+    {
+      label: i18n.language === "ar" ? "إجمالي الحجوزات" : "Total Bookings",
+      value:
+        bookingsData?.data?.pagination?.total ??
+        bookingsData?.data?.bookings?.length ??
+        0,
+      icon: <EventNote sx={{ fontSize: 26 }} />,
+      loading: bookingsLoading,
+    },
+    {
+      label: i18n.language === "ar" ? "إجمالي السيارات" : "Total Cars",
+      value:
+        totalCarsData?.data?.pagination?.total ??
+        totalCarsData?.data?.cars?.length ??
+        0,
+      icon: <DirectionsCar sx={{ fontSize: 26 }} />,
+      loading: totalCarsLoading,
+    },
+    {
+      label: i18n.language === "ar" ? "السيارات المتاحة" : "Available Cars",
+      value:
+        availableCarsData?.data?.pagination?.total ??
+        availableCarsData?.data?.cars?.length ??
+        0,
+      icon: <CheckCircle sx={{ fontSize: 26 }} />,
+      loading: availableCarsLoading,
+    },
+  ];
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+      {stats.map((stat) => (
+        <div
+          key={stat.label}
+          className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-xl sm:rounded-2xl md:rounded-[2rem] p-4 sm:p-5 md:p-6 shadow-2xl relative overflow-hidden"
+        >
+          <div className="absolute top-0 left-0 w-1.5 h-full bg-primary/20" />
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-slate-500">
+                {stat.label}
+              </p>
+              <div className="mt-3 text-2xl sm:text-3xl font-black text-white tracking-tighter">
+                {stat.loading ? <CircularProgress size={22} color="inherit" /> : stat.value}
+              </div>
+            </div>
+            <div className="w-11 h-11 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
+              {stat.icon}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function AdminDashboard() {
   const { user } = useAuth();
   const { t, i18n } = useTranslation("common");
@@ -218,6 +305,8 @@ export default function AdminDashboard() {
           {t("dashboard.admin.welcome.subtitle", { name: user?.name })}
         </p>
       </div>
+
+      <AdminStatsSection />
 
       <Suspense fallback={<CircularProgress className="m-auto block" />}>
         <AdminTabsContent user={user} />
@@ -312,6 +401,7 @@ function ManageBookings() {
     onSuccess: () => {
       toast.success(t("dashboard.admin.bookings.deleteSuccess"));
       queryClient.invalidateQueries(["allBookings"]);
+      queryClient.invalidateQueries(["adminStatsBookings"]);
       setDeleteId(null);
     },
     onError: () => toast.error(t("dashboard.admin.bookings.deleteError")),
@@ -825,6 +915,8 @@ function ManageCars() {
     onSuccess: () => {
       toast.success(t("dashboard.admin.cars.deleteSuccess"));
       queryClient.invalidateQueries(["allCars"]);
+      queryClient.invalidateQueries(["adminStatsTotalCars"]);
+      queryClient.invalidateQueries(["adminStatsAvailableCars"]);
       setDeleteId(null);
     },
     onError: () => {
@@ -1258,6 +1350,11 @@ function AddCarDialog({ open, onClose }) {
     region: "riyadh",
     category: "regular",
     pricePerDay: "",
+    priceWeekly: "",
+    priceHalfMonth: "",
+    priceMonthly: "",
+    seats: "",
+    fuelType: "",
     imageUrl: "",
     description: "",
   });
@@ -1311,6 +1408,8 @@ function AddCarDialog({ open, onClose }) {
     onSuccess: () => {
       toast.success(t("dashboard.admin.addCar.success"));
       queryClient.invalidateQueries(["allCars"]);
+      queryClient.invalidateQueries(["adminStatsTotalCars"]);
+      queryClient.invalidateQueries(["adminStatsAvailableCars"]);
       onClose();
       setFormData({
         name: "",
@@ -1318,6 +1417,11 @@ function AddCarDialog({ open, onClose }) {
         region: "riyadh",
         category: "regular",
         pricePerDay: "",
+        priceWeekly: "",
+        priceHalfMonth: "",
+        priceMonthly: "",
+        seats: "",
+        fuelType: "",
         imageUrl: "",
         description: "",
       });
@@ -1334,6 +1438,11 @@ function AddCarDialog({ open, onClose }) {
     if (
       !formData.name ||
       !formData.pricePerDay ||
+      !formData.priceWeekly ||
+      !formData.priceHalfMonth ||
+      !formData.priceMonthly ||
+      !formData.seats ||
+      !formData.fuelType ||
       !formData.description ||
       !file
     ) {
@@ -1530,25 +1639,114 @@ function AddCarDialog({ open, onClose }) {
               </Select>
             </FormControl>
 
-            <TextField
-              label={t("dashboard.admin.addCar.priceLabel")}
-              placeholder="0.00"
-              fullWidth
-              type="number"
-              variant="outlined"
-              value={formData.pricePerDay}
-              onChange={(e) =>
-                setFormData({ ...formData, pricePerDay: e.target.value })
-              }
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <AttachMoney className="text-primary" />
-                  </InputAdornment>
-                ),
-              }}
-              sx={inputStyle}
-            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <TextField
+                label={t("seats")}
+                placeholder="5"
+                fullWidth
+                type="number"
+                variant="outlined"
+                value={formData.seats}
+                onChange={(e) =>
+                  setFormData({ ...formData, seats: e.target.value })
+                }
+                sx={inputStyle}
+              />
+
+              <TextField
+                label={t("fuelType")}
+                placeholder={t("carCard.specs.petrol")}
+                fullWidth
+                variant="outlined"
+                value={formData.fuelType}
+                onChange={(e) =>
+                  setFormData({ ...formData, fuelType: e.target.value })
+                }
+                sx={inputStyle}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <TextField
+                label={t("dashboard.admin.addCar.priceLabel")}
+                placeholder="0.00"
+                fullWidth
+                type="number"
+                variant="outlined"
+                value={formData.pricePerDay}
+                onChange={(e) =>
+                  setFormData({ ...formData, pricePerDay: e.target.value })
+                }
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AttachMoney className="text-primary" />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={inputStyle}
+              />
+
+              <TextField
+                label={t("priceWeekly")}
+                placeholder="0.00"
+                fullWidth
+                type="number"
+                variant="outlined"
+                value={formData.priceWeekly}
+                onChange={(e) =>
+                  setFormData({ ...formData, priceWeekly: e.target.value })
+                }
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AttachMoney className="text-primary" />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={inputStyle}
+              />
+
+              <TextField
+                label={t("priceHalfMonth")}
+                placeholder="0.00"
+                fullWidth
+                type="number"
+                variant="outlined"
+                value={formData.priceHalfMonth}
+                onChange={(e) =>
+                  setFormData({ ...formData, priceHalfMonth: e.target.value })
+                }
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AttachMoney className="text-primary" />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={inputStyle}
+              />
+
+              <TextField
+                label={t("priceMonthly")}
+                placeholder="0.00"
+                fullWidth
+                type="number"
+                variant="outlined"
+                value={formData.priceMonthly}
+                onChange={(e) =>
+                  setFormData({ ...formData, priceMonthly: e.target.value })
+                }
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AttachMoney className="text-primary" />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={inputStyle}
+              />
+            </div>
 
             <TextField
               label={t("dashboard.admin.addCar.descLabel")}
@@ -1623,6 +1821,11 @@ function EditCarDialog({ open, car, onClose }) {
     region: "riyadh",
     category: "regular",
     pricePerDay: "",
+    priceWeekly: "",
+    priceHalfMonth: "",
+    priceMonthly: "",
+    seats: "",
+    fuelType: "",
     imageUrl: "",
     description: "",
   });
@@ -1637,6 +1840,11 @@ function EditCarDialog({ open, car, onClose }) {
         region: car.region || "riyadh",
         category: car.category || "regular",
         pricePerDay: car.pricePerDay || "",
+        priceWeekly: car.priceWeekly || "",
+        priceHalfMonth: car.priceHalfMonth || "",
+        priceMonthly: car.priceMonthly || "",
+        seats: car.seats || "",
+        fuelType: car.fuelType || "",
         imageUrl: car.imageUrl || car.image || "",
         description: car.description || "",
       });
@@ -1699,7 +1907,16 @@ function EditCarDialog({ open, car, onClose }) {
   });
 
   const handleSubmit = async () => {
-    if (!formData.name || !formData.pricePerDay || !formData.description) {
+    if (
+      !formData.name ||
+      !formData.pricePerDay ||
+      !formData.priceWeekly ||
+      !formData.priceHalfMonth ||
+      !formData.priceMonthly ||
+      !formData.seats ||
+      !formData.fuelType ||
+      !formData.description
+    ) {
       toast.warning(t("dashboard.admin.editCar.warningFill"));
       return;
     }
@@ -1898,25 +2115,114 @@ function EditCarDialog({ open, car, onClose }) {
               </Select>
             </FormControl>
 
-            <TextField
-              label={t("dashboard.admin.editCar.priceLabel")}
-              placeholder="0.00"
-              fullWidth
-              type="number"
-              variant="outlined"
-              value={formData.pricePerDay}
-              onChange={(e) =>
-                setFormData({ ...formData, pricePerDay: e.target.value })
-              }
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <AttachMoney className="text-primary" />
-                  </InputAdornment>
-                ),
-              }}
-              sx={inputStyle}
-            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <TextField
+                label={t("seats")}
+                placeholder="5"
+                fullWidth
+                type="number"
+                variant="outlined"
+                value={formData.seats}
+                onChange={(e) =>
+                  setFormData({ ...formData, seats: e.target.value })
+                }
+                sx={inputStyle}
+              />
+
+              <TextField
+                label={t("fuelType")}
+                placeholder={t("carCard.specs.petrol")}
+                fullWidth
+                variant="outlined"
+                value={formData.fuelType}
+                onChange={(e) =>
+                  setFormData({ ...formData, fuelType: e.target.value })
+                }
+                sx={inputStyle}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <TextField
+                label={t("dashboard.admin.editCar.priceLabel")}
+                placeholder="0.00"
+                fullWidth
+                type="number"
+                variant="outlined"
+                value={formData.pricePerDay}
+                onChange={(e) =>
+                  setFormData({ ...formData, pricePerDay: e.target.value })
+                }
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AttachMoney className="text-primary" />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={inputStyle}
+              />
+
+              <TextField
+                label={t("priceWeekly")}
+                placeholder="0.00"
+                fullWidth
+                type="number"
+                variant="outlined"
+                value={formData.priceWeekly}
+                onChange={(e) =>
+                  setFormData({ ...formData, priceWeekly: e.target.value })
+                }
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AttachMoney className="text-primary" />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={inputStyle}
+              />
+
+              <TextField
+                label={t("priceHalfMonth")}
+                placeholder="0.00"
+                fullWidth
+                type="number"
+                variant="outlined"
+                value={formData.priceHalfMonth}
+                onChange={(e) =>
+                  setFormData({ ...formData, priceHalfMonth: e.target.value })
+                }
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AttachMoney className="text-primary" />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={inputStyle}
+              />
+
+              <TextField
+                label={t("priceMonthly")}
+                placeholder="0.00"
+                fullWidth
+                type="number"
+                variant="outlined"
+                value={formData.priceMonthly}
+                onChange={(e) =>
+                  setFormData({ ...formData, priceMonthly: e.target.value })
+                }
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AttachMoney className="text-primary" />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={inputStyle}
+              />
+            </div>
 
             <TextField
               label={t("dashboard.admin.editCar.descLabel")}

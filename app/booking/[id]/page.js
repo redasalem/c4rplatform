@@ -12,7 +12,6 @@ import {
   Button,
   Grid,
   Divider,
-  Paper,
   Dialog,
   DialogContent,
   DialogActions,
@@ -25,7 +24,6 @@ import {
   CalendarMonth,
   Payments,
   CheckCircleOutline,
-  Speed,
   CheckCircle,
   WhatsApp,
   UploadFile,
@@ -36,6 +34,41 @@ import Link from "next/link";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+
+const WHATSAPP_SUPPORT_NUMBER = "+20123456789";
+const WHATSAPP_SUPPORT_LINK = "https://wa.me/20123456789";
+
+const addDaysToDate = (startDate, numberOfDays) => {
+  if (!startDate) {
+    return "";
+  }
+
+  const nextDate = new Date(startDate);
+  nextDate.setDate(nextDate.getDate() + Number(numberOfDays || 1));
+  return nextDate.toISOString().split("T")[0];
+};
+
+const getTieredPricing = (car, numberOfDays, t) => {
+  const days = Number(numberOfDays || 1);
+  const dailyRate = Number(car?.pricePerDay || 0);
+  const weeklyRate = Number(car?.priceWeekly || dailyRate);
+  const halfMonthRate = Number(car?.priceHalfMonth || dailyRate);
+  const monthlyRate = Number(car?.priceMonthly || dailyRate);
+
+  if (days >= 30) {
+    return { label: t("priceMonthly"), rate: monthlyRate };
+  }
+
+  if (days >= 15) {
+    return { label: t("priceHalfMonth"), rate: halfMonthRate };
+  }
+
+  if (days >= 7) {
+    return { label: t("priceWeekly"), rate: weeklyRate };
+  }
+
+  return { label: t("booking.dailyPrice"), rate: dailyRate };
+};
 
 export default function BookingPage() {
   const { t, i18n } = useTranslation("common");
@@ -48,6 +81,7 @@ export default function BookingPage() {
     startDate: "",
     endDate: "",
   });
+  const [numberOfDays, setNumberOfDays] = useState(1);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [kmPerDay, setKmPerDay] = useState(300);
   const [idCardFile, setIdCardFile] = useState(null);
@@ -61,6 +95,21 @@ export default function BookingPage() {
       setPhoneNumber(user.phoneNumber);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (!dates.startDate) {
+      if (dates.endDate) {
+        setDates((prev) => ({ ...prev, endDate: "" }));
+      }
+      return;
+    }
+
+    const nextEndDate = addDaysToDate(dates.startDate, numberOfDays);
+
+    if (dates.endDate !== nextEndDate) {
+      setDates((prev) => ({ ...prev, endDate: nextEndDate }));
+    }
+  }, [dates.startDate, dates.endDate, numberOfDays]);
 
   // Redirect to login if NOT authenticated
   useEffect(() => {
@@ -146,8 +195,7 @@ export default function BookingPage() {
       ]);
 
       // 2. Calculate Days
-      const diffTime = Math.abs(end - start);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
+      const diffDays = Number(numberOfDays || 1);
 
       // 3. Prepare Data
       const bookingData = {
@@ -190,14 +238,11 @@ export default function BookingPage() {
     car?.images?.[0]?.url ||
     car?.images?.[0] ||
     "/images/car-home.png";
-
-  const diffDays =
-    dates.startDate && dates.endDate
-      ? Math.ceil(
-          Math.abs(new Date(dates.endDate) - new Date(dates.startDate)) /
-            (1000 * 60 * 60 * 24),
-        ) || 1
-      : 1;
+  const diffDays = Number(numberOfDays || 1);
+  const tieredPricing = getTieredPricing(car, diffDays, t);
+  const totalPrice = tieredPricing.rate * diffDays;
+  const appliedTierLabel =
+    i18n.language === "ar" ? "الشريحة المطبقة" : "Applied Tier";
 
   return (
     <div
@@ -238,14 +283,10 @@ export default function BookingPage() {
                     </h3>
                   </div>
                   <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={4}>
                       <TextField
                         label={t("booking.pickupDate")}
-                        type={dates.startDate ? "date" : "text"}
-                        onFocus={(e) => (e.target.type = "date")}
-                        onBlur={(e) => {
-                          if (!e.target.value) e.target.type = "text";
-                        }}
+                        type="date"
                         placeholder="يوم / شهر / سنة"
                         fullWidth
                         size="small"
@@ -281,23 +322,81 @@ export default function BookingPage() {
                         }}
                       />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={4}>
+                      <FormControl fullWidth size="small">
+                        <InputLabel
+                          sx={{
+                            color: "rgba(255,255,255,0.4)",
+                            "&.Mui-focused": { color: "#f97316" },
+                            fontWeight: "bold",
+                            fontSize: "0.85rem",
+                          }}
+                        >
+                          {t("booking.totalDays")}
+                        </InputLabel>
+                        <Select
+                          value={numberOfDays}
+                          onChange={(e) => setNumberOfDays(Number(e.target.value))}
+                          label={t("booking.totalDays")}
+                          sx={{
+                            borderRadius: 3,
+                            bgcolor: "rgba(255,255,255,0.03)",
+                            color: "white",
+                            "& fieldset": {
+                              borderColor: "rgba(255,255,255,0.1)",
+                            },
+                            "&.Mui-focused fieldset": {
+                              borderColor: "#f97316",
+                            },
+                            "& .MuiSelect-icon": {
+                              color: "rgba(255,255,255,0.4)",
+                            },
+                          }}
+                          MenuProps={{
+                            PaperProps: {
+                              sx: {
+                                bgcolor: "#0f172a",
+                                border: "1px solid rgba(255,255,255,0.1)",
+                                color: "white",
+                                borderRadius: "1rem",
+                                "& .MuiMenuItem-root": {
+                                  fontSize: "0.85rem",
+                                  fontWeight: "bold",
+                                  "&:hover": {
+                                    bgcolor: "rgba(255,255,255,0.05)",
+                                  },
+                                  "&.Mui-selected": {
+                                    bgcolor: "rgba(249, 115, 22, 0.2)",
+                                    color: "#f97316",
+                                    "&:hover": {
+                                      bgcolor: "rgba(249, 115, 22, 0.3)",
+                                    },
+                                  },
+                                },
+                              },
+                            },
+                          }}
+                        >
+                          {Array.from({ length: 30 }, (_, index) => index + 1).map(
+                            (day) => (
+                              <MenuItem key={day} value={day}>
+                                {day} {t("booking.days")}
+                              </MenuItem>
+                            ),
+                          )}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
                       <TextField
                         label={t("booking.dropoffDate")}
-                        type={dates.endDate ? "date" : "text"}
-                        onFocus={(e) => (e.target.type = "date")}
-                        onBlur={(e) => {
-                          if (!e.target.value) e.target.type = "text";
-                        }}
+                        type="date"
                         placeholder="يوم / شهر / سنة"
                         fullWidth
                         size="small"
                         InputLabelProps={{ shrink: true }}
                         value={dates.endDate}
-                        onChange={(e) =>
-                          setDates({ ...dates, endDate: e.target.value })
-                        }
-                        required
+                        InputProps={{ readOnly: true }}
                         sx={{
                           "& .MuiOutlinedInput-root": {
                             borderRadius: 3,
@@ -596,7 +695,15 @@ export default function BookingPage() {
                       {t("booking.dailyPrice")}:
                     </span>
                     <span className="font-black text-white">
-                      {car?.pricePerDay} {t("common.currency")}
+                      {tieredPricing.rate} {t("common.currency")}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs sm:text-sm">
+                    <span className="text-slate-400 font-bold">
+                      {appliedTierLabel}:
+                    </span>
+                    <span className="font-black text-white">
+                      {tieredPricing.label}
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-xs sm:text-sm">
@@ -622,7 +729,7 @@ export default function BookingPage() {
                         {t("booking.total")}:
                       </span>
                       <span className="text-xl sm:text-2xl font-black text-primary tracking-tighter">
-                        {diffDays * car?.pricePerDay}
+                        {totalPrice}
                       </span>
                     </div>
                     <span className="text-sm sm:text-base font-black text-primary/60 pb-0.5">
@@ -644,6 +751,17 @@ export default function BookingPage() {
           </div>
         </div>
       </Container>
+
+      <a
+        href={WHATSAPP_SUPPORT_LINK}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={`WhatsApp ${WHATSAPP_SUPPORT_NUMBER}`}
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full bg-green-500 px-4 py-3 text-sm font-black text-white shadow-[0_20px_40px_-10px_rgba(34,197,94,0.5)] transition-transform hover:scale-105"
+      >
+        <WhatsApp fontSize="small" />
+        <span className="hidden sm:inline">{WHATSAPP_SUPPORT_NUMBER}</span>
+      </a>
 
       <Dialog
         open={showSuccessDialog}

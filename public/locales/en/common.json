@@ -476,6 +476,11 @@
     "city": "City",
     "features": "Features"
   },
+  "seats": "Seats",
+  "fuelType": "Fuel Type",
+  "priceWeekly": "Weekly Price",
+  "priceHalfMonth": "Half-Month Price",
+  "priceMonthly": "Monthly Price",
   "booking": {
     "title": "Confirm Booking",
     "startDate": "Start Date",
@@ -527,7 +532,7 @@
     "vat": "VAT",
     "vatIncluded": "Included",
     "total": "Total",
-    "paymentHint": "Flexible Payment: Pay upon pickup or via bank transfer.",
+    "paymentHint": "Tiered per-day pricing will be confirmed with you, and our team can complete bank transfer support through WhatsApp or arrange payment on pickup.",
     "successTitle": "Booking Successful!",
     "successMessagePart1": "Your request is now",
     "successMessagePart2": "Under Review",

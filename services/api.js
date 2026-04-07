@@ -69,6 +69,10 @@ export const authService = {
 
 // User Services
 export const userService = {
+  getAll: async (params) => {
+    const response = await api.get("/users", { params });
+    return response.data;
+  },
   getProfile: async () => {
     const response = await api.get("/users/profile");
     return response.data;
