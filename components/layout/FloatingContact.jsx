@@ -22,17 +22,13 @@ const FloatingContact = () => {
         href="https://wa.me/966554118873"
         target="_blank"
         rel="noopener noreferrer"
-        className="hidden md:flex fixed bottom-8 right-8 z-[9999] bg-[#22c55e] text-white w-16 h-16 rounded-full items-center justify-center hover:scale-110 transition-all duration-300 group"
+        className="hidden md:flex fixed bottom-8 right-8 z-[9999] w-12 h-12 rounded-2xl bg-orange-500/10 items-center justify-center text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300 shadow-lg border border-orange-500/20 active:scale-90"
         aria-label={t("floatingContact.whatsapp")}
       >
         <WhatsApp
           sx={{ fontSize: 32 }}
           className="group-hover:rotate-12 transition-transform"
         />
-        <span className="absolute -top-2 -right-1 flex h-4 w-4">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-4 w-4 bg-green-500"></span>
-        </span>
       </a>
 
       {/* Email - Bottom Left */}
