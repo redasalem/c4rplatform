@@ -57,7 +57,7 @@ export default function ForgotPasswordPage() {
               width={120}
               height={60}
               priority
-              className="object-contain relative z-10 rounded-lg"
+              className="object-contain relative z-10 rounded-lg logo-premium-glow"
               style={{
                 filter: "brightness(1.2) contrast(1.1)",
                 maxHeight: "60px",

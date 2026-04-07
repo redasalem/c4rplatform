@@ -68,7 +68,7 @@ const Footer = () => {
                 width={160}
                 height={65}
                 priority
-                className="object-contain rounded-[15px]"
+                className="object-contain rounded-[15px] logo-premium-glow"
               />
             </Link>
             <p className="text-sm md:text-lg leading-relaxed text-gray-400 font-bold italic max-w-sm mx-auto md:mx-0">

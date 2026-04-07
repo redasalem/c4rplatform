@@ -238,7 +238,7 @@ const Navbar = () => {
                   height={65}
                   priority
                   sizes="(max-width: 640px) 112px, (max-width: 768px) 132px, 160px"
-                  className="h-auto w-full object-contain rounded-[15px]"
+                  className="h-auto w-full object-contain rounded-[15px] logo-premium-glow"
                 />
               </Link>
             </div>

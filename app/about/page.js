@@ -92,7 +92,7 @@ const AboutPage = () => {
                   width={120}
                   height={60}
                   priority
-                  className="object-contain"
+                  className="object-contain logo-premium-glow"
                   style={{
                     filter: "brightness(1.2) contrast(1.1)",
                     maxHeight: "60px",
