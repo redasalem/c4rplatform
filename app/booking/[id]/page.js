@@ -91,13 +91,6 @@ export default function BookingPage() {
   const [uploading, setUploading] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
-  // Pre-fill phone number from user profile
-  useEffect(() => {
-    if (user?.phoneNumber) {
-      setPhoneNumber(user.phoneNumber);
-    }
-  }, [user]);
-
   useEffect(() => {
     if (!dates.startDate) {
       if (dates.endDate) {
