@@ -218,6 +218,17 @@
     "secureLogout": "Secure Logout",
     "loginRequired": "Login required to access",
     "loginButton": "Login",
+    "security": {
+      "title": "Change Password",
+      "subtitle": "Update your password securely",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "updateButton": "Update Password",
+      "errorFillAll": "Please fill in all password fields",
+      "errorWeakPassword": "Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long",
+      "successMessage": "Password changed successfully",
+      "errorMessage": "Failed to change password"
+    },
     "admin": {
       "welcome": {
         "title": "Welcome",

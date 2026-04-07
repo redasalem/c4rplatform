@@ -61,11 +61,11 @@ const Navbar = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 shadow-lg transition-all duration-300 font-sans">
-      {/* ─────────────────────────────────────────────────────────────
-          TOP BAR (Disappears on Scroll)
-          Matches reference: "Corporate", "Policy", "Region"
-          Background: Dark Gray (Reference style)
-      ───────────────────────────────────────────────────────────── */}
+      {/* Top bar */}
+
+
+
+
       <div
         className={`bg-slate-dark text-orange-400 text-sm font-medium tracking-wide transition-all duration-500 ease-in-out overflow-hidden ${
           showTopBar ? "h-11 opacity-100" : "h-0 opacity-0"
@@ -179,16 +179,16 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* ─────────────────────────────────────────────────────────────
-          MAIN NAVBAR (Always Visible)
-          Matches reference: City Links (Right), Logo (Center), Icons (Left)
-          Background: Dark Gray/Black (Reference) or Light (C4R)? 
-          User said "Same picture... but colors will differ". 
-          We will use a Dark Blue/Gray theme for "Premium" look.
-      ───────────────────────────────────────────────────────────── */}
+      {/* Main navbar */}
+
+
+
+
+
+
       <div className="bg-midnight border-b border-white/10 transition-all duration-300 relative">
-        <div className="container mx-auto px-6 py-3" dir="rtl">
-          <div className="flex items-center justify-between">
+        <div className="container mx-auto px-4 sm:px-6 py-3" dir="rtl">
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 md:flex md:items-center md:justify-between">
             {/* RIGHT: City Links + Home */}
             <nav className="hidden md:flex items-center gap-3 min-w-max">
               <Link
@@ -226,24 +226,25 @@ const Navbar = () => {
             </nav>
 
             {/* CENTER: LOGO - Centered and Scale-Optimized */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:relative md:left-auto md:top-auto md:translate-x-0 md:translate-y-0 shrink-0 px-2 sm:px-4">
+            <div className="col-start-2 justify-self-center shrink-0 px-1 sm:px-2 md:px-4 w-[7rem] sm:w-[8.25rem] md:w-40">
               <Link
                 href="/"
                 className="group block transition-transform duration-300 ease-out hover:scale-[1.05] active:scale-95"
               >
                 <Image
-                  src="/images/logo.jpeg"
+                  src="/images/logo.webp"
                   alt="C4R Logo"
                   width={160}
                   height={65}
                   priority
-                  className="object-contain rounded-[15px]"
+                  sizes="(max-width: 640px) 112px, (max-width: 768px) 132px, 160px"
+                  className="h-auto w-full object-contain rounded-[15px]"
                 />
               </Link>
             </div>
 
             {/* LEFT: ICONS (Admin, Login) - Strictly Role-Gated */}
-            <div className="flex items-center gap-2 sm:gap-6 min-w-max justify-end z-10">
+            <div className="col-start-3 justify-self-end flex items-center gap-2 sm:gap-6 min-w-max justify-end z-10">
               {/* User Dashboard icon / Login Button */}
               {mounted && (
                 <>
@@ -370,7 +371,7 @@ const Navbar = () => {
               {t("navbar.riyadh")}
             </Link>
             <Link
-              href="/riyadh"
+              href="/sharqiya"
               onClick={() => setMobileMenuOpen(false)}
               className="text-lg font-bold text-white hover:text-primary transition-colors flex items-center gap-3 p-2 rounded-xl hover:bg-white/5"
             >

@@ -851,13 +851,13 @@ function ChangePasswordSection() {
 
   const handleSubmit = async () => {
     if (!passwords.currentPassword || !passwords.newPassword) {
-      toast.error(t("dashboard.user.security.errorFillAll"));
+      toast.error(t("dashboard.security.errorFillAll"));
       return;
     }
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     if (!passwordRegex.test(passwords.newPassword)) {
-      toast.error(t("dashboard.user.security.errorWeakPassword"));
+      toast.error(t("dashboard.security.errorWeakPassword"));
       return;
     }
 
@@ -867,14 +867,14 @@ function ChangePasswordSection() {
         currentPassword: passwords.currentPassword,
         newPassword: passwords.newPassword,
       });
-      toast.success(t("auth.passwordChanged"));
+      toast.success(t("dashboard.security.successMessage"));
       setPasswords({
         currentPassword: "",
         newPassword: "",
       });
     } catch (error) {
       toast.error(
-        error.response?.data?.message || t("auth.passwordChangeError"),
+        error.response?.data?.message || t("dashboard.security.errorMessage"),
       );
     } finally {
       setLoading(false);
@@ -907,17 +907,17 @@ function ChangePasswordSection() {
         </div>
         <div>
           <h3 className="text-3xl font-black text-white mb-2 leading-tight">
-            {t("dashboard.user.security.title")}
+            {t("dashboard.security.title")}
           </h3>
           <p className="text-slate-400 font-bold text-lg">
-            {t("dashboard.user.security.subtitle")}
+            {t("dashboard.security.subtitle")}
           </p>
         </div>
       </div>
 
       <div className="max-w-md flex flex-col gap-12 mt-6">
         <TextField
-          label={t("dashboard.user.security.currentPassword")}
+          label={t("dashboard.security.currentPassword")}
           type={showCurrentPassword ? "text" : "password"}
           fullWidth
           variant="outlined"
@@ -953,7 +953,7 @@ function ChangePasswordSection() {
           sx={inputStyle}
         />
         <TextField
-          label={t("dashboard.user.security.newPassword")}
+          label={t("dashboard.security.newPassword")}
           type={showNewPassword ? "text" : "password"}
           fullWidth
           variant="outlined"
@@ -1009,7 +1009,7 @@ function ChangePasswordSection() {
             {loading ? (
               <CircularProgress size={26} color="inherit" />
             ) : (
-              t("dashboard.user.security.updateButton")
+              t("dashboard.security.updateButton")
             )}
           </Button>
         </div>

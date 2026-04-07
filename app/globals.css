@@ -9,6 +9,8 @@
   --accent: #fbbf24;
   --midnight: #041233; /* Deep Navy - Matching Background */
   --slate-dark: #061e42; /* Dark Blue - Top Bar Override */
+  --app-frame-border: rgba(59, 130, 246, 0.85);
+  --app-frame-shadow: rgba(37, 99, 235, 0.22);
 }
 
 @theme inline {
@@ -35,6 +37,24 @@ body {
   font-family: var(--font-almarai), "Almarai", sans-serif;
   transition: background-color 0.5s ease;
   min-height: 100vh;
+}
+
+.app-frame::before {
+  content: "";
+  position: fixed;
+  inset: 0.45rem;
+  border: 2px solid var(--app-frame-border);
+  border-radius: 1.2rem;
+  box-shadow: inset 0 0 0 1px var(--app-frame-shadow);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+@media (min-width: 768px) {
+  .app-frame::before {
+    inset: 0.75rem;
+    border-radius: 1.6rem;
+  }
 }
 
 @keyframes scroll {
