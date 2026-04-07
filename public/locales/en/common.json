@@ -31,7 +31,7 @@
     "discount": "Up to 30% Off",
     "titlePart1": "Rent Your Car",
     "titlePart2": "At The Best Prices",
-    "description": "We provide the best cars at competitive prices with 24/7 customer service",
+    "description": "We provide the best cars with the latest models",
     "jeddah": "Jeddah",
     "riyadh": "Riyadh",
     "eastern": "Eastern"
@@ -599,6 +599,9 @@
     "exceptionsItem1": "Remaining days value cannot be refunded if car is returned early (unless exceptionally approved).",
     "exceptionsItem2": "Traffic violations during rental period are non-refundable and deducted from deposit.",
     "disclaimer": "* All operations are primarily subject to the rental contract signed between customer and service provider."
+  },
+  "terms": {
+    "identity_verification": "The client agrees to provide the service provider with a valid copy of the national ID or residency permit and driving license, via the website or approved means, for eligibility verification and to complete the vehicle rental process in accordance with the regulations in the Kingdom of Saudi Arabia."
   },
   "carDetails": {
     "notFound": "Car Not Found",
