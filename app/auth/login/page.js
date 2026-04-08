@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import {
@@ -20,17 +20,20 @@ export default function LoginPage() {
   const { t, i18n } = useTranslation("common");
   const { login, user } = useAuth();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (user) {
-      const returnUrl = searchParams.get("returnUrl");
+      const params =
+        typeof window !== "undefined"
+          ? new URLSearchParams(window.location.search)
+          : null;
+      const returnUrl = params?.get("returnUrl");
       router.push(returnUrl || "/");
     }
-  }, [user, router, searchParams]);
+  }, [user, router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
