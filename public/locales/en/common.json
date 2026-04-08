@@ -336,6 +336,7 @@
         "cancel": "Cancel",
         "success": "Car added successfully",
         "error": "Failed to add car",
+        "warningFill": "Please fill all required fields",
         "categories": {
           "regular": "Individual (Self-drive)",
           "with_driver": "With Driver",
