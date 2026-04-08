@@ -72,6 +72,42 @@ const getDayOptionLabel = (day, t) => {
   return `${day} ${t("booking.days")} - ${tierLabel}`;
 };
 
+const getDateFieldStyles = (hasValue) => ({
+  "& .MuiOutlinedInput-root": {
+    borderRadius: 3,
+    bgcolor: "rgba(255,255,255,0.03)",
+    color: "white",
+    "& fieldset": {
+      borderColor: "rgba(255,255,255,0.1)",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#f97316",
+    },
+    "& input[type='date']": {
+      color: hasValue ? "white" : "transparent",
+      WebkitTextFillColor: hasValue ? "white" : "transparent",
+      caretColor: "transparent",
+    },
+    "& input[type='date']::-webkit-datetime-edit": {
+      color: hasValue ? "white" : "transparent",
+      WebkitTextFillColor: hasValue ? "white" : "transparent",
+    },
+    "& input[type='date']::-webkit-calendar-picker-indicator": {
+      filter: "invert(1)",
+      opacity: 1,
+      cursor: "pointer",
+    },
+  },
+  "& .MuiInputLabel-root": {
+    color: "rgba(255,255,255,0.4)",
+    fontWeight: "bold",
+    fontSize: "0.85rem",
+  },
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: "#f97316",
+  },
+});
+
 export default function BookingPage() {
   const { t, i18n } = useTranslation("common");
   const { user, loading: authLoading } = useAuth();
@@ -250,6 +286,11 @@ export default function BookingPage() {
   const totalPrice = tieredPricing.rate * diffDays;
   const appliedTierLabel =
     i18n.language === "ar" ? "الشريحة المطبقة" : "Applied Tier";
+  const datePlaceholder = t("booking.datePlaceholder");
+  const datePlaceholderPosition =
+    i18n.dir() === "rtl"
+      ? { right: "3rem", textAlign: "right" }
+      : { left: "1rem", textAlign: "left" };
 
   return (
     <div
@@ -291,43 +332,32 @@ export default function BookingPage() {
                   </div>
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={4}>
-                      <TextField
-                        label={t("booking.pickupDate")}
-                        type="date"
-                        placeholder="يوم / شهر / سنة"
-                        fullWidth
-                        size="small"
-                        InputLabelProps={{ shrink: true }}
-                        value={dates.startDate}
-                        onChange={(e) =>
-                          setDates({ ...dates, startDate: e.target.value })
-                        }
-                        required
-                        sx={{
-                          "& .MuiOutlinedInput-root": {
-                            borderRadius: 3,
-                            bgcolor: "rgba(255,255,255,0.03)",
-                            color: "white",
-                            "& fieldset": {
-                              borderColor: "rgba(255,255,255,0.1)",
-                            },
-                            "&.Mui-focused fieldset": {
-                              borderColor: "#f97316",
-                            },
-                            "& input[type='date']::-webkit-calendar-picker-indicator": {
-                              filter: "invert(1)",
-                            },
-                          },
-                          "& .MuiInputLabel-root": {
-                            color: "rgba(255,255,255,0.4)",
-                            fontWeight: "bold",
-                            fontSize: "0.85rem",
-                          },
-                          "& .MuiInputLabel-root.Mui-focused": {
-                            color: "#f97316",
-                          },
-                        }}
-                      />
+                      <div className="relative">
+                        {!dates.startDate && (
+                          <span
+                            className="pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-[0.85rem] font-bold text-white/35"
+                            style={{
+                              width: "calc(100% - 4.5rem)",
+                              ...datePlaceholderPosition,
+                            }}
+                          >
+                            {datePlaceholder}
+                          </span>
+                        )}
+                        <TextField
+                          label={t("booking.pickupDate")}
+                          type="date"
+                          fullWidth
+                          size="small"
+                          InputLabelProps={{ shrink: true }}
+                          value={dates.startDate}
+                          onChange={(e) =>
+                            setDates({ ...dates, startDate: e.target.value })
+                          }
+                          required
+                          sx={getDateFieldStyles(Boolean(dates.startDate))}
+                        />
+                      </div>
                     </Grid>
                     <Grid item xs={12} sm={4}>
                       <FormControl fullWidth size="small">
@@ -395,42 +425,31 @@ export default function BookingPage() {
                       </FormControl>
                     </Grid>
                     <Grid item xs={12} sm={4}>
-                      <TextField
-                        label={t("booking.dropoffDate")}
-                        type="date"
-                        placeholder="يوم / شهر / سنة"
-                        fullWidth
-                        size="small"
-                        InputLabelProps={{ shrink: true }}
-                        value={dates.endDate}
-                        onChange={(e) =>
-                          setDates({ ...dates, endDate: e.target.value })
-                        }
-                        sx={{
-                          "& .MuiOutlinedInput-root": {
-                            borderRadius: 3,
-                            bgcolor: "rgba(255,255,255,0.03)",
-                            color: "white",
-                            "& fieldset": {
-                              borderColor: "rgba(255,255,255,0.1)",
-                            },
-                            "&.Mui-focused fieldset": {
-                              borderColor: "#f97316",
-                            },
-                            "& input[type='date']::-webkit-calendar-picker-indicator": {
-                              filter: "invert(1)",
-                            },
-                          },
-                          "& .MuiInputLabel-root": {
-                            color: "rgba(255,255,255,0.4)",
-                            fontWeight: "bold",
-                            fontSize: "0.85rem",
-                          },
-                          "& .MuiInputLabel-root.Mui-focused": {
-                            color: "#f97316",
-                          },
-                        }}
-                      />
+                      <div className="relative">
+                        {!dates.endDate && (
+                          <span
+                            className="pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-[0.85rem] font-bold text-white/35"
+                            style={{
+                              width: "calc(100% - 4.5rem)",
+                              ...datePlaceholderPosition,
+                            }}
+                          >
+                            {datePlaceholder}
+                          </span>
+                        )}
+                        <TextField
+                          label={t("booking.dropoffDate")}
+                          type="date"
+                          fullWidth
+                          size="small"
+                          InputLabelProps={{ shrink: true }}
+                          value={dates.endDate}
+                          onChange={(e) =>
+                            setDates({ ...dates, endDate: e.target.value })
+                          }
+                          sx={getDateFieldStyles(Boolean(dates.endDate))}
+                        />
+                      </div>
                     </Grid>
                   </Grid>
                 </section>

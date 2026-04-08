@@ -492,6 +492,7 @@
     "errorMessage": "Booking failed",
     "loginRequired": "Please login first to complete your booking",
     "adminCannotBook": "Booking is for customers only.",
+    "datePlaceholder": "DD / MM / YYYY",
     "submitError": "Failed to submit booking request",
     "uploadError": "Failed to upload file",
     "uploadGeneralError": "An error occurred while uploading documents. Please try again.",

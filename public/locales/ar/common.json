@@ -492,6 +492,7 @@
     "errorMessage": "فشل الحجز",
     "loginRequired": "يرجى تسجيل الدخول أولاً لإتمام الحجز",
     "adminCannotBook": "الحجز مخصص للعملاء فقط.",
+    "datePlaceholder": "يوم / شهر / سنة",
     "submitError": "فشل إرسال طلب الحجز",
     "uploadError": "فشل رفع الملف",
     "uploadGeneralError": "حدث خطأ أثناء رفع المستندات. يرجى المحاولة مرة أخرى.",
