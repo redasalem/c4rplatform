@@ -491,7 +491,7 @@
     "successMessage": "Booking successful",
     "errorMessage": "Booking failed",
     "loginRequired": "Please login first to complete your booking",
-    "adminCannotBook": "Booking is available for customer accounts only. Redirecting you to the admin dashboard.",
+    "adminCannotBook": "Booking is for customers only.",
     "submitError": "Failed to submit booking request",
     "uploadError": "Failed to upload file",
     "uploadGeneralError": "An error occurred while uploading documents. Please try again.",

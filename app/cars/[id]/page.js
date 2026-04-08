@@ -4,7 +4,6 @@ import React from "react";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { carService } from "@/services/api";
-import { useAuth } from "@/context/AuthContext";
 import {
   CircularProgress,
   Container,
@@ -34,7 +33,6 @@ import { useTranslation } from "react-i18next";
 
 export default function CarDetailsPage() {
   const { t, i18n } = useTranslation("common");
-  const { user } = useAuth();
   const params = useParams();
   const id = params.id;
 
@@ -77,7 +75,6 @@ export default function CarDetailsPage() {
     car.images?.[0]?.url ||
     car.images?.[0] ||
     "/images/car-home.png";
-  const canBookCar = user?.role !== "admin";
 
   return (
     <div
@@ -295,21 +292,19 @@ export default function CarDetailsPage() {
                 </div>
               </div>
 
-              {canBookCar && (
-                <div className="mt-4 sm:mt-6 md:mt-8">
-                  <Link
-                    href={`/booking/${car._id}`}
-                    className="w-full bg-primary hover:bg-primary-hover text-white py-3 sm:py-4 md:py-5 rounded-xl sm:rounded-2xl md:rounded-[2rem] font-black text-base sm:text-lg md:text-xl transition-all shadow-[0_20px_40px_-10px_rgba(249,115,22,0.4)] flex items-center justify-center gap-2 sm:gap-4 group hover:scale-[1.02] active:scale-[0.98]"
-                  >
-                    <span className="tracking-tighter">
-                      {t("carDetails.bookButton")}
-                    </span>
-                    <ArrowBack
-                      className={`transition-transform ${i18n.dir() === "rtl" ? "group-hover:-translate-x-2" : "group-hover:translate-x-2 rotate-180"}`}
-                    />
-                  </Link>
-                </div>
-              )}
+              <div className="mt-4 sm:mt-6 md:mt-8">
+                <Link
+                  href={`/booking/${car._id}`}
+                  className="w-full bg-primary hover:bg-primary-hover text-white py-3 sm:py-4 md:py-5 rounded-xl sm:rounded-2xl md:rounded-[2rem] font-black text-base sm:text-lg md:text-xl transition-all shadow-[0_20px_40px_-10px_rgba(249,115,22,0.4)] flex items-center justify-center gap-2 sm:gap-4 group hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  <span className="tracking-tighter">
+                    {t("carDetails.bookButton")}
+                  </span>
+                  <ArrowBack
+                    className={`transition-transform ${i18n.dir() === "rtl" ? "group-hover:-translate-x-2" : "group-hover:translate-x-2 rotate-180"}`}
+                  />
+                </Link>
+              </div>
             </div>
           </div>
         </div>

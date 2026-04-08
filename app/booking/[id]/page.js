@@ -113,12 +113,6 @@ export default function BookingPage() {
     if (!user) {
       toast.info(t("booking.loginRequired"));
       router.replace(`/auth/login?returnUrl=/booking/${carId}`);
-      return;
-    }
-
-    if (user.role === "admin") {
-      toast.info(t("booking.adminCannotBook"));
-      router.replace("/dashboard/admin?blocked=booking");
     }
   }, [user, authLoading, router, carId, t]);
 
@@ -136,7 +130,12 @@ export default function BookingPage() {
     },
     onError: (err) => {
       console.error("Booking Error:", err.response?.data || err);
-      // Fallback to translated generic error rather than exposing raw English backend strings
+
+      if (err?.response?.status === 403) {
+        toast.info(t("booking.adminCannotBook"));
+        return;
+      }
+
       toast.error(t("booking.submitError"));
     },
   });
@@ -160,7 +159,6 @@ export default function BookingPage() {
 
     if (user?.role === "admin") {
       toast.info(t("booking.adminCannotBook"));
-      router.replace("/dashboard/admin?blocked=booking");
       return;
     }
 
@@ -240,7 +238,7 @@ export default function BookingPage() {
     );
   }
 
-  if (!user || user.role === "admin") return null;
+  if (!user) return null;
 
   const imageUrl =
     car?.image ||

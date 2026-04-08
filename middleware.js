@@ -49,14 +49,8 @@ export async function middleware(request) {
     return applyAuthCookies(response, { token, role });
   }
 
-  if ((isUserRoute || isBookingRoute) && role === "admin") {
-    const redirectUrl = new URL("/dashboard/admin", request.url);
-
-    if (isBookingRoute) {
-      redirectUrl.searchParams.set("blocked", "booking");
-    }
-
-    const response = NextResponse.redirect(redirectUrl);
+  if (isUserRoute && role === "admin") {
+    const response = NextResponse.redirect(new URL("/dashboard/admin", request.url));
     return applyAuthCookies(response, { token, role });
   }
 
