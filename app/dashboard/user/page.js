@@ -144,17 +144,28 @@ function UserDashboardContent({ user }) {
 }
 
 export default function UserDashboard() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
   const { t, i18n } = useTranslation("common");
 
   useEffect(() => {
-    if (!user) {
-      router.push("/auth/login?returnUrl=/dashboard/user");
-    }
-  }, [user, router]);
+    if (loading) return;
 
-  if (!user) return null;
+    if (!user) {
+      router.replace("/auth/login?returnUrl=/dashboard/user");
+      return;
+    }
+
+    if (user.role === "admin") {
+      router.replace("/dashboard/admin");
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return <CircularProgress className="m-auto block" />;
+  }
+
+  if (!user || user.role === "admin") return null;
 
   return (
     <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8 pb-20 pt-4 sm:pt-10 px-4">

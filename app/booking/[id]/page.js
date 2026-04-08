@@ -108,9 +108,17 @@ export default function BookingPage() {
 
   // Redirect to login if NOT authenticated
   useEffect(() => {
-    if (!authLoading && !user) {
+    if (authLoading) return;
+
+    if (!user) {
       toast.info(t("booking.loginRequired"));
-      router.push(`/auth/login?returnUrl=/booking/${carId}`);
+      router.replace(`/auth/login?returnUrl=/booking/${carId}`);
+      return;
+    }
+
+    if (user.role === "admin") {
+      toast.info(t("booking.adminCannotBook"));
+      router.replace("/dashboard/admin?blocked=booking");
     }
   }, [user, authLoading, router, carId, t]);
 
@@ -149,6 +157,12 @@ export default function BookingPage() {
 
   const handleBooking = async (e) => {
     e.preventDefault();
+
+    if (user?.role === "admin") {
+      toast.info(t("booking.adminCannotBook"));
+      router.replace("/dashboard/admin?blocked=booking");
+      return;
+    }
 
     // 1. Precise Validation
     if (!dates.startDate || !dates.endDate) {
@@ -226,7 +240,7 @@ export default function BookingPage() {
     );
   }
 
-  if (!user) return null;
+  if (!user || user.role === "admin") return null;
 
   const imageUrl =
     car?.image ||

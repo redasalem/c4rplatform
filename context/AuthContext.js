@@ -20,6 +20,32 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  const clearClientSession = () => {
+    Cookies.remove("token");
+    localStorage.removeItem("c4r_user");
+    setUser(null);
+  };
+
+  const clearServerSession = async () => {
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+      });
+    } catch (error) {
+      console.error("Session clear failed:", error);
+    }
+  };
+
+  const syncServerSession = async () => {
+    try {
+      await fetch("/api/auth/session", {
+        method: "POST",
+      });
+    } catch (error) {
+      console.error("Session sync failed:", error);
+    }
+  };
+
   // Load user from token on mount to verify session
   useEffect(() => {
     const checkAuth = async () => {
@@ -32,11 +58,11 @@ export const AuthProvider = ({ children }) => {
           if (profile.success) {
             setUser(profile.data);
             localStorage.setItem("c4r_user", JSON.stringify(profile.data));
+            await syncServerSession();
           } else {
             // Token might be invalid
-            Cookies.remove("token");
-            localStorage.removeItem("c4r_user");
-            setUser(null);
+            await clearServerSession();
+            clearClientSession();
           }
         } catch (error) {
           console.error("Auth check failed:", error);
@@ -45,15 +71,13 @@ export const AuthProvider = ({ children }) => {
             error.response?.status === 401 ||
             error.response?.status === 403
           ) {
-            Cookies.remove("token");
-            localStorage.removeItem("c4r_user");
-            setUser(null);
+            await clearServerSession();
+            clearClientSession();
           }
         }
       } else {
         // No token, ensure local state is clear
-        localStorage.removeItem("c4r_user");
-        setUser(null);
+        clearClientSession();
       }
       setLoading(false);
     };
@@ -63,10 +87,17 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      const data = await authService.login(credentials);
-      if (data && data.success) {
-        const { token, user } = data.data;
-        Cookies.set("token", token, { expires: 7 }); // Store token for 7 days
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials),
+      });
+      const data = await response.json().catch(() => null);
+
+      if (response.ok && data?.success) {
+        const { user } = data.data;
         setUser(user);
         localStorage.setItem("c4r_user", JSON.stringify(user));
         toast.success("تم تسجيل الدخول بنجاح");
@@ -74,11 +105,12 @@ export const AuthProvider = ({ children }) => {
         // Handle redirection
         const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
         const returnUrl = searchParams ? searchParams.get("returnUrl") : null;
+        const targetUrl = returnUrl || "/";
 
-        if (returnUrl) {
-          router.push(returnUrl);
+        if (typeof window !== "undefined") {
+          window.location.assign(targetUrl);
         } else {
-          router.push("/");
+          router.push(targetUrl);
         }
         return true;
       } else {
@@ -114,13 +146,11 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await authService.logout();
+      await clearServerSession();
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
-      Cookies.remove("token");
-      localStorage.removeItem("c4r_user");
-      setUser(null);
+      clearClientSession();
       router.push("/");
       toast.success("تم تسجيل الخروج بنجاح");
     }

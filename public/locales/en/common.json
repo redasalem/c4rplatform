@@ -245,7 +245,7 @@
       "bookings": {
         "title": "Manage Bookings",
         "pending": "Pending",
-        "approved": "Approved",
+        "approved": "Accepted",
         "rejected": "Rejected",
         "noBookings": "No bookings found",
         "empty": "No bookings available currently",
@@ -412,7 +412,7 @@
         "total": "Total:",
         "sar": "SAR",
         "status": {
-          "approved": "Approved",
+          "approved": "Accepted",
           "rejected": "Rejected",
           "pending": "Pending"
         },
@@ -491,6 +491,7 @@
     "successMessage": "Booking successful",
     "errorMessage": "Booking failed",
     "loginRequired": "Please login first to complete your booking",
+    "adminCannotBook": "Booking is available for customer accounts only. Redirecting you to the admin dashboard.",
     "submitError": "Failed to submit booking request",
     "uploadError": "Failed to upload file",
     "uploadGeneralError": "An error occurred while uploading documents. Please try again.",

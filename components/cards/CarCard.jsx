@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 import {
   AirlineSeatReclineExtra,
   LocalGasStation,
@@ -14,6 +15,8 @@ import { useTranslation } from "react-i18next";
 
 const CarCard = ({ car }) => {
   const { t, i18n } = useTranslation("common");
+  const { user } = useAuth();
+  const canBookCar = user?.role !== "admin";
   // Use first image or placeholder
   const imageUrl =
     car.image ||
@@ -113,22 +116,24 @@ const CarCard = ({ car }) => {
         <div className="mt-auto flex gap-2 sm:gap-3">
           <Link
             href={`/cars/${car._id}`}
-            className="flex-1 bg-white text-slate-700 text-center py-2.5 sm:py-3.5 rounded-lg sm:rounded-xl font-extrabold text-[11px] sm:text-sm border-2 border-slate-100 hover:border-slate-300 hover:bg-slate-50 transition-all active:scale-95 flex items-center justify-center shadow-sm"
+            className={`${canBookCar ? "flex-1" : "w-full"} bg-white text-slate-700 text-center py-2.5 sm:py-3.5 rounded-lg sm:rounded-xl font-extrabold text-[11px] sm:text-sm border-2 border-slate-100 hover:border-slate-300 hover:bg-slate-50 transition-all active:scale-95 flex items-center justify-center shadow-sm`}
           >
             {t("carCard.details")}
           </Link>
-          <Link
-            href={`/booking/${car._id}`}
-            className="flex-[1.5] bg-gradient-to-l from-orange-600 to-orange-500 text-white text-center py-2.5 sm:py-3.5 rounded-lg sm:rounded-xl font-black text-[11px] sm:text-sm hover:from-orange-700 hover:to-orange-600 transition-all shadow-[0_10px_20px_-10px_rgba(249,115,22,0.5)] hover:shadow-[0_15px_25px_-10px_rgba(249,115,22,0.6)] active:scale-95 flex items-center justify-center gap-1.5 sm:gap-2 relative overflow-hidden group/btn"
-          >
-            {/* Shimmer Effect */}
-            <div className="absolute inset-0 -translate-x-[150%] bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover/btn:translate-x-[150%] transition-transform duration-[1.5s] ease-in-out"></div>
-            <span className="relative z-10">{t("carCard.bookNow")}</span>
-            <ArrowBack
-              fontSize="small"
-              className="relative z-10 transition-transform group-hover/btn:-translate-x-1.5 !text-[16px] sm:!text-[20px]"
-            />
-          </Link>
+          {canBookCar && (
+            <Link
+              href={`/booking/${car._id}`}
+              className="flex-[1.5] bg-gradient-to-l from-orange-600 to-orange-500 text-white text-center py-2.5 sm:py-3.5 rounded-lg sm:rounded-xl font-black text-[11px] sm:text-sm hover:from-orange-700 hover:to-orange-600 transition-all shadow-[0_10px_20px_-10px_rgba(249,115,22,0.5)] hover:shadow-[0_15px_25px_-10px_rgba(249,115,22,0.6)] active:scale-95 flex items-center justify-center gap-1.5 sm:gap-2 relative overflow-hidden group/btn"
+            >
+              {/* Shimmer Effect */}
+              <div className="absolute inset-0 -translate-x-[150%] bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover/btn:translate-x-[150%] transition-transform duration-[1.5s] ease-in-out"></div>
+              <span className="relative z-10">{t("carCard.bookNow")}</span>
+              <ArrowBack
+                fontSize="small"
+                className="relative z-10 transition-transform group-hover/btn:-translate-x-1.5 !text-[16px] sm:!text-[20px]"
+              />
+            </Link>
+          )}
         </div>
       </div>
     </div>

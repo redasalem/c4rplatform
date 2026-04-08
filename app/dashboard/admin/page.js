@@ -282,8 +282,43 @@ function AdminStatsSection() {
 }
 
 export default function AdminDashboard() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { t, i18n } = useTranslation("common");
+
+  useEffect(() => {
+    if (loading) return;
+
+    if (!user) {
+      router.replace("/auth/login?returnUrl=/dashboard/admin");
+      return;
+    }
+
+    if (user.role !== "admin") {
+      router.replace("/dashboard/user");
+      return;
+    }
+
+    if (searchParams.get("blocked") === "booking") {
+      toast.info(t("booking.adminCannotBook"));
+
+      const nextParams = new URLSearchParams(searchParams.toString());
+      nextParams.delete("blocked");
+
+      const nextUrl = nextParams.toString()
+        ? `/dashboard/admin?${nextParams.toString()}`
+        : "/dashboard/admin";
+
+      router.replace(nextUrl);
+    }
+  }, [user, loading, router, searchParams, t]);
+
+  if (loading) {
+    return <CircularProgress className="m-auto block" />;
+  }
+
+  if (!user || user.role !== "admin") return null;
 
   return (
     <div className="space-y-4 md:space-y-6" dir={i18n.dir()}>
