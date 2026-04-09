@@ -155,7 +155,7 @@
     "copyright": "© 2024 C4R Platform. All rights reserved.",
     "privacy": "Privacy Policy",
     "terms": "Terms & Conditions",
-    "poweredBy": "Powered by C4R Technology"
+    "poweredBy": "Powered by C4R"
   },
   "partners": {
     "titlePart1": "Our",
@@ -200,7 +200,12 @@
     "sendResetLink": "Send Reset Link",
     "resetLinkSent": "Reset link sent to your email",
     "resetLinkError": "Failed to send reset link",
-    "returnToLogin": "Return to Login"
+    "returnToLogin": "Return to Login",
+    "resetTitle": "Reset Password",
+    "resetSubtitle": "Enter your new password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "tokenMissing": "Invalid or expired link"
   },
   "dashboard": {
     "profile": "Profile",
@@ -387,7 +392,8 @@
           "confirm": "Yes, Delete",
           "cancel": "Cancel"
         },
-        "verified": "Verified"
+        "verified": "Verified",
+        "noComment": "No comment"
       }
     },
     "user": {
@@ -434,7 +440,9 @@
         "posting": "Submitting...",
         "postButton": "Submit Review",
         "ratingLabel": "Rating",
-        "commentLabel": "Your Comment"
+        "commentLabel": "Your Comment",
+        "emptyCommentError": "Please write a comment with your rating",
+        "rated": "Reviewed"
       },
       "profile": {
         "title": "Profile",
@@ -508,7 +516,7 @@
     "breadcrumb": "Complete Luxury Booking",
     "pageTitlePart1": "Complete",
     "pageTitlePart2": "Booking Request",
-    "datesTitle": "Date Selection",
+    "datesTitle": "Select Dates",
     "pickupDate": "Pickup Date",
     "dropoffDate": "Dropoff Date",
     "contactTitle": "Contact Information",
@@ -527,8 +535,8 @@
     "processing": "Processing your request...",
     "submitButton": "Confirm Booking & Submit Documents",
     "carImageAlt": "Car Image",
-    "yearLabel": "{{year}} Edition",
-    "modelLabel": "Class A Model",
+    "yearLabel": "{{year}} Model",
+    "modelLabel": "Class A",
     "dailyPrice": "Daily Price",
     "duration": "Duration",
     "days": "days",
@@ -607,6 +615,9 @@
     "exceptionsItem2": "Traffic violations during rental period are non-refundable and deducted from deposit.",
     "disclaimer": "* All operations are primarily subject to the rental contract signed between customer and service provider."
   },
+  "privacy": {
+    "identity_verification": "The client agrees to provide the service provider with a valid copy of the national ID or residency permit and driving license, via the website or approved means, for eligibility verification and to complete the vehicle rental process in accordance with the regulations in the Kingdom of Saudi Arabia."
+  },
   "terms": {
     "identity_verification": "The client agrees to provide the service provider with a valid copy of the national ID or residency permit and driving license, via the website or approved means, for eligibility verification and to complete the vehicle rental process in accordance with the regulations in the Kingdom of Saudi Arabia."
   },
@@ -637,7 +648,7 @@
       "maintenance": "Regular Maintenance",
       "delivery": "Free Delivery (Optional)"
     },
-    "bookButton": "Book This Car Now",
+    "bookButton": "Book Now",
     "reviewsTitle": "Customer Reviews",
     "noReviews": "No reviews for this car yet.",
     "beFirst": "Be the first to book and rate this premium car!"
