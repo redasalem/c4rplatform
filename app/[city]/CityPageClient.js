@@ -9,15 +9,20 @@ import { CircularProgress, Container } from "@mui/material";
 import { LocationOn } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 
+const cityToRegionMap = {
+  sharqiya: "eastern",
+};
+
 export default function CityPageClient({ city }) {
   const { t, i18n } = useTranslation("common");
+  const region = cityToRegionMap[city] || city;
   const {
     data: carsData,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["cars", city],
-    queryFn: () => carService.getAll({ region: city }),
+    queryKey: ["cars", region],
+    queryFn: () => carService.getAll({ region }),
   });
 
   const cars = carsData?.data?.cars || [];
@@ -30,8 +35,7 @@ export default function CityPageClient({ city }) {
     );
   }
 
-  // Fallback if translation missing
-  const translatedCityName = t(`regions.${city}`, { defaultValue: city });
+  const translatedCityName = t(`regions.${region}`, { defaultValue: city });
 
   return (
     <div className="min-h-screen bg-transparent pt-28 pb-20" dir={i18n.dir()}>
