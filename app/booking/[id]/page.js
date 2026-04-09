@@ -72,42 +72,6 @@ const getDayOptionLabel = (day, t) => {
   return `${day} ${t("booking.days")} - ${tierLabel}`;
 };
 
-const getDateFieldStyles = (hasValue) => ({
-  "& .MuiOutlinedInput-root": {
-    borderRadius: 3,
-    bgcolor: "rgba(255,255,255,0.03)",
-    color: "white",
-    "& fieldset": {
-      borderColor: "rgba(255,255,255,0.1)",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#f97316",
-    },
-    "& input[type='date']": {
-      color: hasValue ? "white" : "transparent",
-      WebkitTextFillColor: hasValue ? "white" : "transparent",
-      caretColor: "transparent",
-    },
-    "& input[type='date']::-webkit-datetime-edit": {
-      color: hasValue ? "white" : "transparent",
-      WebkitTextFillColor: hasValue ? "white" : "transparent",
-    },
-    "& input[type='date']::-webkit-calendar-picker-indicator": {
-      filter: "invert(1)",
-      opacity: 1,
-      cursor: "pointer",
-    },
-  },
-  "& .MuiInputLabel-root": {
-    color: "rgba(255,255,255,0.4)",
-    fontWeight: "bold",
-    fontSize: "0.85rem",
-  },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "#f97316",
-  },
-});
-
 export default function BookingPage() {
   const { t, i18n } = useTranslation("common");
   const { user, loading: authLoading } = useAuth();
@@ -330,14 +294,14 @@ export default function BookingPage() {
                       {t("booking.datesTitle")}
                     </h3>
                   </div>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} sm={4}>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} sm={6}>
                       <div className="relative">
                         {!dates.startDate && (
                           <span
                             className="pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-[0.85rem] font-bold text-white/35"
                             style={{
-                              width: "calc(100% - 4.5rem)",
+                              width: "calc(100% - 3rem)",
                               ...datePlaceholderPosition,
                             }}
                           >
@@ -355,7 +319,45 @@ export default function BookingPage() {
                             setDates({ ...dates, startDate: e.target.value })
                           }
                           required
-                          sx={getDateFieldStyles(Boolean(dates.startDate))}
+                          sx={{
+                            "& .MuiOutlinedInput-root": {
+                              borderRadius: 3,
+                              bgcolor: "rgba(255,255,255,0.03)",
+                              color: "white",
+                              "& fieldset": {
+                                borderColor: "rgba(255,255,255,0.1)",
+                              },
+                              "&.Mui-focused fieldset": {
+                                borderColor: "#f97316",
+                              },
+                              "& input[type='date']": {
+                                color: dates.startDate ? "white" : "transparent",
+                                WebkitTextFillColor: dates.startDate ? "white" : "transparent",
+                                caretColor: "transparent",
+                                paddingRight: "2.5rem",
+                              },
+                              "& input[type='date']::-webkit-datetime-edit": {
+                                color: dates.startDate ? "white" : "transparent",
+                                WebkitTextFillColor: dates.startDate ? "white" : "transparent",
+                              },
+                              "& input[type='date']::-webkit-calendar-picker-indicator": {
+                                filter: "invert(1)",
+                                opacity: 1,
+                                cursor: "pointer",
+                                position: "absolute",
+                                right: "0.5rem",
+                                left: "auto",
+                              },
+                            },
+                            "& .MuiInputLabel-root": {
+                              color: "rgba(255,255,255,0.4)",
+                              fontWeight: "bold",
+                              fontSize: "0.85rem",
+                            },
+                            "& .MuiInputLabel-root.Mui-focused": {
+                              color: "#f97316",
+                            },
+                          }}
                         />
                       </div>
                     </Grid>
@@ -424,13 +426,13 @@ export default function BookingPage() {
                         </Select>
                       </FormControl>
                     </Grid>
-                    <Grid item xs={12} sm={4}>
+                    <Grid item xs={12} sm={6}>
                       <div className="relative">
                         {!dates.endDate && (
                           <span
                             className="pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-[0.85rem] font-bold text-white/35"
                             style={{
-                              width: "calc(100% - 4.5rem)",
+                              width: "calc(100% - 3rem)",
                               ...datePlaceholderPosition,
                             }}
                           >
@@ -447,7 +449,45 @@ export default function BookingPage() {
                           onChange={(e) =>
                             setDates({ ...dates, endDate: e.target.value })
                           }
-                          sx={getDateFieldStyles(Boolean(dates.endDate))}
+                          sx={{
+                            "& .MuiOutlinedInput-root": {
+                              borderRadius: 3,
+                              bgcolor: "rgba(255,255,255,0.03)",
+                              color: "white",
+                              "& fieldset": {
+                                borderColor: "rgba(255,255,255,0.1)",
+                              },
+                              "&.Mui-focused fieldset": {
+                                borderColor: "#f97316",
+                              },
+                              "& input[type='date']": {
+                                color: dates.endDate ? "white" : "transparent",
+                                WebkitTextFillColor: dates.endDate ? "white" : "transparent",
+                                caretColor: "transparent",
+                                paddingRight: "2.5rem",
+                              },
+                              "& input[type='date']::-webkit-datetime-edit": {
+                                color: dates.endDate ? "white" : "transparent",
+                                WebkitTextFillColor: dates.endDate ? "white" : "transparent",
+                              },
+                              "& input[type='date']::-webkit-calendar-picker-indicator": {
+                                filter: "invert(1)",
+                                opacity: 1,
+                                cursor: "pointer",
+                                position: "absolute",
+                                right: "0.5rem",
+                                left: "auto",
+                              },
+                            },
+                            "& .MuiInputLabel-root": {
+                              color: "rgba(255,255,255,0.4)",
+                              fontWeight: "bold",
+                              fontSize: "0.85rem",
+                            },
+                            "& .MuiInputLabel-root.Mui-focused": {
+                              color: "#f97316",
+                            },
+                          }}
                         />
                       </div>
                     </Grid>
