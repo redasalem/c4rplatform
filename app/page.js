@@ -5,8 +5,98 @@ import FAQ from "@/components/home/FAQ";
 import ReviewMarquee from "@/components/home/ReviewMarquee";
 
 export default function Home() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "ما هي شروط تأجير السيارات في السعودية؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "يتطلب الحجز هوية سارية، رخصة قيادة معترف بها، وبطاقة ائتمان.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "هل توفرون سيارات مع سائق؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "نعم، لدينا خدمة تأجير سيارات بسائق خاص في جميع مدن المملكة.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "ما هي المدن المتاحة للحجز؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "نغطي الرياض، جدة، المنطقة الشرقية (الدمام، الخبر، الظهران) وقريباً مدن أخرى.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "هل يوجد حد أدنى لمدة الإيجار؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "يمكنك استئجار سيارة بدءاً من يوم واحد. نوفر أيضاً عقود شهرية وسنوية بأسعار مخفضة.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "كيف يتم تأكيد الحجز؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "بعد إرسال طلبك عبر المنصة، سيتواصل معك فريقنا عبر الواتساب لتأكيد الحجز وترتيب التسليم.",
+        },
+      },
+    ],
+  };
+
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "C4R Platform",
+    "alternateName": "سي فور آر لتأجير السيارات",
+    "url": "https://c4rplatform.com",
+    "logo": "https://c4rplatform.com/images/logo.jpeg",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+966554118873",
+      "contactType": "customer service",
+      "availableLanguage": ["Arabic", "English"],
+      "areaServed": "SA",
+    },
+    "sameAs": [
+      "https://www.instagram.com/C4R_Platform",
+      "https://x.com/C4R_Platform",
+      "https://www.tiktok.com/@C4R.Platform",
+    ],
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "C4R Platform",
+    "alternateName": "منصة سي فور آر",
+    "url": "https://c4rplatform.com",
+  };
+
   return (
     <main className="min-h-screen pb-24">
+      {/* Homepage-only JSON-LD schemas */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+
       <HeroAd />
       <Departments />
       <ReviewMarquee />

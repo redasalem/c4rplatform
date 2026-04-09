@@ -14,7 +14,7 @@ const HeroAd = () => {
           <div className="absolute inset-0">
             <Image
               src="/images/car1.png"
-              alt="Luxury Car Fleet"
+              alt={t("hero.imageAlt", { defaultValue: "أسطول سيارات C4R للتأجير في السعودية" })}
               fill
               className="object-cover object-center transition-transform duration-10000 group-hover:scale-105"
               priority
@@ -49,9 +49,9 @@ const HeroAd = () => {
                 <div className="absolute inset-0 bg-midnight/70 backdrop-blur-md transition-colors group-hover/card:bg-midnight/80"></div>
                 <div className="absolute inset-x-0 bottom-0 h-0.5 scale-x-0 bg-primary transition-transform group-hover/card:scale-x-100"></div>
                 <div className="absolute inset-0 flex items-center justify-center px-3">
-                  <h3 className="text-xs font-black text-white transition-colors group-hover/card:text-primary sm:text-sm md:text-base">
+                  <span className="text-xs font-black text-white transition-colors group-hover/card:text-primary sm:text-sm md:text-base">
                     {t("hero.eastern")}
-                  </h3>
+                  </span>
                 </div>
               </Link>
 
@@ -62,9 +62,9 @@ const HeroAd = () => {
                 <div className="absolute inset-0 bg-midnight/70 backdrop-blur-md transition-colors group-hover/card:bg-midnight/80"></div>
                 <div className="absolute inset-x-0 bottom-0 h-0.5 scale-x-0 bg-primary transition-transform group-hover/card:scale-x-100"></div>
                 <div className="absolute inset-0 flex items-center justify-center px-3">
-                  <h3 className="text-xs font-black text-white transition-colors group-hover/card:text-primary sm:text-sm md:text-base">
+                  <span className="text-xs font-black text-white transition-colors group-hover/card:text-primary sm:text-sm md:text-base">
                     {t("hero.riyadh")}
-                  </h3>
+                  </span>
                 </div>
               </Link>
 
@@ -75,9 +75,9 @@ const HeroAd = () => {
                 <div className="absolute inset-0 bg-midnight/70 backdrop-blur-md transition-colors group-hover/card:bg-midnight/80"></div>
                 <div className="absolute inset-x-0 bottom-0 h-0.5 scale-x-0 bg-primary transition-transform group-hover/card:scale-x-100"></div>
                 <div className="absolute inset-0 flex items-center justify-center px-3">
-                  <h3 className="text-xs font-black text-white transition-colors group-hover/card:text-primary sm:text-sm md:text-base">
+                  <span className="text-xs font-black text-white transition-colors group-hover/card:text-primary sm:text-sm md:text-base">
                     {t("hero.jeddah")}
-                  </h3>
+                  </span>
                 </div>
               </Link>
             </div>

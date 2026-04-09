@@ -31,9 +31,9 @@ const Footer = () => {
       <div className="bg-linear-to-r from-orange-600 to-orange-500 py-10 relative overflow-hidden">
         <div className="container mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-right">
           <div className="space-y-2">
-            <h3 className="text-xl md:text-3xl font-black text-white leading-tight">
+            <p className="text-xl md:text-3xl font-black text-white leading-tight">
               {t("footer.ctaTitle")}
-            </h3>
+            </p>
             <p className="text-orange-100 text-sm md:text-base font-bold opacity-90">
               {t("footer.ctaSubtitle")}
             </p>
@@ -67,7 +67,7 @@ const Footer = () => {
                 alt="C4R Logo"
                 width={160}
                 height={65}
-                priority
+                loading="lazy"
                 className="object-contain rounded-[15px] logo-premium-glow"
               />
             </Link>
@@ -205,7 +205,7 @@ const Footer = () => {
       <div className="border-t border-white/5 bg-midnight/40 backdrop-blur-md pb-24 md:pb-8">
         <div className="container mx-auto px-6 py-8 flex flex-col lg:flex-row items-center justify-between gap-6 text-xs md:text-base text-gray-400 font-bold">
           <p className="text-center lg:text-right uppercase tracking-wider order-2 lg:order-1">
-            {t("footer.copyright")}
+            © {new Date().getFullYear()} منصة C4R. جميع الحقوق محفوظة.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 order-1 lg:order-2">
             <Link

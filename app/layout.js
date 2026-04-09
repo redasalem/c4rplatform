@@ -14,7 +14,10 @@ const almarai = Almarai({
 });
 
 export const metadata = {
-  title: "C4R-Platform | تأجير سيارات في السعودية",
+  title: {
+    default: "C4R-Platform | تأجير سيارات في السعودية",
+    template: "%s | C4R Platform",
+  },
   description:
     "منصة C4R لتأجير السيارات الفاخرة والاقتصادية في المملكة العربية السعودية. حجز سريع وآمن وخدمة عملاء 24/7.",
   metadataBase: new URL("https://c4rplatform.com"),
@@ -59,7 +62,7 @@ export default function RootLayout({ children }) {
         className={`${almarai.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
-        {/* JSON-LD Structured Data */}
+        {/* JSON-LD Structured Data — CarRental (global) */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -76,36 +79,9 @@ export default function RootLayout({ children }) {
                 "addressRegion": "KSA",
               },
               "sameAs": [
-                "https://facebook.com/c4rplatform",
-                "https://instagram.com/c4rplatform",
-                "https://twitter.com/c4rplatform",
-              ],
-            }),
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              "mainEntity": [
-                {
-                  "@type": "Question",
-                  "name": "ما هي شروط تأجير السيارات في السعودية؟",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "يتطلب الحجز هوية سارية، رخصة قيادة معترف بها، وبطاقة ائتمان.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  "name": "هل توفرون سيارات مع سائق؟",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "نعم، لدينا خدمة تأجير سيارات بسائق خاص في جميع مدن المملكة.",
-                  },
-                },
+                "https://www.instagram.com/C4R_Platform",
+                "https://x.com/C4R_Platform",
+                "https://www.tiktok.com/@C4R.Platform",
               ],
             }),
           }}

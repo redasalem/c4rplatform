@@ -1,47 +1,105 @@
-"use client";
+import FAQPageClient from "./FAQPageClient";
 
-import React from "react";
-import Breadcrumbs from "@/components/layout/Breadcrumbs";
-import FAQ from "@/components/home/FAQ";
-import { QuestionAnswer } from "@mui/icons-material";
-
-const FAQPage = () => {
-  const breadcrumbItems = [{ label: "الأسئلة الشائعة" }];
-
-  return (
-    <div className="min-h-screen bg-transparent pt-32 pb-20 px-6">
-      <div className="max-w-6xl mx-auto mb-12">
-        <Breadcrumbs items={breadcrumbItems} />
-      </div>
-
-      <div className="max-w-6xl mx-auto">
-        <div className="bg-white/5 backdrop-blur-3xl rounded-[3.5rem] p-12 md:p-20 border border-white/10 shadow-2xl relative overflow-hidden">
-          {/* Decorative Elements */}
-          <div className="absolute top-0 left-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2" />
-
-          <div className="text-center mb-16 relative z-10" dir="rtl">
-            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full mb-6 border border-primary/20">
-              <QuestionAnswer fontSize="small" />
-              <span className="font-black text-xs uppercase tracking-widest">
-                الأسئلة الشائعة
-              </span>
-            </div>
-            <h1 className="text-3xl md:text-5xl font-black text-white tracking-tighter mb-8 italic">
-              كل ما تود <span className="text-primary not-italic">معرفته</span>
-            </h1>
-            <p className="text-xl text-slate-400 font-bold max-w-2xl mx-auto leading-relaxed">
-              جمعنا لك أكثر الأسئلة تكراراً لتوفير وقتك. إذا لم تجد ما تبحث عنه،
-              فريقنا متاح دائماً عبر الواتساب.
-            </p>
-          </div>
-
-          <div className="relative z-10">
-            <FAQ />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+export const metadata = {
+  title: "الأسئلة الشائعة - أجوبة حول تأجير السيارات",
+  description:
+    "إجابات على أكثر الأسئلة تكراراً حول تأجير السيارات في السعودية: الشروط، الأسعار، التوصيل، وطرق الدفع مع منصة C4R.",
+  openGraph: {
+    title: "الأسئلة الشائعة - C4R Platform",
+    description:
+      "كل ما تود معرفته عن تأجير السيارات في السعودية مع C4R.",
+    url: "https://c4rplatform.com/faq",
+  },
 };
 
-export default FAQPage;
+export default function FAQPage() {
+  // FAQPage JSON-LD — only renders on /faq (also on homepage)
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "ما هي شروط تأجير السيارات في السعودية؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "يتطلب الحجز هوية سارية، رخصة قيادة معترف بها، وبطاقة ائتمان.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "هل توفرون سيارات مع سائق؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "نعم، لدينا خدمة تأجير سيارات بسائق خاص في جميع مدن المملكة.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "ما هي المدن المتاحة للحجز؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "نغطي الرياض، جدة، المنطقة الشرقية (الدمام، الخبر، الظهران) وقريباً مدن أخرى.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "هل يوجد حد أدنى لمدة الإيجار؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "يمكنك استئجار سيارة بدءاً من يوم واحد. نوفر أيضاً عقود شهرية وسنوية بأسعار مخفضة.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "كيف يتم تأكيد الحجز؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "بعد إرسال طلبك عبر المنصة، سيتواصل معك فريقنا عبر الواتساب لتأكيد الحجز وترتيب التسليم.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "ما هي طرق الدفع المتاحة؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "نوفر الدفع بالتحويل البنكي أو الدفع نقداً عند الاستلام في المدن المدعومة.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "هل يمكن إلغاء الحجز بعد التأكيد؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "يمكن إلغاء الحجز قبل استلام السيارة. قد تطبق رسوم إلغاء حسب سياسة جهة التأجير.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "هل التوصيل مجاني؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "نوفر خدمة توصيل السيارة لموقعك. قد تضاف رسوم توصيل حسب المدينة وبعد الموقع.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "هل يشمل الإيجار التأمين؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "نعم، جميع السيارات مؤمنة تأميناً شاملاً أو ضد الغير حسب نوع السيارة وجهة التأجير.",
+        },
+      },
+    ],
+  };
+
+  return (
+    <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <FAQPageClient />
+    </main>
+  );
+}
