@@ -28,9 +28,9 @@
     "email": "Send Email"
   },
   "hero": {
-    "titlePart1": "Rent Your Car",
-    "titlePart2": "At The Best Prices",
-    "description": "We provide the best cars with the latest models",
+    "titlePart1": "Top Car Rental",
+    "titlePart2": "in Saudi Arabia",
+    "description": "Discover affordable & luxury car rentals across KSA. Book online for daily or monthly rentals.",
     "jeddah": "Jeddah",
     "riyadh": "Riyadh",
     "eastern": "Eastern"
@@ -79,13 +79,13 @@
     "empty": "No cars available at the moment"
   },
   "departments": {
-    "titlePart1": "Explore",
-    "titlePart2": "Our Sections",
-    "regularTitle": "Individuals Section",
-    "regularDesc": "Daily and diverse car rentals for individuals with the best prices and latest models.",
+    "titlePart1": "Best Car Rental Options",
+    "titlePart2": "For You",
+    "regularTitle": "Car Rental for Individuals",
+    "regularDesc": "Daily and monthly car rentals with the cheapest prices. Wide variety of economy & luxury cars.",
     "regularAction": "Rent Now",
-    "driverTitle": "Cars with Driver",
-    "driverDesc": "Enjoy a comfortable journey with a professional driver. Premium service for business and families.",
+    "driverTitle": "Rent a Car with Driver",
+    "driverDesc": "Enjoy a comfortable journey with a professional driver. Premium luxury car service.",
     "driverAction": "Book Now",
     "corporateBadge": "For Companies",
     "corporateTitle": "Corporate Section",

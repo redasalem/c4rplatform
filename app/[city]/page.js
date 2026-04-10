@@ -11,8 +11,8 @@ export async function generateMetadata({ params }) {
   const cityName = cityNames[city] || city;
 
   return {
-    title: `تأجير سيارات في ${cityName} | C4R Platform`,
-    description: `أفضل خيارات تأجير السيارات في ${cityName}. حجز سريع، أسعار تنافسية، وأسطول متنوع من السيارات الفاخرة والاقتصادية.`,
+    title: `أرخص تأجير سيارات في ${cityName} | Rent a Car in ${city} | C4R`,
+    description: `أفضل عروض تأجير السيارات في ${cityName}. احجز سيارتك أونلاين بأفضل الأسعار. تأجير يومي وشهري للسيارات الاقتصادية والفخمة. Affordable car rental in ${city}.`,
   };
 }
 

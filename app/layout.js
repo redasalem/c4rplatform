@@ -15,11 +15,11 @@ const almarai = Almarai({
 
 export const metadata = {
   title: {
-    default: "C4R-Platform | تأجير سيارات في السعودية",
-    template: "%s | C4R Platform",
+    default: "منصة C4R | أفضل تأجير سيارات في السعودية | Car Rental KSA",
+    template: "%s | C4R Platform | تأجير سيارات",
   },
   description:
-    "منصة C4R لتأجير السيارات الفاخرة والاقتصادية في المملكة العربية السعودية. حجز سريع وآمن وخدمة عملاء 24/7.",
+    "احجز مع منصة C4R أفضل وأرخص سيارات للإيجار في السعودية. نوفر تأجير سيارات فخمة واقتصادية، إيجار يومي وشهري في الرياض، جدة والشرقية. Best & affordable car rental in KSA.",
   metadataBase: new URL("https://c4rplatform.com"),
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
@@ -30,9 +30,9 @@ export const metadata = {
     apple: [{ url: "/images/logo.jpeg", sizes: "180x180" }],
   },
   openGraph: {
-    title: "C4R-Platform | تأجير سيارات في السعودية",
+    title: "منصة C4R | أفضل تأجير سيارات في السعودية | Car Rental KSA",
     description:
-      "منصة C4R لتأجير السيارات الفاخرة والاقتصادية في المملكة العربية السعودية.",
+      "احجز مع منصة C4R أفضل وأرخص سيارات للإيجار في السعودية. تأجير سيارات فخمة واقتصادية. Best car rental KSA.",
     url: "https://c4rplatform.com",
     siteName: "C4R Platform",
     locale: "ar_SA",
@@ -48,9 +48,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "C4R-Platform | تأجير سيارات في السعودية",
+    title: "منصة C4R | تأجير سيارات في السعودية | Car Rental KSA",
     description:
-      "منصة C4R لتأجير السيارات الفاخرة والاقتصادية في المملكة العربية السعودية.",
+      "أفضل وأرخص سيارات للإيجار في السعودية. حجز سريع. Best car rental KSA.",
     images: ["/images/logo.jpeg"],
   },
 };
@@ -70,6 +70,8 @@ export default function RootLayout({ children }) {
               "@context": "https://schema.org",
               "@type": "CarRental",
               "name": "C4R Platform | سي فور آر لتأجير السيارات",
+              "alternateName": "C4R Car Rental Saudi Arabia",
+              "description": "Best and affordable car rental services in Saudi Arabia. Rent cheap, luxury, and economy cars in Riyadh, Jeddah, and Eastern Province.",
               "logo": "https://c4rplatform.com/images/logo.jpeg",
               "url": "https://c4rplatform.com",
               "telephone": "+966554118873",

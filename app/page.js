@@ -56,7 +56,9 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "C4R Platform",
-    "alternateName": "سي فور آر لتأجير السيارات",
+    "alternateName": ["سي فور آر لتأجير السيارات", "C4R Car Rental Saudi Arabia"],
+    "description": "منصة لتأجير السيارات في السعودية أونلاين. حجز سيارة فخمة أو اقتصادية بأرخص الأسعار.",
+    "keywords": "تأجير سيارات في السعودية, أرخص تأجير سيارات, تأجير سيارات الرياض, rent a car KSA, car rental Saudi",
     "url": "https://c4rplatform.com",
     "logo": "https://c4rplatform.com/images/logo.jpeg",
     "contactPoint": {
