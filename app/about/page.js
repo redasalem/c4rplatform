@@ -9,6 +9,9 @@ export const metadata = {
     description: "تعرف على منصة C4R، الوجهة الأولى لتأجير السيارات في المملكة بخيارات متنوعة وأسعار تنافسية.",
     url: "https://c4rplatform.com/about",
   },
+  alternates: {
+    canonical: "https://c4rplatform.com/about",
+  },
 };
 
 export default function AboutPage() {

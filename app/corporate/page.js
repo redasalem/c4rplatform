@@ -9,6 +9,9 @@ export const metadata = {
     description: "حلول تأجير السيارات للشركات والمؤسسات بأسعار مميزة وعقود مرنة.",
     url: "https://c4rplatform.com/corporate",
   },
+  alternates: {
+    canonical: "https://c4rplatform.com/corporate",
+  },
 };
 
 export default function CorporatePage() {

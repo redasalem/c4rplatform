@@ -9,6 +9,9 @@ export const metadata = {
     description: "اطلع على أفضل عروض الإيجار اليومي والشهري للسيارات في السعودية.",
     url: "https://c4rplatform.com/individuals",
   },
+  alternates: {
+    canonical: "https://c4rplatform.com/individuals",
+  },
 };
 
 export default function IndividualsPage() {

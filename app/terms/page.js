@@ -8,6 +8,9 @@ export const metadata = {
     description: "اطلع على شروط وأحكام تأجير السيارات مع منصة C4R.",
     url: "https://c4rplatform.com/terms",
   },
+  alternates: {
+    canonical: "https://c4rplatform.com/terms",
+  },
 };
 
 export default function TermsPage() {

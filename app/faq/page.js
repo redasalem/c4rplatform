@@ -9,6 +9,9 @@ export const metadata = {
     description: "كل ما تود معرفته عن تأجير السيارات في السعودية مع C4R.",
     url: "https://c4rplatform.com/faq",
   },
+  alternates: {
+    canonical: "https://c4rplatform.com/faq",
+  },
 };
 
 export default function FAQPage() {

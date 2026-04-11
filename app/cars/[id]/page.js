@@ -49,6 +49,9 @@ export async function generateMetadata({ params }) {
       description: desc,
       images: car.image ? [car.image] : [],
     },
+    alternates: {
+      canonical: `https://c4rplatform.com/cars/${id}`,
+    },
   };
 }
 

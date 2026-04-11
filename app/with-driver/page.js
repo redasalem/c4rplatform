@@ -9,6 +9,9 @@ export const metadata = {
     description: "سيارات فخمة مع سائقين محترفين لاستقبال الشخصيات والمشاوير الطويلة.",
     url: "https://c4rplatform.com/with-driver",
   },
+  alternates: {
+    canonical: "https://c4rplatform.com/with-driver",
+  },
 };
 
 export default function WithDriverPage() {

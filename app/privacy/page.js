@@ -8,6 +8,9 @@ export const metadata = {
     description: "تعرف على سياسة الخصوصية لمنصة C4R وكيفية حماية بياناتك الشخصية.",
     url: "https://c4rplatform.com/privacy",
   },
+  alternates: {
+    canonical: "https://c4rplatform.com/privacy",
+  },
 };
 
 export default function PrivacyPage() {

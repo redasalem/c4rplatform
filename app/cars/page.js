@@ -9,6 +9,9 @@ export const metadata = {
     description: "تصفح أسطول سيارات C4R واحجز سيارتك المفضلة اليوم.",
     url: "https://c4rplatform.com/cars",
   },
+  alternates: {
+    canonical: "https://c4rplatform.com/cars",
+  },
 };
 
 export default function AllCarsPage() {

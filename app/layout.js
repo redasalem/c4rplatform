@@ -24,6 +24,9 @@ export const metadata = {
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
   },
+  alternates: {
+    canonical: "https://c4rplatform.com",
+  },
   icons: {
     icon: [{ url: "/favicon.ico", type: "image/x-icon" }],
     shortcut: ["/favicon.ico"],
