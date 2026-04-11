@@ -62,29 +62,42 @@ export default function RootLayout({ children }) {
         className={`${almarai.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
-        {/* JSON-LD Structured Data — CarRental (global) */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "CarRental",
-              "name": "C4R Platform | سي فور آر لتأجير السيارات",
-              "alternateName": "C4R Car Rental Saudi Arabia",
-              "description": "Best and affordable car rental services in Saudi Arabia. Rent cheap, luxury, and economy cars in Riyadh, Jeddah, and Eastern Province.",
-              "logo": "https://c4rplatform.com/images/logo.jpeg",
-              "url": "https://c4rplatform.com",
-              "telephone": "+966554118873",
-              "address": {
-                "@type": "PostalAddress",
-                "addressCountry": "SA",
-                "addressRegion": "KSA",
-              },
-              "sameAs": [
-                "https://www.instagram.com/C4R_Platform",
-                "https://x.com/C4R_Platform",
-                "https://www.tiktok.com/@C4R.Platform",
-              ],
+              "@graph": [
+                {
+                  "@type": "CarRental",
+                  "@id": "https://c4rplatform.com/#carrental",
+                  "name": "C4R Platform | سي فور آر لتأجير السيارات",
+                  "alternateName": "C4R Car Rental Saudi Arabia",
+                  "description": "Best and affordable car rental services in Saudi Arabia. Rent cheap, luxury, and economy cars in Riyadh, Jeddah, and Eastern Province.",
+                  "logo": "https://c4rplatform.com/images/logo.jpeg",
+                  "url": "https://c4rplatform.com",
+                  "telephone": "+966554118873",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "SA",
+                    "addressRegion": "KSA",
+                  },
+                  "sameAs": [
+                    "https://facebook.com/c4rplatform",
+                    "https://instagram.com/c4rplatform",
+                    "https://twitter.com/c4rplatform",
+                    "https://www.tiktok.com/@C4R.Platform"
+                  ]
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://c4rplatform.com/#website",
+                  "url": "https://c4rplatform.com/",
+                  "name": "C4R Platform | سي فور آر لتأجير السيارات",
+                  "description": "منصة C4R لتأجير السيارات الفاخرة والاقتصادية في المملكة العربية السعودية.",
+                  "inLanguage": "ar-SA"
+                }
+              ]
             }),
           }}
         />

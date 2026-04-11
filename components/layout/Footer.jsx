@@ -220,6 +220,12 @@ const Footer = () => {
             >
               {t("footer.terms")}
             </Link>
+            <Link
+              href="/policy"
+              className="hover:text-white transition-colors active:scale-95"
+            >
+              {t("navbar.policy")}
+            </Link>
             <span className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] w-full sm:w-auto justify-center mt-2 sm:mt-0">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
               {t("footer.poweredBy")}

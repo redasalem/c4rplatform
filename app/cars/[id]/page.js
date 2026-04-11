@@ -23,7 +23,7 @@ export async function generateMetadata({ params }) {
 
   if (!car) {
     return {
-      title: "سيارة غير موجودة",
+      title: "سيارة غير موجودة | منصة C4R",
       description: "لم يتم العثور على السيارة المطلوبة.",
     };
   }
@@ -32,14 +32,22 @@ export async function generateMetadata({ params }) {
   const price = car.pricePerDay || "";
   const region = car.region || "";
 
+  const title = `تأجير سيارة ${carName} | ضمان التميز - C4R`;
+  const desc = `استأجر ${carName} في السعودية${region ? ` في ${region}` : ""}. أسعار تبدأ من ${price} ريال يومياً. حجز سريع وتوصيل مجاني مع منصة C4R.`;
+
   return {
-    title: `${carName} للإيجار ${price ? `- ${price} ريال/يوم` : ""} ${region ? `في ${region}` : ""}`,
-    description: `استأجر ${carName} بأفضل الأسعار${price ? ` بدءاً من ${price} ريال يومياً` : ""}. حجز سريع وتوصيل مجاني مع منصة C4R.`,
+    title,
+    description: desc,
     openGraph: {
-      title: `${carName} - تأجير سيارة | C4R Platform`,
-      description: `${carName} متاحة للإيجار مع C4R.${price ? ` السعر: ${price} ريال/يوم.` : ""}`,
+      title,
+      description: desc,
       url: `https://c4rplatform.com/cars/${id}`,
       images: car.image ? [{ url: car.image, alt: carName }] : [],
+    },
+    twitter: {
+      title,
+      description: desc,
+      images: car.image ? [car.image] : [],
     },
   };
 }
@@ -122,7 +130,7 @@ export default async function CarDetailsPage({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <CarDetailsClient />
+      <CarDetailsClient initialCarData={car} />
     </main>
   );
 }

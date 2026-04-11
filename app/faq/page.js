@@ -1,19 +1,17 @@
 import FAQPageClient from "./FAQPageClient";
 
 export const metadata = {
-  title: "الأسئلة الشائعة - أجوبة حول تأجير السيارات",
+  title: "الأسئلة الشائعة | منصة C4R لتأجير السيارات",
   description:
     "إجابات على أكثر الأسئلة تكراراً حول تأجير السيارات في السعودية: الشروط، الأسعار، التوصيل، وطرق الدفع مع منصة C4R.",
   openGraph: {
-    title: "الأسئلة الشائعة - C4R Platform",
-    description:
-      "كل ما تود معرفته عن تأجير السيارات في السعودية مع C4R.",
+    title: "الأسئلة الشائعة | منصة C4R لتأجير السيارات",
+    description: "كل ما تود معرفته عن تأجير السيارات في السعودية مع C4R.",
     url: "https://c4rplatform.com/faq",
   },
 };
 
 export default function FAQPage() {
-  // FAQPage JSON-LD — only renders on /faq (also on homepage)
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",

@@ -1,77 +1,46 @@
 const BASE_URL = "https://c4rplatform.com";
+const API_URL = "https://c4r-platform-backend.vercel.app/api";
 
-export default function sitemap() {
-  const staticPages = [
-    {
-      url: BASE_URL,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 1.0,
-    },
-    {
-      url: `${BASE_URL}/cars`,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.9,
-    },
-    {
-      url: `${BASE_URL}/corporate`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${BASE_URL}/individuals`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${BASE_URL}/with-driver`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${BASE_URL}/about`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${BASE_URL}/faq`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${BASE_URL}/privacy`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.3,
-    },
-    {
-      url: `${BASE_URL}/terms`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.3,
-    },
-    {
-      url: `${BASE_URL}/policy`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.3,
-    },
+export default async function sitemap() {
+  // Static routes
+  const staticRoutes = [
+    { url: BASE_URL, lastModified: new Date(), changeFrequency: "daily", priority: 1.0 },
+    { url: `${BASE_URL}/cars`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
+    { url: `${BASE_URL}/individuals`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE_URL}/with-driver`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE_URL}/corporate`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE_URL}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE_URL}/faq`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE_URL}/privacy`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE_URL}/terms`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE_URL}/policy`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
   ];
 
-  // City pages
-  const cities = ["riyadh", "jeddah", "eastern", "sharqiya"];
-  const cityPages = cities.map((city) => ({
+  // City routes
+  const cityRoutes = ["riyadh", "jeddah", "eastern", "sharqiya"].map((city) => ({
     url: `${BASE_URL}/${city}`,
     lastModified: new Date(),
     changeFrequency: "daily",
     priority: 0.9,
   }));
 
-  return [...staticPages, ...cityPages];
+  // Dynamic car routes — fetch all cars from API
+  let carRoutes = [];
+  try {
+    const res = await fetch(`${API_URL}/cars`, { next: { revalidate: 3600 } });
+    if (res.ok) {
+      const data = await res.json();
+      const cars = data?.data?.cars || [];
+      carRoutes = cars.map((car) => ({
+        url: `${BASE_URL}/cars/${car._id}`,
+        lastModified: new Date(car.updatedAt || car.createdAt || Date.now()),
+        changeFrequency: "weekly",
+        priority: 0.7,
+      }));
+    }
+  } catch (error) {
+    console.error("Sitemap: Failed to fetch cars", error);
+  }
+
+  return [...staticRoutes, ...cityRoutes, ...carRoutes];
 }

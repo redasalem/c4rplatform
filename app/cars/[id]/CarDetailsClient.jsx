@@ -3,7 +3,7 @@
 import React from "react";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { carService } from "@/services/api";
+import { carService, reviewService } from "@/services/api";
 import {
   CircularProgress,
   Container,
@@ -28,10 +28,9 @@ const regionNames = {
 import Link from "next/link";
 import Image from "next/image";
 import { Avatar, Rating } from "@mui/material";
-import { reviewService } from "@/services/api";
 import { useTranslation } from "react-i18next";
 
-export default function CarDetailsClient() {
+export default function CarDetailsClient({ initialCarData }) {
   const { t, i18n } = useTranslation("common");
   const params = useParams();
   const id = params.id;
@@ -39,6 +38,7 @@ export default function CarDetailsClient() {
   const { data: carResponse, isLoading: carLoading } = useQuery({
     queryKey: ["car", id],
     queryFn: () => carService.getOne(id).catch(() => null),
+    initialData: initialCarData ? { data: { car: initialCarData } } : undefined,
   });
 
   const { data: reviewsResponse, isLoading: reviewsLoading } = useQuery({
@@ -46,11 +46,11 @@ export default function CarDetailsClient() {
     queryFn: () => reviewService.getAllCarReviews(id).catch(() => ({ data: { reviews: [], pagination: { total: 0 } } })),
   });
 
-  const car = carResponse?.data?.car || carResponse?.data || carResponse;
+  const car = carResponse?.data?.car || carResponse?.data || carResponse || initialCarData;
   const reviews = reviewsResponse?.data?.reviews || [];
   const reviewsCount = reviewsResponse?.data?.pagination?.total || 0;
 
-  if (carLoading) {
+  if (carLoading && !car) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <CircularProgress color="primary" />

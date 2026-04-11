@@ -604,7 +604,7 @@ function ManageBookings() {
                       sx={{ fontSize: { xs: 12, sm: 20 } }}
                     />
                     <span className="text-[9px] sm:text-base">
-                      {booking.kmPerDay} {t("carDetails.kmPerDay", "km/day")}
+                      {booking.kmPerDay} {t("booking.kmPerDay", "km/day")}
                     </span>
                   </div>
                 </div>
