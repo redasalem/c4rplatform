@@ -55,7 +55,7 @@ const AboutPageClient = () => {
                   من نحن
                 </span>
               </div>
-              <h1 className="text-2xl md:text-4xl font-black text-white mb-8 tracking-tighter leading-tight">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-8 tracking-tighter leading-tight">
                 قصتنا في <span className="text-primary italic">C4R</span>
               </h1>
               <p className="text-xl text-slate-400 font-bold leading-relaxed mb-10">
@@ -71,7 +71,7 @@ const AboutPageClient = () => {
                       {feature.icon}
                     </div>
                     <div>
-                      <h2 className="text-xl font-black text-white mb-2">
+                      <h2 className="text-2xl font-black text-white mb-2">
                         {feature.title}
                       </h2>
                       <p className="text-slate-500 font-bold">
@@ -89,12 +89,12 @@ const AboutPageClient = () => {
                 <Image
                   src="/images/logo.jpeg"
                   alt="شعار منصة C4R لتأجير السيارات في السعودية"
-                  width={120}
-                  height={60}
+                  width={400}
+                  height={200}
                   className="object-contain logo-premium-glow"
                   style={{
-                    filter: "brightness(1.2) contrast(1.1)",
-                    maxHeight: "60px",
+                    filter: "brightness(1.5) contrast(1.1)",
+                    maxHeight: "220px",
                     width: "auto",
                   }}
                 />

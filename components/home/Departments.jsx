@@ -59,7 +59,7 @@ const Departments = () => {
               </div>
 
               <div>
-                <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mb-2 text-transparent bg-clip-text bg-linear-to-r from-accent to-primary transition-all duration-500">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-black mb-1 sm:mb-2 text-transparent bg-clip-text bg-linear-to-r from-orange-400 to-primary drop-shadow-lg">
                   {t("departments.regularTitle")}
                 </h3>
                 <p className="text-slate-200 text-sm sm:text-base md:text-lg mb-4 max-w-sm leading-relaxed font-bold opacity-90 line-clamp-2">
@@ -112,7 +112,7 @@ const Departments = () => {
               </div>
 
               <div>
-                <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mb-2 text-transparent bg-clip-text bg-linear-to-r from-accent to-primary transition-all duration-500">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-black mb-1 sm:mb-2 text-transparent bg-clip-text bg-linear-to-r from-orange-400 to-primary drop-shadow-lg">
                   {t("departments.driverTitle")}
                 </h3>
                 <p className="text-slate-200 text-sm sm:text-base md:text-lg mb-4 max-w-sm leading-relaxed font-bold opacity-90 line-clamp-2">
@@ -164,7 +164,7 @@ const Departments = () => {
               </div>
 
               <div>
-                <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mb-2 text-transparent bg-clip-text bg-linear-to-r from-accent to-primary transition-all duration-500">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-black mb-1 sm:mb-2 text-transparent bg-clip-text bg-linear-to-r from-orange-400 to-primary drop-shadow-lg">
                   {t("departments.corporateTitle")}
                 </h3>
                 <p className="text-slate-300 text-sm sm:text-base md:text-lg mb-4 max-w-sm leading-relaxed font-bold opacity-90 line-clamp-2">
