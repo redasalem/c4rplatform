@@ -81,6 +81,8 @@ const Navbar = () => {
             <Link
               href="/individuals"
               className="hover:text-orange-200 transition-all duration-300 border-l border-orange-700/30 pl-3 sm:pl-6 h-full flex items-center active:scale-95"
+              aria-label={t("navbar.individuals")}
+              title={t("navbar.individuals")}
             >
               <Tooltip text={t("navbar.individuals")} position="bottom">
                 <Group className="md:hidden ml-2" style={{ fontSize: 20 }} />
@@ -92,6 +94,8 @@ const Navbar = () => {
             <Link
               href="/corporate"
               className="hover:text-orange-200 transition-all duration-300 border-l border-orange-700/30 pl-3 sm:pl-6 h-full flex items-center active:scale-95"
+              aria-label={t("navbar.corporate")}
+              title={t("navbar.corporate")}
             >
               <Tooltip text={t("navbar.corporate")} position="bottom">
                 <Business className="md:hidden ml-2" style={{ fontSize: 20 }} />
@@ -103,6 +107,8 @@ const Navbar = () => {
             <Link
               href="/with-driver"
               className="hover:text-orange-200 transition-all duration-300 border-l border-orange-700/30 pl-3 sm:pl-6 h-full flex items-center active:scale-95"
+              aria-label={t("navbar.withDriver")}
+              title={t("navbar.withDriver")}
             >
               <Tooltip text={t("navbar.withDriver")} position="bottom">
                 <Person className="md:hidden ml-2" style={{ fontSize: 20 }} />
@@ -229,11 +235,13 @@ const Navbar = () => {
             <div className="col-start-2 justify-self-center shrink-0 px-1 sm:px-2 md:px-4 w-[7rem] sm:w-[8.25rem] md:w-40">
               <Link
                 href="/"
-                className="group block transition-transform duration-300 ease-out hover:scale-[1.05] active:scale-95"
+                className="group block transition-transform duration-300 ease-out hover:scale-[1.05] active:scale-95 focus:outline-none"
+                aria-label="C4R Platform Home"
+                title="C4R Platform - تأجير سيارات السعودية"
               >
                 <Image
                   src="/images/logo.webp"
-                  alt="C4R Logo"
+                  alt="C4R Platform - أفضل منصة لتأجير السيارات في السعودية"
                   width={160}
                   height={65}
                   priority
@@ -303,6 +311,8 @@ const Navbar = () => {
               <button
                 className="md:hidden flex items-center justify-center w-10 h-10 text-white hover:text-primary transition-colors active:scale-95"
                 onClick={() => setMobileMenuOpen(true)}
+                aria-label={t("navbar.menu")}
+                title={t("navbar.menu")}
               >
                 <Menu fontSize="medium" />
               </button>

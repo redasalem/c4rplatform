@@ -29,12 +29,14 @@ const Departments = () => {
           <Link
             href="/individuals"
             className="group relative h-[300px] sm:h-[350px] md:h-[450px] rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-500 active:scale-95 border border-white/10"
+            aria-label={t("departments.regularTitle")}
+            title={t("departments.regularTitle")}
           >
             {/* Background Image */}
             <div className="absolute inset-0">
               <Image
                 src="/images/car-indevadulals.jpg"
-                alt="Individuals Car Rentals"
+                alt={t("departments.regularTitle") + " - أفضل عروض تأجير السيارات للأفراد في السعودية"}
                 fill
                 className="object-cover transition-transform duration-1000 group-hover:scale-110"
                 sizes="(max-width: 768px) 100vw, 33vw"
@@ -82,6 +84,8 @@ const Departments = () => {
           <Link
             href="/with-driver"
             className="group relative h-[300px] sm:h-[350px] md:h-[450px] rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-500 active:scale-95 border border-white/10"
+            aria-label={t("departments.driverTitle")}
+            title={t("departments.driverTitle")}
           >
             {/* Background Image */}
             <div className="absolute inset-0">
@@ -135,6 +139,8 @@ const Departments = () => {
           <Link
             href="/corporate"
             className="group relative h-[300px] sm:h-[350px] md:h-[450px] rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-500 active:scale-95 border border-white/10"
+            aria-label={t("departments.corporateTitle")}
+            title={t("departments.corporateTitle")}
           >
             {/* Background Image */}
             <div className="absolute inset-0">

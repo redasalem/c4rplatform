@@ -45,6 +45,8 @@ const HeroAd = () => {
               <Link
                 href="/sharqiya"
                 className="group/card relative h-12 w-full max-w-[150px] overflow-hidden rounded-xl border border-white/20 shadow-lg transition-all duration-300 active:scale-95 hover:border-primary/50 sm:h-14 md:h-16"
+                aria-label={t("hero.eastern")}
+                title={t("hero.eastern")}
               >
                 <div className="absolute inset-0 bg-midnight/70 backdrop-blur-md transition-colors group-hover/card:bg-midnight/80"></div>
                 <div className="absolute inset-x-0 bottom-0 h-0.5 scale-x-0 bg-primary transition-transform group-hover/card:scale-x-100"></div>
@@ -58,6 +60,8 @@ const HeroAd = () => {
               <Link
                 href="/riyadh"
                 className="group/card relative h-12 w-full max-w-[150px] overflow-hidden rounded-xl border border-white/20 shadow-lg transition-all duration-300 active:scale-95 hover:border-primary/50 sm:h-14 md:h-16"
+                aria-label={t("hero.riyadh")}
+                title={t("hero.riyadh")}
               >
                 <div className="absolute inset-0 bg-midnight/70 backdrop-blur-md transition-colors group-hover/card:bg-midnight/80"></div>
                 <div className="absolute inset-x-0 bottom-0 h-0.5 scale-x-0 bg-primary transition-transform group-hover/card:scale-x-100"></div>
@@ -71,6 +75,8 @@ const HeroAd = () => {
               <Link
                 href="/jeddah"
                 className="group/card relative h-12 w-full max-w-[150px] overflow-hidden rounded-xl border border-white/20 shadow-lg transition-all duration-300 active:scale-95 hover:border-primary/50 sm:h-14 md:h-16"
+                aria-label={t("hero.jeddah")}
+                title={t("hero.jeddah")}
               >
                 <div className="absolute inset-0 bg-midnight/70 backdrop-blur-md transition-colors group-hover/card:bg-midnight/80"></div>
                 <div className="absolute inset-x-0 bottom-0 h-0.5 scale-x-0 bg-primary transition-transform group-hover/card:scale-x-100"></div>

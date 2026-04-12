@@ -81,11 +81,13 @@ const Footer = () => {
                 {
                   icon: <Instagram />,
                   href: "https://www.instagram.com/C4R_Platform/#",
+                  label: "Instagram",
                 },
-                { icon: <X />, href: "https://x.com/C4R_Platform" },
+                { icon: <X />, href: "https://x.com/C4R_Platform", label: "X (Twitter)" },
                 {
                   icon: <SiTiktok className="text-xl" />,
                   href: "https://www.tiktok.com/@C4R.Platform",
+                  label: "TikTok",
                 },
               ].map((social, index) => (
                 <Link
@@ -93,6 +95,8 @@ const Footer = () => {
                   href={social.href}
                   target="_blank"
                   className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-orange-500 hover:text-white hover:border-orange-500 transition-all duration-500 shadow-xl group active:scale-90"
+                  aria-label={t("footer.followUsOn") + " " + social.label}
+                  title={t("footer.followUsOn") + " " + social.label}
                 >
                   <span className="group-hover:scale-110 transition-transform">
                     {social.icon}
@@ -119,6 +123,8 @@ const Footer = () => {
                   <Link
                     href={link.href}
                     className="flex items-center justify-center md:justify-start gap-2 md:gap-3 text-gray-400 hover:text-orange-400 transition-all duration-300 group active:scale-95"
+                    aria-label={link.label}
+                    title={link.label}
                   >
                     <KeyboardArrowLeft className="text-gray-600 group-hover:text-orange-500 transition-colors hidden md:block" />
                     <span className="group-hover:translate-x-[-6px] transition-transform">
@@ -146,6 +152,8 @@ const Footer = () => {
                   <Link
                     href={link.href}
                     className="flex items-center justify-center md:justify-start gap-2 md:gap-3 text-gray-400 hover:text-orange-400 transition-all duration-300 group active:scale-95"
+                    aria-label={link.label}
+                    title={link.label}
                   >
                     <KeyboardArrowLeft className="text-gray-600 group-hover:text-orange-500 transition-colors hidden md:block" />
                     <span className="group-hover:translate-x-[-6px] transition-transform">

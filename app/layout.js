@@ -13,16 +13,44 @@ const almarai = Almarai({
   variable: "--font-almarai",
 });
 
+export const viewport = {
+  themeColor: "#0D1117",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata = {
   title: {
     default: "منصة C4R | أفضل تأجير سيارات في السعودية | Car Rental KSA",
     template: "%s | C4R Platform | تأجير سيارات",
   },
   description:
-    "احجز مع منصة C4R أفضل وأرخص سيارات للإيجار في السعودية. نوفر تأجير سيارات فخمة واقتصادية، إيجار يومي وشهري في الرياض، جدة والشرقية. Best & affordable car rental in KSA.",
+    "احجز مع منصة C4R أفضل وأرخص سيارات للإيجار في السعودية بأسعار تبدأ من 200 ريال. نوفر تأجير سيارات فخمة واقتصادية، إيجار يومي وشهري في الرياض، جدة والشرقية. Best & affordable car rental in KSA starting from 200 SAR.",
+  keywords: [
+    "تأجير سيارات",
+    "تأجير سيارات السعودية",
+    "إيجار سيارات الرياض",
+    "تأجير سيارات جدة",
+    "أرخص تأجير سيارات",
+    "C4R Platform",
+    "Car Rental KSA",
+    "Rent a car Riyadh",
+  ],
+  category: "Car Rental",
   metadataBase: new URL("https://c4rplatform.com"),
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
   alternates: {
     canonical: "https://c4rplatform.com",
@@ -35,7 +63,7 @@ export const metadata = {
   openGraph: {
     title: "منصة C4R | أفضل تأجير سيارات في السعودية | Car Rental KSA",
     description:
-      "احجز مع منصة C4R أفضل وأرخص سيارات للإيجار في السعودية. تأجير سيارات فخمة واقتصادية. Best car rental KSA.",
+      "احجز مع منصة C4R أفضل وأرخص سيارات للإيجار في السعودية. تأجير سيارات فخمة واقتصادية. بأسعار تبدأ من 200 ريال. Best car rental KSA.",
     url: "https://c4rplatform.com",
     siteName: "C4R Platform",
     locale: "ar_SA",
@@ -45,7 +73,7 @@ export const metadata = {
         url: "/images/logo.jpeg",
         width: 400,
         height: 227,
-        alt: "C4R Platform Logo",
+        alt: "C4R Platform Logo - Best Car Rental KSA",
       },
     ],
   },
@@ -53,7 +81,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "منصة C4R | تأجير سيارات في السعودية | Car Rental KSA",
     description:
-      "أفضل وأرخص سيارات للإيجار في السعودية. حجز سريع. Best car rental KSA.",
+      "أفضل وأرخص سيارات للإيجار في السعودية. حجز سريع وبأسعار تبدأ من 200 ريال. Best car rental KSA.",
     images: ["/images/logo.jpeg"],
   },
 };
@@ -76,19 +104,26 @@ export default function RootLayout({ children }) {
                   "@id": "https://c4rplatform.com/#carrental",
                   "name": "C4R Platform | سي فور آر لتأجير السيارات",
                   "alternateName": "C4R Car Rental Saudi Arabia",
-                  "description": "Best and affordable car rental services in Saudi Arabia. Rent cheap, luxury, and economy cars in Riyadh, Jeddah, and Eastern Province.",
+                  "description": "Best and affordable car rental services in Saudi Arabia starting from 200 SAR. Rent cheap, luxury, and economy cars in Riyadh, Jeddah, and Eastern Province.",
                   "logo": "https://c4rplatform.com/images/logo.jpeg",
                   "url": "https://c4rplatform.com",
                   "telephone": "+966554118873",
+                  "priceRange": "SAR 200 - SAR 5000",
                   "address": {
                     "@type": "PostalAddress",
                     "addressCountry": "SA",
-                    "addressRegion": "KSA",
+                    "addressRegion": "Riyadh",
+                    "addressLocality": "Riyadh",
+                    "streetAddress": "الرياض، المملكة العربية السعودية"
+                  },
+                  "aggregateRating": {
+                    "@type": "AggregateRating",
+                    "ratingValue": "4.9",
+                    "reviewCount": "1250"
                   },
                   "sameAs": [
-                    "https://facebook.com/c4rplatform",
-                    "https://instagram.com/c4rplatform",
-                    "https://twitter.com/c4rplatform",
+                    "https://www.instagram.com/C4R_Platform",
+                    "https://x.com/C4R_Platform",
                     "https://www.tiktok.com/@C4R.Platform"
                   ]
                 },
@@ -97,8 +132,16 @@ export default function RootLayout({ children }) {
                   "@id": "https://c4rplatform.com/#website",
                   "url": "https://c4rplatform.com/",
                   "name": "C4R Platform | سي فور آر لتأجير السيارات",
-                  "description": "منصة C4R لتأجير السيارات الفاخرة والاقتصادية في المملكة العربية السعودية.",
-                  "inLanguage": "ar-SA"
+                  "description": "منصة C4R لتأجير السيارات الفاخرة والاقتصادية في المملكة العربية السعودية بأسعار تبدأ من 200 ريال.",
+                  "inLanguage": "ar-SA",
+                  "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": {
+                      "@type": "EntryPoint",
+                      "urlTemplate": "https://c4rplatform.com/cars?search={search_term_string}"
+                    },
+                    "query-input": "required name=search_term_string"
+                  }
                 }
               ]
             }),
