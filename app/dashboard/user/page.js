@@ -9,6 +9,7 @@ import {
   bookingService,
   authService,
   reviewService,
+  notificationService,
 } from "@/services/api"; // Added reviewService
 import {
   TextField,
@@ -38,6 +39,7 @@ import {
   Phone,
   Settings,
   WhatsApp,
+  Notifications,
 } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import Image from "next/image";
@@ -91,7 +93,13 @@ function UserDashboardContent({ user }) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
     const tabName =
-      newValue === 1 ? "bookings" : newValue === 2 ? "password" : "profile";
+      newValue === 1
+        ? "bookings"
+        : newValue === 2
+          ? "notifications"
+          : newValue === 3
+            ? "password"
+            : "profile";
     router.push(`/dashboard/user?tab=${tabName}`);
   };
 

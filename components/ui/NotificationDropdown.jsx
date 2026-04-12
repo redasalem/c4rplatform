@@ -11,8 +11,10 @@ import {
 } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { notificationService } from "@/services/api";
+import { useAuth } from "@/context/AuthContext";
 
 const NotificationDropdown = ({ isAdminSettings = false }) => {
+  const { user } = useAuth();
   const { t, i18n } = useTranslation("common");
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -185,14 +187,16 @@ const NotificationDropdown = ({ isAdminSettings = false }) => {
                         {getTimeAgo(notif.createdAt)}
                       </span>
                     </div>
-                    {/* Delete button (shows on hover) */}
-                    <button 
-                      onClick={(e) => handleDelete(e, notif._id)}
-                      className="absolute top-4 rtl:left-4 ltr:right-4 opacity-0 group-hover:opacity-100 text-gray-500 hover:text-red-500 transition-all active:scale-90"
-                      title={t("notifications.delete")}
-                    >
-                      <Delete fontSize="small" />
-                    </button>
+                    {/* Delete button (shows on hover - Admin only) */}
+                    {user?.role === "admin" && (
+                      <button 
+                        onClick={(e) => handleDelete(e, notif._id)}
+                        className="absolute top-4 rtl:left-4 ltr:right-4 opacity-0 group-hover:opacity-100 text-gray-500 hover:text-red-500 transition-all active:scale-90"
+                        title={t("notifications.delete")}
+                      >
+                        <Delete fontSize="small" />
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>
