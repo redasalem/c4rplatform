@@ -15,6 +15,7 @@ import {
   Star,
   Home,
   Lock,
+  Notifications,
 } from "@mui/icons-material";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { Suspense } from "react";
@@ -44,6 +45,11 @@ function DashboardSidebarContent({
       icon: <EventNote />,
     },
     {
+      name: t("notifications.title"),
+      href: `${prefix}?tab=notifications`,
+      icon: <Notifications />,
+    },
+    {
       name: t("dashboard.changePassword"),
       href: `${prefix}?tab=password`,
       icon: <Settings />,
@@ -55,6 +61,11 @@ function DashboardSidebarContent({
       name: t("dashboard.adminBookings"),
       href: `${prefix}?tab=bookings`,
       icon: <EventNote />,
+    },
+    {
+      name: t("dashboard.admin.tabs.notifications"),
+      href: `${prefix}?tab=notifications`,
+      icon: <Notifications />,
     },
     {
       name: t("dashboard.adminCars"),

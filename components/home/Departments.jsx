@@ -15,7 +15,7 @@ const Departments = () => {
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         {/* Section Title */}
         <div className="text-center mb-12 md:mb-20">
-          <h2 className="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-4 md:mb-6 tracking-tighter">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4 md:mb-6 tracking-tighter">
             {t("departments.titlePart1")}{" "}
             <span className="text-transparent bg-clip-text bg-linear-to-r from-accent to-primary">
               {t("departments.titlePart2")}
