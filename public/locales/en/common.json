@@ -241,6 +241,7 @@
       },
       "tabs": {
         "bookings": "Bookings",
+        "notifications": "Notifications",
         "cars": "Cars",
         "reviews": "Reviews",
         "profile": "Profile",

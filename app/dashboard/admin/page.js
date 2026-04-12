@@ -11,6 +11,7 @@ import api, {
   reviewService,
   userService,
   authService,
+  notificationService,
 } from "@/services/api"; // Added reviewService, userService, authService
 import {
   Button,
@@ -56,6 +57,9 @@ import {
   VisibilityOff,
   Settings as SettingsIcon,
   Edit,
+  Notifications,
+  Error as ErrorIcon,
+  Info as InfoIcon,
 } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import Image from "next/image";
@@ -78,10 +82,11 @@ const AdminTabsContent = ({ user }) => {
   // Tabs mapping: bookings=0, cars=1, reviews=2, profile=3, password=4
   const tabParam = searchParams.get("tab");
   const getTabIndex = (tab) => {
-    if (tab === "cars") return 1;
-    if (tab === "reviews") return 2;
-    if (tab === "profile") return 3;
-    if (tab === "password") return 4;
+    if (tab === "notifications") return 1;
+    if (tab === "cars") return 2;
+    if (tab === "reviews") return 3;
+    if (tab === "profile") return 4;
+    if (tab === "password") return 5;
     return 0; // default: bookings
   };
 
@@ -97,14 +102,16 @@ const AdminTabsContent = ({ user }) => {
     setValue(newValue);
     const tabName =
       newValue === 1
-        ? "cars"
+        ? "notifications"
         : newValue === 2
-          ? "reviews"
+          ? "cars"
           : newValue === 3
-            ? "profile"
+            ? "reviews"
             : newValue === 4
-              ? "password"
-              : "bookings";
+              ? "profile"
+              : newValue === 5
+                ? "password"
+                : "bookings";
     router.push(`/dashboard/admin?tab=${tabName}`);
   };
 
@@ -161,6 +168,11 @@ const AdminTabsContent = ({ user }) => {
           label={t("dashboard.admin.tabs.bookings")}
         />
         <Tab
+          icon={<Notifications sx={{ fontSize: { xs: 18, sm: 24 } }} />}
+          iconPosition="start"
+          label={t("dashboard.admin.tabs.notifications")}
+        />
+        <Tab
           icon={<DirectionsCar sx={{ fontSize: { xs: 18, sm: 24 } }} />}
           iconPosition="start"
           label={t("dashboard.admin.tabs.cars")}
@@ -186,15 +198,18 @@ const AdminTabsContent = ({ user }) => {
         <ManageBookings />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ManageCars />
+        <ManageNotifications />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <ManageReviews />
+        <ManageCars />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <ProfileSection user={user} />
+        <ManageReviews />
       </TabPanel>
       <TabPanel value={value} index={4}>
+        <ProfileSection user={user} />
+      </TabPanel>
+      <TabPanel value={value} index={5}>
         <ChangePasswordSection />
       </TabPanel>
     </div>
@@ -2696,3 +2711,118 @@ function ChangePasswordSection() {
     </div>
   );
 }
+
+function ManageNotifications() {
+  const { t, i18n } = useTranslation("common");
+  const queryClient = useQueryClient();
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["adminNotifications"],
+    queryFn: () => notificationService.getAll(),
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: notificationService.delete,
+    onSuccess: () => {
+      toast.success(t("notifications.deleteSuccess", "تم حذف الإشعار بنجاح"));
+      queryClient.invalidateQueries(["adminNotifications"]);
+    },
+    onError: () => toast.error(t("common.error")),
+  });
+
+  const markAllReadMutation = useMutation({
+    mutationFn: notificationService.markAllAsRead,
+    onSuccess: () => {
+      toast.success(t("notifications.markAllReadSuccess", "تم تحديد الكل كمقروء"));
+      queryClient.invalidateQueries(["adminNotifications"]);
+    },
+    onError: () => toast.error(t("common.error")),
+  });
+
+  const getTimeAgo = (dateStr) => {
+    try {
+      const date = new Date(dateStr);
+      const now = new Date();
+      const diffInSeconds = Math.floor((now - date) / 1000);
+      const rtf = new Intl.RelativeTimeFormat(i18n.language === "ar" ? "ar" : "en", { numeric: "auto" });
+      if (diffInSeconds < 60) return rtf.format(-diffInSeconds, "second");
+      if (diffInSeconds < 3600) return rtf.format(-Math.floor(diffInSeconds / 60), "minute");
+      if (diffInSeconds < 86400) return rtf.format(-Math.floor(diffInSeconds / 3600), "hour");
+      if (diffInSeconds < 2592000) return rtf.format(-Math.floor(diffInSeconds / 86400), "day");
+      return rtf.format(-Math.floor(diffInSeconds / 2592000), "month");
+    } catch (e) {
+      return "";
+    }
+  };
+
+  if (isLoading) return <CircularProgress className="m-auto block" />;
+
+  const notifications = data?.data?.notifications || [];
+
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-black text-white">{t("dashboard.admin.tabs.notifications")}</h2>
+        {notifications.length > 0 && (
+          <Button
+            onClick={() => markAllReadMutation.mutate()}
+            disabled={markAllReadMutation.isPending}
+            variant="outlined"
+            size="small"
+            sx={{
+              borderRadius: "1rem",
+              borderColor: "rgba(255,255,255,0.1)",
+              color: "white",
+              "&:hover": { borderColor: "var(--primary)", bgcolor: "rgba(249,115,22,0.05)" },
+            }}
+          >
+            {t("notifications.markAllRead", "تحديد الكل كمقروء")}
+          </Button>
+        )}
+      </div>
+
+      {notifications.length === 0 ? (
+        <div className="text-center py-20 bg-white/5 rounded-[3rem] border border-dashed border-white/10">
+          <Notifications sx={{ fontSize: 64, color: "rgba(255,255,255,0.1)", mb: 2 }} />
+          <p className="text-slate-500 font-bold">{t("notifications.empty")}</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-4">
+          {notifications.map((notif) => (
+            <div
+              key={notif._id}
+              className={`p-6 rounded-3xl border transition-all flex justify-between items-center group ${
+                notif.isRead ? "bg-white/5 border-white/5" : "bg-primary/5 border-primary/20 shadow-[0_0_20px_rgba(249,115,22,0.1)]"
+              }`}
+            >
+              <div className="flex gap-4">
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${
+                  notif.type === 'booking_new' ? 'bg-blue-500/10 text-blue-500' : 'bg-primary/10 text-primary'
+                }`}>
+                  {notif.type === 'booking_new' ? <InfoIcon /> : <Notifications />}
+                </div>
+                <div>
+                  <h4 className="font-black text-white text-lg">{notif.title}</h4>
+                  <p className="text-slate-400 font-medium">{notif.message}</p>
+                  <span className="text-xs text-slate-500 mt-2 block font-bold">{getTimeAgo(notif.createdAt)}</span>
+                </div>
+              </div>
+              <IconButton
+                onClick={() => deleteMutation.mutate(notif._id)}
+                className="opacity-0 group-hover:opacity-100 transition-opacity"
+                sx={{
+                  color: "#ef4444",
+                  bgcolor: "rgba(239, 68, 68, 0.1)",
+                  "&:hover": { bgcolor: "rgba(239, 68, 68, 0.2)" },
+                }}
+              >
+                <Delete size="small" />
+              </IconButton>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
