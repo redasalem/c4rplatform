@@ -26,6 +26,7 @@ import {
 } from "@mui/icons-material";
 import { useAuth } from "@/context/AuthContext";
 import Tooltip from "@/components/ui/Tooltip";
+import NotificationDropdown from "@/components/ui/NotificationDropdown";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -258,6 +259,7 @@ const Navbar = () => {
                 <>
                   {user ? (
                     <div className="flex items-center gap-1 sm:gap-4 border-r border-white/10 pr-1 sm:pr-4">
+                      <NotificationDropdown />
                       <Link
                         href={
                           user.role === "admin"

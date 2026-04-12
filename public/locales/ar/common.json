@@ -652,5 +652,14 @@
     "reviewsTitle": "آراء العملاء",
     "noReviews": "لا توجد تقييمات لهذه السيارة بعد.",
     "beFirst": "كن أول من يحجز ويقيّم هذه السيارة!"
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "loading": "جاري التحميل...",
+    "empty": "لا توجد إشعارات جديدة",
+    "delete": "حذف الإشعار",
+    "bookingApproved": "تمت الموافقة على حجزك رقم {{bookingId}} لسيارة {{carName}}",
+    "bookingRejected": "عذراً، تم رفض طلب حجزك لسيارة {{carName}}",
+    "newBooking": "طلب حجز جديد للسيارة {{carName}}"
   }
 }

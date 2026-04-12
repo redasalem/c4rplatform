@@ -153,18 +153,33 @@ export const reviewService = {
     const response = await api.get("/reviews/recent");
     return response.data;
   },
-  // Admin only - ideally this endpoint should exist, or we filter by admin
+  // Admin only
   getAllAdmin: async () => {
-    // Assuming backend endpoint exists or we use a general one.
-    // Based on reviewController, there isn't a "get ALL reviews" for admin yet.
-    // I will use `getCarReviews` loop or add a new endpoint later.
-    // BUT for now, let's assume I'll add `getAllReviews` to controller or use a placeholder.
-    // Let's stick to what's safer: I'll add it to the backend controller in a moment.
     const response = await api.get("/reviews/admin/all");
     return response.data;
   },
   delete: async (id) => {
     const response = await api.delete(`/reviews/${id}`);
+    return response.data;
+  },
+};
+
+// Notification Services
+export const notificationService = {
+  getAll: async () => {
+    const response = await api.get("/notifications");
+    return response.data;
+  },
+  markAsRead: async (id) => {
+    const response = await api.patch(`/notifications/${id}/read`);
+    return response.data;
+  },
+  markAllAsRead: async () => {
+    const response = await api.patch("/notifications/mark-all-read");
+    return response.data;
+  },
+  delete: async (id) => {
+    const response = await api.delete(`/notifications/${id}`);
     return response.data;
   },
 };

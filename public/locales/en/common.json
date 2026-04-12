@@ -652,5 +652,14 @@
     "reviewsTitle": "Customer Reviews",
     "noReviews": "No reviews for this car yet.",
     "beFirst": "Be the first to book and rate this premium car!"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "loading": "Loading...",
+    "empty": "No new notifications",
+    "delete": "Delete Notification",
+    "bookingApproved": "Your booking #{{bookingId}} for {{carName}} has been approved",
+    "bookingRejected": "Sorry, your booking request for {{carName}} has been rejected",
+    "newBooking": "New booking request for {{carName}}"
   }
 }
