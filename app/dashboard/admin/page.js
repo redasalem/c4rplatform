@@ -60,6 +60,7 @@ import {
   Notifications,
   Error as ErrorIcon,
   Info as InfoIcon,
+  Article,
 } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import Image from "next/image";
