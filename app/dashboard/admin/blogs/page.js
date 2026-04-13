@@ -118,7 +118,7 @@ export default function AdminBlogs() {
         category: blog.category?._id || blog.category || "",
         status: blog.status,
         image: blog.image === 'no-photo.jpg' ? '' : blog.image,
-        relatedCars: blog.relatedCars.map(c => c._id || c) || []
+        relatedCars: blog.relatedCars?.map(c => c._id || c) || []
       });
     } else {
       resetForm();
