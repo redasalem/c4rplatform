@@ -3,7 +3,6 @@ import Departments from "@/components/home/Departments";
 import FAQ from "@/components/home/FAQ";
 import ReviewMarquee from "@/components/home/ReviewMarquee";
 import LatestBlogs from "@/components/home/LatestBlogs";
-import { Metadata } from "next";
 
 export const metadata = {
   title: "أرخص تأجير سيارات في السعودية | أسعار تبدأ من 200 ريال | C4R",
