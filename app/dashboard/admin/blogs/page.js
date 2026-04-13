@@ -181,36 +181,36 @@ export default function AdminBlogs() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {blogs.map((blog) => (
-              <div key={blog._id} className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition-colors group flex flex-col">
+            {blogs.filter(Boolean).map((blog) => (
+              <div key={blog?._id || blog?.slug} className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition-colors group flex flex-col">
                 <div className="relative h-48 w-full bg-slate-800">
-                  {blog.image && blog.image !== 'no-photo.jpg' ? (
-                    <Image src={blog.image} alt={blog.title} fill className="object-cover" />
+                  {blog?.image && blog.image !== 'no-photo.jpg' ? (
+                    <Image src={blog.image} alt={blog?.title || ''} fill className="object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-slate-500">
                       <Article sx={{ fontSize: 48, opacity: 0.5 }} />
                     </div>
                   )}
                   <div className="absolute top-3 right-3 flex gap-2">
-                    <span className={`px-2 py-1 text-[10px] font-black rounded-lg ${blog.status === 'published' ? 'bg-green-500/80 text-white' : 'bg-orange-500/80 text-white'}`}>
-                      {blog.status === 'published' ? 'منشور' : 'مسودة'}
+                    <span className={`px-2 py-1 text-[10px] font-black rounded-lg ${blog?.status === 'published' ? 'bg-green-500/80 text-white' : 'bg-orange-500/80 text-white'}`}>
+                      {blog?.status === 'published' ? 'منشور' : 'مسودة'}
                     </span>
                   </div>
                   <div className="absolute top-3 left-3 bg-black/50 backdrop-blur px-2 py-1 rounded-lg text-[10px] text-white font-bold inline-flex items-center gap-1">
-                    👁 {blog.views || 0}
+                    👁 {blog?.views || 0}
                   </div>
                 </div>
                 
                 <div className="p-5 flex-1 flex flex-col">
                   <div className="text-[10px] text-primary font-black uppercase mb-1 line-clamp-1">
-                    {blog.category?.name || "بدون قسم"}
+                    {blog?.category?.name || "بدون قسم"}
                   </div>
-                  <h3 className="text-lg font-black text-white mb-2 line-clamp-2">{blog.title}</h3>
-                  <p className="text-xs text-slate-400 font-medium mb-4 line-clamp-2 flex-1">{blog.summary}</p>
+                  <h3 className="text-lg font-black text-white mb-2 line-clamp-2">{blog?.title || "بدون عنوان"}</h3>
+                  <p className="text-xs text-slate-400 font-medium mb-4 line-clamp-2 flex-1">{blog?.summary || ""}</p>
                   
                   <div className="flex items-center justify-between mt-auto pt-4 border-t border-white/5">
                     <span className="text-[10px] text-slate-500 italic">
-                      {new Date(blog.createdAt).toLocaleDateString(i18n.language)}
+                      {blog?.createdAt ? new Date(blog.createdAt).toLocaleDateString(i18n.language) : ""}
                     </span>
                     <div className="flex gap-2">
                       <IconButton size="small" onClick={() => handleOpenDialog(blog)} sx={{ color: "rgba(255,255,255,0.5)", "&:hover": { color: "white" } }}>

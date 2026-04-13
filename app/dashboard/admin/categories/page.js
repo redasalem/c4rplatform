@@ -90,7 +90,7 @@ export default function AdminCategories() {
     if (!formData.name) return toast.warning("يرجى إدخال اسم القسم");
 
     if (selectedCategory) {
-      updateMutation.mutate({ slug: selectedCategory.slug, data: formData });
+      updateMutation.mutate({ slug: selectedCategory?.slug || selectedCategory?._id, data: formData });
     } else {
       createMutation.mutate(formData);
     }
@@ -136,8 +136,8 @@ export default function AdminCategories() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {categories.map((cat) => (
-              <div key={cat._id} className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors group">
+            {categories.filter(Boolean).map((cat) => (
+              <div key={cat?._id || cat?.slug} className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors group">
                 <div className="flex items-start justify-between mb-4">
                   <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
                     <CategoryIcon />
@@ -151,10 +151,10 @@ export default function AdminCategories() {
                     </IconButton>
                   </div>
                 </div>
-                <h3 className="text-xl font-black text-white mb-2">{cat.name}</h3>
-                <p className="text-sm text-slate-400 font-medium mb-3 line-clamp-2">{cat.description || "لا يوجد وصف"}</p>
+                <h3 className="text-xl font-black text-white mb-2">{cat?.name || "بدون اسم"}</h3>
+                <p className="text-sm text-slate-400 font-medium mb-3 line-clamp-2">{cat?.description || "لا يوجد وصف"}</p>
                 <div className="text-xs font-black text-slate-500 uppercase tracking-widest bg-white/5 inline-block px-3 py-1 rounded-lg">
-                  /{cat.slug}
+                  /{cat?.slug || "بدون رابط"}
                 </div>
               </div>
             ))}
