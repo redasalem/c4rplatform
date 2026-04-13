@@ -36,7 +36,7 @@ export default function AdminBlogs() {
 
   const { data: blogsData, isLoading: blogsLoading } = useQuery({
     queryKey: ["adminBlogs"],
-    queryFn: () => blogService.getAll({ limit: 100, sort: '-createdAt', status: '' }), // fetch both published & drafts
+    queryFn: () => blogService.getAll({ limit: 50, sort: '-createdAt', status: '' }), // fetch both published & drafts
   });
 
   const { data: catData, isLoading: catLoading } = useQuery({
@@ -46,7 +46,7 @@ export default function AdminBlogs() {
 
   const { data: carData, isLoading: carLoading } = useQuery({
     queryKey: ["adminCars"],
-    queryFn: () => carService.getAll({ limit: 100 }),
+    queryFn: () => carService.getAll({ limit: 50 }),
   });
 
   const [openDialog, setOpenDialog] = useState(false);
