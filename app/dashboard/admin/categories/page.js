@@ -196,10 +196,10 @@ export default function AdminCategories() {
       {/* Delete Dialog */}
       <Dialog open={deleteDialog} onClose={() => setDeleteDialog(false)} PaperProps={{ sx: { borderRadius: "1.5rem", bgcolor: "#0f172a", border: "1px solid rgba(220,38,38,0.2)" } }}>
         <DialogTitle className="text-red-500 font-black">حـذف القسم</DialogTitle>
-        <DialogContent className="text-white/80">هل أنت متأكد من رغبتك في حذف قسم ({selectedCategory?.name})؟ هذا الإجراء لا يمكن التراجع عنه.</DialogContent>
+        <DialogContent className="text-white/80">هل أنت متأكد من رغبتك في حذف قسم ({selectedCategory?.name || ''})؟ هذا الإجراء لا يمكن التراجع عنه.</DialogContent>
         <DialogActions className="p-4">
           <Button onClick={() => setDeleteDialog(false)} sx={{ color: "rgba(255,255,255,0.5)", fontWeight: "bold" }}>إلغاء</Button>
-          <Button variant="contained" color="error" onClick={() => deleteMutation.mutate(selectedCategory.slug)} disabled={deleteMutation.isPending} sx={{ borderRadius: "0.75rem", fontWeight: "bold" }}>
+          <Button variant="contained" color="error" onClick={() => selectedCategory && deleteMutation.mutate(selectedCategory.slug)} disabled={deleteMutation.isPending || !selectedCategory} sx={{ borderRadius: "0.75rem", fontWeight: "bold" }}>
             تأكيد الحذف
           </Button>
         </DialogActions>

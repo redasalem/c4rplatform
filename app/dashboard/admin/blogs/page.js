@@ -132,7 +132,7 @@ export default function AdminBlogs() {
       return toast.warning("يرجى ملء الحقول الإلزامية (العنوان، المحتوى، القسم)");
     }
 
-    if (selectedBlog) {
+    if (selectedBlog?._id) {
       updateMutation.mutate({ id: selectedBlog._id, data: formData });
     } else {
       createMutation.mutate(formData);
@@ -341,7 +341,7 @@ export default function AdminBlogs() {
         <DialogContent className="text-white/80">هل أنت متأكد من رغبتك في حذف ({selectedBlog?.title})؟</DialogContent>
         <DialogActions className="p-4">
           <Button onClick={() => setDeleteDialog(false)} sx={{ color: "rgba(255,255,255,0.5)", fontWeight: "bold" }}>إلغاء</Button>
-          <Button variant="contained" color="error" onClick={() => deleteMutation.mutate(selectedBlog._id)} disabled={deleteMutation.isPending} sx={{ borderRadius: "0.75rem", fontWeight: "bold" }}>
+          <Button variant="contained" color="error" onClick={() => selectedBlog && deleteMutation.mutate(selectedBlog._id)} disabled={deleteMutation.isPending || !selectedBlog} sx={{ borderRadius: "0.75rem", fontWeight: "bold" }}>
             تأكيد الحذف
           </Button>
         </DialogActions>
