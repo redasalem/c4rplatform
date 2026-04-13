@@ -80,6 +80,16 @@ function DashboardSidebarContent({
       icon: <Star />,
     },
     {
+      name: t("dashboard.admin.tabs.categories"),
+      href: "/dashboard/admin/categories",
+      icon: <Category />,
+    },
+    {
+      name: t("dashboard.admin.tabs.blog"),
+      href: "/dashboard/admin/blogs",
+      icon: <Article />,
+    },
+    {
       name: t("dashboard.profile"),
       href: `${prefix}?tab=profile`,
       icon: <Person />,
@@ -88,16 +98,6 @@ function DashboardSidebarContent({
       name: t("dashboard.adminPassword"),
       href: `${prefix}?tab=password`,
       icon: <Lock />,
-    },
-    {
-      name: "الأقسام (Categories)",
-      href: "/dashboard/admin/categories",
-      icon: <Category />,
-    },
-    {
-      name: "المدونة (Blog)",
-      href: "/dashboard/admin/blogs",
-      icon: <Article />,
     },
   ];
 

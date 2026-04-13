@@ -14,7 +14,8 @@
     "adminPanel": "لوحة الإدارة",
     "logout": "تسجيل الخروج",
     "menu": "القائمة",
-    "language": "اللغة"
+    "language": "اللغة",
+    "blog": "المدونة"
   },
   "bottomNav": {
     "home": "الرئيسية",
@@ -246,7 +247,9 @@
         "reviews": "التقييمات",
         "profile": "الملف الشخصي",
         "password": "كلمة المرور",
-        "security": "الأمان"
+        "security": "الأمان",
+        "categories": "الأقسام",
+        "blog": "المدونة"
       },
       "bookings": {
         "title": "إدارة الحجوزات",

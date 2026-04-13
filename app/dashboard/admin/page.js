@@ -238,6 +238,7 @@ function AdminStatsSection() {
         totalBookings: adminStatsResponse?.data?.totalBookings ?? 0,
         totalCars: adminStatsResponse?.data?.totalCars ?? 0,
         availableCars: adminStatsResponse?.data?.availableCars ?? 0,
+        totalBlogs: adminStatsResponse?.data?.totalBlogs ?? 0,
       };
     },
   });
@@ -256,9 +257,9 @@ function AdminStatsSection() {
       loading: statsLoading,
     },
     {
-      label: i18n.language === "ar" ? "إجمالي السيارات" : "Total Cars",
-      value: statsData?.totalCars ?? 0,
-      icon: <DirectionsCar sx={{ fontSize: 26 }} />,
+      label: i18n.language === "ar" ? "إجمالي المقالات" : "Blog Articles",
+      value: statsData?.totalBlogs ?? 0,
+      icon: <Article sx={{ fontSize: 26 }} />,
       loading: statsLoading,
     },
     {

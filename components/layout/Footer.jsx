@@ -118,6 +118,7 @@ const Footer = () => {
                 { label: t("footer.individuals"), href: "/individuals" },
                 { label: t("footer.withDriver"), href: "/with-driver" },
                 { label: t("footer.companies"), href: "/corporate" },
+                { label: t("navbar.blog"), href: "/blog" },
               ].map((link, index) => (
                 <li key={index}>
                   <Link

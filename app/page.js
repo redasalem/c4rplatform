@@ -2,6 +2,7 @@ import HeroAd from "@/components/home/HeroAd";
 import Departments from "@/components/home/Departments";
 import FAQ from "@/components/home/FAQ";
 import ReviewMarquee from "@/components/home/ReviewMarquee";
+import LatestBlogs from "@/components/home/LatestBlogs";
 import { Metadata } from "next";
 
 export const metadata = {
@@ -110,6 +111,7 @@ export default function Home() {
       <HeroAd />
       <Departments />
       <ReviewMarquee />
+      <LatestBlogs />
       {/* <Partners /> */}
       <FAQ />
     </main>

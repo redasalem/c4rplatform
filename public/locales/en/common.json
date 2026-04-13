@@ -14,7 +14,8 @@
     "adminPanel": "Admin Panel",
     "logout": "Logout",
     "menu": "Menu",
-    "language": "Language"
+    "language": "Language",
+    "blog": "Blog"
   },
   "bottomNav": {
     "home": "Home",
@@ -246,7 +247,9 @@
         "reviews": "Reviews",
         "profile": "Profile",
         "password": "Password",
-        "security": "Security"
+        "security": "Security",
+        "categories": "Categories",
+        "blog": "Blog"
       },
       "bookings": {
         "title": "Manage Bookings",

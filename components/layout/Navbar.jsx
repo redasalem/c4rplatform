@@ -226,9 +226,16 @@ const Navbar = () => {
               </Link>
               <Link
                 href="/sharqiya"
-                className="text-primary hover:text-primary-hover font-extrabold text-sm lg:text-base transition-colors"
+                className="text-primary hover:text-primary-hover font-extrabold text-sm lg:text-base transition-colors border-l border-white/10 pl-6"
               >
                 {t("navbar.sharqiya")}
+              </Link>
+              <Link
+                href="/blog"
+                className="text-primary hover:text-primary-hover font-extrabold text-sm lg:text-base transition-colors flex items-center gap-1"
+              >
+                <Article fontSize="small" />
+                {t("navbar.blog")}
               </Link>
             </nav>
 
@@ -389,6 +396,14 @@ const Navbar = () => {
             >
               <LocationOn className="text-primary" />
               {t("navbar.sharqiya")}
+            </Link>
+            <Link
+              href="/blog"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-lg font-bold text-white hover:text-primary transition-colors flex items-center gap-3 p-2 rounded-xl hover:bg-white/5"
+            >
+              <Article className="text-primary" />
+              {t("navbar.blog")}
             </Link>
             <div className="h-px bg-white/10 w-full my-1" />
             <Link
