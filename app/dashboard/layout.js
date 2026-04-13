@@ -171,10 +171,13 @@ function DashboardSidebarContent({
               ? link.href.split("?tab=")[1] 
               : null;
             
-            // Check if active: either it matches search params TAB, or the pathname matches the href identically
-            const isActive = linkTab 
-              ? linkTab === currentTab 
-              : pathname === link.href;
+            // Check if active: pathname match takes priority over tab match
+            const pathMatch = pathname === link.href;
+            const isActive = pathMatch 
+              ? true 
+              : linkTab 
+                ? linkTab === currentTab 
+                : false;
 
             return (
               <Link
