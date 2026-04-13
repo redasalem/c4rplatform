@@ -108,7 +108,7 @@ function DashboardSidebarContent({
   return (
     <>
       {/* Sidebar - Premium Midnight Glassmorphism */}
-      <aside className="w-80 bg-midnight/80 backdrop-blur-2xl border-l border-white/10 hidden md:flex flex-col fixed h-full right-0 z-40 shadow-[20px_0_50px_rgba(0,0,0,0.5)] pt-24">
+      <aside className="w-80 bg-midnight/80 backdrop-blur-2xl border-l border-white/10 hidden md:flex flex-col fixed h-full overflow-y-auto right-0 z-40 shadow-[20px_0_50px_rgba(0,0,0,0.5)] pt-24">
         {/* User Info Card */}
         <div className="p-8 border-b border-white/5 bg-white/5">
           <div className="flex items-center gap-5">
