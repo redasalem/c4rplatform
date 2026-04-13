@@ -264,7 +264,7 @@ export default function AdminBlogs() {
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 sx={{ color: "white", "& .MuiSelect-icon": { color: "white" } }}
               >
-                {categories.map((cat) => (
+                {(Array.isArray(categories) ? categories : []).map((cat) => (
                   <MenuItem key={cat._id} value={cat._id}>{cat.name}</MenuItem>
                 ))}
               </Select>
@@ -302,15 +302,15 @@ export default function AdminBlogs() {
               input={<OutlinedInput />}
               renderValue={(selected) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                  {selected.map((value) => {
-                    const car = cars.find(c => c._id === value);
-                    return <Chip key={value} label={car ? `${car.make} ${car.model}` : value} sx={{ bgcolor: "var(--primary)", color: "white", borderRadius: 1 }} size="small" />;
+                  {(Array.isArray(selected) ? selected : []).map((value) => {
+                    const car = cars?.find(c => c._id === value);
+                    return <Chip key={value} label={car ? car.name : value} sx={{ bgcolor: "var(--primary)", color: "white", borderRadius: 1 }} size="small" />;
                   })}
                 </Box>
               )}
               sx={{ color: "white", "& .MuiSelect-icon": { color: "white" } }}
             >
-              {cars.map((car) => (
+              {(Array.isArray(cars) ? cars : []).map((car) => (
                 <MenuItem key={car._id} value={car._id}>{`${car.make} ${car.model} (${car.year})`}</MenuItem>
               ))}
             </Select>

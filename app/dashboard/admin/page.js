@@ -273,7 +273,7 @@ function AdminStatsSection() {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-      {stats.map((stat) => (
+      {(Array.isArray(stats) ? stats : []).map((stat) => (
         <div
           key={stat.label}
           className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-xl sm:rounded-2xl md:rounded-[2rem] p-4 sm:p-5 md:p-6 shadow-2xl relative overflow-hidden"
@@ -473,7 +473,7 @@ function ManageBookings() {
   return (
     <div className="space-y-8 pb-10">
       <div className="grid grid-cols-1 gap-8">
-        {bookings.map((booking) => (
+        {(Array.isArray(bookings) ? bookings : []).map((booking) => (
           <div
             key={booking._id}
             className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl sm:rounded-3xl p-3 sm:p-8 lg:p-10 shadow-2xl hover:bg-white/10 transition-all duration-500 relative overflow-hidden group"
@@ -1029,7 +1029,7 @@ function ManageCars() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
-          {cars.map((car) => (
+          {(Array.isArray(cars) ? cars : []).map((car) => (
             <div
               key={car._id}
               className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl hover:bg-white/10 transition-all duration-500 group relative"
@@ -1246,7 +1246,7 @@ function ManageReviews() {
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-        {reviews.map((review) => (
+        {(Array.isArray(reviews) ? reviews : []).map((review) => (
           <div
             key={review._id}
             className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl md:rounded-[2.5rem] p-3 sm:p-8 md:p-10 shadow-2xl hover:bg-white/10 transition-all duration-500 group relative overflow-hidden"
@@ -2790,7 +2790,7 @@ function ManageNotifications() {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4">
-          {notifications.map((notif) => (
+          {(Array.isArray(notifications) ? notifications : []).map((notif) => (
             <div
               key={notif._id}
               className={`p-6 rounded-3xl border transition-all flex justify-between items-center group ${
