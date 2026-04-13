@@ -23,12 +23,7 @@ import {
 import { Add, Delete, Edit, Article, OpenInNew } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-import dynamic from "next/dynamic";
-import "react-quill/dist/quill.snow.css";
 import Image from "next/image";
-
-// Load ReactQuill dynamically for client-side only
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false, loading: () => <CircularProgress size={24} /> });
 
 export default function AdminBlogs() {
   const { t, i18n } = useTranslation("common");
@@ -316,16 +311,16 @@ export default function AdminBlogs() {
             </Select>
           </FormControl>
 
-          <div className="bg-white/5 rounded-xl border border-white/10 p-2 text-white">
-            <div className="mb-2 px-2 text-sm text-slate-400 font-bold">المحتوى النصي مع الروابط </div>
-            <ReactQuill
-              theme="snow"
-              value={formData.content}
-              onChange={(content) => setFormData({ ...formData, content })}
-              className="text-white bg-[#1e293b]"
-              style={{ minHeight: '200px' }}
-            />
-          </div>
+          <TextField
+            fullWidth
+            multiline
+            rows={8}
+            label="المحتوى النصي مع الروابط"
+            value={formData.content}
+            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+            variant="filled"
+            sx={{ textarea: { color: "white" }, label: { color: "rgba(255,255,255,0.5)" }, bgcolor: "rgba(255,255,255,0.05)", borderRadius: 1 }}
+          />
         </DialogContent>
         <DialogActions className="p-4 border-t border-white/10 mt-4">
           <Button onClick={() => setOpenDialog(false)} sx={{ color: "rgba(255,255,255,0.5)", fontWeight: "bold", mr: 2 }}>إلغاء</Button>
