@@ -181,7 +181,7 @@ export default function AdminBlogs() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {blogs.filter(Boolean).map((blog) => (
+            {(Array.isArray(blogs) ? blogs.filter(Boolean) : []).map((blog) => (
               <div key={blog?._id || blog?.slug} className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition-colors group flex flex-col">
                 <div className="relative h-48 w-full bg-slate-800">
                   {blog?.image && blog.image !== 'no-photo.jpg' ? (

@@ -136,7 +136,7 @@ export default function AdminCategories() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {categories.filter(Boolean).map((cat) => (
+            {(Array.isArray(categories) ? categories.filter(Boolean) : []).map((cat) => (
               <div key={cat?._id || cat?.slug} className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors group">
                 <div className="flex items-start justify-between mb-4">
                   <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
