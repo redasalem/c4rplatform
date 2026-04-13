@@ -42,5 +42,34 @@ export default async function sitemap() {
     console.error("Sitemap: Failed to fetch cars", error);
   }
 
-  return [...staticRoutes, ...cityRoutes, ...carRoutes];
+  // Dynamic blog routes — fetch all published blog posts
+  let blogRoutes = [];
+  try {
+    const res = await fetch(`${API_URL}/blogs?status=published&limit=500&select=slug,category,updatedAt`, {
+      next: { revalidate: 3600 },
+    });
+    if (res.ok) {
+      const { data: blogs } = await res.json();
+      // Add the main blog listing page
+      blogRoutes.push({
+        url: `${BASE_URL}/blog`,
+        lastModified: new Date(),
+        changeFrequency: "daily",
+        priority: 0.8,
+      });
+      // Add individual blog post pages
+      blogs.forEach((blog) => {
+        blogRoutes.push({
+          url: `${BASE_URL}/blog/${blog.category?.slug || "general"}/${blog.slug}`,
+          lastModified: new Date(blog.updatedAt || Date.now()),
+          changeFrequency: "weekly",
+          priority: 0.7,
+        });
+      });
+    }
+  } catch (error) {
+    console.error("Sitemap: Failed to fetch blogs", error);
+  }
+
+  return [...staticRoutes, ...cityRoutes, ...carRoutes, ...blogRoutes];
 }

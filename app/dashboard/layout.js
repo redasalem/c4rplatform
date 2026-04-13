@@ -16,6 +16,8 @@ import {
   Home,
   Lock,
   Notifications,
+  Article,
+  Category,
 } from "@mui/icons-material";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { Suspense } from "react";
@@ -87,6 +89,16 @@ function DashboardSidebarContent({
       href: `${prefix}?tab=password`,
       icon: <Lock />,
     },
+    {
+      name: "الأقسام (Categories)",
+      href: "/dashboard/admin/categories",
+      icon: <Category />,
+    },
+    {
+      name: "المدونة (Blog)",
+      href: "/dashboard/admin/blogs",
+      icon: <Article />,
+    },
   ];
 
   const links = isAdmin ? adminLinks : userLinks;
@@ -155,9 +167,14 @@ function DashboardSidebarContent({
 
         <nav className="flex-1 px-6 space-y-2.5">
           {links.map((link) => {
-            const linkTab =
-              link.href.split("?tab=")[1] || (isAdmin ? "bookings" : "profile");
-            const isActive = linkTab === currentTab;
+            const linkTab = link.href.includes('?tab=') 
+              ? link.href.split("?tab=")[1] 
+              : null;
+            
+            // Check if active: either it matches search params TAB, or the pathname matches the href identically
+            const isActive = linkTab 
+              ? linkTab === currentTab 
+              : pathname === link.href;
 
             return (
               <Link

@@ -184,4 +184,52 @@ export const notificationService = {
   },
 };
 
+// Category Services
+export const categoryService = {
+  getAll: async () => {
+    const response = await api.get("/categories");
+    return response.data;
+  },
+  getOne: async (slug) => {
+    const response = await api.get(`/categories/${slug}`);
+    return response.data;
+  },
+  create: async (data) => {
+    const response = await api.post("/categories", data);
+    return response.data;
+  },
+  update: async (slug, data) => {
+    const response = await api.put(`/categories/${slug}`, data);
+    return response.data;
+  },
+  delete: async (slug) => {
+    const response = await api.delete(`/categories/${slug}`);
+    return response.data;
+  },
+};
+
+// Blog Services
+export const blogService = {
+  getAll: async (params) => {
+    const response = await api.get("/blogs", { params });
+    return response.data;
+  },
+  getOne: async (slug) => {
+    const response = await api.get(`/blogs/${slug}`);
+    return response.data;
+  },
+  create: async (data) => {
+    const response = await api.post("/blogs", data);
+    return response.data;
+  },
+  update: async (slug, data) => {
+    const response = await api.put(`/blogs/${slug}`, data);
+    return response.data;
+  },
+  delete: async (slug) => {
+    const response = await api.delete(`/blogs/${slug}`);
+    return response.data;
+  },
+};
+
 export default api;
