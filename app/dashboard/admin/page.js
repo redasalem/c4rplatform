@@ -12,7 +12,9 @@ import api, {
   userService,
   authService,
   notificationService,
-} from "@/services/api"; // Added reviewService, userService, authService
+  blogService,
+  categoryService,
+} from "@/services/api"; // Added blogService, categoryService
 import {
   Button,
   CircularProgress,
@@ -64,6 +66,14 @@ import {
 } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+
+// Dynamic import for ReactQuill to avoid SSR issues
+const ReactQuill = dynamic(() => import("react-quill"), {
+  ssr: false,
+  loading: () => <CircularProgress size={20} />,
+});
+import "react-quill/dist/quill.snow.css";
 
 // Tab Panel Component
 function TabPanel(props) {
@@ -84,10 +94,11 @@ const AdminTabsContent = ({ user }) => {
   const tabParam = searchParams.get("tab");
   const getTabIndex = (tab) => {
     if (tab === "notifications") return 1;
-    if (tab === "cars") return 2;
-    if (tab === "reviews") return 3;
-    if (tab === "profile") return 4;
-    if (tab === "password") return 5;
+    if (tab === "blog") return 2;
+    if (tab === "cars") return 3;
+    if (tab === "reviews") return 4;
+    if (tab === "profile") return 5;
+    if (tab === "password") return 6;
     return 0; // default: bookings
   };
 
@@ -105,14 +116,16 @@ const AdminTabsContent = ({ user }) => {
       newValue === 1
         ? "notifications"
         : newValue === 2
-          ? "cars"
+          ? "blog"
           : newValue === 3
-            ? "reviews"
+            ? "cars"
             : newValue === 4
-              ? "profile"
+              ? "reviews"
               : newValue === 5
-                ? "password"
-                : "bookings";
+                ? "profile"
+                : newValue === 6
+                  ? "password"
+                  : "bookings";
     router.push(`/dashboard/admin?tab=${tabName}`);
   };
 
@@ -174,6 +187,11 @@ const AdminTabsContent = ({ user }) => {
           label={t("dashboard.admin.tabs.notifications")}
         />
         <Tab
+          icon={<Article sx={{ fontSize: { xs: 18, sm: 24 } }} />}
+          iconPosition="start"
+          label={t("dashboard.admin.tabs.blog")}
+        />
+        <Tab
           icon={<DirectionsCar sx={{ fontSize: { xs: 18, sm: 24 } }} />}
           iconPosition="start"
           label={t("dashboard.admin.tabs.cars")}
@@ -202,15 +220,18 @@ const AdminTabsContent = ({ user }) => {
         <ManageNotifications />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <ManageCars />
+        <ManageBlogs />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <ManageReviews />
+        <ManageCars />
       </TabPanel>
       <TabPanel value={value} index={4}>
-        <ProfileSection user={user} />
+        <ManageReviews />
       </TabPanel>
       <TabPanel value={value} index={5}>
+        <ProfileSection user={user} />
+      </TabPanel>
+      <TabPanel value={value} index={6}>
         <ChangePasswordSection />
       </TabPanel>
     </div>
@@ -2869,4 +2890,866 @@ function ManageNotifications() {
     </div>
   );
 }
+
+function ManageBlogs() {
+  const { t, i18n } = useTranslation("common");
+  const queryClient = useQueryClient();
+  const { data: blogsData, isLoading } = useQuery({
+    queryKey: ["allBlogs"],
+    queryFn: () => blogService.getAll(),
+  });
+
+  const [deleteId, setDeleteId] = useState(null);
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [editingBlog, setEditingBlog] = useState(null);
+
+  const deleteMutation = useMutation({
+    mutationFn: blogService.delete,
+    onSuccess: () => {
+      toast.success(t("dashboard.admin.blog.deleteSuccess"));
+      queryClient.invalidateQueries(["allBlogs"]);
+      queryClient.invalidateQueries(["adminStats"]);
+      setDeleteId(null);
+    },
+    onError: () => {
+      toast.error(t("dashboard.admin.blog.deleteError"));
+      setDeleteId(null);
+    },
+  });
+
+  if (isLoading) return <CircularProgress className="m-auto block" />;
+
+  const blogs = blogsData?.data || [];
+
+  return (
+    <div className="space-y-8">
+      <div className="flex flex-col md:flex-row justify-between items-center bg-white/5 backdrop-blur-xl p-3 sm:p-8 rounded-xl sm:rounded-3xl border border-white/10 shadow-2xl gap-3 sm:gap-6">
+        <div className="text-center md:text-right">
+          <h2 className="text-lg sm:text-2xl font-black text-white tracking-tight">
+            {t("dashboard.admin.blog.title")}
+          </h2>
+          <p className="text-[8px] sm:text-sm text-slate-400 mt-0.5 sm:mt-2 font-bold uppercase tracking-widest">
+            {t("dashboard.admin.blog.count", { count: blogs.length })}
+          </p>
+        </div>
+
+        <Button
+          variant="contained"
+          fullWidth={false}
+          startIcon={<Add sx={{ ml: 1 }} />}
+          onClick={() => setIsAddOpen(true)}
+          sx={{
+            backgroundColor: "var(--primary)",
+            "&:hover": { backgroundColor: "var(--primary-hover)" },
+            borderRadius: { xs: "0.75rem", sm: "1.25rem" },
+            fontWeight: "900",
+            px: { xs: 2.5, md: 4 },
+            py: { xs: 1, md: 1.5 },
+            fontSize: { xs: "0.75rem", md: "1rem" },
+            boxShadow: "0 10px 20px rgba(249, 115, 22, 0.2)",
+            width: { xs: "100%", md: "auto" },
+          }}
+        >
+          {t("dashboard.admin.blog.addNew")}
+        </Button>
+      </div>
+
+      {blogs.length === 0 ? (
+        <div className="text-center py-20 bg-white/5 rounded-[3rem] border border-dashed border-white/10">
+          <Article
+            sx={{ fontSize: 80, color: "rgba(255,255,255,0.1)", mb: 4 }}
+          />
+          <p className="text-xl font-black text-slate-500">
+            {t("dashboard.admin.blog.empty")}
+          </p>
+          <Button
+            variant="text"
+            color="primary"
+            onClick={() => setIsAddOpen(true)}
+            sx={{ mt: 3, fontWeight: "900", fontSize: "1.1rem" }}
+          >
+            {t("dashboard.admin.blog.emptyAction")}
+          </Button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+          {blogs.map((blog) => (
+            <BlogCard
+              key={blog._id}
+              blog={blog}
+              onEdit={() => setEditingBlog(blog)}
+              onDelete={() => setDeleteId(blog.slug)}
+            />
+          ))}
+        </div>
+      )}
+
+      <AddBlogDialog open={isAddOpen} onClose={() => setIsAddOpen(false)} />
+      {editingBlog && (
+        <EditBlogDialog
+          open={!!editingBlog}
+          blog={editingBlog}
+          onClose={() => setEditingBlog(null)}
+        />
+      )}
+
+      <Dialog
+        open={!!deleteId}
+        onClose={() => setDeleteId(null)}
+        PaperProps={{
+          sx: {
+            borderRadius: "2.5rem",
+            bgcolor: "#020617",
+            backgroundImage:
+              "radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.1) 0px, transparent 50%)",
+            border: "1px solid rgba(255,255,255,0.1)",
+            boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5)",
+            p: 3,
+          },
+        }}
+        dir={i18n.dir()}
+      >
+        <DialogTitle className="font-black text-3xl text-white text-center mb-2">
+          {t("dashboard.admin.blog.deleteDialog.title")}
+        </DialogTitle>
+        <DialogContent>
+          <p className="text-slate-400 font-bold text-center text-lg leading-relaxed">
+            {t("dashboard.admin.blog.deleteDialog.message")}
+          </p>
+        </DialogContent>
+        <DialogActions className="justify-center gap-4 pb-4">
+          <Button
+            onClick={() => setDeleteId(null)}
+            sx={{
+              fontWeight: "900",
+              color: "rgba(255,255,255,0.4)",
+              fontSize: "1.1rem",
+            }}
+          >
+            {t("dashboard.admin.blog.deleteDialog.cancel")}
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => deleteMutation.mutate(deleteId)}
+            autoFocus
+            sx={{
+              borderRadius: "1.25rem",
+              fontWeight: "900",
+              px: 5,
+              py: 1.5,
+              fontSize: "1.1rem",
+              boxShadow: "0 10px 20px rgba(185, 28, 28, 0.3)",
+            }}
+          >
+            {t("dashboard.admin.blog.deleteDialog.confirm")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
+
+function BlogCard({ blog, onEdit, onDelete }) {
+  const { t, i18n } = useTranslation("common");
+
+  return (
+    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl hover:bg-white/10 transition-all duration-500 group relative">
+      <div className="relative h-48 w-full bg-slate-800">
+        <Image
+          src={blog.image || "/images/blog-placeholder.jpg"}
+          fill
+          alt={blog.title}
+          className="object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+        <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
+          <Chip
+            label={blog.category?.name || "General"}
+            size="small"
+            sx={{
+              bgcolor: "rgba(0,0,0,0.6)",
+              backdropFilter: "blur(10px)",
+              color: "white",
+              fontWeight: "900",
+              border: "1px solid rgba(255,255,255,0.1)",
+            }}
+          />
+          <Chip
+            label={t(`dashboard.admin.blog.statuses.${blog.status || "draft"}`)}
+            size="small"
+            sx={{
+              bgcolor: blog.status === "published" ? "#16a34a" : "#f97316",
+              color: "white",
+              fontWeight: "900",
+              boxShadow: `0 0 10px ${blog.status === "published" ? "rgba(22,163,74,0.4)" : "rgba(249,115,22,0.4)"}`,
+            }}
+          />
+        </div>
+      </div>
+
+      <div className="p-5">
+        <h4 className="text-xl font-black text-white group-hover:text-primary transition-colors line-clamp-2 min-h-[3.5rem] mb-4">
+          {blog.title}
+        </h4>
+        
+        <div className="flex justify-between items-center pt-4 border-t border-white/5">
+          <div className="flex items-center gap-2">
+            <Visibility sx={{ fontSize: 16, color: "rgba(255,255,255,0.3)" }} />
+            <span className="text-xs font-black text-slate-500">{blog.views || 0}</span>
+          </div>
+          <div className="flex gap-2">
+            <IconButton
+              size="small"
+              color="primary"
+              onClick={onEdit}
+              sx={{
+                bgcolor: "rgba(249, 115, 22, 0.1)",
+                "&:hover": { bgcolor: "rgba(249, 115, 22, 0.2)" },
+              }}
+            >
+              <Edit sx={{ fontSize: 18 }} />
+            </IconButton>
+            <IconButton
+              size="small"
+              color="error"
+              onClick={onDelete}
+              sx={{
+                bgcolor: "rgba(220, 38, 38, 0.1)",
+                "&:hover": { bgcolor: "rgba(220, 38, 38, 0.2)" },
+              }}
+            >
+              <Delete sx={{ fontSize: 18 }} />
+            </IconButton>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AddBlogDialog({ open, onClose }) {
+  const { t, i18n } = useTranslation("common");
+  const queryClient = useQueryClient();
+  const [tabValue, setTabValue] = useState(0);
+  const [file, setFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [slugSync, setSlugSync] = useState(true);
+
+  const [formData, setFormData] = useState({
+    title: "",
+    slug: "",
+    category: "",
+    content: "",
+    summary: "",
+    status: "draft",
+    relatedCars: [],
+    metaTitle: "",
+    metaDescription: "",
+    focusKeywords: "",
+    faqs: [],
+    primaryCta: { text: "", link: "", type: "custom" },
+  });
+
+  const { data: categoriesData } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => categoryService.getAll(),
+  });
+
+  const { data: carsData } = useQuery({
+    queryKey: ["allCars_simple"],
+    queryFn: () => carService.getAll({ select: "name" }),
+  });
+
+  // Intel: Slug Sync
+  useEffect(() => {
+    if (slugSync && formData.title) {
+        const slug = formData.title.toLowerCase()
+            .replace(/[^a-z0-9-ء-ي]+/g, '-')
+            .replace(/(^-|-$)+/g, '');
+        setFormData(prev => ({ ...prev, slug }));
+    }
+  }, [formData.title, slugSync]);
+
+  // Intel: Reading Time Calc
+  const getReadingTime = () => {
+    const words = formData.content.replace(/<[^>]*>?/gm, '').split(/\s+/).length;
+    return Math.ceil(words / 200) || 1;
+  };
+
+  const createMutation = useMutation({
+    mutationFn: blogService.create,
+    onSuccess: () => {
+      toast.success(t("dashboard.admin.blog.addDialog.success"));
+      queryClient.invalidateQueries(["allBlogs"]);
+      onClose();
+      setFormData({
+        title: "",
+        slug: "",
+        category: "",
+        content: "",
+        summary: "",
+        status: "draft",
+        relatedCars: [],
+        metaTitle: "",
+        metaDescription: "",
+        focusKeywords: "",
+        faqs: [],
+        primaryCta: { text: "", link: "", type: "custom" },
+      });
+      setFile(null);
+      setTabValue(0);
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.error || t("dashboard.admin.blog.addDialog.error"));
+    },
+  });
+
+  const handleUploadAndSubmit = async () => {
+    if (!formData.title || !formData.category || !formData.content || (!file && !formData.image)) {
+      toast.warning(t("dashboard.admin.addCar.warningFill"));
+      setTabValue(0);
+      return;
+    }
+
+    setUploading(true);
+    try {
+      let currentImageUrl = "";
+      if (file) {
+        const uploadData = new FormData();
+        uploadData.append("file", file);
+        const res = await fetch("/api/upload", { method: "POST", body: uploadData });
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || "Upload failed");
+        currentImageUrl = result.url;
+      }
+
+      // Elite Fix: ID Distillation for Zod
+      const finalData = {
+        ...formData,
+        image: currentImageUrl,
+        category: formData.category?._id || formData.category, // Ensure ID
+        relatedCars: formData.relatedCars.map(c => c._id || c), // Ensure Array of IDs
+        focusKeywords: formData.focusKeywords ? formData.focusKeywords.split(",").map(k => k.trim()).filter(k => k) : [],
+        summary: formData.summary || formData.content.replace(/<[^>]*>?/gm, '').substring(0, 160), // Smart summary
+      };
+
+      createMutation.mutate(finalData);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const inputStyle = {
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "1.25rem",
+      bgcolor: "rgba(255,255,255,0.03)",
+      color: "white",
+      fontWeight: "bold",
+      "& fieldset": { borderColor: "rgba(255,255,255,0.08)" },
+      "&:hover fieldset": { borderColor: "rgba(255,255,255,0.2)" },
+      "&.Mui-focused fieldset": { borderColor: "#f97316" },
+    },
+    "& .MuiInputLabel-root": { color: "rgba(255,255,255,0.4)", fontWeight: "bold" },
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="md"
+      dir={i18n.dir()}
+      transitionDuration={500}
+      PaperProps={{
+        sx: {
+          borderRadius: "3rem",
+          bgcolor: "#020617",
+          backgroundImage: "radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.1) 0px, transparent 50%)",
+          border: "1px solid rgba(255,255,255,0.1)",
+        },
+      }}
+    >
+      <div className="bg-white/5 p-8 border-b border-white/5 flex justify-between items-center relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-2 h-full bg-primary" />
+        <div>
+          <h2 className="text-3xl font-black text-white tracking-tight">{t("dashboard.admin.blog.addDialog.title")}</h2>
+          <p className="text-slate-400 font-bold text-sm tracking-wide flex items-center gap-2">
+            <Article sx={{ fontSize: 16 }} /> {t("dashboard.admin.blog.addDialog.subtitle")}
+          </p>
+        </div>
+        <IconButton onClick={onClose} sx={{ color: "white", bgcolor: "white/5" }}><Close /></IconButton>
+      </div>
+
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 4, pt: 2 }}>
+        <Tabs 
+            value={tabValue} 
+            onChange={(e, v) => setTabValue(v)} 
+            variant="scrollable"
+            sx={{
+                '& .MuiTabs-indicator': { bgcolor: 'var(--primary)', height: 3, borderRadius: 3 },
+                '& .MuiTab-root': { color: 'rgba(255,255,255,0.4)', fontWeight: 900, py: 3, fontSize: '1rem' },
+                '& .Mui-selected': { color: '#fff !important' }
+            }}
+        >
+          <Tab label="General" />
+          <Tab label="Content" />
+          <Tab label="SEO" />
+          <Tab label="Advanced" />
+        </Tabs>
+      </Box>
+
+      <DialogContent className="p-8 custom-scrollbar" sx={{ minHeight: "60vh" }}>
+        <TabPanel value={tabValue} index={0}>
+          <div className="grid grid-cols-1 gap-8">
+            <div
+                className={`border-2 border-dashed rounded-[2.5rem] p-12 text-center transition-all cursor-pointer relative overflow-hidden group ${file ? "border-primary/50 bg-primary/5 shadow-inner" : "border-white/10 hover:border-primary/30 hover:bg-white/5"}`}
+            >
+                <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer z-10" onChange={(e) => setFile(e.target.files[0])} />
+                {file ? (
+                <div className="relative w-full h-64 rounded-3xl overflow-hidden shadow-2xl">
+                    <Image src={URL.createObjectURL(file)} alt="Preview" fill className="object-cover group-hover:scale-105 transition-transform duration-1000" />
+                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><Chip label="Change Cover Image" color="primary" sx={{ fontWeight: 900 }} /></div>
+                </div>
+                ) : (
+                <div className="flex flex-col items-center gap-4 py-8">
+                    <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-500 mb-2 border border-primary/20"><UploadFile fontSize="large" /></div>
+                    <span className="text-2xl font-black text-white">{t("dashboard.admin.blog.addDialog.imageLabel")}</span>
+                    <span className="text-xs text-slate-500 font-black uppercase tracking-[0.2em]">{t("dashboard.admin.addCar.uploadHint")}</span>
+                </div>
+                )}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <TextField label={t("dashboard.admin.blog.addDialog.titleLabel")} fullWidth value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} sx={inputStyle} />
+                <FormControl fullWidth sx={inputStyle} variant="outlined">
+                <InputLabel>{t("dashboard.admin.blog.addDialog.categoryLabel")}</InputLabel>
+                <Select label={t("dashboard.admin.blog.addDialog.categoryLabel")} value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
+                    {(categoriesData || []).map((cat) => (
+                    <MenuItem key={cat._id} value={cat._id}>{cat.name}</MenuItem>
+                    ))}
+                </Select>
+                </FormControl>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormControl fullWidth sx={inputStyle} variant="outlined">
+                <InputLabel>{t("dashboard.admin.blog.addDialog.statusLabel")}</InputLabel>
+                <Select label={t("dashboard.admin.blog.addDialog.statusLabel")} value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value })}>
+                    <MenuItem value="draft">{t("dashboard.admin.blog.statuses.draft")}</MenuItem>
+                    <MenuItem value="published">{t("dashboard.admin.blog.statuses.published")}</MenuItem>
+                </Select>
+                </FormControl>
+                <FormControl fullWidth sx={inputStyle} variant="outlined">
+                <InputLabel>{t("dashboard.admin.blog.addDialog.relatedCarsLabel")}</InputLabel>
+                <Select
+                    multiple label={t("dashboard.admin.blog.addDialog.relatedCarsLabel")} value={formData.relatedCars}
+                    onChange={(e) => setFormData({ ...formData, relatedCars: e.target.value })}
+                    renderValue={(selected) => (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                        {selected.map((v) => <Chip key={v} label={carsData?.data?.cars?.find(c => c._id === v)?.name} size="small" sx={{ bgcolor: "var(--primary)", color: "white", fontWeight: "900" }} />)}
+                    </Box>
+                    )}
+                >
+                    {(carsData?.data?.cars || []).map((car) => (
+                    <MenuItem key={car._id} value={car._id}>{car.name}</MenuItem>
+                    ))}
+                </Select>
+                </FormControl>
+            </div>
+          </div>
+        </TabPanel>
+
+        <TabPanel value={tabValue} index={1}>
+          <div className="space-y-8">
+            <TextField label={t("dashboard.admin.blog.addDialog.summaryLabel")} fullWidth multiline rows={3} value={formData.summary} onChange={(e) => setFormData({ ...formData, summary: e.target.value })} sx={inputStyle} helperText={`${formData.summary.length}/500 chars (SEO recommended 160)`} />
+            <div className="space-y-4">
+                <div className="flex justify-between items-center px-1">
+                    <Typography variant="caption" sx={{ color: "rgba(255,255,255,0.4)", fontWeight: "900", textTransform: "uppercase", letterSpacing: 2 }}>
+                        {t("dashboard.admin.blog.addDialog.contentLabel")}
+                    </Typography>
+                    <Chip label={`${getReadingTime()} Min Read`} size="small" color="primary" sx={{ fontWeight: 900 }} />
+                </div>
+                <div className="bg-white/5 rounded-[2rem] border border-white/10 overflow-hidden min-h-[500px] shadow-2xl">
+                <ReactQuill
+                    theme="snow" value={formData.content} onChange={(val) => setFormData(prev => ({ ...prev, content: val }))}
+                    modules={{ toolbar: [[{ 'header': [1, 2, 3, false] }], ['bold', 'italic', 'underline', 'strike'], [{'list': 'ordered'}, {'list': 'bullet'}], ['blockquote', 'code-block'], ['link', 'image', 'clean']] }}
+                    className="blog-editor"
+                />
+                </div>
+            </div>
+          </div>
+        </TabPanel>
+
+        <TabPanel value={tabValue} index={2}>
+          <div className="grid grid-cols-1 gap-10">
+            <div className="bg-white/5 p-8 rounded-3xl border border-white/10 relative">
+                <div className="flex justify-between mb-4">
+                    <h4 className="text-white font-black uppercase text-sm tracking-widest flex items-center gap-2"><Visibility sx={{ fontSize: 18, color: 'var(--primary)' }} /> Slug Configuration</h4>
+                    <Button size="small" onClick={() => setSlugSync(!slugSync)} sx={{ fontWeight: 900 }}>{slugSync ? "Change Manually" : "Sync with Title"}</Button>
+                </div>
+                <TextField fullWidth value={formData.slug} onChange={(e) => setFormData({ ...formData, slug: e.target.value })} disabled={slugSync} sx={inputStyle} placeholder="my-blog-post-url" />
+            </div>
+
+            <div className="grid grid-cols-1 gap-8">
+                <div className="space-y-4">
+                    <div className="flex justify-between text-xs font-black uppercase tracking-widest">
+                        <span className="text-slate-400">Meta Title</span>
+                        <span className={formData.metaTitle.length > 60 ? "text-red-500" : "text-green-500"}>{formData.metaTitle.length}/60</span>
+                    </div>
+                    <TextField fullWidth value={formData.metaTitle} onChange={(e) => setFormData({ ...formData, metaTitle: e.target.value })} sx={inputStyle} />
+                </div>
+                <div className="space-y-4">
+                    <div className="flex justify-between text-xs font-black uppercase tracking-widest">
+                        <span className="text-slate-400">Meta Description</span>
+                        <span className={formData.metaDescription.length > 160 ? "text-red-500" : "text-green-500"}>{formData.metaDescription.length}/160</span>
+                    </div>
+                    <TextField fullWidth multiline rows={3} value={formData.metaDescription} onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })} sx={inputStyle} />
+                </div>
+                <TextField label="Focus Keywords (Comma separated)" fullWidth value={formData.focusKeywords} onChange={(e) => setFormData({ ...formData, focusKeywords: e.target.value })} sx={inputStyle} helperText="Example: luxury car, rental dubai, luxury rentals" />
+            </div>
+          </div>
+        </TabPanel>
+
+        <TabPanel value={tabValue} index={3}>
+           <div className="space-y-12">
+                <div className="space-y-6">
+                    <div className="flex justify-between items-center">
+                        <h4 className="text-white font-black uppercase text-sm tracking-widest flex items-center gap-2"><InfoIcon sx={{ fontSize: 18, color: 'var(--primary)' }} /> FAQ Manager (Google Schema)</h4>
+                        <Button startIcon={<Add />} onClick={() => setFormData({...formData, faqs: [...formData.faqs, { question: "", answer: "" }]})} sx={{ fontWeight: 900, bgcolor: 'primary/10' }}>Add Question</Button>
+                    </div>
+                    <div className="space-y-4">
+                        {formData.faqs.map((faq, idx) => (
+                            <div key={idx} className="bg-white/5 p-6 rounded-3xl border border-white/5 space-y-4 relative group">
+                                <IconButton onClick={() => setFormData({...formData, faqs: formData.faqs.filter((_, i) => i !== idx)})} sx={{ position:'absolute', top: 10, right: 10, color:'rgba(255,255,255,0.2)', opacity: 0, '&:hover': { opacity: 1 }, transition:'all 0.3s' }} className="group-hover:opacity-100"><Delete fontSize="small" /></IconButton>
+                                <TextField fullWidth label="Question" value={faq.question} onChange={(e) => {
+                                    const newFaqs = [...formData.faqs];
+                                    newFaqs[idx].question = e.target.value;
+                                    setFormData({...formData, faqs: newFaqs});
+                                }} sx={inputStyle} />
+                                <TextField fullWidth multiline rows={2} label="Answer" value={faq.answer} onChange={(e) => {
+                                    const newFaqs = [...formData.faqs];
+                                    newFaqs[idx].answer = e.target.value;
+                                    setFormData({...formData, faqs: newFaqs});
+                                }} sx={inputStyle} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="space-y-6 pt-10 border-t border-white/10">
+                    <h4 className="text-white font-black uppercase text-sm tracking-widest flex items-center gap-2"><Speed sx={{ fontSize: 18, color: 'var(--primary)' }} /> Call-To-Action (CRO)</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <TextField label="Button Text" fullWidth value={formData.primaryCta.text} onChange={(e) => setFormData({...formData, primaryCta: {...formData.primaryCta, text: e.target.value}})} sx={inputStyle} />
+                        <TextField label="Button Link" fullWidth value={formData.primaryCta.link} onChange={(e) => setFormData({...formData, primaryCta: {...formData.primaryCta, link: e.target.value}})} sx={inputStyle} />
+                    </div>
+                    <FormControl fullWidth sx={inputStyle}>
+                        <InputLabel>CTA Style / Action</InputLabel>
+                        <Select value={formData.primaryCta.type} onChange={(e) => setFormData({...formData, primaryCta: {...formData.primaryCta, type: e.target.value}})} label="CTA Style / Action">
+                            <MenuItem value="booking">Booking Page</MenuItem>
+                            <MenuItem value="offer">Special Offer</MenuItem>
+                            <MenuItem value="contact">Contact Sales</MenuItem>
+                            <MenuItem value="custom">General Link</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>
+           </div>
+        </TabPanel>
+      </DialogContent>
+
+      <DialogActions className="p-8 bg-white/5 border-t border-white/5 flex gap-4">
+        <Button onClick={onClose} sx={{ color: "rgba(255,255,255,0.4)", fontWeight: "900", px: 6, py: 2 }}>{t("common.cancel")}</Button>
+        <Button
+          variant="contained" onClick={handleUploadAndSubmit} disabled={uploading || createMutation.isPending} fullWidth
+          sx={{ py: 2, borderRadius: "1.5rem", fontWeight: "900", bgcolor: "var(--primary)", "&:hover": { bgcolor: "var(--primary-hover)" }, boxShadow: "0 20px 40px rgba(249, 115, 22, 0.4)" }}
+        >
+          {uploading ? <CircularProgress size={24} color="inherit" /> : createMutation.isPending ? "Savring Article..." : "Launch Article"}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
+
+function EditBlogDialog({ open, blog, onClose }) {
+  const { t, i18n } = useTranslation("common");
+  const queryClient = useQueryClient();
+  const [tabValue, setTabValue] = useState(0);
+  const [file, setFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [slugSync, setSlugSync] = useState(false);
+  
+  const [formData, setFormData] = useState({
+    title: "", slug: "", category: "", content: "", summary: "", status: "draft", relatedCars: [], metaTitle: "", metaDescription: "", focusKeywords: "", faqs: [], primaryCta: { text: "", link: "", type: "custom" },
+  });
+
+  useEffect(() => {
+    if (blog) {
+      setFormData({
+        title: blog.title || "",
+        slug: blog.slug || "",
+        category: blog.category?._id || blog.category || "",
+        content: blog.content || "",
+        summary: blog.summary || "",
+        status: blog.status || "draft",
+        relatedCars: blog.relatedCars?.map(c => c._id || c) || [],
+        metaTitle: blog.metaTitle || "",
+        metaDescription: blog.metaDescription || "",
+        focusKeywords: Array.isArray(blog.focusKeywords) ? blog.focusKeywords.join(", ") : "",
+        faqs: blog.faqs || [],
+        primaryCta: blog.primaryCta || { text: "", link: "", type: "custom" },
+      });
+    }
+  }, [blog]);
+
+  useEffect(() => {
+    if (slugSync && formData.title) {
+        const slug = formData.title.toLowerCase().replace(/[^a-z0-9-ء-ي]+/g, '-').replace(/(^-|-$)+/g, '');
+        setFormData(prev => ({ ...prev, slug }));
+    }
+  }, [formData.title, slugSync]);
+
+  const { data: categoriesData } = useQuery({ queryKey: ["categories"], queryFn: () => categoryService.getAll() });
+  const { data: carsData } = useQuery({ queryKey: ["allCars_simple"], queryFn: () => carService.getAll({ select: "name" }) });
+
+  const updateMutation = useMutation({
+    mutationFn: (data) => blogService.update(blog.slug, data),
+    onSuccess: () => {
+      toast.success(t("dashboard.admin.blog.editDialog.success"));
+      queryClient.invalidateQueries(["allBlogs"]);
+      onClose();
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.error || t("dashboard.admin.blog.editDialog.error"));
+    },
+  });
+
+  const getReadingTime = () => {
+    const words = formData.content.replace(/<[^>]*>?/gm, '').split(/\s+/).length;
+    return Math.ceil(words / 200) || 1;
+  };
+
+  const handleUpdate = async () => {
+    if (!formData.title || !formData.category || !formData.content) {
+      toast.warning(t("dashboard.admin.addCar.warningFill"));
+      setTabValue(0);
+      return;
+    }
+
+    setUploading(true);
+    try {
+      let currentImageUrl = blog.image;
+      if (file) {
+        const uploadData = new FormData();
+        uploadData.append("file", file);
+        const res = await fetch("/api/upload", { method: "POST", body: uploadData });
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || "Upload failed");
+        currentImageUrl = result.url;
+      }
+
+      // Elite Fix: ID Distillation
+      const finalData = {
+        ...formData,
+        image: currentImageUrl,
+        category: formData.category?._id || formData.category,
+        relatedCars: formData.relatedCars.map(c => c._id || c),
+        focusKeywords: typeof formData.focusKeywords === 'string' ? formData.focusKeywords.split(",").map(k => k.trim()).filter(k => k) : formData.focusKeywords,
+      };
+
+      updateMutation.mutate(finalData);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const inputStyle = {
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "1.25rem",
+      bgcolor: "rgba(255,255,255,0.03)",
+      color: "white",
+      fontWeight: "bold",
+      "& fieldset": { borderColor: "rgba(255,255,255,0.08)" },
+      "&:hover fieldset": { borderColor: "rgba(255,255,255,0.2)" },
+      "&.Mui-focused fieldset": { borderColor: "#f97316" },
+    },
+    "& .MuiInputLabel-root": { color: "rgba(255,255,255,0.4)", fontWeight: "bold" },
+  };
+
+  return (
+    <Dialog
+      open={open} onClose={onClose} fullWidth maxWidth="md" dir={i18n.dir()}
+      transitionDuration={500}
+      PaperProps={{
+        sx: {
+          borderRadius: "3rem", bgcolor: "#020617",
+          backgroundImage: "radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.1) 0px, transparent 50%)",
+          border: "1px solid rgba(255,255,255,0.1)",
+        },
+      }}
+    >
+      <div className="bg-white/5 p-8 border-b border-white/5 flex justify-between items-center relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-2 h-full bg-primary" />
+        <div>
+          <h2 className="text-3xl font-black text-white tracking-tight">{t("dashboard.admin.blog.editDialog.title")}</h2>
+          <p className="text-slate-400 font-bold text-sm flex items-center gap-2"><Edit sx={{ fontSize: 16 }} /> Updating "{blog.title}"</p>
+        </div>
+        <IconButton onClick={onClose} sx={{ color: "white", bgcolor: "white/5" }}><Close /></IconButton>
+      </div>
+
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 4, pt: 2 }}>
+        <Tabs 
+            value={tabValue} onChange={(e, v) => setTabValue(v)}  variant="scrollable"
+            sx={{
+                '& .MuiTabs-indicator': { bgcolor: 'var(--primary)', height: 3, borderRadius: 3 },
+                '& .MuiTab-root': { color: 'rgba(255,255,255,0.4)', fontWeight: 900, py: 3, fontSize: '1rem' },
+                '& .Mui-selected': { color: '#fff !important' }
+            }}
+        >
+          <Tab label="General" /><Tab label="Content" /><Tab label="SEO" /><Tab label="Advanced" />
+        </Tabs>
+      </Box>
+
+      <DialogContent className="p-8 custom-scrollbar" sx={{ minHeight: "60vh" }}>
+        <TabPanel value={tabValue} index={0}>
+          <div className="grid grid-cols-1 gap-8">
+            <div className={`border-2 border-dashed rounded-[2.5rem] p-12 text-center transition-all cursor-pointer relative overflow-hidden group ${file || blog.image ? "border-primary/50 bg-primary/5 shadow-inner" : "border-white/10"}`}>
+                <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer z-10" onChange={(e) => setFile(e.target.files[0])} />
+                {file || blog.image ? (
+                <div className="relative w-full h-64 rounded-3xl overflow-hidden shadow-2xl">
+                    <Image src={file ? URL.createObjectURL(file) : blog.image} alt="Preview" fill className="object-cover group-hover:scale-105 transition-transform duration-1000" />
+                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><Chip label="Update Cover Image" color="primary" sx={{ fontWeight: 900 }} /></div>
+                </div>
+                ) : (
+                <div className="flex flex-col items-center gap-4 py-8">
+                    <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center text-primary group-hover:scale-110 trans-all mb-2 border border-primary/20"><UploadFile fontSize="large" /></div>
+                    <span className="text-2xl font-black text-white">Upload Blog Image</span>
+                </div>
+                )}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <TextField label="Title" fullWidth value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} sx={inputStyle} />
+                <FormControl fullWidth sx={inputStyle}>
+                    <InputLabel>Category</InputLabel>
+                    <Select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} label="Category">
+                        {(categoriesData || []).map((cat) => <MenuItem key={cat._id} value={cat._id}>{cat.name}</MenuItem>)}
+                    </Select>
+                </FormControl>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormControl fullWidth sx={inputStyle}>
+                    <InputLabel>Status</InputLabel>
+                    <Select value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value })} label="Status">
+                        <MenuItem value="draft">Draft</MenuItem><MenuItem value="published">Published</MenuItem>
+                    </Select>
+                </FormControl>
+                <FormControl fullWidth sx={inputStyle}>
+                    <InputLabel>Related Cars</InputLabel>
+                    <Select multiple value={formData.relatedCars} onChange={(e) => setFormData({ ...formData, relatedCars: e.target.value })} label="Related Cars"
+                        renderValue={(selected) => <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>{selected.map((v) => <Chip key={v} label={carsData?.data?.cars?.find(c => c._id === v)?.name} size="small" sx={{ bgcolor: "var(--primary)", color: "white", fontWeight: "900" }} />)}</Box>}
+                    >
+                        {(carsData?.data?.cars || []).map((car) => <MenuItem key={car._id} value={car._id}>{car.name}</MenuItem>)}
+                    </Select>
+                </FormControl>
+            </div>
+          </div>
+        </TabPanel>
+
+        <TabPanel value={tabValue} index={1}>
+          <div className="space-y-8">
+            <TextField label="Summary" fullWidth multiline rows={3} value={formData.summary} onChange={(e) => setFormData({ ...formData, summary: e.target.value })} sx={inputStyle} helperText={`${formData.summary.length}/500 chars (SEO recommended 160)`} />
+            <div className="space-y-4">
+                <div className="flex justify-between items-center px-1">
+                    <Typography variant="caption" sx={{ color: "rgba(255,255,255,0.4)", fontWeight: "900" }}>CONTENT</Typography>
+                    <Chip label={`${getReadingTime()} Min Read`} size="small" color="primary" sx={{ fontWeight: 900 }} />
+                </div>
+                <div className="bg-white/5 rounded-[2rem] border border-white/10 overflow-hidden min-h-[500px] shadow-2xl">
+                    <ReactQuill theme="snow" value={formData.content} onChange={(val) => setFormData(prev => ({ ...prev, content: val }))} className="blog-editor" />
+                </div>
+            </div>
+          </div>
+        </TabPanel>
+
+        <TabPanel value={tabValue} index={2}>
+           <div className="grid grid-cols-1 gap-10">
+            <div className="bg-white/5 p-8 rounded-3xl border border-white/10 relative">
+                <div className="flex justify-between mb-4">
+                    <h4 className="text-white font-black uppercase text-sm tracking-widest flex items-center gap-2"><Visibility sx={{ fontSize: 18, color: 'var(--primary)' }} /> Slug Configuration</h4>
+                    <Button size="small" onClick={() => setSlugSync(!slugSync)} sx={{ fontWeight: 900 }}>{slugSync ? "Change Manually" : "Title Sync Off"}</Button>
+                </div>
+                <TextField fullWidth value={formData.slug} onChange={(e) => setFormData({ ...formData, slug: e.target.value })} disabled={slugSync} sx={inputStyle} />
+                <Typography variant="caption" sx={{ mt: 1, color:'rgba(255,255,255,0.3)', fontWeight: 700 }}>Warning: Changing the slug for a published article will break existing links.</Typography>
+            </div>
+
+            <div className="grid grid-cols-1 gap-8">
+                <div className="space-y-2">
+                    <div className="flex justify-between text-xs font-black uppercase tracking-widest"><span className="text-slate-400">Meta Title</span><span className={formData.metaTitle.length > 60 ? "text-red-500" : "text-green-500"}>{formData.metaTitle.length}/60</span></div>
+                    <TextField fullWidth value={formData.metaTitle} onChange={(e) => setFormData({ ...formData, metaTitle: e.target.value })} sx={inputStyle} />
+                </div>
+                <div className="space-y-2">
+                    <div className="flex justify-between text-xs font-black uppercase tracking-widest"><span className="text-slate-400">Meta Description</span><span className={formData.metaDescription.length > 160 ? "text-red-500" : "text-green-500"}>{formData.metaDescription.length}/160</span></div>
+                    <TextField fullWidth multiline rows={3} value={formData.metaDescription} onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })} sx={inputStyle} />
+                </div>
+                <TextField label="Focus Keywords" fullWidth value={formData.focusKeywords} onChange={(e) => setFormData({ ...formData, focusKeywords: e.target.value })} sx={inputStyle} />
+            </div>
+          </div>
+        </TabPanel>
+
+        <TabPanel value={tabValue} index={3}>
+           <div className="space-y-12">
+                <div className="space-y-6">
+                    <div className="flex justify-between items-center">
+                        <h4 className="text-white font-black uppercase text-sm tracking-widest">FAQ Manager</h4>
+                        <Button startIcon={<Add />} onClick={() => setFormData({...formData, faqs: [...formData.faqs, { question: "", answer: "" }]})} sx={{ fontWeight: 900 }}>Add FAQ</Button>
+                    </div>
+                    <div className="space-y-4">
+                        {formData.faqs.map((faq, idx) => (
+                            <div key={idx} className="bg-white/5 p-6 rounded-3xl border border-white/5 space-y-4 relative group">
+                                <IconButton onClick={() => setFormData({...formData, faqs: formData.faqs.filter((_, i) => i !== idx)})} sx={{ position:'absolute', top: 10, right: 10, color:'rgba(255,255,255,0.2)' }}><Delete fontSize="small" /></IconButton>
+                                <TextField fullWidth label="Question" value={faq.question} onChange={(e) => {
+                                    const next = [...formData.faqs]; next[idx].question = e.target.value; setFormData({...formData, faqs: next});
+                                }} sx={inputStyle} />
+                                <TextField fullWidth multiline rows={2} label="Answer" value={faq.answer} onChange={(e) => {
+                                    const next = [...formData.faqs]; next[idx].answer = e.target.value; setFormData({...formData, faqs: next});
+                                }} sx={inputStyle} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="space-y-6 pt-10 border-t border-white/10">
+                    <h4 className="text-white font-black uppercase text-sm tracking-widest">Call-To-Action</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <TextField label="Button Text" fullWidth value={formData.primaryCta.text} onChange={(e) => setFormData({...formData, primaryCta: {...formData.primaryCta, text: e.target.value}})} sx={inputStyle} />
+                        <TextField label="Button Link" fullWidth value={formData.primaryCta.link} onChange={(e) => setFormData({...formData, primaryCta: {...formData.primaryCta, link: e.target.value}})} sx={inputStyle} />
+                    </div>
+                    <FormControl fullWidth sx={inputStyle}>
+                        <InputLabel>Action Type</InputLabel>
+                        <Select value={formData.primaryCta.type} onChange={(e) => setFormData({...formData, primaryCta: {...formData.primaryCta, type: e.target.value}})} label="Action Type">
+                            <MenuItem value="booking">Booking</MenuItem><MenuItem value="offer">Offer</MenuItem><MenuItem value="contact">Contact</MenuItem><MenuItem value="custom">Custom</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>
+           </div>
+        </TabPanel>
+      </DialogContent>
+
+      <DialogActions className="p-8 bg-white/5 border-t border-white/5 flex gap-4">
+        <Button onClick={onClose} sx={{ color: "rgba(255,255,255,0.4)", fontWeight: "900", px: 6 }}>Cancel</Button>
+        <Button
+          variant="contained" onClick={handleUpdate} disabled={uploading || updateMutation.isPending} fullWidth
+          sx={{ py: 2, borderRadius: "1.5rem", fontWeight: "900", bgcolor: "var(--primary)", "&:hover": { bgcolor: "var(--primary-hover)" } }}
+        >
+          {uploading ? <CircularProgress size={24} color="inherit" /> : updateMutation.isPending ? "Syncing Changes..." : "Update Article"}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
 

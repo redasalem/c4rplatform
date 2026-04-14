@@ -400,6 +400,51 @@
         },
         "verified": "Verified",
         "noComment": "No comment"
+      },
+      "blog": {
+        "title": "Articles & Blog Management",
+        "count": "Articles: {{count}}",
+        "addNew": "Add New Article",
+        "empty": "No articles found yet",
+        "emptyAction": "Add First Article",
+        "deleteSuccess": "Article deleted successfully",
+        "deleteError": "Failed to delete article",
+        "deleteDialog": {
+          "title": "Delete Article",
+          "message": "Are you sure you want to delete this article? This action cannot be undone.",
+          "confirm": "Yes, Delete",
+          "cancel": "Cancel"
+        },
+        "addDialog": {
+          "title": "Create New Article",
+          "subtitle": "Create engaging content and boost your SEO",
+          "imageLabel": "Article Image",
+          "titleLabel": "Article Title",
+          "titlePlaceholder": "e.g., Top 5 Places to Visit in Riyadh",
+          "categoryLabel": "Category",
+          "statusLabel": "Status",
+          "relatedCarsLabel": "Related Cars",
+          "summaryLabel": "Short Summary",
+          "summaryPlaceholder": "Write a brief snippet for search results...",
+          "contentLabel": "Article Content (Rich Text)",
+          "metaTitleLabel": "SEO Meta Title",
+          "metaDescLabel": "SEO Meta Description",
+          "keywordsLabel": "Focus Keywords (comma separated)",
+          "submit": "Publish Article",
+          "saveDraft": "Save as Draft",
+          "success": "Article created successfully",
+          "error": "Failed to create article"
+        },
+        "editDialog": {
+          "title": "Edit Article",
+          "subtitle": "Update content and SEO settings",
+          "success": "Article updated successfully",
+          "error": "Failed to update article"
+        },
+        "statuses": {
+          "draft": "Draft",
+          "published": "Published"
+        }
       }
     },
     "user": {

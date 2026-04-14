@@ -136,7 +136,54 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 @keyframes cinematicRim {
   0%, 100% {
-    opacity: 0.6;
+    opacity: 0.6;/* react-quill premium dark theme styles */
+.blog-editor .ql-toolbar {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-top-left-radius: 1.5rem !important;
+  border-top-right-radius: 1.5rem !important;
+  padding: 1rem !important;
+}
+.blog-editor .ql-container {
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-top: none !important;
+  border-bottom-left-radius: 1.5rem !important;
+  border-bottom-right-radius: 1.5rem !important;
+  font-family: inherit !important;
+  font-size: 1rem !important;
+}
+.blog-editor .ql-editor {
+  min-height: 350px !important;
+  color: white !important;
+  padding: 1.5rem !important;
+}
+.blog-editor .ql-editor.ql-blank::before {
+  color: rgba(255, 255, 255, 0.3) !important;
+  font-style: normal !important;
+}
+.blog-editor .ql-stroke {
+  stroke: rgba(255, 255, 255, 0.6) !important;
+}
+.blog-editor .ql-fill {
+  fill: rgba(255, 255, 255, 0.6) !important;
+}
+.blog-editor .ql-picker {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+.blog-editor .ql-picker-options {
+  background-color: #0f172a !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 0.75rem !important;
+}
+.blog-editor .ql-active .ql-stroke, 
+.blog-editor .ql-active .ql-fill {
+  stroke: var(--primary) !important;
+  fill: var(--primary) !important;
+}
+.blog-editor .ql-active {
+  color: var(--primary) !important;
+}
     inset: -3px;
   }
   50% {

@@ -400,6 +400,51 @@
         },
         "verified": "موثق",
         "noComment": "لا يوجد تعليق"
+      },
+      "blog": {
+        "title": "إدارة المقالات والمدونة",
+        "count": "عدد المقالات: {{count}}",
+        "addNew": "إضافة مقال جديد",
+        "empty": "لا توجد مقالات حالياً",
+        "emptyAction": "أضف المقال الأول",
+        "deleteSuccess": "تم حذف المقال بنجاح",
+        "deleteError": "فشل حذف المقال",
+        "deleteDialog": {
+          "title": "حذف المقال",
+          "message": "هل أنت متأكد من حذف هذا المقال؟ لا يمكن التراجع.",
+          "confirm": "نعم، احذف",
+          "cancel": "إلغاء"
+        },
+        "addDialog": {
+          "title": "إضافة مقال جديد",
+          "subtitle": "أنشئ محتوى جذاب لعملائك وحسّن الـ SEO",
+          "imageLabel": "صورة المقال",
+          "titleLabel": "عنوان المقال",
+          "titlePlaceholder": "مثال: أفضل 5 أماكن للزيارة في الرياض",
+          "categoryLabel": "القسم",
+          "statusLabel": "الحالة",
+          "relatedCarsLabel": "السيارات المرتبطة",
+          "summaryLabel": "ملخص قصير",
+          "summaryPlaceholder": "اكتب نبذة مختصرة تظهر في نتائج البحث...",
+          "contentLabel": "محتوى المقال (Rich Text)",
+          "metaTitleLabel": "عنوان الـ SEO (Meta Title)",
+          "metaDescLabel": "وصف الـ SEO (Meta Description)",
+          "keywordsLabel": "الكلمات المفتاحية (Keywords)",
+          "submit": "نشر المقال",
+          "saveDraft": "حفظ كمسودة",
+          "success": "تم إنشاء المقال بنجاح",
+          "error": "فشل إنشاء المقال"
+        },
+        "editDialog": {
+          "title": "تعديل المقال",
+          "subtitle": "قم بتحديث محتوى المقال وإعدادات الـ SEO",
+          "success": "تم تحديث المقال بنجاح",
+          "error": "فشل تحديث المقال"
+        },
+        "statuses": {
+          "draft": "مسودة",
+          "published": "منشور"
+        }
       }
     },
     "user": {
