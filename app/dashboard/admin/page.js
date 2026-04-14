@@ -1064,6 +1064,19 @@ function ManageCars() {
                       border: "1px solid rgba(255,255,255,0.1)",
                     }}
                   />
+                  <Chip
+                    label={"#" + (car.order || 0)}
+                    size="small"
+                    sx={{
+                      bgcolor: "var(--primary)",
+                      color: "white",
+                      fontWeight: "900",
+                      fontSize: { xs: "0.6rem", sm: "0.75rem" },
+                      height: { xs: 20, sm: 24 },
+                      border: "1px solid rgba(255,255,255,0.1)",
+                      boxShadow: "0 0 10px rgba(249,115,22,0.4)",
+                    }}
+                  />
                 </div>
               </div>
 
@@ -1402,6 +1415,7 @@ function AddCarDialog({ open, onClose }) {
     fuelType: "",
     imageUrl: "",
     description: "",
+    order: 0,
   });
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -1805,6 +1819,19 @@ function AddCarDialog({ open, onClose }) {
               }
               sx={inputStyle}
             />
+
+            <TextField
+              label={t("dashboard.admin.addCar.orderLabel")}
+              placeholder="0"
+              fullWidth
+              type="number"
+              variant="outlined"
+              value={formData.order}
+              onChange={(e) =>
+                setFormData({ ...formData, order: e.target.value })
+              }
+              sx={inputStyle}
+            />
           </div>
         </div>
       </DialogContent>
@@ -1872,6 +1899,7 @@ function EditCarDialog({ open, car, onClose }) {
     fuelType: "",
     imageUrl: "",
     description: "",
+    order: 0,
   });
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -1891,6 +1919,7 @@ function EditCarDialog({ open, car, onClose }) {
         fuelType: car.fuelType || "",
         imageUrl: car.imageUrl || car.image || "",
         description: car.description || "",
+        order: car.order || 0,
       });
     }
   }, [car]);
@@ -2279,6 +2308,19 @@ function EditCarDialog({ open, car, onClose }) {
               value={formData.description}
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })
+              }
+              sx={inputStyle}
+            />
+
+            <TextField
+              label={t("dashboard.admin.editCar.orderLabel")}
+              placeholder="0"
+              fullWidth
+              type="number"
+              variant="outlined"
+              value={formData.order}
+              onChange={(e) =>
+                setFormData({ ...formData, order: e.target.value })
               }
               sx={inputStyle}
             />

@@ -345,6 +345,7 @@
         "cancel": "Cancel",
         "success": "Car added successfully",
         "error": "Failed to add car",
+        "orderLabel": "Display Order (1 is top)",
         "warningFill": "Please fill all required fields",
         "categories": {
           "regular": "Individual (Self-drive)",
@@ -377,6 +378,7 @@
         "cancel": "Cancel",
         "success": "Car updated successfully",
         "error": "Failed to update car",
+        "orderLabel": "Display Order (1 is top)",
         "warningFill": "Please fill all required fields"
       },
       "reviews": {
