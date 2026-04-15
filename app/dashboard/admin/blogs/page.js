@@ -244,9 +244,10 @@ export default function AdminBlogs() {
     }
   };
 
-  const blogs = blogsData?.data?.blogs || blogsData?.data || [];
-  const categories = catData?.data || [];
-  const cars = carData?.data?.cars || carData?.data || [];
+  // Improved Data Mapping with Defensive Checks
+  const blogs = blogsData?.data?.blogs || (Array.isArray(blogsData?.data) ? blogsData.data : []);
+  const categories = Array.isArray(catData?.data) ? catData.data : (Array.isArray(catData) ? catData : []);
+  const cars = Array.isArray(carData?.data?.cars) ? carData.data.cars : (Array.isArray(carData?.data) ? carData.data : (Array.isArray(carData) ? carData : []));
 
   return (
     <div className="space-y-8" dir={i18n.dir()}>
