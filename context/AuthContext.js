@@ -54,26 +54,20 @@ export const AuthProvider = ({ children }) => {
       if (typeof window === "undefined") return;
 
       const token = Cookies.get("token");
+
       if (token) {
         try {
           const profile = await userService.getProfile();
           if (profile.success) {
             setUser(profile.data);
             localStorage.setItem("c4r_user", JSON.stringify(profile.data));
-            await syncServerSession();
           } else {
             // Token might be invalid
-            await clearServerSession();
             clearClientSession();
           }
         } catch (error) {
           console.error("Auth check failed:", error);
-          // Only clear if it's a 401/403 error, otherwise maybe network issue
-          if (
-            error.response?.status === 401 ||
-            error.response?.status === 403
-          ) {
-            await clearServerSession();
+          if (error.response?.status === 401 || error.response?.status === 403) {
             clearClientSession();
           }
         }
