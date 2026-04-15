@@ -120,6 +120,20 @@ export default function AdminBlogs() {
     primaryCta: { text: "", link: "", type: "custom" },
   };
   const [formData, setFormData] = useState(initialForm);
+  const [localCategories, setLocalCategories] = useState([]);
+  const [localCars, setLocalCars] = useState([]);
+
+  // Sync Query Data with Local State to Force Rerenders
+  useEffect(() => {
+    if (catData?.data) setLocalCategories(Array.isArray(catData.data) ? catData.data : []);
+    else if (Array.isArray(catData)) setLocalCategories(catData);
+  }, [catData]);
+
+  useEffect(() => {
+    if (carData?.data?.cars) setLocalCars(carData.data.cars);
+    else if (Array.isArray(carData?.data)) setLocalCars(carData.data);
+    else if (Array.isArray(carData)) setLocalCars(carData);
+  }, [carData]);
 
   // Intel: Slug Sync
   useEffect(() => {
@@ -395,10 +409,10 @@ export default function AdminBlogs() {
                               onChange={(e) => setFormData({...formData, category: e.target.value})} 
                               label={t("dashboard.admin.blog.addDialog.categoryLabel")}
                             >
-                                {categories.length === 0 ? (
+                                {localCategories.length === 0 ? (
                                   <MenuItem disabled>{t("dashboard.admin.blog.elite.loading")}</MenuItem>
                                 ) : (
-                                  categories.map(cat => <MenuItem key={cat._id} value={cat._id}>{cat.name}</MenuItem>)
+                                  localCategories.map(cat => <MenuItem key={cat._id} value={cat._id}>{cat.name}</MenuItem>)
                                 )}
                             </Select>
                         </FormControl>
@@ -465,7 +479,7 @@ export default function AdminBlogs() {
                                   {selected.map((val) => (
                                     <Chip 
                                       key={val} 
-                                      label={cars.find(c => c._id === val)?.name || cars.find(c => c._id === val)?.brand || val} 
+                                      label={localCars.find(c => c._id === val)?.name || localCars.find(c => c._id === val)?.brand || val} 
                                       size="small" 
                                       sx={{ bgcolor: 'var(--primary)', color: 'white' }} 
                                     />
@@ -474,10 +488,10 @@ export default function AdminBlogs() {
                               )}
                               label={t("dashboard.admin.blog.addDialog.relatedCarsLabel")}
                             >
-                                {cars.length === 0 ? (
+                                {localCars.length === 0 ? (
                                   <MenuItem disabled>{t("dashboard.admin.blog.elite.loading")}</MenuItem>
                                 ) : (
-                                  cars.map(car => (
+                                  localCars.map(car => (
                                     <MenuItem key={car._id} value={car._id}>
                                       {car.brand} {car.model} ({car.year})
                                     </MenuItem>

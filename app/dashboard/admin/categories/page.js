@@ -34,39 +34,42 @@ export default function AdminCategories() {
   const createMutation = useMutation({
     mutationFn: categoryService.create,
     onSuccess: () => {
-      toast.success("تم إنشـاء القسم بنجاح");
+      toast.success(t("dashboard.admin.blog.addDialog.success"));
       queryClient.invalidateQueries(["adminCategories"]);
       setOpenDialog(false);
       resetForm();
     },
     onError: (err) => {
-      toast.error(err.response?.data?.message || t("notifications.error"));
+      const msg = err.response?.data?.message || err.message || t("dashboard.admin.categories.error");
+      toast.error(msg);
     },
   });
 
   const updateMutation = useMutation({
     mutationFn: ({ slug, data }) => categoryService.update(slug, data),
     onSuccess: () => {
-      toast.success("تم تحديث القسم بنجاح");
+      toast.success(t("dashboard.admin.blog.editDialog.success"));
       queryClient.invalidateQueries(["adminCategories"]);
       setOpenDialog(false);
       resetForm();
     },
     onError: (err) => {
-      toast.error(err.response?.data?.message || t("notifications.error"));
+      const msg = err.response?.data?.message || err.message || t("dashboard.admin.categories.error");
+      toast.error(msg);
     },
   });
 
   const deleteMutation = useMutation({
     mutationFn: categoryService.delete,
     onSuccess: () => {
-      toast.success("تم الحذف بنجاح");
+      toast.success(t("dashboard.admin.blog.deleteSuccess"));
       queryClient.invalidateQueries(["adminCategories"]);
       setDeleteDialog(false);
       setSelectedCategory(null);
     },
     onError: (err) => {
-      toast.error(err.response?.data?.message || t("notifications.error"));
+      const msg = err.response?.data?.message || err.message || t("dashboard.admin.blog.deleteError");
+      toast.error(msg);
     },
   });
 
