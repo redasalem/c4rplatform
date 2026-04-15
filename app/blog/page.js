@@ -123,7 +123,7 @@ async function BlogList({ searchParams }) {
             ))}
         </div>
       )}
-    </>
+  );
 }
 
 export default async function BlogPage({ searchParams }) {
