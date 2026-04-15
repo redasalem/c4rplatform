@@ -389,8 +389,16 @@ export default function AdminBlogs() {
                         </div>
                         <FormControl fullWidth sx={inputStyle}>
                             <InputLabel>{t("dashboard.admin.blog.addDialog.categoryLabel")}</InputLabel>
-                            <Select value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} label={t("dashboard.admin.blog.addDialog.categoryLabel")}>
-                                {categories.map(cat => <MenuItem key={cat._id} value={cat._id}>{cat.name}</MenuItem>)}
+                            <Select 
+                              value={formData.category} 
+                              onChange={(e) => setFormData({...formData, category: e.target.value})} 
+                              label={t("dashboard.admin.blog.addDialog.categoryLabel")}
+                            >
+                                {categories.length === 0 ? (
+                                  <MenuItem disabled>{t("dashboard.admin.blog.elite.loading")}</MenuItem>
+                                ) : (
+                                  categories.map(cat => <MenuItem key={cat._id} value={cat._id}>{cat.name}</MenuItem>)
+                                )}
                             </Select>
                         </FormControl>
                         <FormControl fullWidth sx={inputStyle}>
@@ -447,15 +455,33 @@ export default function AdminBlogs() {
                           </div>
                         <FormControl fullWidth sx={inputStyle}>
                             <InputLabel>{t("dashboard.admin.blog.addDialog.relatedCarsLabel")}</InputLabel>
-                            <Select multiple value={formData.relatedCars} onChange={(e) => setFormData({...formData, relatedCars: e.target.value})}
+                            <Select 
+                              multiple 
+                              value={formData.relatedCars} 
+                              onChange={(e) => setFormData({...formData, relatedCars: e.target.value})}
                               renderValue={(selected) => (
                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                  {selected.map((val) => <Chip key={val} label={cars.find(c => c._id === val)?.name || val} size="small" sx={{ bgcolor: 'var(--primary)', color: 'white' }} />)}
+                                  {selected.map((val) => (
+                                    <Chip 
+                                      key={val} 
+                                      label={cars.find(c => c._id === val)?.name || cars.find(c => c._id === val)?.brand || val} 
+                                      size="small" 
+                                      sx={{ bgcolor: 'var(--primary)', color: 'white' }} 
+                                    />
+                                  ))}
                                 </Box>
                               )}
                               label={t("dashboard.admin.blog.addDialog.relatedCarsLabel")}
                             >
-                                {cars.map(car => <MenuItem key={car._id} value={car._id}>{car.name}</MenuItem>)}
+                                {cars.length === 0 ? (
+                                  <MenuItem disabled>{t("dashboard.admin.blog.elite.loading")}</MenuItem>
+                                ) : (
+                                  cars.map(car => (
+                                    <MenuItem key={car._id} value={car._id}>
+                                      {car.brand} {car.model} ({car.year})
+                                    </MenuItem>
+                                  ))
+                                )}
                             </Select>
                         </FormControl>
                      </div>
