@@ -123,6 +123,7 @@ async function BlogList({ searchParams }) {
             ))}
         </div>
       )}
+    </>
   );
 }
 
