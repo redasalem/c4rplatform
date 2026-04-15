@@ -199,7 +199,7 @@ export default function AdminBlogs() {
     };
 
     if (selectedBlog) {
-      updateMutation.mutate({ slug: selectedBlog.slug, data: finalData });
+      updateMutation.mutate({ slug: selectedBlog?.slug, data: finalData });
     } else {
       createMutation.mutate(finalData);
     }
@@ -448,7 +448,7 @@ export default function AdminBlogs() {
       <Dialog open={deleteDialog} onClose={() => setDeleteDialog(false)} PaperProps={{ sx: { borderRadius: "2.5rem", bgcolor: "#020617", border: "1px solid rgba(185,28,28,0.3)" } }}>
         <DialogTitle className="text-red-500 font-black p-8 pb-4">Delete Article?</DialogTitle>
         <DialogContent className="p-8 pt-0 text-slate-400 font-bold">Permanently remove ({selectedBlog?.title})?</DialogContent>
-        <DialogActions className="p-8"><Button onClick={() => setDeleteDialog(false)} sx={{ color: "white" }}>No</Button><Button variant="contained" color="error" onClick={() => deleteMutation.mutate(selectedBlog.slug)}>Yes, Delete</Button></DialogActions>
+        <DialogActions className="p-8"><Button onClick={() => setDeleteDialog(false)} sx={{ color: "white" }}>No</Button><Button variant="contained" color="error" onClick={() => deleteMutation.mutate(selectedBlog?.slug)}>Yes, Delete</Button></DialogActions>
       </Dialog>
     </div>
   );
