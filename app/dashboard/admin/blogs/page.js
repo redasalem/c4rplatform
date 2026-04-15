@@ -402,20 +402,30 @@ export default function AdminBlogs() {
                             <TextField fullWidth label="Slug" value={formData.slug} disabled={slugSync} sx={inputStyle} />
                             <IconButton onClick={() => setSlugSync(!slugSync)} sx={{ color: slugSync ? 'var(--primary)' : 'rgba(255,255,255,0.2)' }}><Settings /></IconButton>
                         </div>
-                        <FormControl fullWidth sx={inputStyle}>
-                            <InputLabel>{t("dashboard.admin.blog.addDialog.categoryLabel")}</InputLabel>
-                            <Select 
-                              value={formData.category} 
-                              onChange={(e) => setFormData({...formData, category: e.target.value})} 
-                              label={t("dashboard.admin.blog.addDialog.categoryLabel")}
-                            >
-                                {localCategories.length === 0 ? (
-                                  <MenuItem disabled>{t("dashboard.admin.blog.elite.loading")}</MenuItem>
-                                ) : (
-                                  localCategories.map(cat => <MenuItem key={cat._id} value={cat._id}>{cat.name}</MenuItem>)
-                                )}
-                            </Select>
-                        </FormControl>
+                        <div className="flex flex-col gap-2">
+                            <FormControl fullWidth sx={inputStyle}>
+                                <InputLabel>{t("dashboard.admin.blog.addDialog.categoryLabel")}</InputLabel>
+                                <Select 
+                                value={formData.category} 
+                                onChange={(e) => setFormData({...formData, category: e.target.value})} 
+                                label={t("dashboard.admin.blog.addDialog.categoryLabel")}
+                                >
+                                    {localCategories.length === 0 ? (
+                                    <MenuItem disabled>{t("dashboard.admin.blog.elite.loading")}</MenuItem>
+                                    ) : (
+                                    localCategories.map(cat => <MenuItem key={cat._id} value={cat._id}>{cat.name}</MenuItem>)
+                                    )}
+                                </Select>
+                            </FormControl>
+                            <TextField 
+                                fullWidth 
+                                label="أو اكتب القسم يدوياً (في حال لم يظهر)" 
+                                placeholder="مثال: أخبار السيارات" 
+                                value={typeof formData.category === 'string' && !localCategories.find(c => c._id === formData.category) ? formData.category : ""}
+                                onChange={(e) => setFormData({...formData, category: e.target.value})}
+                                sx={{ ...inputStyle, mt: 1 }}
+                            />
+                        </div>
                         <FormControl fullWidth sx={inputStyle}>
                             <InputLabel>{t("dashboard.admin.blog.addDialog.statusLabel")}</InputLabel>
                             <Select value={formData.status} onChange={(e) => setFormData({...formData, status: e.target.value})} label={t("dashboard.admin.blog.addDialog.statusLabel")}>
@@ -468,37 +478,42 @@ export default function AdminBlogs() {
                               </div>
                             )}
                           </div>
-                        <FormControl fullWidth sx={inputStyle}>
-                            <InputLabel>{t("dashboard.admin.blog.addDialog.relatedCarsLabel")}</InputLabel>
-                            <Select 
-                              multiple 
-                              value={formData.relatedCars} 
-                              onChange={(e) => setFormData({...formData, relatedCars: e.target.value})}
-                              renderValue={(selected) => (
-                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                  {selected.map((val) => (
-                                    <Chip 
-                                      key={val} 
-                                      label={localCars.find(c => c._id === val)?.name || localCars.find(c => c._id === val)?.brand || val} 
-                                      size="small" 
-                                      sx={{ bgcolor: 'var(--primary)', color: 'white' }} 
-                                    />
-                                  ))}
-                                </Box>
-                              )}
-                              label={t("dashboard.admin.blog.addDialog.relatedCarsLabel")}
-                            >
-                                {localCars.length === 0 ? (
-                                  <MenuItem disabled>{t("dashboard.admin.blog.elite.loading")}</MenuItem>
-                                ) : (
-                                  localCars.map(car => (
-                                    <MenuItem key={car._id} value={car._id}>
-                                      {car.brand} {car.model} ({car.year})
-                                    </MenuItem>
-                                  ))
+                        <div className="space-y-4">
+                            <FormControl fullWidth sx={inputStyle}>
+                                <InputLabel>{t("dashboard.admin.blog.addDialog.relatedCarsLabel")}</InputLabel>
+                                <Select 
+                                multiple 
+                                value={formData.relatedCars} 
+                                onChange={(e) => setFormData({...formData, relatedCars: e.target.value})}
+                                renderValue={(selected) => (
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                    {selected.map((val) => (
+                                        <Chip 
+                                        key={val} 
+                                        label={localCars.find(c => c._id === val)?.name || localCars.find(c => c._id === val)?.brand || val} 
+                                        size="small" 
+                                        sx={{ bgcolor: 'var(--primary)', color: 'white' }} 
+                                        />
+                                    ))}
+                                    </Box>
                                 )}
-                            </Select>
-                        </FormControl>
+                                label={t("dashboard.admin.blog.addDialog.relatedCarsLabel")}
+                                >
+                                    {localCars.length === 0 ? (
+                                    <MenuItem disabled>{t("dashboard.admin.blog.elite.loading")}</MenuItem>
+                                    ) : (
+                                    localCars.map(car => (
+                                        <MenuItem key={car._id} value={car._id}>
+                                        {car.brand} {car.model} ({car.year})
+                                        </MenuItem>
+                                    ))
+                                    )}
+                                </Select>
+                            </FormControl>
+                            <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block' }}>
+                                * ملاحظة: إذا لم تظهر القائمة، تأكد من وجود سيارات مضافة في قسم السيارات أولاً.
+                            </Typography>
+                        </div>
                      </div>
                 </div>
            </TabPanel>
@@ -506,8 +521,23 @@ export default function AdminBlogs() {
            <TabPanel value={tabValue} index={1}>
                 <div className="space-y-8">
                     <TextField fullWidth multiline rows={2} label={t("dashboard.admin.blog.addDialog.summaryLabel")} value={formData.summary} onChange={(e) => setFormData({...formData, summary: e.target.value})} sx={inputStyle} />
-                    <div className="min-h-[400px] border border-white/10 rounded-[2rem] overflow-hidden bg-white/5 p-4">
-                        <ReactQuill theme="snow" value={formData.content} onChange={(v) => setFormData({...formData, content: v})} style={{ height: 350, color: 'white' }} />
+                    <div className="min-h-[450px] border border-white/10 rounded-[2rem] overflow-hidden bg-white/5 p-4 ql-elite-editor">
+                        <style>{`
+                            .ql-elite-editor .ql-editor { font-size: 1.25rem !important; line-height: 1.8 !important; min-height: 350px; color: white; }
+                            .ql-elite-editor .ql-toolbar { border-radius: 1.5rem 1.5rem 0 0 !important; background: rgba(255,255,255,0.05) !important; border: none !important; padding: 15px !important; }
+                            .ql-elite-editor .ql-container { border: none !important; }
+                        `}</style>
+                        <ReactQuill theme="snow" value={formData.content} onChange={(v) => setFormData({...formData, content: v})} 
+                            modules={{
+                                toolbar: [
+                                    [{ 'header': [1, 2, 3, false] }],
+                                    ['bold', 'italic', 'underline', 'strike'],
+                                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                                    ['link', 'image', 'video'],
+                                    ['clean']
+                                ]
+                            }}
+                        />
                     </div>
                 </div>
            </TabPanel>
