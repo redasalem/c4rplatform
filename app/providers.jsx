@@ -58,6 +58,12 @@ export default function Providers({ children }) {
             <ToastContainer
               position={dir === "rtl" ? "bottom-right" : "bottom-left"}
               rtl={dir === "rtl"}
+              theme="dark"
+              pauseOnHover
+              draggable
+              closeOnClick
+              limit={3}
+              autoClose={4000}
             />
           </AuthProvider>
         </ThemeProvider>
