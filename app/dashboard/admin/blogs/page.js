@@ -479,39 +479,16 @@ export default function AdminBlogs() {
                             )}
                           </div>
                         <div className="space-y-4">
-                            <FormControl fullWidth sx={inputStyle}>
-                                <InputLabel>{t("dashboard.admin.blog.addDialog.relatedCarsLabel")}</InputLabel>
-                                <Select 
-                                multiple 
-                                value={formData.relatedCars} 
+                            <TextField 
+                                fullWidth 
+                                label={t("dashboard.admin.blog.addDialog.relatedCarsLabel")} 
+                                placeholder="مثال: نيسان باترول، تويوتا لاندكروزر (افصل بفاصلة)" 
+                                value={Array.isArray(formData.relatedCars) ? formData.relatedCars.join(", ") : formData.relatedCars}
                                 onChange={(e) => setFormData({...formData, relatedCars: e.target.value})}
-                                renderValue={(selected) => (
-                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                    {selected.map((val) => (
-                                        <Chip 
-                                        key={val} 
-                                        label={localCars.find(c => c._id === val)?.name || localCars.find(c => c._id === val)?.brand || val} 
-                                        size="small" 
-                                        sx={{ bgcolor: 'var(--primary)', color: 'white' }} 
-                                        />
-                                    ))}
-                                    </Box>
-                                )}
-                                label={t("dashboard.admin.blog.addDialog.relatedCarsLabel")}
-                                >
-                                    {localCars.length === 0 ? (
-                                    <MenuItem disabled>{t("dashboard.admin.blog.elite.loading")}</MenuItem>
-                                    ) : (
-                                    localCars.map(car => (
-                                        <MenuItem key={car._id} value={car._id}>
-                                        {car.brand} {car.model} ({car.year})
-                                        </MenuItem>
-                                    ))
-                                    )}
-                                </Select>
-                            </FormControl>
+                                sx={inputStyle}
+                            />
                             <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block' }}>
-                                * ملاحظة: إذا لم تظهر القائمة، تأكد من وجود سيارات مضافة في قسم السيارات أولاً.
+                                * ملاحظة: اكتب أسماء السيارات يدوياً وافصل بينها بفاصلة (،) لضمان الربط الذكي في الـ SEO.
                             </Typography>
                         </div>
                      </div>
