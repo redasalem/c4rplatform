@@ -42,7 +42,7 @@ import dynamic from "next/dynamic";
 // Dynamic import for ReactQuill
 const ReactQuill = dynamic(
   async () => {
-    const { default: Quill } = await import("react-quill");
+    const { default: Quill } = await import("react-quill-new");
     return Quill;
   },
   {
@@ -54,7 +54,7 @@ const ReactQuill = dynamic(
     ),
   }
 );
-import "react-quill/dist/quill.snow.css";
+import "react-quill-new/dist/quill.snow.css";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -93,7 +93,7 @@ export default function AdminBlogs() {
 
   const { data: carData } = useQuery({
     queryKey: ["adminCars"],
-    queryFn: () => carService.getAll({ limit: 100 }),
+    queryFn: () => carService.getAll({ page: 1, limit: 100 }),
   });
 
   const [openDialog, setOpenDialog] = useState(false);
