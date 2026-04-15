@@ -231,8 +231,8 @@
       "updateButton": "Update Password",
       "errorFillAll": "Please fill in all password fields",
       "errorWeakPassword": "Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long",
-      "successMessage": "Password changed successfully",
-      "errorMessage": "Failed to change password"
+      "successMessage": "Password updated successfully with secure encryption",
+      "errorMessage": "Unable to update password, please try again later"
     },
     "admin": {
       "welcome": {
@@ -267,12 +267,12 @@
         "dates": "Dates",
         "status": "Status",
         "actions": "Actions",
-        "approveSuccess": "Booking approved successfully",
-        "approveError": "Failed to approve booking",
-        "rejectSuccess": "Booking rejected successfully",
-        "rejectError": "Failed to reject booking",
-        "deleteSuccess": "Booking deleted successfully",
-        "deleteError": "Failed to delete booking",
+        "approveSuccess": "Booking approved successfully and customer notified",
+        "approveError": "Unable to approve booking, server synchronization error",
+        "rejectSuccess": "Booking rejected and request status updated",
+        "rejectError": "Failed to execute rejection, please check connectivity",
+        "deleteSuccess": "Booking permanently removed from the records",
+        "deleteError": "An error occurred while attempting to delete the record",
         "deleteDialog": {
           "title": "Delete Booking",
           "message": "Are you sure you want to delete this booking? This action cannot be undone.",
@@ -308,8 +308,8 @@
         "city": "City",
         "available": "Available",
         "unavailable": "Unavailable",
-        "deleteSuccess": "Car deleted successfully",
-        "deleteError": "Failed to delete car",
+        "deleteSuccess": "Car removed from fleet successfully",
+        "deleteError": "Deletion failed, car might be linked to active bookings",
         "deleteDialog": {
           "title": "Delete Car",
           "message": "Are you sure you want to delete this car? This action cannot be undone.",
@@ -343,8 +343,8 @@
         "saving": "Saving...",
         "submit": "Add Car",
         "cancel": "Cancel",
-        "success": "Car added successfully",
-        "error": "Failed to add car",
+        "success": "New car added to the system successfully",
+        "error": "Failed to add car, please review the input data",
         "orderLabel": "Display Order (1 is top)",
         "warningFill": "Please fill all required fields",
         "categories": {
@@ -376,8 +376,8 @@
         "saving": "Saving...",
         "submit": "Save Changes",
         "cancel": "Cancel",
-        "success": "Car updated successfully",
-        "error": "Failed to update car",
+        "success": "Car details updated and changes saved successfully",
+        "error": "Unable to save edits, data synchronization error",
         "orderLabel": "Display Order (1 is top)",
         "warningFill": "Please fill all required fields"
       },
@@ -390,8 +390,8 @@
         "rating": "Rating",
         "comment": "Comment",
         "date": "Date",
-        "deleteSuccess": "Review deleted successfully",
-        "deleteError": "Failed to delete review",
+        "deleteSuccess": "Review deleted and removed from display",
+        "deleteError": "Unable to delete review, please try again",
         "deleteDialog": {
           "title": "Delete Review",
           "message": "Are you sure you want to delete this review?",
@@ -438,8 +438,35 @@
         "editDialog": {
           "title": "Edit Article",
           "subtitle": "Update content and SEO settings",
-          "success": "Article updated successfully",
-          "error": "Failed to update article"
+          "success": "Article published and blog updated successfully",
+          "error": "Failed to publish article, please check mandatory fields"
+        },
+        "elite": {
+          "title": "Elite Content Management",
+          "subtitle": "Full control over articles, SEO, and smart links",
+          "addArticle": "Add New Elite Article",
+          "editArticle": "Edit Professional Article",
+          "loading": "Loading smart data...",
+          "noArticles": "No articles added in the Elite system",
+          "startNow": "Start Blogging Now",
+          "generalTab": "General Settings",
+          "contentTab": "Article Content",
+          "seoTab": "Search Engine (SEO)",
+          "conversionTab": "Conversion (CTA)",
+          "uploadImage": "Upload Cover Image",
+          "imageHint": "PNG, JPG up to 5MB for visual identity",
+          "changeImage": "Change Cover Image",
+          "syncSlug": "Sync Link (Slug)",
+          "faqBuilder": "FAQ Builder",
+          "addFaq": "Add New Question",
+          "question": "Interactive Question",
+          "answer": "Model Answer",
+          "ctaText": "CTA Button Text",
+          "ctaLink": "Destination Link",
+          "ctaType": "Conversion Type",
+          "publish": "Publish Elite Content",
+          "update": "Update Advanced Content",
+          "publishing": "Publishing..."
         },
         "statuses": {
           "draft": "Draft",
@@ -708,9 +735,13 @@
     "title": "Notifications",
     "loading": "Loading...",
     "empty": "No new notifications",
-    "delete": "Delete Notification",
+    "delete": "Remove Notification",
     "bookingApproved": "Your booking #{{bookingId}} for {{carName}} has been approved",
-    "bookingRejected": "Sorry, your booking request for {{carName}} has been rejected",
-    "newBooking": "New booking request for {{carName}}"
+    "bookingRejected": "We are currently unable to accept your booking for {{carName}}",
+    "newBooking": "Alert: New booking request for {{carName}}",
+    "uploadSuccess": "Image uploaded successfully and stored in cloud",
+    "uploadError": "Failed to upload image file, please check file size",
+    "requiredFields": "Please fill in the specified mandatory fields",
+    "fillAll": "Please complete all data to proceed"
   }
 }

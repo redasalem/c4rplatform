@@ -171,13 +171,26 @@ function DashboardSidebarContent({
               ? link.href.split("?tab=")[1] 
               : null;
             
-            // Check if active: pathname match takes priority over tab match
+            // Improved active state logic
+            const isBaseAdmin = pathname === "/dashboard/admin";
             const pathMatch = pathname === link.href;
-            const isActive = pathMatch 
-              ? true 
-              : linkTab 
-                ? linkTab === currentTab 
-                : false;
+            const tabInUrl = searchParams.get("tab");
+            
+            // If we are on /dashboard/admin/blogs, ONLY the blog link should be active.
+            // If we are on /dashboard/admin with ?tab=bookings, ONLY bookings should be active.
+            let isActive = false;
+            
+            if (link.href.startsWith('/dashboard/admin/')) {
+              // Exact path match for dedicated pages like /blogs or /categories
+              isActive = pathname.startsWith(link.href);
+            } else if (linkTab) {
+              // Tab match for query-based routes, but only if we ARE on the base dashboard page
+              isActive = isBaseAdmin && tabInUrl === linkTab;
+              // Fallback for default tab (bookings) if no tab is in URL
+              if (!tabInUrl && linkTab === 'bookings' && isBaseAdmin) isActive = true;
+            } else {
+              isActive = pathMatch;
+            }
 
             return (
               <Link

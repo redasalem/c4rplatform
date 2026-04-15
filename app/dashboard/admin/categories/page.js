@@ -40,7 +40,7 @@ export default function AdminCategories() {
       resetForm();
     },
     onError: (err) => {
-      toast.error(err.response?.data?.message || "حدث خطأ");
+      toast.error(err.response?.data?.message || t("notifications.error"));
     },
   });
 
@@ -53,7 +53,7 @@ export default function AdminCategories() {
       resetForm();
     },
     onError: (err) => {
-      toast.error(err.response?.data?.message || "حدث خطأ");
+      toast.error(err.response?.data?.message || t("notifications.error"));
     },
   });
 
@@ -66,7 +66,7 @@ export default function AdminCategories() {
       setSelectedCategory(null);
     },
     onError: (err) => {
-      toast.error(err.response?.data?.message || "حدث خطأ");
+      toast.error(err.response?.data?.message || t("notifications.error"));
     },
   });
 
@@ -87,7 +87,7 @@ export default function AdminCategories() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.name) return toast.warning("يرجى إدخال اسم القسم");
+    if (!formData.name) return toast.warning(t("notifications.requiredFields"));
 
     if (selectedCategory) {
       updateMutation.mutate({ slug: selectedCategory?.slug || selectedCategory?._id, data: formData });
@@ -106,7 +106,7 @@ export default function AdminCategories() {
             إدارة <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">الأقسـام</span>
           </h1>
           <p className="text-slate-400 font-bold text-sm md:text-base">
-            إضافة وتعديل أقسام المدونة للمحتوى وتصنيفات السيارات
+            إضافة وتصنيف المحتوى الـ Elite لضمان أفضل تجربة للمستخدم
           </p>
         </div>
         <Button
@@ -122,7 +122,7 @@ export default function AdminCategories() {
             "&:hover": { bgcolor: "var(--primary-hover)" },
           }}
         >
-          إضافـة قسم
+          إضافة تصنيف جديد
         </Button>
       </div>
 
@@ -132,7 +132,7 @@ export default function AdminCategories() {
         ) : categories.length === 0 ? (
           <div className="text-center py-20 border border-dashed border-white/10 rounded-3xl mt-4">
             <CategoryIcon sx={{ fontSize: 48, color: "rgba(255,255,255,0.2)" }} className="mb-4" />
-            <p className="text-lg font-black text-slate-500">لا يوجد أقسام مضافة بعد!</p>
+            <p className="text-lg font-black text-slate-500">{t("common.noData")}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -151,8 +151,8 @@ export default function AdminCategories() {
                     </IconButton>
                   </div>
                 </div>
-                <h3 className="text-xl font-black text-white mb-2">{cat?.name || "بدون اسم"}</h3>
-                <p className="text-sm text-slate-400 font-medium mb-3 line-clamp-2">{cat?.description || "لا يوجد وصف"}</p>
+                <h3 className="text-xl font-black text-white mb-2">{cat?.name || t("common.noData")}</h3>
+                <p className="text-sm text-slate-400 font-medium mb-3 line-clamp-2">{cat?.description || t("common.noData")}</p>
                 <div className="text-xs font-black text-slate-500 uppercase tracking-widest bg-white/5 inline-block px-3 py-1 rounded-lg">
                   /{cat?.slug || "بدون رابط"}
                 </div>
@@ -163,8 +163,8 @@ export default function AdminCategories() {
       </div>
 
       {/* Add/Edit Dialog */}
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="sm" fullWidth PaperProps={{ sx: { borderRadius: "1.5rem", bgcolor: "#0f172a", border: "1px solid rgba(255,255,255,0.1)" } }}>
-        <DialogTitle className="text-white font-black">{selectedCategory ? "تعديل القسم" : "إضـافة قسم جديد"}</DialogTitle>
+  <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="sm" fullWidth PaperProps={{ sx: { borderRadius: "1.5rem", bgcolor: "#0f172a", border: "1px solid rgba(255,255,255,0.1)" } }}>
+    <DialogTitle className="text-white font-black">{selectedCategory ? t("dashboard.admin.tabs.categories") + " - " + t("common.edit") : t("dashboard.admin.tabs.categories") + " - " + t("common.add")}</DialogTitle>
         <DialogContent dividers className="border-white/10 space-y-4">
           <TextField
             fullWidth
@@ -186,9 +186,9 @@ export default function AdminCategories() {
           />
         </DialogContent>
         <DialogActions className="p-4 border-t border-white/10">
-          <Button onClick={() => setOpenDialog(false)} sx={{ color: "rgba(255,255,255,0.5)", fontWeight: "bold" }}>إلغاء</Button>
+          <Button onClick={() => setOpenDialog(false)} sx={{ color: "rgba(255,255,255,0.5)", fontWeight: "bold" }}>{t("common.cancel")}</Button>
           <Button variant="contained" onClick={handleSubmit} disabled={createMutation.isPending || updateMutation.isPending} sx={{ bgcolor: "var(--primary)", borderRadius: "0.75rem", fontWeight: "bold" }}>
-            {selectedCategory ? "تحديث التغييرات" : "حفظ القسم"}
+             {selectedCategory ? t("common.save") : t("common.add")}
           </Button>
         </DialogActions>
       </Dialog>
@@ -198,9 +198,9 @@ export default function AdminCategories() {
         <DialogTitle className="text-red-500 font-black">حـذف القسم</DialogTitle>
         <DialogContent className="text-white/80">هل أنت متأكد من رغبتك في حذف قسم ({selectedCategory?.name || ''})؟ هذا الإجراء لا يمكن التراجع عنه.</DialogContent>
         <DialogActions className="p-4">
-          <Button onClick={() => setDeleteDialog(false)} sx={{ color: "rgba(255,255,255,0.5)", fontWeight: "bold" }}>إلغاء</Button>
+          <Button onClick={() => setDeleteDialog(false)} sx={{ color: "rgba(255,255,255,0.5)", fontWeight: "bold" }}>{t("common.cancel")}</Button>
           <Button variant="contained" color="error" onClick={() => selectedCategory && deleteMutation.mutate(selectedCategory?.slug)} disabled={deleteMutation.isPending || !selectedCategory} sx={{ borderRadius: "0.75rem", fontWeight: "bold" }}>
-            تأكيد الحذف
+            {t("common.confirm")}
           </Button>
         </DialogActions>
       </Dialog>

@@ -40,10 +40,20 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 
 // Dynamic import for ReactQuill
-const ReactQuill = dynamic(() => import("react-quill"), {
-  ssr: false,
-  loading: () => <CircularProgress size={20} />,
-});
+const ReactQuill = dynamic(
+  async () => {
+    const { default: Quill } = await import("react-quill");
+    return Quill;
+  },
+  {
+    ssr: false,
+    loading: () => (
+      <Box sx={{ display: 'flex', justifyContent: 'center', py: 5 }}>
+        <CircularProgress size={30} sx={{ color: 'var(--primary)' }} />
+      </Box>
+    ),
+  }
+);
 import "react-quill/dist/quill.snow.css";
 
 function TabPanel(props) {
@@ -91,6 +101,8 @@ export default function AdminBlogs() {
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [tabValue, setTabValue] = useState(0);
   const [slugSync, setSlugSync] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [file, setFile] = useState(null);
 
   const initialForm = {
     title: "",
@@ -135,13 +147,13 @@ export default function AdminBlogs() {
   const updateMutation = useMutation({
     mutationFn: ({ slug, data }) => blogService.update(slug, data),
     onSuccess: () => {
-      toast.success("تم التحديث بنجاح");
+      toast.success(t("dashboard.admin.blog.editDialog.success"));
       queryClient.invalidateQueries(["adminBlogs"]);
       setOpenDialog(false);
       resetForm();
     },
     onError: (err) => {
-      toast.error(err.response?.data?.message || err.message);
+      toast.error(err.response?.data?.message || t("notifications.error"));
     },
   });
 
@@ -159,6 +171,8 @@ export default function AdminBlogs() {
     setFormData(initialForm);
     setSelectedBlog(null);
     setTabValue(0);
+    setFile(null);
+    setUploading(false);
   };
 
   const handleOpenDialog = (blog = null) => {
@@ -185,29 +199,54 @@ export default function AdminBlogs() {
     setOpenDialog(true);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!formData.title || !formData.content || !formData.category) {
-      toast.warning("يرجى ملء الحقول الرئيسية");
+      toast.warning(t("notifications.requiredFields"));
       setTabValue(0);
       return;
     }
 
-    const finalData = {
-      ...formData,
-      focusKeywords: formData.focusKeywords ? formData.focusKeywords.split(",").map(k => k.trim()).filter(k => k) : [],
-      summary: formData.summary || formData.content.replace(/<[^>]*>?/gm, '').substring(0, 160),
-    };
+    setUploading(true);
+    try {
+      let currentImageUrl = formData.image;
 
-    if (selectedBlog) {
-      updateMutation.mutate({ slug: selectedBlog?.slug, data: finalData });
-    } else {
-      createMutation.mutate(finalData);
+      if (file) {
+        const uploadData = new FormData();
+        uploadData.append("file", file);
+
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: uploadData,
+        });
+
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || t("notifications.uploadError"));
+        currentImageUrl = result.url;
+        toast.success(t("notifications.uploadSuccess"));
+      }
+
+      const finalData = {
+        ...formData,
+        image: currentImageUrl,
+        focusKeywords: formData.focusKeywords ? formData.focusKeywords.split(",").map(k => k.trim()).filter(k => k) : [],
+        summary: formData.summary || formData.content.replace(/<[^>]*>?/gm, '').substring(0, 160),
+      };
+
+      if (selectedBlog) {
+        updateMutation.mutate({ slug: selectedBlog?.slug, data: finalData });
+      } else {
+        createMutation.mutate(finalData);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setUploading(false);
     }
   };
 
-  const blogs = blogsData?.data || [];
+  const blogs = blogsData?.data?.blogs || blogsData?.data || [];
   const categories = catData?.data || [];
-  const cars = carData?.data || [];
+  const cars = carData?.data?.cars || carData?.data || [];
 
   return (
     <div className="space-y-8" dir={i18n.dir()}>
@@ -215,11 +254,11 @@ export default function AdminBlogs() {
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] -z-10 group-hover:bg-primary/20 transition-all duration-700" />
         <div>
           <h1 className="text-3xl md:text-5xl font-black text-white mb-3 tracking-tighter flex items-center gap-3">
-             إدارة <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">المحتوى الـ Elite</span>
+             {t("dashboard.admin.blog.elite.title")}
           </h1>
           <p className="text-slate-400 font-bold text-base md:text-lg flex items-center gap-2">
             <AutoFixHigh className="text-primary/50" fontSize="small" />
-            تحكم كامل في المقالات، الـ SEO، والروابط الذكية للسيارات
+            {t("dashboard.admin.blog.elite.subtitle")}
           </p>
         </div>
         <Button
@@ -239,21 +278,21 @@ export default function AdminBlogs() {
             transition: "all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)"
           }}
         >
-          إضافـة مقال جديد
+          {t("dashboard.admin.blog.elite.addArticle")}
         </Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {blogsLoading ? (
           <div className="col-span-full flex flex-col items-center justify-center py-20 gap-4">
-             <CircularProgress thickness={6} size={60} sx={{ color: 'var(--primary)' }} />
-             <p className="text-white font-black animate-pulse">جاري تحميل البيانات الذكية...</p>
+              <CircularProgress thickness={6} size={60} sx={{ color: 'var(--primary)' }} />
+              <p className="text-white font-black animate-pulse">{t("dashboard.admin.blog.elite.loading")}</p>
           </div>
         ) : blogs.length === 0 ? (
           <div className="col-span-full text-center py-32 bg-white/5 border-2 border-dashed border-white/5 rounded-[3.5rem]">
             <Article sx={{ fontSize: 100, color: "rgba(255,255,255,0.05)" }} className="mb-6" />
-            <h3 className="text-2xl font-black text-slate-400">لا يوجد مقالات حتى الآن</h3>
-            <Button onClick={() => handleOpenDialog()} className="mt-6 text-primary font-black">ابدأ الآن</Button>
+            <h3 className="text-2xl font-black text-slate-400">{t("dashboard.admin.blog.elite.noArticles")}</h3>
+            <Button onClick={() => handleOpenDialog()} className="mt-6 text-primary font-black uppercase tracking-widest">{t("dashboard.admin.blog.elite.startNow")}</Button>
           </div>
         ) : (
           blogs.map((blog) => (
@@ -313,15 +352,15 @@ export default function AdminBlogs() {
         }}
       >
         <DialogTitle className="flex flex-col gap-4 p-10 border-b border-white/5">
-           <div className="flex justify-between items-center">
-                <Typography variant="h4" className="text-white font-black tracking-tighter">
-                   {selectedBlog ? "تحرير المقال الاحترافي" : "إنشاء مقال Elite جديد"}
-                </Typography>
-                <div className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-2xl border border-white/5">
-                   <Settings className="text-primary" />
-                   <span className="text-xs text-white font-black uppercase tracking-widest">Advanced Suite</span>
-                </div>
-           </div>
+            <div className="flex justify-between items-center">
+                 <Typography variant="h4" className="text-white font-black tracking-tighter">
+                    {selectedBlog ? t("dashboard.admin.blog.elite.editArticle") : t("dashboard.admin.blog.elite.addArticle")}
+                 </Typography>
+                 <div className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-2xl border border-white/5">
+                    <Settings className="text-primary" />
+                    <span className="text-xs text-white font-black uppercase tracking-widest">Advanced Suite</span>
+                 </div>
+            </div>
            
            <Tabs 
              value={tabValue} 
@@ -332,48 +371,89 @@ export default function AdminBlogs() {
                 "& .Mui-selected": { color: 'white !important' }
              }}
            >
-             <Tab icon={<AutoFixHigh />} iconPosition="start" label="General" />
-             <Tab icon={<Article />} iconPosition="start" label="Content" />
-             <Tab icon={<Analytics />} iconPosition="start" label="SEO & FAQ" />
-             <Tab icon={<AdsClick />} iconPosition="start" label="Conversion" />
-           </Tabs>
+              <Tab icon={<AutoFixHigh />} iconPosition="start" label={t("dashboard.admin.blog.elite.generalTab")} />
+              <Tab icon={<Article />} iconPosition="start" label={t("dashboard.admin.blog.elite.contentTab")} />
+              <Tab icon={<Analytics />} iconPosition="start" label={t("dashboard.admin.blog.elite.seoTab")} />
+              <Tab icon={<AdsClick />} iconPosition="start" label={t("dashboard.admin.blog.elite.conversionTab")} />
+            </Tabs>
         </DialogTitle>
 
         <DialogContent className="p-10">
            <TabPanel value={tabValue} index={0}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                      <div className="space-y-6">
-                        <TextField fullWidth label="Article Title" value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} sx={inputStyle} />
+                        <TextField fullWidth label={t("dashboard.admin.blog.addDialog.titleLabel")} value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} sx={inputStyle} />
                         <div className="flex gap-4">
                             <TextField fullWidth label="Slug" value={formData.slug} disabled={slugSync} sx={inputStyle} />
                             <IconButton onClick={() => setSlugSync(!slugSync)} sx={{ color: slugSync ? 'var(--primary)' : 'rgba(255,255,255,0.2)' }}><Settings /></IconButton>
                         </div>
                         <FormControl fullWidth sx={inputStyle}>
-                            <InputLabel>Category</InputLabel>
-                            <Select value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} label="Category">
+                            <InputLabel>{t("dashboard.admin.blog.addDialog.categoryLabel")}</InputLabel>
+                            <Select value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} label={t("dashboard.admin.blog.addDialog.categoryLabel")}>
                                 {categories.map(cat => <MenuItem key={cat._id} value={cat._id}>{cat.name}</MenuItem>)}
                             </Select>
                         </FormControl>
                         <FormControl fullWidth sx={inputStyle}>
-                            <InputLabel>Status</InputLabel>
-                            <Select value={formData.status} onChange={(e) => setFormData({...formData, status: e.target.value})} label="Status">
-                                <MenuItem value="draft">Draft</MenuItem>
-                                <MenuItem value="published">Published</MenuItem>
+                            <InputLabel>{t("dashboard.admin.blog.addDialog.statusLabel")}</InputLabel>
+                            <Select value={formData.status} onChange={(e) => setFormData({...formData, status: e.target.value})} label={t("dashboard.admin.blog.addDialog.statusLabel")}>
+                                <MenuItem value="draft">{t("dashboard.admin.blog.statuses.draft")}</MenuItem>
+                                <MenuItem value="published">{t("dashboard.admin.blog.statuses.published")}</MenuItem>
                             </Select>
                         </FormControl>
                      </div>
                      <div className="space-y-6">
-                        <Box sx={{ border: '2px dashed rgba(255,255,255,0.1)', borderRadius: '2rem', height: 200, display: 'flex', itemsCenter: 'center', justifyCenter: 'center', bgcolor: 'rgba(255,255,255,0.02)', position: 'relative' }}>
-                           <TextField label="Cover Image URL" fullWidth value={formData.image} onChange={(e) => setFormData({...formData, image: e.target.value})} sx={inputStyle} />
-                        </Box>
+                        <div
+                            className={`border-2 border-dashed rounded-[2rem] p-8 transition-all cursor-pointer relative group overflow-hidden ${file || formData.image
+                              ? "border-primary/50 bg-primary/5"
+                              : "border-white/10 hover:border-primary/30 hover:bg-white/5"
+                              }`}
+                          >
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                              onChange={(e) => setFile(e.target.files[0])}
+                            />
+
+                            {file || formData.image ? (
+                              <div className="relative w-full h-56 rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                                <Image
+                                  src={file ? URL.createObjectURL(file) : formData.image}
+                                  alt="Preview"
+                                  fill
+                                  className="object-cover group-hover:scale-105 transition-transform duration-700"
+                                />
+                                <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm">
+                                  <div className="bg-primary px-6 py-2.5 rounded-full text-white font-black flex items-center gap-2 shadow-2xl">
+                                    <CloudUpload /> {t("dashboard.admin.blog.elite.changeImage")}
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="flex flex-col items-center justify-center py-10 gap-5 text-slate-400">
+                                <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center text-primary mb-1 group-hover:scale-110 transition-transform duration-500 border border-white/5 shadow-2xl">
+                                  <CloudUpload fontSize="large" />
+                                </div>
+                                <div className="text-center">
+                                  <span className="block font-black text-2xl text-white mb-2 tracking-tight">
+                                    {t("dashboard.admin.blog.elite.uploadImage")}
+                                  </span>
+                                  <span className="text-xs text-slate-500 font-bold uppercase tracking-widest">
+                                    {t("dashboard.admin.blog.elite.imageHint")}
+                                  </span>
+                                </div>
+                              </div>
+                            )}
+                          </div>
                         <FormControl fullWidth sx={inputStyle}>
-                            <InputLabel>Linked Cars</InputLabel>
+                            <InputLabel>{t("dashboard.admin.blog.addDialog.relatedCarsLabel")}</InputLabel>
                             <Select multiple value={formData.relatedCars} onChange={(e) => setFormData({...formData, relatedCars: e.target.value})}
                               renderValue={(selected) => (
                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                   {selected.map((val) => <Chip key={val} label={cars.find(c => c._id === val)?.name || val} size="small" sx={{ bgcolor: 'var(--primary)', color: 'white' }} />)}
                                 </Box>
                               )}
+                              label={t("dashboard.admin.blog.addDialog.relatedCarsLabel")}
                             >
                                 {cars.map(car => <MenuItem key={car._id} value={car._id}>{car.name}</MenuItem>)}
                             </Select>
@@ -384,7 +464,7 @@ export default function AdminBlogs() {
 
            <TabPanel value={tabValue} index={1}>
                 <div className="space-y-8">
-                    <TextField fullWidth multiline rows={2} label="Excerpt" value={formData.summary} onChange={(e) => setFormData({...formData, summary: e.target.value})} sx={inputStyle} />
+                    <TextField fullWidth multiline rows={2} label={t("dashboard.admin.blog.addDialog.summaryLabel")} value={formData.summary} onChange={(e) => setFormData({...formData, summary: e.target.value})} sx={inputStyle} />
                     <div className="min-h-[400px] border border-white/10 rounded-[2rem] overflow-hidden bg-white/5 p-4">
                         <ReactQuill theme="snow" value={formData.content} onChange={(v) => setFormData({...formData, content: v})} style={{ height: 350, color: 'white' }} />
                     </div>
@@ -394,23 +474,23 @@ export default function AdminBlogs() {
            <TabPanel value={tabValue} index={2}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                     <div className="space-y-6">
-                        <TextField fullWidth label="Meta Title" value={formData.metaTitle} onChange={(e) => setFormData({...formData, metaTitle: e.target.value})} helperText={`${formData.metaTitle.length}/60`} sx={inputStyle} />
-                        <TextField fullWidth label="Meta Description" multiline rows={4} value={formData.metaDescription} onChange={(e) => setFormData({...formData, metaDescription: e.target.value})} helperText={`${formData.metaDescription.length}/160`} sx={inputStyle} />
-                        <TextField fullWidth label="Focus Keywords" value={formData.focusKeywords} onChange={(e) => setFormData({...formData, focusKeywords: e.target.value})} sx={inputStyle} />
+                        <TextField fullWidth label={t("dashboard.admin.blog.addDialog.metaTitleLabel")} value={formData.metaTitle} onChange={(e) => setFormData({...formData, metaTitle: e.target.value})} helperText={`${formData.metaTitle.length}/60`} sx={inputStyle} />
+                        <TextField fullWidth label={t("dashboard.admin.blog.addDialog.metaDescLabel")} multiline rows={4} value={formData.metaDescription} onChange={(e) => setFormData({...formData, metaDescription: e.target.value})} helperText={`${formData.metaDescription.length}/160`} sx={inputStyle} />
+                        <TextField fullWidth label={t("dashboard.admin.blog.addDialog.keywordsLabel")} value={formData.focusKeywords} onChange={(e) => setFormData({...formData, focusKeywords: e.target.value})} sx={inputStyle} />
                     </div>
                     <div className="space-y-6">
                          <div className="flex justify-between items-center">
-                            <Typography className="text-white/60 font-black">FAQ Builder</Typography>
-                            <Button startIcon={<Add />} onClick={() => setFormData({...formData, faqs: [...formData.faqs, { question: "", answer: "" }]})}>Add FAQ</Button>
+                            <Typography className="text-white/60 font-black">{t("dashboard.admin.blog.elite.faqBuilder")}</Typography>
+                            <Button startIcon={<Add />} onClick={() => setFormData({...formData, faqs: [...formData.faqs, { question: "", answer: "" }]})}>{t("dashboard.admin.blog.elite.addFaq")}</Button>
                          </div>
                          <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                              {formData.faqs.map((faq, idx) => (
                                  <div key={idx} className="bg-white/5 p-6 rounded-3xl border border-white/5 space-y-4 relative">
                                      <IconButton onClick={() => setFormData({...formData, faqs: formData.faqs.filter((_, i) => i !== idx)})} sx={{ position:'absolute', top: 10, right: 10 }}><Delete fontSize="small" /></IconButton>
-                                     <TextField fullWidth label="Question" value={faq.question} onChange={(e) => {
+                                     <TextField fullWidth label={t("dashboard.admin.blog.elite.question")} value={faq.question} onChange={(e) => {
                                          const next = [...formData.faqs]; next[idx].question = e.target.value; setFormData({...formData, faqs: next});
                                      }} sx={inputStyle} />
-                                     <TextField fullWidth multiline rows={2} label="Answer" value={faq.answer} onChange={(e) => {
+                                     <TextField fullWidth multiline rows={2} label={t("dashboard.admin.blog.elite.answer")} value={faq.answer} onChange={(e) => {
                                          const next = [...formData.faqs]; next[idx].answer = e.target.value; setFormData({...formData, faqs: next});
                                      }} sx={inputStyle} />
                                  </div>
@@ -423,12 +503,12 @@ export default function AdminBlogs() {
            <TabPanel value={tabValue} index={3}>
                 <div className="space-y-10">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <TextField label="CTA Button Text" fullWidth value={formData.primaryCta.text} onChange={(e) => setFormData({...formData, primaryCta: {...formData.primaryCta, text: e.target.value}})} sx={inputStyle} />
-                        <TextField label="CTA Link" fullWidth value={formData.primaryCta.link} onChange={(e) => setFormData({...formData, primaryCta: {...formData.primaryCta, link: e.target.value}})} sx={inputStyle} />
+                        <TextField label={t("dashboard.admin.blog.elite.ctaText")} fullWidth value={formData.primaryCta.text} onChange={(e) => setFormData({...formData, primaryCta: {...formData.primaryCta, text: e.target.value}})} sx={inputStyle} />
+                        <TextField label={t("dashboard.admin.blog.elite.ctaLink")} fullWidth value={formData.primaryCta.link} onChange={(e) => setFormData({...formData, primaryCta: {...formData.primaryCta, link: e.target.value}})} sx={inputStyle} />
                     </div>
                     <FormControl fullWidth sx={inputStyle}>
-                        <InputLabel>CTA Type</InputLabel>
-                        <Select value={formData.primaryCta.type} onChange={(e) => setFormData({...formData, primaryCta: {...formData.primaryCta, type: e.target.value}})} label="CTA Type">
+                        <InputLabel>{t("dashboard.admin.blog.elite.ctaType")}</InputLabel>
+                        <Select value={formData.primaryCta.type} onChange={(e) => setFormData({...formData, primaryCta: {...formData.primaryCta, type: e.target.value}})} label={t("dashboard.admin.blog.elite.ctaType")}>
                             <MenuItem value="booking">Booking</MenuItem><MenuItem value="offer">Offer</MenuItem><MenuItem value="contact">Contact</MenuItem><MenuItem value="custom">Custom</MenuItem>
                         </Select>
                     </FormControl>
@@ -437,18 +517,18 @@ export default function AdminBlogs() {
         </DialogContent>
 
         <DialogActions className="p-10 bg-white/5 border-t border-white/5 flex gap-6">
-           <Button onClick={() => setOpenDialog(false)} sx={{ color: "rgba(255,255,255,0.4)", fontWeight: "900", px: 6 }}>Cancel</Button>
-           <Button variant="contained" onClick={handleSubmit} fullWidth sx={{ py: 2, borderRadius: "2rem", fontWeight: "900", bgcolor: "var(--primary)" }}>
-             {selectedBlog ? "Update Elite Content" : "Publish Elite Article"}
+           <Button onClick={() => setOpenDialog(false)} sx={{ color: "rgba(255,255,255,0.4)", fontWeight: "900", px: 6 }}>{t("common.cancel")}</Button>
+           <Button variant="contained" onClick={handleSubmit} fullWidth disabled={uploading || createMutation.isPending || updateMutation.isPending} sx={{ py: 2, borderRadius: "2rem", fontWeight: "900", bgcolor: "var(--primary)" }}>
+             {uploading ? t("dashboard.admin.blog.elite.publishing") : (selectedBlog ? t("dashboard.admin.blog.elite.update") : t("dashboard.admin.blog.elite.publish"))}
            </Button>
         </DialogActions>
       </Dialog>
 
       {/* Delete Dialog */}
       <Dialog open={deleteDialog} onClose={() => setDeleteDialog(false)} PaperProps={{ sx: { borderRadius: "2.5rem", bgcolor: "#020617", border: "1px solid rgba(185,28,28,0.3)" } }}>
-        <DialogTitle className="text-red-500 font-black p-8 pb-4">Delete Article?</DialogTitle>
-        <DialogContent className="p-8 pt-0 text-slate-400 font-bold">Permanently remove ({selectedBlog?.title})?</DialogContent>
-        <DialogActions className="p-8"><Button onClick={() => setDeleteDialog(false)} sx={{ color: "white" }}>No</Button><Button variant="contained" color="error" onClick={() => deleteMutation.mutate(selectedBlog?.slug)}>Yes, Delete</Button></DialogActions>
+        <DialogTitle className="text-red-500 font-black p-8 pb-4">{t("dashboard.admin.blog.deleteDialog.title")}</DialogTitle>
+        <DialogContent className="p-8 pt-0 text-slate-400 font-bold">{t("dashboard.admin.blog.deleteDialog.message")} ({selectedBlog?.title})?</DialogContent>
+        <DialogActions className="p-8"><Button onClick={() => setDeleteDialog(false)} sx={{ color: "white" }}>{t("common.no")}</Button><Button variant="contained" color="error" onClick={() => deleteMutation.mutate(selectedBlog?.slug)}>{t("common.yes")}</Button></DialogActions>
       </Dialog>
     </div>
   );
