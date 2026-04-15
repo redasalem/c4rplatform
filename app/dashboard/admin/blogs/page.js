@@ -242,8 +242,13 @@ export default function AdminBlogs() {
       const finalData = {
         ...formData,
         image: currentImageUrl,
-        focusKeywords: formData.focusKeywords ? formData.focusKeywords.split(",").map(k => k.trim()).filter(k => k) : [],
-        summary: formData.summary || formData.content.replace(/<[^>]*>?/gm, '').substring(0, 160),
+        focusKeywords: typeof formData.focusKeywords === 'string' 
+            ? formData.focusKeywords.split(",").map(k => k.trim()).filter(k => k) 
+            : (Array.isArray(formData.focusKeywords) ? formData.focusKeywords : []),
+        relatedCars: typeof formData.relatedCars === 'string'
+            ? formData.relatedCars.split(",").map(c => c.trim()).filter(c => c)
+            : (Array.isArray(formData.relatedCars) ? formData.relatedCars : []),
+        summary: formData.summary || (formData.content ? formData.content.replace(/<[^>]*>?/gm, '').substring(0, 160) : ""),
       };
 
       if (selectedBlog) {
