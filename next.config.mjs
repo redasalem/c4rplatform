@@ -13,10 +13,6 @@ const nextConfig = {
         protocol: "https",
         hostname: "www-asia.nissan-cdn.net",
       },
-      {
-        protocol: "https",
-        hostname: "**",
-      },
     ],
   },
   async redirects() {

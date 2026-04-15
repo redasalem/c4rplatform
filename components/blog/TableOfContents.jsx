@@ -13,13 +13,14 @@ const TableOfContents = ({ contentSelector = ".prose" }) => {
     const content = document.querySelector(contentSelector);
     if (!content) return;
 
-    const elements = Array.from(content.querySelectorAll("h2"));
+    const elements = Array.from(content.querySelectorAll("h2, h3"));
     const headingData = elements.map((el, index) => {
       const id = el.id || `heading-${index}`;
       el.id = id;
       return {
         id,
         text: el.innerText,
+        level: el.tagName.toLowerCase(),
       };
     });
 
@@ -88,11 +89,18 @@ const TableOfContents = ({ contentSelector = ".prose" }) => {
                   activeId === heading.id
                     ? "bg-primary/20 text-primary font-black"
                     : "text-slate-400 hover:bg-white/5 hover:text-white font-bold"
-                }`}
+                } ${heading.level === 'h3' ? 'pr-8' : ''}`}
               >
-                <div className={`w-1.5 h-1.5 rounded-full transition-all ${
-                  activeId === heading.id ? "bg-primary scale-125" : "bg-white/10 group-hover:bg-white/30"
-                }`} />
+                {heading.level === 'h2' && (
+                  <div className={`w-1.5 h-1.5 rounded-full transition-all ${
+                    activeId === heading.id ? "bg-primary scale-125" : "bg-white/10 group-hover:bg-white/30"
+                  }`} />
+                )}
+                {heading.level === 'h3' && (
+                  <div className={`w-1 h-1 rounded-full transition-all ${
+                    activeId === heading.id ? "bg-primary" : "bg-white/10"
+                  }`} />
+                )}
                 <span className="line-clamp-1">{heading.text}</span>
               </button>
             </li>

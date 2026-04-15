@@ -248,8 +248,7 @@ export default function BookingPage() {
   const diffDays = Number(numberOfDays || 1);
   const tieredPricing = getTieredPricing(car, diffDays, t);
   const totalPrice = tieredPricing.rate * diffDays;
-  const appliedTierLabel =
-    i18n.language === "ar" ? "الشريحة المطبقة" : "Applied Tier";
+  const appliedTierLabel = t("booking.appliedTier");
   const datePlaceholder = t("booking.datePlaceholder");
   const datePlaceholderPosition =
     i18n.dir() === "rtl"

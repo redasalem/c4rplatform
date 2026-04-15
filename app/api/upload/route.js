@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
+import { fetchSessionFromToken, AUTH_TOKEN_COOKIE } from "@/lib/authSession";
+import { cookies } from "next/headers";
 
 // Configure Cloudinary
 cloudinary.config({
@@ -10,8 +12,31 @@ cloudinary.config({
 
 export async function POST(request) {
   try {
+    // 1. Auth Check - Only Admins can upload
+    const cookieStore = await cookies();
+    const token = cookieStore.get(AUTH_TOKEN_COOKIE)?.value;
+    const session = await fetchSessionFromToken(token);
+
+    if (!session.success || session.user.role !== "admin") {
+      return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
+    }
+
     const formData = await request.formData();
     const file = formData.get("file");
+
+    if (!file) {
+      return NextResponse.json({ error: "No file provided" }, { status: 400 });
+    }
+
+    // 2. File Validation (Type and Size)
+    if (!file.type.startsWith("image/")) {
+      return NextResponse.json({ error: "Invalid file type. Only images are allowed." }, { status: 400 });
+    }
+
+    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      return NextResponse.json({ error: "File too large. Maximum size is 5MB." }, { status: 400 });
+    }
+
 
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });

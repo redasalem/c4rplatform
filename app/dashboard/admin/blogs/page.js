@@ -21,6 +21,7 @@ import {
   Tabs,
   Tab,
   Typography,
+  Autocomplete,
 } from "@mui/material";
 import {
   Add,
@@ -148,7 +149,7 @@ export default function AdminBlogs() {
   const createMutation = useMutation({
     mutationFn: blogService.create,
     onSuccess: () => {
-      toast.success("تم إنشـاء المقال بنجاح (Elite Mode Active)");
+      toast.success(t("feedback.admin.blogCreateSuccess"));
       queryClient.invalidateQueries(["adminBlogs"]);
       setOpenDialog(false);
       resetForm();
@@ -161,7 +162,7 @@ export default function AdminBlogs() {
   const updateMutation = useMutation({
     mutationFn: ({ slug, data }) => blogService.update(slug, data),
     onSuccess: () => {
-      toast.success(t("dashboard.admin.blog.editDialog.success"));
+      toast.success(t("feedback.admin.blogUpdateSuccess"));
       queryClient.invalidateQueries(["adminBlogs"]);
       setOpenDialog(false);
       resetForm();
@@ -174,7 +175,7 @@ export default function AdminBlogs() {
   const deleteMutation = useMutation({
     mutationFn: blogService.delete,
     onSuccess: () => {
-      toast.success("تم حذف المقال");
+      toast.success(t("feedback.admin.blogDeleteSuccess"));
       queryClient.invalidateQueries(["adminBlogs"]);
       setDeleteDialog(false);
       setSelectedBlog(null);
@@ -407,30 +408,21 @@ export default function AdminBlogs() {
                             <TextField fullWidth label="Slug" value={formData.slug} disabled={slugSync} sx={inputStyle} />
                             <IconButton onClick={() => setSlugSync(!slugSync)} sx={{ color: slugSync ? 'var(--primary)' : 'rgba(255,255,255,0.2)' }}><Settings /></IconButton>
                         </div>
-                        <div className="flex flex-col gap-2">
-                            <FormControl fullWidth sx={inputStyle}>
-                                <InputLabel>{t("dashboard.admin.blog.addDialog.categoryLabel")}</InputLabel>
-                                <Select 
-                                value={formData.category} 
-                                onChange={(e) => setFormData({...formData, category: e.target.value})} 
-                                label={t("dashboard.admin.blog.addDialog.categoryLabel")}
-                                >
-                                    {localCategories.length === 0 ? (
-                                    <MenuItem disabled>{t("dashboard.admin.blog.elite.loading")}</MenuItem>
-                                    ) : (
-                                    localCategories.map(cat => <MenuItem key={cat._id} value={cat._id}>{cat.name}</MenuItem>)
-                                    )}
-                                </Select>
-                            </FormControl>
-                            <TextField 
-                                fullWidth 
-                                label="أو اكتب القسم يدوياً (في حال لم يظهر)" 
-                                placeholder="مثال: أخبار السيارات" 
-                                value={typeof formData.category === 'string' && !localCategories.find(c => c._id === formData.category) ? formData.category : ""}
-                                onChange={(e) => setFormData({...formData, category: e.target.value})}
-                                sx={{ ...inputStyle, mt: 1 }}
-                            />
-                        </div>
+                        <FormControl fullWidth sx={inputStyle} error={!formData.category}>
+                            <InputLabel>{t("dashboard.admin.blog.addDialog.categoryLabel")}</InputLabel>
+                            <Select 
+                            value={formData.category} 
+                            onChange={(e) => setFormData({...formData, category: e.target.value})} 
+                            label={t("dashboard.admin.blog.addDialog.categoryLabel")}
+                            >
+                                {localCategories.length === 0 ? (
+                                <MenuItem disabled>{t("dashboard.admin.blog.elite.loading")}</MenuItem>
+                                ) : (
+                                localCategories.map(cat => <MenuItem key={cat._id} value={cat._id}>{cat.name}</MenuItem>)
+                                )}
+                            </Select>
+                            {!formData.category && <Typography variant="caption" color="error" sx={{ mt: 1, ml: 1 }}>يرجى اختيار قسم من القائمة</Typography>}
+                        </FormControl>
                         <FormControl fullWidth sx={inputStyle}>
                             <InputLabel>{t("dashboard.admin.blog.addDialog.statusLabel")}</InputLabel>
                             <Select value={formData.status} onChange={(e) => setFormData({...formData, status: e.target.value})} label={t("dashboard.admin.blog.addDialog.statusLabel")}>
@@ -484,16 +476,47 @@ export default function AdminBlogs() {
                             )}
                           </div>
                         <div className="space-y-4">
-                            <TextField 
-                                fullWidth 
-                                label={t("dashboard.admin.blog.addDialog.relatedCarsLabel")} 
-                                placeholder="مثال: نيسان باترول، تويوتا لاندكروزر (افصل بفاصلة)" 
-                                value={Array.isArray(formData.relatedCars) ? formData.relatedCars.join(", ") : formData.relatedCars}
-                                onChange={(e) => setFormData({...formData, relatedCars: e.target.value})}
-                                sx={inputStyle}
+                            <Autocomplete
+                                multiple
+                                options={carData?.data?.cars || []}
+                                getOptionLabel={(option) => `${option.name} (${option.year})`}
+                                value={(carData?.data?.cars || []).filter(car => 
+                                    Array.isArray(formData.relatedCars) && formData.relatedCars.includes(car._id)
+                                )}
+                                onChange={(event, newValue) => {
+                                    setFormData({
+                                        ...formData,
+                                        relatedCars: newValue.map(car => car._id)
+                                    });
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label={t("dashboard.admin.blog.addDialog.relatedCarsLabel")}
+                                        placeholder="اختر السيارات المرتبطة"
+                                        sx={inputStyle}
+                                    />
+                                )}
+                                renderTags={(value, getTagProps) =>
+                                    value.map((option, index) => (
+                                        <Chip
+                                            label={option.name}
+                                            {...getTagProps({ index })}
+                                            sx={{ borderRadius: '0.75rem', fontWeight: 'bold' }}
+                                        />
+                                    ))
+                                }
+                                sx={{
+                                    "& .MuiAutocomplete-tag": {
+                                        borderRadius: "0.75rem",
+                                        fontWeight: "bold",
+                                        bgcolor: "primary.main",
+                                        color: "white"
+                                    }
+                                }}
                             />
                             <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block' }}>
-                                * ملاحظة: اكتب أسماء السيارات يدوياً وافصل بينها بفاصلة (،) لضمان الربط الذكي في الـ SEO.
+                                * ملاحظة: اختر السيارات المرتبطة من القائمة لضمان الربط التقني الصحيح في الموقع.
                             </Typography>
                         </div>
                      </div>

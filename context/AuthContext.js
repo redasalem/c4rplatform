@@ -5,10 +5,12 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { authService, userService } from "@/services/api";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const { t } = useTranslation("common");
   const [user, setUser] = useState(() => {
     // Check for cached user on initial load
     if (typeof window !== "undefined") {
@@ -100,7 +102,7 @@ export const AuthProvider = ({ children }) => {
         const { user } = data.data;
         setUser(user);
         localStorage.setItem("c4r_user", JSON.stringify(user));
-        toast.success("تم تسجيل الدخول بنجاح");
+        toast.success(t("feedback.auth.loginSuccess"));
 
         // Handle redirection
         const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
@@ -114,12 +116,12 @@ export const AuthProvider = ({ children }) => {
         }
         return true;
       } else {
-        toast.error(data?.message || "فشل تسجيل الدخول");
+        toast.error(data?.message || t("feedback.auth.loginError"));
         return false;
       }
     } catch (error) {
       console.error("Login error:", error);
-      const msg = error?.response?.data?.message || error?.message || "تعذر الاتصال بالخادم. الرجاء المحاولة لاحقاً.";
+      const msg = error?.response?.data?.message || error?.message || t("feedback.common.error");
       toast.error(msg);
       return false;
     }
@@ -129,16 +131,16 @@ export const AuthProvider = ({ children }) => {
     try {
       const data = await authService.register(userData);
       if (data && data.success) {
-        toast.success("تم إنشاء الحساب بنجاح. يرجى تسجيل الدخول.");
+        toast.success(t("feedback.auth.signupSuccess"));
         router.push("/auth/login");
         return true;
       } else {
-        toast.error(data?.message || "فشل إنشاء الحساب");
+        toast.error(data?.message || t("feedback.common.error"));
         return false;
       }
     } catch (error) {
       console.error("Register error:", error);
-      const msg = error?.response?.data?.message || error?.message || "تعذر الاتصال بالخادم. الرجاء المحاولة لاحقاً.";
+      const msg = error?.response?.data?.message || error?.message || t("feedback.common.error");
       toast.error(msg);
       return false;
     }
@@ -152,7 +154,7 @@ export const AuthProvider = ({ children }) => {
     } finally {
       clearClientSession();
       router.push("/");
-      toast.success("تم تسجيل الخروج بنجاح");
+      toast.success(t("feedback.auth.logoutSuccess"));
     }
   };
 

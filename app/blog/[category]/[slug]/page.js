@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Article, Person, DateRange, ArrowBack, AccessTime } from "@mui/icons-material";
 import CarCard from "@/components/cards/CarCard";
+import { notFound, redirect } from "next/navigation";
 import DOMPurify from "isomorphic-dompurify";
 import { cache } from "react";
 
@@ -28,42 +29,60 @@ const getBlog = cache(async (slug) => {
 
 // 1. Generation of Metadata
 export async function generateMetadata({ params }) {
-  const { slug } = params;
+  const { slug } = await params;
   
   try {
     const blog = await getBlog(slug);
-    if (!blog) throw new Error("Not found");
+    if (!blog) return { title: "مقال غير موجود | C4R", robots: { index: false } };
     
+    const metaTitle = blog.metaTitle || `${blog.title} | مدونة C4R`;
+    const metaDescription = blog.metaDescription || blog.summary || blog.title;
+    const categorySlug = blog.category?.slug || "general";
+
+    const seoTitle = metaTitle || `${blog.title} | مدونة C4R`;
+    const seoDesc = metaDescription || blog.summary || blog.title;
+    const imageUrl = blog.image !== 'no-photo.jpg' ? blog.image : "https://c4rplatform.com/images/blog-default.jpg";
+
     return {
-      title: `${blog.title} | مدونة C4R`,
-      description: blog.summary || blog.title,
+      title: seoTitle,
+      description: seoDesc,
+      keywords: Array.isArray(blog.focusKeywords) ? blog.focusKeywords.join(", ") : "",
       openGraph: {
-        title: blog.title,
-        description: blog.summary || blog.title,
-        images: [blog.image !== 'no-photo.jpg' ? blog.image : "https://c4rplatform.com/images/blog-default.jpg"],
+        type: "article",
+        title: seoTitle,
+        description: seoDesc,
+        images: [{ url: imageUrl, width: 1200, height: 630, alt: blog.title }],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: seoTitle,
+        description: seoDesc,
+        images: [imageUrl],
       },
       alternates: {
-        canonical: `https://c4rplatform.com/blog/${params.category}/${slug}`,
+        canonical: `https://c4rplatform.com/blog/${categorySlug}/${slug}`,
       },
     };
   } catch (error) {
     return {
       title: "مقال غير موجود | C4R",
+      robots: { index: false }
     };
   }
 }
 
 export default async function BlogPostPage({ params }) {
-  const { category, slug } = params;
+  const { category, slug } = await params;
   const blog = await getBlog(slug);
 
   if (!blog) {
-    return (
-      <main className="min-h-screen pt-40 pb-20 px-4 text-center">
-        <h1 className="text-3xl text-white font-black">عذراً، المقال غير موجود!</h1>
-        <Link href="/blog" className="text-primary mt-4 inline-block font-bold">العودة للمدونة ←</Link>
-      </main>
-    );
+    notFound();
+  }
+
+  // SEO: Redirect to the correct category URL if there's a mismatch
+  const correctCategorySlug = blog.category?.slug || "general";
+  if (category !== correctCategorySlug) {
+      redirect(`/blog/${correctCategorySlug}/${slug}`);
   }
 
   // 3. Structured Data
@@ -104,7 +123,7 @@ export default async function BlogPostPage({ params }) {
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "الرئيسية", "item": "https://c4rplatform.com" },
       { "@type": "ListItem", "position": 2, "name": "المدونة", "item": "https://c4rplatform.com/blog" },
-      { "@type": "ListItem", "position": 3, "name": blog.category?.name || "عام", "item": `https://c4rplatform.com/blog/${category}` },
+      { "@type": "ListItem", "position": 3, "name": blog.category?.name || "عام" },
       { "@type": "ListItem", "position": 4, "name": blog.title, "item": `https://c4rplatform.com/blog/${category}/${slug}` },
     ],
   };

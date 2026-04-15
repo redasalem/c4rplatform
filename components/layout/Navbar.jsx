@@ -246,11 +246,11 @@ const Navbar = () => {
                 href="/"
                 className="group block transition-transform duration-300 ease-out hover:scale-[1.05] active:scale-95 focus:outline-none"
                 aria-label="C4R Platform Home"
-                title="C4R Platform - تأجير سيارات السعودية"
+                title={t("navbar.logoTitle")}
               >
                 <Image
                   src="/images/logo.webp"
-                  alt="C4R Platform - أفضل منصة لتأجير السيارات في السعودية"
+                  alt={t("navbar.logoAlt")}
                   width={160}
                   height={65}
                   priority

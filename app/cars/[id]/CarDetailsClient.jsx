@@ -20,11 +20,6 @@ import {
   LocationOn,
 } from "@mui/icons-material";
 
-const regionNames = {
-  riyadh: "الرياض",
-  jeddah: "جدة",
-  eastern: "المنطقة الشرقية",
-};
 import Link from "next/link";
 import Image from "next/image";
 import { Avatar, Rating } from "@mui/material";
@@ -115,7 +110,7 @@ export default function CarDetailsClient({ initialCarData }) {
                     icon={
                       <LocationOn style={{ color: "white", fontSize: 18 }} />
                     }
-                    label={t(`regions.${car.region}`) || regionNames[car.region] || car.region}
+                    label={t(`regions.${car.region}`)}
                     sx={{
                       bgcolor: "#f97316",
                       color: "white",

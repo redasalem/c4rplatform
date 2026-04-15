@@ -76,7 +76,7 @@ export const TrendingCars = () => {
     queryKey: ["trendingCars"],
     queryFn: async () => {
       // Fetch some high-performing cars or generic ones
-      const res = await api.get("/cars?limit=4&sort=-rating,-createdAt");
+      const res = await api.get("/cars?limit=4&sort=-averageRating,-createdAt");
       return res.data;
     },
   });
@@ -99,7 +99,7 @@ export const TrendingCars = () => {
           : cars.map((car) => (
               <Link
                 key={car._id}
-                href={`/cars/${car.slug}`}
+                href={`/cars/${car._id}`}
                 className="flex items-center gap-4 p-3 rounded-2xl bg-white/5 border border-white/5 hover:border-primary/30 transition-all group"
               >
                  <div className="relative w-20 h-14 rounded-xl overflow-hidden bg-slate-800 shrink-0">
@@ -113,10 +113,10 @@ export const TrendingCars = () => {
                         <span className="text-[10px] text-primary font-black">
                             {car.pricePerDay} {i18n.language === "ar" ? "ريال" : "SAR"}
                         </span>
-                        {car.rating && (
+                        {car.averageRating && (
                         <div className="flex items-center text-yellow-500 text-[10px]">
                            <Star sx={{ fontSize: 10 }} /> 
-                           <span className="font-black">{car.rating}</span>
+                           <span className="font-black">{car.averageRating}</span>
                         </div>
                         )}
                     </div>

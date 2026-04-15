@@ -35,13 +35,13 @@ const LatestBlogs = () => {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary mb-2">
               <Article sx={{ fontSize: 18 }} />
               <span className="text-xs font-black uppercase tracking-widest">
-                {i18n.language === "ar" ? "آخر الأخبار" : "Latest News"}
+                {t("blog.latestNews")}
               </span>
             </div>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tighter leading-tight">
-              {i18n.language === "ar" ? "من مدونتنا" : "From Our Blog"}
+              {t("blog.fromBlog")}
               <span className="text-primary block mt-2 text-2xl md:text-3xl lg:text-4xl opacity-90">
-                {i18n.language === "ar" ? "دليلك الشامل لعالم السيارات" : "Your guide to the car world"}
+                {t("blog.guideTitle")}
               </span>
             </h2>
           </div>
@@ -50,7 +50,7 @@ const LatestBlogs = () => {
             href="/blog"
             className="group flex items-center gap-3 text-white/60 hover:text-primary font-black transition-all duration-300 bg-white/5 hover:bg-white/10 px-8 py-4 rounded-2xl border border-white/5"
           >
-            <span>{i18n.language === "ar" ? "مشاهدة كافة المقالات" : "View All Articles"}</span>
+            <span>{t("blog.viewAll")}</span>
             <ArrowBackIosNew 
               sx={{ 
                 fontSize: 16, 
@@ -88,7 +88,7 @@ const LatestBlogs = () => {
                       </div>
                     )}
                     <div className="absolute top-6 left-6 bg-black/60 backdrop-blur-xl px-4 py-2 rounded-2xl text-xs text-white font-black border border-white/10">
-                      {blog.category?.name || (i18n.language === "ar" ? "عام" : "General")}
+                      {blog.category?.name || t("blog.generalCategory")}
                     </div>
                   </div>
 
@@ -103,7 +103,7 @@ const LatestBlogs = () => {
                     <div className="flex justify-between items-center w-full pt-6 border-t border-white/5 mt-auto">
                       <div className="flex flex-col">
                          <span className="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-1">
-                            {i18n.language === "ar" ? "تاريخ النشر" : "Published Date"}
+                            {t("blog.publishDate")}
                          </span>
                          <span className="text-xs font-bold text-slate-400">
                             {new Date(blog.createdAt).toLocaleDateString(i18n.language === "ar" ? "ar-SA" : "en-US", {

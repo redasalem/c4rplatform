@@ -435,7 +435,7 @@ function BookingsSection() {
   const createReviewMutation = useMutation({
     mutationFn: reviewService.create,
     onSuccess: () => {
-      toast.success(t("dashboard.user.reviews.success", "تم التقييم بنجاح!"));
+      toast.success(t("feedback.reviews.success"));
       setReviewOpen(false);
       setComment("");
       setRating(5);
@@ -446,9 +446,9 @@ function BookingsSection() {
     onError: (err) => {
       const msg = err.response?.data?.message;
       if (msg === "You have already reviewed this booking") {
-        toast.error(t("dashboard.user.reviews.alreadyReviewed", "لقد قمت بتقييم هذا الحجز مسبقاً"));
+        toast.error(t("feedback.reviews.alreadyReviewed"));
       } else {
-        toast.error(t("dashboard.user.reviews.error", "حدث خطأ أثناء التقييم"));
+        toast.error(t("feedback.reviews.error"));
       }
     },
   });
@@ -461,7 +461,7 @@ function BookingsSection() {
   const handleSubmitReview = () => {
     if (!selectedBooking) return;
     if (!comment.trim()) {
-      toast.warning(t("dashboard.user.reviews.emptyCommentError", "الرجاء كتابة تعليق مع التقييم"));
+      toast.warning(t("feedback.reviews.emptyComment"));
       return;
     }
     createReviewMutation.mutate({

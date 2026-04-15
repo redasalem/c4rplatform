@@ -42,22 +42,29 @@ export default async function sitemap() {
     console.error("Sitemap: Failed to fetch cars", error);
   }
 
-  // Dynamic blog routes — fetch all published blog posts
-  let blogRoutes = [];
-  try {
-    const res = await fetch(`${API_URL}/blogs?status=published&limit=500&select=slug,category,updatedAt`, {
-      next: { revalidate: 3600 },
-    });
-    if (res.ok) {
-      const { data: blogs } = await res.json();
-      // Add the main blog listing page
-      blogRoutes.push({
+  // Dynamic blog routes — fetch all published blog posts with pagination
+  let blogRoutes = [
+    {
         url: `${BASE_URL}/blog`,
         lastModified: new Date(),
         changeFrequency: "daily",
         priority: 0.8,
+    }
+  ];
+  
+  try {
+    let page = 1;
+    let hasMore = true;
+    
+    while (hasMore) {
+      const res = await fetch(`${API_URL}/blogs?status=published&page=${page}&limit=100&select=slug,category,updatedAt`, {
+        next: { revalidate: 3600 },
       });
-      // Add individual blog post pages
+      
+      if (!res.ok) break;
+      
+      const { data: blogs, pagination } = await res.json();
+      
       blogs.forEach((blog) => {
         blogRoutes.push({
           url: `${BASE_URL}/blog/${blog.category?.slug || "general"}/${blog.slug}`,
@@ -66,6 +73,9 @@ export default async function sitemap() {
           priority: 0.7,
         });
       });
+      
+      hasMore = pagination && pagination.next;
+      page++;
     }
   } catch (error) {
     console.error("Sitemap: Failed to fetch blogs", error);
