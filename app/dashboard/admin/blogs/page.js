@@ -496,8 +496,8 @@ export default function AdminBlogs() {
                     <TextField 
                       fullWidth 
                       label={t("dashboard.admin.blog.addDialog.titleLabel")} 
-                      value={formData.title} 
-                      onChange={(e) => setFormData({...formData, title: e.target.value})} 
+                      value={formData?.title || ""} 
+                      onChange={(e) => setFormData(prev => ({ ...(prev || {}), title: e.target.value }))} 
                       sx={eliteInputStyle}
                       error={validation.errors.title}
                       required
@@ -506,7 +506,7 @@ export default function AdminBlogs() {
                       <TextField 
                         fullWidth 
                         label="Slug" 
-                        value={formData.slug} 
+                        value={formData?.slug || ""} 
                         disabled={slugSync} 
                         sx={eliteInputStyle}
                         InputProps={{
@@ -521,8 +521,8 @@ export default function AdminBlogs() {
                     <FormControl fullWidth sx={eliteInputStyle} error={validation.errors.category}>
                       <InputLabel>{t("dashboard.admin.blog.addDialog.categoryLabel")}</InputLabel>
                       <Select 
-                        value={formData.category} 
-                        onChange={(e) => setFormData({...formData, category: e.target.value})} 
+                        value={formData?.category || ""} 
+                        onChange={(e) => setFormData(prev => ({ ...(prev || {}), category: e.target.value }))} 
                         label={t("dashboard.admin.blog.addDialog.categoryLabel")}
                       >
                         {localCategories.length === 0 ? (
@@ -534,7 +534,7 @@ export default function AdminBlogs() {
                     </FormControl>
                     <FormControl fullWidth sx={eliteInputStyle}>
                       <InputLabel>{t("dashboard.admin.blog.addDialog.statusLabel")}</InputLabel>
-                      <Select value={formData.status} onChange={(e) => setFormData({...formData, status: e.target.value})} label={t("dashboard.admin.blog.addDialog.statusLabel")}>
+                      <Select value={formData?.status || "draft"} onChange={(e) => setFormData(prev => ({ ...(prev || {}), status: e.target.value }))} label={t("dashboard.admin.blog.addDialog.statusLabel")}>
                         <MenuItem value="draft">{t("dashboard.admin.blog.statuses.draft")}</MenuItem>
                         <MenuItem value="published">{t("dashboard.admin.blog.statuses.published")}</MenuItem>
                       </Select>
@@ -542,8 +542,8 @@ export default function AdminBlogs() {
                   </div>
                   <div className="space-y-6">
                     <ImageUpload 
-                      value={formData.image}
-                      onChange={(url) => setFormData({...formData, image: url})}
+                      value={formData?.image || ""}
+                      onChange={(url) => setFormData(prev => ({ ...(prev || {}), image: url || "" }))}
                       onFileSelect={(f) => setFile(f)}
                       error={validation.errors.image}
                     />
@@ -606,8 +606,8 @@ export default function AdminBlogs() {
                     `}</style>
                     <ReactQuill 
                       theme="snow" 
-                      value={formData.content} 
-                      onChange={(v) => setFormData({...formData, content: v})}
+                      value={formData?.content || ""} 
+                      onChange={(v) => setFormData(prev => ({ ...(prev || {}), content: v || "" }))}
                       modules={{
                         toolbar: [
                           [{ 'header': [1, 2, 3, false] }],
@@ -628,9 +628,9 @@ export default function AdminBlogs() {
                     <TextField 
                       fullWidth 
                       label={t("dashboard.admin.blog.addDialog.metaTitleLabel")} 
-                      value={formData.metaTitle} 
-                      onChange={(e) => setFormData({...formData, metaTitle: e.target.value})} 
-                      helperText={`${formData.metaTitle.length}/60`}
+                      value={formData?.metaTitle || ""} 
+                      onChange={(e) => setFormData(prev => ({...prev, metaTitle: e.target.value}))} 
+                      helperText={`${formData?.metaTitle?.length || 0}/60`}
                       sx={eliteInputStyle}
                       error={validation.errors.metaTitle}
                       required
@@ -640,9 +640,9 @@ export default function AdminBlogs() {
                       label={t("dashboard.admin.blog.addDialog.metaDescLabel")} 
                       multiline 
                       rows={4} 
-                      value={formData.metaDescription} 
-                      onChange={(e) => setFormData({...formData, metaDescription: e.target.value})} 
-                      helperText={`${formData.metaDescription.length}/160`}
+                      value={formData?.metaDescription || ""} 
+                      onChange={(e) => setFormData(prev => ({...prev, metaDescription: e.target.value}))} 
+                      helperText={`${formData?.metaDescription?.length || 0}/160`}
                       sx={eliteInputStyle}
                       error={validation.errors.metaDescription}
                       required
@@ -650,28 +650,28 @@ export default function AdminBlogs() {
                     <TextField 
                       fullWidth 
                       label={t("dashboard.admin.blog.addDialog.keywordsLabel")} 
-                      value={formData.focusKeywords} 
-                      onChange={(e) => setFormData({...formData, focusKeywords: e.target.value})} 
+                      value={formData?.focusKeywords || ""} 
+                      onChange={(e) => setFormData(prev => ({...prev, focusKeywords: e.target.value}))} 
                       sx={eliteInputStyle}
                     />
                   </div>
                   <div className="space-y-6">
                     <div className="flex justify-between items-center">
                       <Typography className="text-white/60 font-black">{t("dashboard.admin.blog.elite.faqBuilder")}</Typography>
-                      <Button startIcon={<Add />} onClick={() => setFormData({...formData, faqs: [...formData.faqs, { question: "", answer: "" }]})}>{t("dashboard.admin.blog.elite.addFaq")}</Button>
+                      <Button startIcon={<Add />} onClick={() => setFormData(prev => ({...prev, faqs: [...(prev?.faqs || []), { question: "", answer: "" }]}))}>{t("dashboard.admin.blog.elite.addFaq")}</Button>
                     </div>
                     <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                      {formData.faqs.map((faq, idx) => (
+                      {(formData?.faqs || []).map((faq, idx) => (
                         <div key={idx} className="bg-white/5 p-6 rounded-3xl border border-white/5 space-y-4 relative">
-                          <IconButton onClick={() => setFormData({...formData, faqs: formData.faqs.filter((_, i) => i !== idx)})} sx={{ position:'absolute', top: 10, right: 10 }}><Delete fontSize="small" /></IconButton>
+                          <IconButton onClick={() => setFormData(prev => ({...prev, faqs: (prev?.faqs || []).filter((_, i) => i !== idx)}))} sx={{ position:'absolute', top: 10, right: 10 }}><Delete fontSize="small" /></IconButton>
                           <TextField 
                             fullWidth 
                             label={t("dashboard.admin.blog.elite.question")} 
-                            value={faq.question} 
+                            value={faq?.question || ""} 
                             onChange={(e) => {
-                              const next = [...formData.faqs]; 
-                              next[idx].question = e.target.value; 
-                              setFormData({...formData, faqs: next});
+                              const next = [...(formData?.faqs || [])]; 
+                              if (next[idx]) next[idx].question = e.target.value; 
+                              setFormData(prev => ({...prev, faqs: next}));
                             }} 
                             sx={eliteInputStyle} 
                           />
@@ -680,11 +680,11 @@ export default function AdminBlogs() {
                             multiline 
                             rows={2} 
                             label={t("dashboard.admin.blog.elite.answer")} 
-                            value={faq.answer} 
+                            value={faq?.answer || ""} 
                             onChange={(e) => {
-                              const next = [...formData.faqs]; 
-                              next[idx].answer = e.target.value; 
-                              setFormData({...formData, faqs: next});
+                              const next = [...(formData?.faqs || [])]; 
+                              if (next[idx]) next[idx].answer = e.target.value; 
+                              setFormData(prev => ({...prev, faqs: next}));
                             }} 
                             sx={eliteInputStyle} 
                           />
@@ -701,23 +701,23 @@ export default function AdminBlogs() {
                     <TextField 
                       label={t("dashboard.admin.blog.elite.ctaText")} 
                       fullWidth 
-                      value={formData.primaryCta.text} 
-                      onChange={(e) => setFormData({...formData, primaryCta: {...formData.primaryCta, text: e.target.value}})} 
+                      value={formData?.primaryCta?.text || ""} 
+                      onChange={(e) => setFormData(prev => ({...prev, primaryCta: {...(prev?.primaryCta || {}), text: e.target.value}}))} 
                       sx={eliteInputStyle} 
                     />
                     <TextField 
                       label={t("dashboard.admin.blog.elite.ctaLink")} 
                       fullWidth 
-                      value={formData.primaryCta.link} 
-                      onChange={(e) => setFormData({...formData, primaryCta: {...formData.primaryCta, link: e.target.value}})} 
+                      value={formData?.primaryCta?.link || ""} 
+                      onChange={(e) => setFormData(prev => ({...prev, primaryCta: {...(prev?.primaryCta || {}), link: e.target.value}}))} 
                       sx={eliteInputStyle} 
                     />
                   </div>
                   <FormControl fullWidth sx={eliteInputStyle}>
                     <InputLabel>{t("dashboard.admin.blog.elite.ctaType")}</InputLabel>
                     <Select 
-                      value={formData.primaryCta.type} 
-                      onChange={(e) => setFormData({...formData, primaryCta: {...formData.primaryCta, type: e.target.value}})} 
+                      value={formData?.primaryCta?.type || ""} 
+                      onChange={(e) => setFormData(prev => ({...prev, primaryCta: {...(prev?.primaryCta || {}), type: e.target.value}}))} 
                       label={t("dashboard.admin.blog.elite.ctaType")}
                     >
                       <MenuItem value="booking">Booking</MenuItem>
@@ -734,8 +734,8 @@ export default function AdminBlogs() {
               <div className="sticky top-6">
                 <SEOPreview 
                   formData={formData}
-                  image={formData.image || (file ? URL.createObjectURL(file) : null)}
-                  relatedCars={localCars.filter(car => formData.relatedCars.includes(car._id))}
+                  image={formData?.image || (file ? URL.createObjectURL(file) : null)}
+                  relatedCars={localCars.filter(car => (formData?.relatedCars || []).includes(car._id))}
                 />
               </div>
             </div>
