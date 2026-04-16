@@ -201,10 +201,10 @@ export default function AdminBlogs() {
         summary: blog.summary || "",
         status: blog.status || "draft",
         image: blog.image === 'no-photo.jpg' ? '' : blog.image,
-        relatedCars: blog.relatedCars?.map(c => c._id || c) || [],
+        relatedCars: blog.relatedCars ? blog.relatedCars.map(c => typeof c === 'object' ? c._id : c) : [],
         metaTitle: blog.metaTitle || "",
         metaDescription: blog.metaDescription || "",
-        focusKeywords: Array.isArray(blog.focusKeywords) ? blog.focusKeywords.join(", ") : "",
+        focusKeywords: Array.isArray(blog.focusKeywords) ? blog.focusKeywords.join(", ") : (blog.focusKeywords || ""),
         faqs: blog.faqs || [],
         primaryCta: blog.primaryCta || { text: "", link: "", type: "custom" },
       });
@@ -478,9 +478,11 @@ export default function AdminBlogs() {
                         <div className="space-y-4">
                             <Autocomplete
                                 multiple
-                                options={carData?.data?.cars || []}
+                                options={localCars}
+                                loading={!localCars.length && !carData}
                                 getOptionLabel={(option) => `${option.name} (${option.year})`}
-                                value={(carData?.data?.cars || []).filter(car => 
+                                isOptionEqualToValue={(option, value) => (option._id || option) === (value._id || value)}
+                                value={localCars.filter(car => 
                                     Array.isArray(formData.relatedCars) && formData.relatedCars.includes(car._id)
                                 )}
                                 onChange={(event, newValue) => {

@@ -157,7 +157,7 @@ export default async function BlogPostPage({ params }) {
           {blog.title}
         </h1>
         <div className="flex flex-wrap items-center gap-6 text-sm text-slate-400 font-bold border-y border-white/5 py-6">
-          <div className="flex items-center gap-2"><DateRange fontSize="small" className="text-primary" /> {new Date(blog.createdAt).toLocaleDateString("ar-SA", { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+          <div className="flex items-center gap-2" suppressHydrationWarning><DateRange fontSize="small" className="text-primary" /> {new Date(blog.createdAt).toLocaleDateString("ar-SA", { day: 'numeric', month: 'long', year: 'numeric' })}</div>
           <div className="flex items-center gap-2"><Person fontSize="small" className="text-primary" /> بقلم خبراء C4R</div>
           <div className="flex items-center gap-2 text-white/80"><span className="text-primary">👁</span> {blog.views || 1} {blog.views === 1 ? 'مشاهدة' : 'مشاهدات'}</div>
         </div>

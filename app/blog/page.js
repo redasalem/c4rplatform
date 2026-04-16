@@ -93,7 +93,7 @@ async function BlogList({ searchParams }) {
               </p>
               
               <div className="flex justify-between items-center w-full pt-4 border-t border-white/5 mt-auto">
-                <span className="text-xs font-bold text-slate-500">
+                <span className="text-xs font-bold text-slate-500" suppressHydrationWarning>
                   {new Date(blog.createdAt).toLocaleDateString("ar-SA", { year: 'numeric', month: 'long', day: 'numeric' })}
                 </span>
                 <span className="text-primary font-black text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
