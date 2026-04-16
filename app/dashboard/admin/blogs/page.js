@@ -175,28 +175,25 @@ export default function AdminBlogs() {
     else if (Array.isArray(carData?.data)) cars = carData.data;
     else if (Array.isArray(carData)) cars = carData;
     
-    setLocalCars(cars);
-    if (formData.allCars?.length === 0 && cars.length > 0) {
-      setFormData(prev => ({ ...prev, allCars: cars }));
-    }
+    setLocalCars(cars || []);
   }, [carData]);
 
   useEffect(() => {
-    if (slugSync && formData.title) {
+    if (slugSync && formData?.title) {
       const slug = formData.title.toLowerCase()
         .replace(/[^a-z0-9-ء-ي]+/g, '-')
         .replace(/(^-|-$)+/g, '');
-      setFormData(prev => ({ ...prev, slug }));
+      setFormData(prev => ({ ...prev, slug: slug }));
     }
-  }, [formData.title, slugSync]);
+  }, [formData?.title, slugSync]);
 
   const validation = useMemo(() => {
-    const hasTitle = !!formData.title?.trim();
-    const hasCategory = !!formData.category;
-    const hasContent = !!formData.content?.trim() && formData.content !== "<p><br></p>";
-    const hasImage = !!(formData.image || file);
-    const hasMetaTitle = !!formData.metaTitle?.trim();
-    const hasMetaDesc = !!formData.metaDescription?.trim();
+    const hasTitle = !!(formData?.title?.trim());
+    const hasCategory = !!formData?.category;
+    const hasContent = !!(formData?.content?.trim()) && formData?.content !== "<p><br></p>";
+    const hasImage = !!(formData?.image || file);
+    const hasMetaTitle = !!(formData?.metaTitle?.trim());
+    const hasMetaDesc = !!(formData?.metaDescription?.trim());
     
     const isReady = hasTitle && hasCategory && hasContent && hasImage && hasMetaTitle && hasMetaDesc;
     
@@ -291,24 +288,24 @@ export default function AdminBlogs() {
   const handleSubmit = async () => {
     if (!validation.isReady) {
       const missingFields = [];
-      if (!formData.title) missingFields.push(t("blog.validation.required.title"));
-      if (!formData.category) missingFields.push(t("blog.validation.required.category"));
-      if (!formData.content) missingFields.push(t("blog.validation.required.content"));
-      if (!formData.image && !file) missingFields.push(t("blog.validation.seoStats.image"));
-      if (!formData.metaTitle) missingFields.push(t("blog.validation.seoStats.title"));
-      if (!formData.metaDescription) missingFields.push(t("blog.validation.seoStats.description"));
+      if (!formData?.title) missingFields.push(t("blog.validation.required.title"));
+      if (!formData?.category) missingFields.push(t("blog.validation.required.category"));
+      if (!formData?.content) missingFields.push(t("blog.validation.required.content"));
+      if (!formData?.image && !file) missingFields.push(t("blog.validation.seoStats.image"));
+      if (!formData?.metaTitle) missingFields.push(t("blog.validation.seoStats.title"));
+      if (!formData?.metaDescription) missingFields.push(t("blog.validation.seoStats.description"));
       
       toast.error(`${t("blog.validation.publishBlocked")}: ${missingFields.join(", ")}`);
       
-      if (!formData.title || !formData.category) setTabValue(0);
-      else if (!formData.content) setTabValue(1);
+      if (!formData?.title || !formData?.category) setTabValue(0);
+      else if (!formData?.content) setTabValue(1);
       else setTabValue(2);
       return;
     }
 
     setUploading(true);
     try {
-      let currentImageUrl = formData.image;
+      let currentImageUrl = formData?.image || "";
 
       if (file) {
         const uploadData = new FormData();
@@ -328,13 +325,13 @@ export default function AdminBlogs() {
       const finalData = {
         ...formData,
         image: currentImageUrl,
-        focusKeywords: typeof formData.focusKeywords === 'string' 
+        focusKeywords: typeof formData?.focusKeywords === 'string' 
           ? formData.focusKeywords.split(",").map(k => k.trim()).filter(k => k) 
-          : (Array.isArray(formData.focusKeywords) ? formData.focusKeywords : []),
-        relatedCars: Array.isArray(formData.relatedCars) 
+          : (Array.isArray(formData?.focusKeywords) ? formData.focusKeywords : []),
+        relatedCars: Array.isArray(formData?.relatedCars) 
           ? formData.relatedCars.map(c => typeof c === 'object' ? c._id : c)
           : [],
-        summary: formData.summary || (formData.content ? formData.content.replace(/<[^>]*>?/gm, '').substring(0, 160) : ""),
+        summary: formData?.summary || (formData?.content ? formData.content.replace(/<[^>]*>?/gm, '').substring(0, 160) : ""),
       };
 
       if (selectedBlog) {
@@ -343,7 +340,7 @@ export default function AdminBlogs() {
         createMutation.mutate(finalData);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error?.message || "An error occurred");
     } finally {
       setUploading(false);
     }
@@ -556,12 +553,12 @@ export default function AdminBlogs() {
                       loading={!localCars?.length && !carData}
                       getOptionLabel={(option) => `${option?.name || ""} (${option?.year || ""})`}
                       isOptionEqualToValue={(option, value) => (option?._id || option) === (value?._id || value)}
-                      value={localCars?.filter(car => (formData?.relatedCars || []).includes(car?._id)) || []}
+                      value={(localCars || []).filter(car => (formData?.relatedCars || []).includes(car?._id))}
                       onChange={(event, newValue) => {
-                        setFormData({
-                          ...formData,
-                          relatedCars: (newValue || []).map(car => car?._id).filter(Boolean)
-                        });
+                        setFormData(prev => ({
+                          ...(prev || {}),
+                          relatedCars: Array.isArray(newValue) ? newValue.map(car => car?._id).filter(Boolean) : []
+                        }));
                       }}
                       renderInput={(params) => (
                         <TextField
@@ -571,15 +568,15 @@ export default function AdminBlogs() {
                         />
                       )}
                       renderTags={(value, getTagProps) =>
-                        value.map((option, index) => (
+                        (value || []).map((option, index) => (
                           <Chip
-                            key={option._id}
-                            label={option.name}
+                            key={option?._id || index}
+                            label={option?.name || ""}
                             {...getTagProps({ index })}
                             sx={{ borderRadius: '0.75rem', fontWeight: 'bold', bgcolor: 'var(--primary)', color: 'white' }}
                             avatar={
                               <div className="w-5 h-5 rounded-full bg-slate-800 overflow-hidden ml-1">
-                                <Image src={option.image && option.image !== 'no-photo.jpg' ? option.image : '/images/car-placeholder.png'} alt="" width={20} height={20} className="object-cover" />
+                                <Image src={option?.image && option?.image !== 'no-photo.jpg' ? option.image : '/images/car-placeholder.png'} alt="" width={20} height={20} className="object-cover" />
                               </div>
                             }
                           />
@@ -597,8 +594,8 @@ export default function AdminBlogs() {
                     multiline 
                     rows={2} 
                     label={t("dashboard.admin.blog.addDialog.summaryLabel")} 
-                    value={formData.summary} 
-                    onChange={(e) => setFormData({...formData, summary: e.target.value})} 
+                    value={formData?.summary || ""} 
+                    onChange={(e) => setFormData(prev => ({ ...(prev || {}), summary: e.target.value }))} 
                     sx={eliteInputStyle}
                   />
                   <div className="min-h-[450px] border border-white/10 rounded-[2rem] overflow-hidden bg-white/5 p-4 ql-elite-editor">
