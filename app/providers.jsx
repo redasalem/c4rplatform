@@ -10,7 +10,6 @@ import { CssBaseline } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
-import rtlPlugin from "stylis-plugin-rtl";
 import { prefixer } from "stylis";
 
 export default function Providers({ children }) {
@@ -31,13 +30,13 @@ export default function Providers({ children }) {
     }
   }, [dir, i18n.language, mounted]);
 
-  // Create RTL/LTR Cache for MUI
+  // Create LTR Cache for MUI (removing RTL plugin to fix fatal crash)
   const cacheRtl = useMemo(() => {
     return createCache({
-      key: dir === "rtl" ? "muirtl" : "muiltr",
-      stylisPlugins: dir === "rtl" ? [prefixer, rtlPlugin] : [prefixer],
+      key: "muiltr",
+      stylisPlugins: [prefixer],
     });
-  }, [dir]);
+  }, []);
 
   const theme = useMemo(
     () =>
