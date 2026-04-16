@@ -259,9 +259,11 @@ export default function AdminBlogs() {
   });
 
   const resetForm = () => {
+    if (!mounted) return;
+    
     setFormData({ 
       ...initialForm, 
-      allCars: localCars || [],
+      allCars: Array.isArray(localCars) ? localCars : [],
       relatedCars: [],
       faqs: [],
       primaryCta: { text: "", link: "", type: "custom" },
@@ -273,6 +275,8 @@ export default function AdminBlogs() {
   };
 
   const handleOpenDialog = (blog = null) => {
+    if (!mounted) return;
+    
     const safeBlog = blog || {};
     
     if (blog) {
@@ -301,13 +305,15 @@ export default function AdminBlogs() {
         link: safeBlog.primaryCta?.link || "",
         type: safeBlog.primaryCta?.type || "custom"
       } : { text: "", link: "", type: "custom" },
-      allCars: localCars || [],
+      allCars: Array.isArray(localCars) ? localCars : [],
     });
     
     setOpenDialog(true);
   };
 
   const handleSubmit = async () => {
+    if (!mounted) return;
+    
     if (!validation.isReady) {
       const missingFields = [];
       if (!formData?.title) missingFields.push(t("blog.validation.required.title"));
@@ -317,7 +323,9 @@ export default function AdminBlogs() {
       if (!formData?.metaTitle) missingFields.push(t("blog.validation.seoStats.title"));
       if (!formData?.metaDescription) missingFields.push(t("blog.validation.seoStats.description"));
       
-      toast.error(`${t("blog.validation.publishBlocked")}: ${missingFields.join(", ")}`);
+      if (missingFields.length > 0) {
+        toast.error(`${t("blog.validation.publishBlocked")}: ${missingFields.join(", ")}`);
+      }
       
       if (!formData?.title || !formData?.category) setTabValue(0);
       else if (!formData?.content) setTabValue(1);
