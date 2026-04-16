@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { CheckCircle, Warning, Error, Google, Search } from "@mui/icons-material";
@@ -8,6 +8,25 @@ import { CheckCircle, Warning, Error, Google, Search } from "@mui/icons-material
 const SEOPreview = ({ title, metaTitle, metaDescription, slug, image, relatedCars = [], formData }) => {
   const { t, i18n } = useTranslation("common");
   const siteUrl = "https://c4rplatform.com";
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="space-y-6 h-full">
+        <div className="bg-white rounded-2xl overflow-hidden shadow-lg p-4">
+          <div className="animate-pulse space-y-3">
+            <div className="h-6 bg-slate-200 rounded w-3/4"></div>
+            <div className="h-4 bg-slate-200 rounded w-1/2"></div>
+            <div className="h-4 bg-slate-200 rounded w-full"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   
   const displayTitle = metaTitle || formData?.title || title || "";
   const displaySlug = slug || (formData?.title 

@@ -380,6 +380,14 @@ export default function AdminBlogs() {
   const categories = Array.isArray(catData?.data) ? catData.data : (Array.isArray(catData) ? catData : []);
   const cars = localCars;
 
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-[#020617] flex items-center justify-center">
+        <CircularProgress thickness={6} size={60} sx={{ color: 'var(--primary)' }} />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8" dir={i18n.dir()}>
       <div className="bg-[#020617] backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[3.5rem] border border-white/10 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center shadow-[0_20px_50px_rgba(0,0,0,0.5)] group">
