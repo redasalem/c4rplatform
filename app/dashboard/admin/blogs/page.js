@@ -513,12 +513,13 @@ export default function AdminBlogs() {
         onClose={() => setOpenDialog(false)} 
         maxWidth="lg" 
         fullWidth 
+        disablePortal
         PaperProps={{ 
           sx: { 
             borderRadius: "2rem", 
             bgcolor: "#020617", 
             border: "1px solid rgba(255,255,255,0.1)", 
-            backgroundImage: "radial-gradient(at 100% 0%, rgba(249, 115, 22, 0.05) 0%, transparent 70%)",
+            backgroundImage: "radial-gradient(at top 100%, rgba(249, 115, 22, 0.05) 0%, transparent 70%)",
             maxHeight: "90vh",
           } 
         }}
@@ -849,7 +850,12 @@ export default function AdminBlogs() {
       )}
 
       {mounted && (
-      <Dialog open={deleteDialog} onClose={() => setDeleteDialog(false)} PaperProps={{ sx: { borderRadius: "2.5rem", bgcolor: "#020617", border: "1px solid rgba(185,28,28,0.3)" } }}>
+      <Dialog 
+        open={deleteDialog} 
+        onClose={() => setDeleteDialog(false)}
+        disablePortal
+        PaperProps={{ sx: { bgcolor: "#020617", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "1.5rem" } }}
+      >
         <DialogTitle className="text-red-500 font-black p-8 pb-4">{t("dashboard.admin.blog.deleteDialog.title")}</DialogTitle>
         <DialogContent className="p-8 pt-0 text-slate-400 font-bold">{t("dashboard.admin.blog.deleteDialog.message")} ({selectedBlog?.title})?</DialogContent>
         <DialogActions className="p-8">
