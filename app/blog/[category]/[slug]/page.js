@@ -21,49 +21,78 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://c4r-platform-backend
 const getBlog = cache(async (slug) => {
   try {
     const encodedSlug = encodeURIComponent(slug);
-    const res = await fetch(`${API_URL}/blogs/${encodedSlug}`, {
+    const apiUrl = `${API_URL}/blogs/${encodedSlug}`;
+    console.log(`[Blog Fetch] Requesting: ${apiUrl}`);
+    
+    const res = await fetch(apiUrl, {
       next: { revalidate: 60 },
     });
-    if (!res.ok) return null;
-    const { data } = await res.json();
-    return data;
+    
+    if (!res.ok) {
+        console.warn(`[Blog Fetch] Failed: ${res.status} ${res.statusText}`);
+        return null;
+    }
+    
+    const json = await res.json();
+    return json.data || null;
   } catch (error) {
-    console.error("Fetch blog error:", error);
+    console.error("[Blog Fetch] Critical Error:", error);
     return null;
   }
 });
 
+// Helper for safe date formatting
+const formatArabicDate = (dateString) => {
+    if (!dateString) return "";
+    try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return "";
+        return date.toLocaleDateString("ar-SA", {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+    } catch (e) {
+        console.error("[Date Format] Failed:", e);
+        return dateString.split('T')[0] || ""; // Fallback to YYYY-MM-DD
+    }
+};
+
 // 1. Generation of Metadata
 export async function generateMetadata({ params }) {
   const { slug } = await params;
+  if (!slug) return { title: "المدونة | C4R" };
+  
   const decodedSlug = decodeURIComponent(slug);
   
   try {
     const blog = await getBlog(decodedSlug);
-    if (!blog) return { title: "مقال غير موجود | C4R", robots: { index: false } };
+    if (!blog) {
+        return { 
+            title: "مقال غير موجود | C4R", 
+            robots: { index: false } 
+        };
+    }
     
     const metaTitle = blog.metaTitle || `${blog.title} | مدونة C4R`;
-    const metaDescription = blog.metaDescription || blog.summary || blog.title;
+    const metaDescription = blog.metaDescription || blog.summary || blog.title || "";
     const categorySlug = blog.category?.slug || "general";
-
-    const seoTitle = metaTitle || `${blog.title} | مدونة C4R`;
-    const seoDesc = metaDescription || blog.summary || blog.title;
-    const imageUrl = blog.image !== 'no-photo.jpg' ? blog.image : "https://c4rplatform.com/images/blog-default.jpg";
+    const imageUrl = blog.image && blog.image !== 'no-photo.jpg' ? blog.image : "https://c4rplatform.com/images/blog-default.jpg";
 
     return {
-      title: seoTitle,
-      description: seoDesc,
+      title: metaTitle,
+      description: metaDescription,
       keywords: Array.isArray(blog.focusKeywords) ? blog.focusKeywords.join(", ") : "",
       openGraph: {
         type: "article",
-        title: seoTitle,
-        description: seoDesc,
-        images: [{ url: imageUrl, width: 1200, height: 630, alt: blog.title }],
+        title: metaTitle,
+        description: metaDescription,
+        images: [{ url: imageUrl, width: 1200, height: 630, alt: blog.title || "" }],
       },
       twitter: {
         card: "summary_large_image",
-        title: seoTitle,
-        description: seoDesc,
+        title: metaTitle,
+        description: metaDescription,
         images: [imageUrl],
       },
       alternates: {
@@ -71,42 +100,60 @@ export async function generateMetadata({ params }) {
       },
     };
   } catch (error) {
-    return {
-      title: "مقال غير موجود | C4R",
-      robots: { index: false }
-    };
+    console.error("[Metadata] Error:", error);
+    return { title: "مدونة C4R" };
   }
 }
 
 export default async function BlogPostPage({ params }) {
   const { category, slug } = await params;
+  
+  if (!slug) return notFound();
+  
   const decodedSlug = decodeURIComponent(slug);
-  const decodedCategory = decodeURIComponent(category);
+  const decodedCategory = decodeURIComponent(category || "");
+  
+  console.log(`[Blog Page] Rendering slug: ${decodedSlug}`);
   
   const blog = await getBlog(decodedSlug);
 
   if (!blog) {
+    console.warn(`[Blog Page] Blog not found for slug: ${decodedSlug}`);
     notFound();
   }
 
   // SEO: Redirect to the correct category URL if there's a mismatch
   const correctCategorySlug = blog.category?.slug || "general";
-  if (decodedCategory !== correctCategorySlug) {
+  if (decodedCategory && decodedCategory !== correctCategorySlug) {
+      console.log(`[Blog Page] Redirecting to correct category: ${correctCategorySlug}`);
       redirect(`/blog/${correctCategorySlug}/${decodedSlug}`);
   }
 
   // 3. Structured Data
-  const articleSchema = {
+  const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": blog.title,
-    "description": blog.summary,
-    "image": blog.image !== 'no-photo.jpg' ? blog.image : "https://c4rplatform.com/images/blog-default.jpg",
-    "datePublished": blog.createdAt,
-    "dateModified": blog.updatedAt,
-    "author": {
+    "@type": "BlogPosting",
+    headline: blog.title,
+    image: blog.image && blog.image !== 'no-photo.jpg' ? blog.image : "https://c4rplatform.com/images/blog-default.jpg",
+    author: {
       "@type": "Organization",
-      "name": "C4R Platform"
+      name: "C4R Platform",
+      url: "https://c4rplatform.com"
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "C4R",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://c4rplatform.com/logo.png"
+      }
+    },
+    datePublished: blog.createdAt,
+    dateModified: blog.updatedAt || blog.createdAt,
+    description: blog.summary || blog.title,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://c4rplatform.com/blog/${correctCategorySlug}/${decodedSlug}`
     }
   };
 
@@ -144,7 +191,7 @@ export default async function BlogPostPage({ params }) {
       <StickyMobileCTA />
       
       {/* Inject Structured Data */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />}
 
@@ -167,7 +214,7 @@ export default async function BlogPostPage({ params }) {
           {blog.title}
         </h1>
         <div className="flex flex-wrap items-center gap-6 text-sm text-slate-400 font-bold border-y border-white/5 py-6">
-          <div className="flex items-center gap-2" suppressHydrationWarning><DateRange fontSize="small" className="text-primary" /> {new Date(blog.createdAt).toLocaleDateString("ar-SA", { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+          <div className="flex items-center gap-2" suppressHydrationWarning><DateRange fontSize="small" className="text-primary" /> {formatArabicDate(blog.createdAt)}</div>
           <div className="flex items-center gap-2"><Person fontSize="small" className="text-primary" /> بقلم خبراء C4R</div>
           <div className="flex items-center gap-2 text-white/80"><span className="text-primary">👁</span> {blog.views || 1} {blog.views === 1 ? 'مشاهدة' : 'مشاهدات'}</div>
         </div>
@@ -179,12 +226,13 @@ export default async function BlogPostPage({ params }) {
           <div className="sticky top-32 space-y-8">
             <TableOfContents />
             
-            {blog.relatedCars?.length > 0 ? (
+            {blog.relatedCars && blog.relatedCars.filter(c => c && typeof c === 'object').length > 0 ? (
               <div className="space-y-6">
                  <h3 className="text-xl font-black text-white px-2 border-r-4 border-primary">سيارات موصى بها</h3>
                  <div className="grid grid-cols-1 gap-6">
-                    {blog.relatedCars.map((car) => {
-                      const formattedCar = { ...car, name: car.name || `${car.make} ${car.model}`, brand: car.brand || car.make };
+                    {blog.relatedCars.filter(c => c && typeof c === 'object').map((car) => {
+                      const carImage = Array.isArray(car.image) ? car.image[0] : (car.image || "/images/car-placeholder.png");
+                      const formattedCar = { ...car, image: carImage, name: car.name || `${car.make || ""} ${car.model || ""}`.trim() || "سيارة غير متوفرة", brand: car.brand || car.make };
                       return <CarCard key={car._id} car={formattedCar} />;
                     })}
                  </div>
@@ -207,10 +255,10 @@ export default async function BlogPostPage({ params }) {
           )}
 
           {/* Intro Section - Start of Content */}
-          <div 
-            className="prose prose-invert prose-orange max-w-none text-slate-300 prose-headings:text-white prose-headings:font-black prose-headings:tracking-tighter prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-8 prose-h2:pb-4 prose-h2:border-b prose-h2:border-white/5 prose-a:text-primary hover:prose-a:text-orange-400 transition-all prose-img:rounded-[2rem] leading-loose font-medium text-lg lg:text-xl"
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(blog.content, { ADD_TAGS: ['iframe', 'h2', 'h3', 'p', 'ul', 'li', 'strong', 'em', 'img'], ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling', 'target', 'src', 'alt', 'id'] }) }}
-          />
+            <div 
+              className="prose prose-invert prose-orange max-w-none text-slate-300 prose-headings:text-white prose-headings:font-black prose-headings:tracking-tighter prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-8 prose-h2:pb-4 prose-h2:border-b prose-h2:border-white/5 prose-a:text-primary hover:prose-a:text-orange-400 transition-all prose-img:rounded-[2rem] leading-loose font-medium text-lg lg:text-xl"
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(blog.content || "", { ADD_TAGS: ['iframe', 'h2', 'h3', 'p', 'ul', 'li', 'strong', 'em', 'img'], ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling', 'target', 'src', 'alt', 'id'] }) }}
+            />
 
           {/* Contextual CTA Injection */}
           <DynamicContentCTA />
