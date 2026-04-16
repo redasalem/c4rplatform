@@ -53,7 +53,7 @@ const RelatedArticles = ({ currentBlogId }) => {
           : blogs.map((blog) => (
               <Link
                 key={blog._id}
-                href={`/blog/${blog.category?.slug || "general"}/${blog.slug}`}
+                href={`/blog/${blog._id}`}
                 className="group bg-white/5 border border-white/10 rounded-3xl p-6 flex flex-col gap-4 hover:bg-white/10 transition-all duration-300 h-full shadow-2xl hover:shadow-primary/5"
               >
                 <div className="relative h-40 w-full bg-slate-800 rounded-2xl overflow-hidden">

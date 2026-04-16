@@ -358,7 +358,7 @@ export default function AdminBlogs() {
                         <Button
                           size="small"
                           component={Link}
-                          href={`/blog/${blog.category?.slug || 'general'}/${blog.slug}`}
+                          href={`/blog/${blog._id}`}
                           target="_blank"
                           startIcon={<Visibility />}
                           sx={{

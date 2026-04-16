@@ -39,7 +39,7 @@ export const PopularArticles = ({ excludeId }) => {
           : blogs.map((blog) => (
               <Link
                 key={blog._id}
-                href={`/blog/${blog.category?.slug || "general"}/${blog.slug}`}
+                href={`/blog/${blog._id}`}
                 className="flex items-start gap-4 p-2 rounded-2xl hover:bg-white/5 transition-all group"
               >
                  <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-slate-800 shrink-0">

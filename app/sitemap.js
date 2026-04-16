@@ -57,7 +57,7 @@ export default async function sitemap() {
     let hasMore = true;
     
     while (hasMore) {
-      const res = await fetch(`${API_URL}/blogs?status=published&page=${page}&limit=100&select=slug,category,updatedAt`, {
+      const res = await fetch(`${API_URL}/blogs?status=published&page=${page}&limit=100&select=_id,updatedAt`, {
         next: { revalidate: 3600 },
       });
       
@@ -67,7 +67,7 @@ export default async function sitemap() {
       
       blogs.forEach((blog) => {
         blogRoutes.push({
-          url: `${BASE_URL}/blog/${blog.category?.slug || "general"}/${blog.slug}`,
+          url: `${BASE_URL}/blog/${blog._id}`,
           lastModified: new Date(blog.updatedAt || Date.now()),
           changeFrequency: "weekly",
           priority: 0.7,

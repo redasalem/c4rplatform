@@ -18,10 +18,9 @@ import ContinueReading from "@/components/blog/ContinueReading";
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://c4r-platform-backend.vercel.app/api";
 
 // Cached fetch
-const getBlog = cache(async (slug) => {
+const getBlog = cache(async (id) => {
   try {
-    const encodedSlug = encodeURIComponent(slug);
-    const apiUrl = `${API_URL}/blogs/${encodedSlug}`;
+    const apiUrl = `${API_URL}/blogs/${id}`;
     console.log(`[Blog Fetch] Requesting: ${apiUrl}`);
     
     const res = await fetch(apiUrl, {
@@ -58,22 +57,20 @@ const formatArabicDate = (dateString) => {
 };
 
 export async function generateMetadata({ params }) {
-  const { slug } = await params;
-  if (!slug) return { title: "المدونة | C4R" };
-  const decodedSlug = decodeURIComponent(slug);
+  const { id } = await params;
+  if (!id) return { title: "المدونة | C4R" };
   
   try {
-    const blog = await getBlog(decodedSlug);
+    const blog = await getBlog(id);
     if (!blog) return { title: "مقال غير موجود | C4R" };
     
-    const categorySlug = blog.category?.slug || "general";
     const imageUrl = blog.image && blog.image !== 'no-photo.jpg' ? blog.image : "https://c4rplatform.com/images/blog-default.jpg";
 
     return {
       title: blog.metaTitle || `${blog.title} | مدونة C4R`,
       description: blog.metaDescription || blog.summary || blog.title,
       alternates: {
-        canonical: `https://c4rplatform.com/blog/${categorySlug}/${encodeURIComponent(decodedSlug)}`,
+        canonical: `https://c4rplatform.com/blog/${id}`,
       },
       openGraph: {
         images: [{ url: imageUrl }],
@@ -85,24 +82,13 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function BlogPostPage({ params }) {
-  const { category, slug } = await params;
-  if (!slug) return notFound();
+  const { id } = await params;
+  if (!id) return notFound();
   
-  const decodedSlug = decodeURIComponent(slug);
-  const decodedCategory = decodeURIComponent(category || "");
-  
-  const blog = await getBlog(decodedSlug);
+  const blog = await getBlog(id);
   if (!blog) return notFound();
 
-  // Redirect check (Must be outside try/catch)
-  const correctCategorySlug = blog.category?.slug || "general";
-  if (decodedCategory && decodedCategory !== correctCategorySlug) {
-      redirect(`/blog/${correctCategorySlug}/${encodeURIComponent(decodedSlug)}`);
-  }
-
   try {
-    const encodedSlug = encodeURIComponent(decodedSlug);
-    
     const jsonLd = {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
@@ -111,7 +97,7 @@ export default async function BlogPostPage({ params }) {
       datePublished: blog.createdAt,
       mainEntityOfPage: {
         "@type": "WebPage",
-        "@id": `https://c4rplatform.com/blog/${correctCategorySlug}/${encodedSlug}`
+        "@id": `https://c4rplatform.com/blog/${id}`
       }
     };
 
