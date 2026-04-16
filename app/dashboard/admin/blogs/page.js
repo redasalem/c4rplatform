@@ -33,7 +33,8 @@ import {
   Settings,
   CloudUpload,
   AdsClick,
-  AutoFixHigh
+  AutoFixHigh,
+  Visibility
 } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
@@ -339,14 +340,39 @@ export default function AdminBlogs() {
                   <p className="text-sm text-slate-400 font-bold line-clamp-3 leading-relaxed flex-1">{blog.summary}</p>
                   
                   <div className="flex justify-between items-center mt-4 pt-4 border-t border-white/5">
-                     <div className="flex -space-x-2">
-                        {(blog.relatedCars || []).slice(0, 3).map((car, i) => (
-                          <div key={i} className="w-8 h-8 rounded-full bg-slate-800 border-2 border-[#020617] overflow-hidden" title={car.name}>
-                             <Image src={car.image || '/images/car-top.png'} alt="car" width={32} height={32} className="object-cover" />
-                          </div>
-                        ))}
-                     </div>
-                     <div className="flex gap-2">
+                      <div className="flex -space-x-2">
+                         {(blog.relatedCars || []).filter(car => car && typeof car === 'object').slice(0, 3).map((car, i) => (
+                           <div key={i} className="w-8 h-8 rounded-full bg-slate-800 border-2 border-[#020617] overflow-hidden" title={car.name}>
+                              <Image 
+                                src={car.image && car.image !== 'no-photo.jpg' ? car.image : '/images/car-placeholder.png'} 
+                                alt={car.name || "car"} 
+                                width={32} 
+                                height={32} 
+                                className="object-cover"
+                              />
+                           </div>
+                         ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          size="small"
+                          component={Link}
+                          href={`/blog/${blog.category?.slug || 'general'}/${blog.slug}`}
+                          target="_blank"
+                          startIcon={<Visibility />}
+                          sx={{
+                            color: '#94a3b8',
+                            bgcolor: 'rgba(255,255,255,0.02)',
+                            '&:hover': { bgcolor: 'rgba(255,255,255,0.05)', color: 'white' },
+                            borderRadius: '1rem',
+                            fontWeight: 900,
+                            px: 1.5,
+                            fontSize: '0.7rem',
+                            textTransform: 'none'
+                          }}
+                        >
+                          {t("common.view")}
+                        </Button>
                         <Button
                           size="small"
                           onClick={() => handleOpenDialog(blog)}
@@ -379,7 +405,7 @@ export default function AdminBlogs() {
                         >
                           {t("common.delete")}
                         </Button>
-                     </div>
+                      </div>
                   </div>
                </div>
             </div>
