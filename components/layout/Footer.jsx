@@ -213,7 +213,7 @@ const Footer = () => {
       {/* Bottom Copyright Bar */}
       <div className="border-t border-white/5 bg-midnight/40 backdrop-blur-md pb-24 md:pb-8">
         <div className="container mx-auto px-6 py-8 flex flex-col lg:flex-row items-center justify-between gap-6 text-xs md:text-base text-gray-400 font-bold">
-          <p className="text-center lg:text-right uppercase tracking-wider order-2 lg:order-1">
+          <p className="text-center lg:text-right uppercase tracking-wider order-2 lg:order-1" suppressHydrationWarning>
             © {new Date().getFullYear()} منصة C4R. جميع الحقوق محفوظة.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 order-1 lg:order-2">

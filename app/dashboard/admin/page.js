@@ -555,7 +555,7 @@ function ManageBookings() {
                       <span className="text-[8px] sm:text-[10px] text-slate-500 uppercase">
                         {t("dashboard.admin.bookings.start")}
                       </span>
-                      <span className="text-[9px] sm:text-xs text-white">
+                      <span className="text-[9px] sm:text-xs text-white" suppressHydrationWarning>
                         {booking.startDate
                           ? new Date(booking.startDate).toLocaleDateString(
                             i18n.language,
@@ -573,7 +573,7 @@ function ManageBookings() {
                       <span className="text-[8px] sm:text-[10px] text-slate-500 uppercase">
                         {t("dashboard.admin.bookings.end")}
                       </span>
-                      <span className="text-[9px] sm:text-xs text-white">
+                      <span className="text-[9px] sm:text-xs text-white" suppressHydrationWarning>
                         {booking.endDate
                           ? new Date(booking.endDate).toLocaleDateString(
                             i18n.language,

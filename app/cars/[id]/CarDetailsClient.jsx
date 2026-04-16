@@ -365,7 +365,7 @@ export default function CarDetailsClient({ initialCarData }) {
                       <h3 className="font-black text-white text-base sm:text-lg">
                         {review.user?.name}
                       </h3>
-                      <p className="text-[9px] sm:text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] mt-1">
+                      <p className="text-[9px] sm:text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] mt-1" suppressHydrationWarning>
                         {new Date(review.createdAt).toLocaleDateString(
                           i18n.language === "en" ? "en-US" : "ar-EG",
                           { year: "numeric", month: "long", day: "numeric" },

@@ -105,7 +105,7 @@ const LatestBlogs = () => {
                          <span className="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-1">
                             {t("blog.publishDate")}
                          </span>
-                         <span className="text-xs font-bold text-slate-400">
+                         <span className="text-xs font-bold text-slate-400" suppressHydrationWarning>
                             {new Date(blog.createdAt).toLocaleDateString(i18n.language === "ar" ? "ar-SA" : "en-US", {
                             year: "numeric",
                             month: "long",

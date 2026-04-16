@@ -587,7 +587,7 @@ function BookingsSection() {
                       className="text-primary"
                       sx={{ fontSize: { xs: 10, sm: 16 } }}
                     />
-                    <span className="text-[9px] sm:text-xs font-black text-white">
+                    <span className="text-[9px] sm:text-xs font-black text-white" suppressHydrationWarning>
                       {new Date(booking.startDate).toLocaleDateString(
                         i18n.language === "en" ? "en-US" : "ar-EG",
                       )}
@@ -603,7 +603,7 @@ function BookingsSection() {
                       className="text-primary"
                       sx={{ fontSize: { xs: 10, sm: 16 } }}
                     />
-                    <span className="text-[9px] sm:text-xs font-black text-white">
+                    <span className="text-[9px] sm:text-xs font-black text-white" suppressHydrationWarning>
                       {new Date(booking.endDate).toLocaleDateString(
                         i18n.language === "en" ? "en-US" : "ar-EG",
                       )}
