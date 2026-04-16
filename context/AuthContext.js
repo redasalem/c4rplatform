@@ -11,20 +11,17 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const { t } = useTranslation("common");
-  const [user, setUser] = useState(() => {
-    // Check for cached user on initial load
-    if (typeof window !== "undefined") {
-      const cachedUser = localStorage.getItem("c4r_user");
-      return cachedUser ? JSON.parse(cachedUser) : null;
-    }
-    return null;
-  });
+  // HYDRATION FIX: Always start with null to match the server render.
+  // localStorage is read inside useEffect to avoid server/client mismatch.
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   const clearClientSession = () => {
     Cookies.remove("token");
-    localStorage.removeItem("c4r_user");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("c4r_user");
+    }
     setUser(null);
   };
 
@@ -48,11 +45,22 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Load user from token on mount to verify session
+  // Load user from cache first (instant), then verify with server
   useEffect(() => {
     const checkAuth = async () => {
       if (typeof window === "undefined") return;
 
+      // Step 1: Instantly restore cached user for fast UI
+      const cachedUser = localStorage.getItem("c4r_user");
+      if (cachedUser) {
+        try {
+          setUser(JSON.parse(cachedUser));
+        } catch (e) {
+          localStorage.removeItem("c4r_user");
+        }
+      }
+
+      // Step 2: Verify token with server
       const token = Cookies.get("token");
 
       if (token) {
