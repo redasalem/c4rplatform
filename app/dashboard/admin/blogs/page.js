@@ -237,7 +237,7 @@ export default function AdminBlogs() {
     mutationFn: blogService.create,
     onSuccess: () => {
       toast.success(t("feedback.admin.blogCreateSuccess"));
-      queryClient.invalidateQueries(["adminBlogs"]);
+      queryClient.invalidateQueries({ queryKey: ["adminBlogs"] });
       setOpenDialog(false);
       resetForm();
     },
@@ -250,7 +250,7 @@ export default function AdminBlogs() {
     mutationFn: ({ slug, data }) => blogService.update(slug, data),
     onSuccess: () => {
       toast.success(t("feedback.admin.blogUpdateSuccess"));
-      queryClient.invalidateQueries(["adminBlogs"]);
+      queryClient.invalidateQueries({ queryKey: ["adminBlogs"] });
       setOpenDialog(false);
       resetForm();
     },
@@ -263,7 +263,7 @@ export default function AdminBlogs() {
     mutationFn: blogService.delete,
     onSuccess: () => {
       toast.success(t("feedback.admin.blogDeleteSuccess"));
-      queryClient.invalidateQueries(["adminBlogs"]);
+      queryClient.invalidateQueries({ queryKey: ["adminBlogs"] });
       setDeleteDialog(false);
       setSelectedBlog(null);
     },
@@ -369,8 +369,10 @@ export default function AdminBlogs() {
         toast.success(t("notifications.uploadSuccess"));
       }
 
+      // Build API payload — strip UI-only fields (allCars) before sending
+      const { allCars: _stripAllCars, ...cleanFormData } = formData || {};
       const finalData = {
-        ...formData,
+        ...cleanFormData,
         image: currentImageUrl,
         focusKeywords: typeof formData?.focusKeywords === 'string' && formData?.focusKeywords
           ? formData.focusKeywords.split(",").map(k => k.trim()).filter(k => k) 
@@ -573,12 +575,14 @@ export default function AdminBlogs() {
                         value={formData?.slug || ""} 
                         disabled={slugSync} 
                         sx={eliteInputStyle}
-                        InputProps={{
-                          endAdornment: (
-                            <IconButton onClick={() => setSlugSync(!slugSync)} sx={{ color: slugSync ? 'var(--primary)' : 'rgba(255,255,255,0.2)' }}>
-                              <Settings />
-                            </IconButton>
-                          )
+                        slotProps={{
+                          input: {
+                            endAdornment: (
+                              <IconButton onClick={() => setSlugSync(!slugSync)} sx={{ color: slugSync ? 'var(--primary)' : 'rgba(255,255,255,0.2)' }}>
+                                <Settings />
+                              </IconButton>
+                            )
+                          }
                         }}
                       />
                     </div>
