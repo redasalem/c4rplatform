@@ -2,15 +2,12 @@
 import "../i18n";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, useMemo, useEffect } from "react";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { AuthProvider } from "@/context/AuthContext";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { CacheProvider } from "@emotion/react";
-import createCache from "@emotion/cache";
-import { prefixer } from "stylis";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { AuthProvider } from "@/context/AuthContext";
 
 export default function Providers({ children }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -29,14 +26,6 @@ export default function Providers({ children }) {
       document.documentElement.lang = i18n.language;
     }
   }, [dir, i18n.language, mounted]);
-
-  // Create LTR Cache for MUI (removing RTL plugin to fix fatal crash)
-  const cacheRtl = useMemo(() => {
-    return createCache({
-      key: "muiltr",
-      stylisPlugins: [prefixer],
-    });
-  }, []);
 
   const theme = useMemo(
     () =>
@@ -57,24 +46,22 @@ export default function Providers({ children }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CacheProvider value={cacheRtl}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <AuthProvider>
-            {children}
-            <ToastContainer
-              position={dir === "rtl" ? "bottom-right" : "bottom-left"}
-              rtl={dir === "rtl"}
-              theme="dark"
-              pauseOnHover
-              draggable
-              closeOnClick
-              limit={3}
-              autoClose={4000}
-            />
-          </AuthProvider>
-        </ThemeProvider>
-      </CacheProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AuthProvider>
+          {children}
+          <ToastContainer
+            position={dir === "rtl" ? "bottom-right" : "bottom-left"}
+            rtl={dir === "rtl"}
+            theme="dark"
+            pauseOnHover
+            draggable
+            closeOnClick
+            limit={3}
+            autoClose={4000}
+          />
+        </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
