@@ -424,7 +424,7 @@ export default function AdminBlogs() {
                 
                 <div className="flex justify-between items-center mt-4 pt-4 border-t border-white/5">
                   <div className="flex -space-x-2">
-                    {(blog.relatedCars || []).filter(car => car && typeof car === 'object').slice(0, 3).map((car, i) => (
+                    {(Array.isArray(blog?.relatedCars) ? blog.relatedCars : []).filter(car => car && typeof car === 'object').slice(0, 3).map((car, i) => (
                       <div key={i} className="w-8 h-8 rounded-full bg-slate-800 border-2 border-[#020617] overflow-hidden" title={car.name}>
                         <Image src={car.image && car.image !== 'no-photo.jpg' ? car.image : '/images/car-placeholder.png'} alt={car.name || "car"} width={32} height={32} className="object-cover" />
                       </div>
@@ -552,15 +552,15 @@ export default function AdminBlogs() {
                     />
                     <Autocomplete
                       multiple
-                      options={localCars}
-                      loading={!localCars.length && !carData}
-                      getOptionLabel={(option) => `${option.name} (${option.year || ""})`}
-                      isOptionEqualToValue={(option, value) => (option._id || option) === (value._id || value)}
-                      value={localCars.filter(car => formData.relatedCars.includes(car._id))}
+                      options={localCars || []}
+                      loading={!localCars?.length && !carData}
+                      getOptionLabel={(option) => `${option?.name || ""} (${option?.year || ""})`}
+                      isOptionEqualToValue={(option, value) => (option?._id || option) === (value?._id || value)}
+                      value={localCars?.filter(car => (formData?.relatedCars || []).includes(car?._id)) || []}
                       onChange={(event, newValue) => {
                         setFormData({
                           ...formData,
-                          relatedCars: newValue.map(car => car._id)
+                          relatedCars: (newValue || []).map(car => car?._id).filter(Boolean)
                         });
                       }}
                       renderInput={(params) => (

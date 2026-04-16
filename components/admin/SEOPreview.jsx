@@ -20,18 +20,38 @@ const SEOPreview = ({ title, metaTitle, metaDescription, slug, image, relatedCar
   const titleLength = displayTitle.length;
   const descLength = displayDescription.length;
   const hasImage = !!(image || formData?.image);
-  const keywords = formData?.focusKeywords 
-    ? (typeof formData.focusKeywords === 'string' 
-        ? formData.focusKeywords.split(",").filter(k => k.trim()) 
-        : formData.focusKeywords)
-    : [];
   
-  const linkedCars = relatedCars.length > 0 
-    ? relatedCars 
-    : (formData?.relatedCars || []).map(id => {
-        const car = formData?.allCars?.find(c => c._id === id);
-        return car ? { _id: id, name: car.name, image: car.image } : null;
-      }).filter(Boolean);
+  const keywords = React.useMemo(() => {
+    if (!formData?.focusKeywords) return [];
+    if (typeof formData.focusKeywords === 'string') {
+      return formData.focusKeywords.split(",").filter(k => k.trim());
+    }
+    if (Array.isArray(formData.focusKeywords)) {
+      return formData.focusKeywords;
+    }
+    return [];
+  }, [formData?.focusKeywords]);
+  
+  const linkedCars = React.useMemo(() => {
+    if (!relatedCars || !Array.isArray(relatedCars)) {
+      relatedCars = [];
+    }
+    
+    if (relatedCars.length > 0) {
+      return relatedCars;
+    }
+    
+    const carIds = formData?.relatedCars || [];
+    if (!Array.isArray(carIds)) return [];
+    
+    const allCars = formData?.allCars || [];
+    if (!Array.isArray(allCars)) return [];
+    
+    return carIds.map(id => {
+      const car = allCars.find(c => c && c._id === id);
+      return car ? { _id: id, name: car.name || '', image: car.image } : null;
+    }).filter(Boolean);
+  }, [relatedCars, formData?.relatedCars, formData?.allCars]);
 
   const getTitleStatus = () => {
     if (!displayTitle) return "error";
