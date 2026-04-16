@@ -35,7 +35,7 @@ export default function AdminCategories() {
     mutationFn: categoryService.create,
     onSuccess: () => {
       toast.success(t("dashboard.admin.blog.addDialog.success"));
-      queryClient.invalidateQueries(["adminCategories"]);
+      queryClient.invalidateQueries({ queryKey: ["adminCategories"] });
       setOpenDialog(false);
       resetForm();
     },
@@ -49,7 +49,7 @@ export default function AdminCategories() {
     mutationFn: ({ slug, data }) => categoryService.update(slug, data),
     onSuccess: () => {
       toast.success(t("dashboard.admin.blog.editDialog.success"));
-      queryClient.invalidateQueries(["adminCategories"]);
+      queryClient.invalidateQueries({ queryKey: ["adminCategories"] });
       setOpenDialog(false);
       resetForm();
     },
@@ -63,7 +63,7 @@ export default function AdminCategories() {
     mutationFn: categoryService.delete,
     onSuccess: () => {
       toast.success(t("dashboard.admin.blog.deleteSuccess"));
-      queryClient.invalidateQueries(["adminCategories"]);
+      queryClient.invalidateQueries({ queryKey: ["adminCategories"] });
       setDeleteDialog(false);
       setSelectedCategory(null);
     },

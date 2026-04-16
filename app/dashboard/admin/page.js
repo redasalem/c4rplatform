@@ -414,8 +414,8 @@ function ManageBookings() {
       setReviewOpen(false);
       setComment("");
       setRating(5);
-      queryClient.invalidateQueries(["allBookings"]);
-      queryClient.invalidateQueries(["recentReviews"]);
+      queryClient.invalidateQueries({ queryKey: ["allBookings"] });
+      queryClient.invalidateQueries({ queryKey: ["recentReviews"] });
     },
     onError: (err) => {
       // Localize the "already reviewed" error or fallback to general error
@@ -451,7 +451,7 @@ function ManageBookings() {
     mutationFn: bookingService.approve,
     onSuccess: () => {
       toast.success(t("dashboard.admin.bookings.approveSuccess"));
-      queryClient.invalidateQueries(["allBookings"]);
+      queryClient.invalidateQueries({ queryKey: ["allBookings"] });
     },
     onError: (err) =>
       toast.error(
@@ -464,7 +464,7 @@ function ManageBookings() {
     mutationFn: bookingService.reject,
     onSuccess: () => {
       toast.success(t("dashboard.admin.bookings.rejectSuccess"));
-      queryClient.invalidateQueries(["allBookings"]);
+      queryClient.invalidateQueries({ queryKey: ["allBookings"] });
     },
     onError: (err) =>
       toast.error(
@@ -477,8 +477,8 @@ function ManageBookings() {
     mutationFn: bookingService.delete,
     onSuccess: () => {
       toast.success(t("dashboard.admin.bookings.deleteSuccess"));
-      queryClient.invalidateQueries(["allBookings"]);
-      queryClient.invalidateQueries(["adminStats"]);
+      queryClient.invalidateQueries({ queryKey: ["allBookings"] });
+      queryClient.invalidateQueries({ queryKey: ["adminStats"] });
       setDeleteId(null);
     },
     onError: () => toast.error(t("dashboard.admin.bookings.deleteError")),
@@ -991,8 +991,8 @@ function ManageCars() {
     mutationFn: carService.delete,
     onSuccess: () => {
       toast.success(t("dashboard.admin.cars.deleteSuccess"));
-      queryClient.invalidateQueries(["allCars"]);
-      queryClient.invalidateQueries(["adminStats"]);
+      queryClient.invalidateQueries({ queryKey: ["allCars"] });
+      queryClient.invalidateQueries({ queryKey: ["adminStats"] });
       setDeleteId(null);
     },
     onError: () => {
@@ -1260,8 +1260,8 @@ function ManageReviews() {
     mutationFn: reviewService.delete,
     onSuccess: () => {
       toast.success(t("dashboard.admin.reviews.deleteSuccess"));
-      queryClient.invalidateQueries(["allReviewsAdmin"]);
-      queryClient.invalidateQueries(["recentReviews"]); // Sync home page
+      queryClient.invalidateQueries({ queryKey: ["allReviewsAdmin"] });
+      queryClient.invalidateQueries({ queryKey: ["recentReviews"] }); // Sync home page
       setDeleteId(null);
     },
     onError: () => {
@@ -1497,8 +1497,8 @@ function AddCarDialog({ open, onClose }) {
     mutationFn: carService.create,
     onSuccess: () => {
       toast.success(t("dashboard.admin.addCar.success"));
-      queryClient.invalidateQueries(["allCars"]);
-      queryClient.invalidateQueries(["adminStats"]);
+      queryClient.invalidateQueries({ queryKey: ["allCars"] });
+      queryClient.invalidateQueries({ queryKey: ["adminStats"] });
       onClose();
       setFormData({
         name: "",
@@ -2000,8 +2000,8 @@ function EditCarDialog({ open, car, onClose }) {
     mutationFn: (data) => carService.update(car._id, data),
     onSuccess: () => {
       toast.success(t("dashboard.admin.editCar.success"));
-      queryClient.invalidateQueries(["allCars"]);
-      queryClient.invalidateQueries(["adminStats"]);
+      queryClient.invalidateQueries({ queryKey: ["allCars"] });
+      queryClient.invalidateQueries({ queryKey: ["adminStats"] });
       onClose();
     },
     onError: (err) => {
@@ -2800,7 +2800,7 @@ function ManageNotifications() {
     mutationFn: notificationService.delete,
     onSuccess: () => {
       toast.success(t("notifications.deleteSuccess", "تم حذف الإشعار بنجاح"));
-      queryClient.invalidateQueries(["adminNotifications"]);
+      queryClient.invalidateQueries({ queryKey: ["adminNotifications"] });
     },
     onError: () => toast.error(t("common.error")),
   });
@@ -2809,7 +2809,7 @@ function ManageNotifications() {
     mutationFn: notificationService.markAllAsRead,
     onSuccess: () => {
       toast.success(t("notifications.markAllReadSuccess", "تم تحديد الكل كمقروء"));
-      queryClient.invalidateQueries(["adminNotifications"]);
+      queryClient.invalidateQueries({ queryKey: ["adminNotifications"] });
     },
     onError: () => toast.error(t("common.error")),
   });

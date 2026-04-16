@@ -440,8 +440,8 @@ function BookingsSection() {
       setComment("");
       setRating(5);
       // Optional: invalidate checked bookings if we tracked reviewed status
-      queryClient.invalidateQueries(["myBookings"]);
-      queryClient.invalidateQueries(["recentReviews"]); // Sync home page
+      queryClient.invalidateQueries({ queryKey: ["myBookings"] });
+      queryClient.invalidateQueries({ queryKey: ["recentReviews"] }); // Sync home page
     },
     onError: (err) => {
       const msg = err.response?.data?.message;
