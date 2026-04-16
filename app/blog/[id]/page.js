@@ -108,7 +108,7 @@ export default async function BlogPostPage({ params }) {
         { "@type": "ListItem", "position": 1, "name": "الرئيسية", "item": "https://c4rplatform.com" },
         { "@type": "ListItem", "position": 2, "name": "المدونة", "item": "https://c4rplatform.com/blog" },
         { "@type": "ListItem", "position": 3, "name": blog.category?.name || "عام" },
-        { "@type": "ListItem", "position": 4, "name": blog.title, "item": `https://c4rplatform.com/blog/${correctCategorySlug}/${encodedSlug}` },
+        { "@type": "ListItem", "position": 4, "name": blog.title, "item": `https://c4rplatform.com/blog/${id}` },
       ],
     };
 
