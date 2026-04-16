@@ -253,7 +253,13 @@ export default function AdminBlogs() {
   });
 
   const resetForm = () => {
-    setFormData({ ...initialForm, allCars: localCars });
+    setFormData({ 
+      ...initialForm, 
+      allCars: localCars || [],
+      relatedCars: [],
+      faqs: [],
+      primaryCta: { text: "", link: "", type: "custom" },
+    });
     setSelectedBlog(null);
     setTabValue(0);
     setFile(null);
@@ -261,27 +267,37 @@ export default function AdminBlogs() {
   };
 
   const handleOpenDialog = (blog = null) => {
+    const safeBlog = blog || {};
+    
     if (blog) {
       setSelectedBlog(blog);
-      setFormData({
-        title: blog.title || "",
-        slug: blog.slug || "",
-        category: blog.category?._id || blog.category || "",
-        content: blog.content || "",
-        summary: blog.summary || "",
-        status: blog.status || "draft",
-        image: blog.image === 'no-photo.jpg' ? '' : blog.image,
-        relatedCars: blog.relatedCars ? blog.relatedCars.map(c => typeof c === 'object' ? c._id : c) : [],
-        metaTitle: blog.metaTitle || "",
-        metaDescription: blog.metaDescription || "",
-        focusKeywords: Array.isArray(blog.focusKeywords) ? blog.focusKeywords.join(", ") : (blog.focusKeywords || ""),
-        faqs: blog.faqs || [],
-        primaryCta: blog.primaryCta || { text: "", link: "", type: "custom" },
-        allCars: localCars,
-      });
-    } else {
-      resetForm();
     }
+    
+    setFormData({
+      title: safeBlog.title || "",
+      slug: safeBlog.slug || "",
+      category: safeBlog.category?._id || safeBlog.category || "",
+      content: safeBlog.content || "",
+      summary: safeBlog.summary || "",
+      status: safeBlog.status || "draft",
+      image: safeBlog.image === 'no-photo.jpg' ? '' : (safeBlog.image || ""),
+      relatedCars: Array.isArray(safeBlog.relatedCars) 
+        ? safeBlog.relatedCars.map(c => typeof c === 'object' ? c?._id : c) 
+        : [],
+      metaTitle: safeBlog.metaTitle || "",
+      metaDescription: safeBlog.metaDescription || "",
+      focusKeywords: Array.isArray(safeBlog.focusKeywords) 
+        ? safeBlog.focusKeywords.join(", ") 
+        : (typeof safeBlog.focusKeywords === 'string' ? safeBlog.focusKeywords : ""),
+      faqs: Array.isArray(safeBlog.faqs) ? safeBlog.faqs : [],
+      primaryCta: safeBlog.primaryCta ? {
+        text: safeBlog.primaryCta?.text || "",
+        link: safeBlog.primaryCta?.link || "",
+        type: safeBlog.primaryCta?.type || "custom"
+      } : { text: "", link: "", type: "custom" },
+      allCars: localCars || [],
+    });
+    
     setOpenDialog(true);
   };
 
@@ -555,8 +571,9 @@ export default function AdminBlogs() {
                       isOptionEqualToValue={(option, value) => (option?._id || option) === (value?._id || value)}
                       value={(localCars || []).filter(car => (formData?.relatedCars || []).includes(car?._id))}
                       onChange={(event, newValue) => {
+                        if (!newValue) newValue = [];
                         setFormData(prev => ({
-                          ...(prev || {}),
+                          ...(prev || initialForm),
                           relatedCars: Array.isArray(newValue) ? newValue.map(car => car?._id).filter(Boolean) : []
                         }));
                       }}

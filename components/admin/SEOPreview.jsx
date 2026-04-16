@@ -23,7 +23,7 @@ const SEOPreview = ({ title, metaTitle, metaDescription, slug, image, relatedCar
   
   const keywords = React.useMemo(() => {
     if (!formData?.focusKeywords) return [];
-    if (typeof formData.focusKeywords === 'string') {
+    if (typeof formData.focusKeywords === 'string' && formData.focusKeywords) {
       return formData.focusKeywords.split(",").filter(k => k.trim());
     }
     if (Array.isArray(formData.focusKeywords)) {
