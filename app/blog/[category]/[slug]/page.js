@@ -19,20 +19,27 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://c4r-platform-backend
 
 // Cached fetch — React deduplicates this across generateMetadata + page render
 const getBlog = cache(async (slug) => {
-  const res = await fetch(`${API_URL}/blogs/${slug}`, {
-    next: { revalidate: 60 },
-  });
-  if (!res.ok) return null;
-  const { data } = await res.json();
-  return data;
+  try {
+    const encodedSlug = encodeURIComponent(slug);
+    const res = await fetch(`${API_URL}/blogs/${encodedSlug}`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return null;
+    const { data } = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Fetch blog error:", error);
+    return null;
+  }
 });
 
 // 1. Generation of Metadata
 export async function generateMetadata({ params }) {
   const { slug } = await params;
+  const decodedSlug = decodeURIComponent(slug);
   
   try {
-    const blog = await getBlog(slug);
+    const blog = await getBlog(decodedSlug);
     if (!blog) return { title: "مقال غير موجود | C4R", robots: { index: false } };
     
     const metaTitle = blog.metaTitle || `${blog.title} | مدونة C4R`;
@@ -60,7 +67,7 @@ export async function generateMetadata({ params }) {
         images: [imageUrl],
       },
       alternates: {
-        canonical: `https://c4rplatform.com/blog/${categorySlug}/${slug}`,
+        canonical: `https://c4rplatform.com/blog/${categorySlug}/${decodedSlug}`,
       },
     };
   } catch (error) {
@@ -73,7 +80,10 @@ export async function generateMetadata({ params }) {
 
 export default async function BlogPostPage({ params }) {
   const { category, slug } = await params;
-  const blog = await getBlog(slug);
+  const decodedSlug = decodeURIComponent(slug);
+  const decodedCategory = decodeURIComponent(category);
+  
+  const blog = await getBlog(decodedSlug);
 
   if (!blog) {
     notFound();
@@ -81,8 +91,8 @@ export default async function BlogPostPage({ params }) {
 
   // SEO: Redirect to the correct category URL if there's a mismatch
   const correctCategorySlug = blog.category?.slug || "general";
-  if (category !== correctCategorySlug) {
-      redirect(`/blog/${correctCategorySlug}/${slug}`);
+  if (decodedCategory !== correctCategorySlug) {
+      redirect(`/blog/${correctCategorySlug}/${decodedSlug}`);
   }
 
   // 3. Structured Data
