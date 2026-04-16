@@ -32,10 +32,10 @@ i18n
       escapeValue: false,
     },
     detection: {
-      order: ["localStorage", "cookie", "navigator"],
-      caches: ["localStorage", "cookie"],
-      lookupLocalStorage: "i18nextLng",
+      order: ["cookie", "localStorage", "navigator"],
+      caches: ["cookie", "localStorage"],
       lookupCookie: "i18next",
+      lookupLocalStorage: "i18nextLng",
     },
     react: {
       useSuspense: false, 
