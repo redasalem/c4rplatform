@@ -136,6 +136,7 @@ export default function AdminBlogs() {
     queryFn: () => carService.getAll({ page: 1, limit: 100 }),
   });
 
+  const [mounted, setMounted] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState(null);
@@ -143,6 +144,10 @@ export default function AdminBlogs() {
   const [slugSync, setSlugSync] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [file, setFile] = useState(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const initialForm = {
     title: "",
@@ -461,6 +466,7 @@ export default function AdminBlogs() {
         )}
       </div>
 
+      {mounted && (
       <Dialog 
         open={openDialog} 
         onClose={() => setOpenDialog(false)} 
@@ -790,7 +796,9 @@ export default function AdminBlogs() {
           </Button>
         </DialogActions>
       </Dialog>
+      )}
 
+      {mounted && (
       <Dialog open={deleteDialog} onClose={() => setDeleteDialog(false)} PaperProps={{ sx: { borderRadius: "2.5rem", bgcolor: "#020617", border: "1px solid rgba(185,28,28,0.3)" } }}>
         <DialogTitle className="text-red-500 font-black p-8 pb-4">{t("dashboard.admin.blog.deleteDialog.title")}</DialogTitle>
         <DialogContent className="p-8 pt-0 text-slate-400 font-bold">{t("dashboard.admin.blog.deleteDialog.message")} ({selectedBlog?.title})?</DialogContent>
@@ -799,6 +807,7 @@ export default function AdminBlogs() {
           <Button variant="contained" color="error" onClick={() => deleteMutation.mutate(selectedBlog?.slug)}>{t("common.yes")}</Button>
         </DialogActions>
       </Dialog>
+      )}
     </div>
   );
 }
