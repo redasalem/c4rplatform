@@ -183,7 +183,7 @@ const NotificationDropdown = ({ isAdminSettings = false }) => {
                       <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">
                         {notif.message}
                       </p>
-                      <span className="text-[10px] text-gray-500 mt-2 block">
+                      <span className="text-[10px] text-gray-500 mt-2 block" suppressHydrationWarning>
                         {getTimeAgo(notif.createdAt)}
                       </span>
                     </div>

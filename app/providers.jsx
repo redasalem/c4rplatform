@@ -16,12 +16,20 @@ import { prefixer } from "stylis";
 export default function Providers({ children }) {
   const [queryClient] = useState(() => new QueryClient());
   const { i18n } = useTranslation();
-  const dir = i18n.dir();
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const dir = mounted ? i18n.dir() : "rtl"; // Default to RTL (matches layout.js)
 
   useEffect(() => {
-    document.dir = dir;
-    document.documentElement.lang = i18n.language;
-  }, [dir, i18n.language]);
+    if (mounted) {
+      document.dir = dir;
+      document.documentElement.lang = i18n.language;
+    }
+  }, [dir, i18n.language, mounted]);
 
   // Create RTL/LTR Cache for MUI
   const cacheRtl = useMemo(() => {

@@ -26,7 +26,7 @@ export const PopularArticles = ({ excludeId }) => {
   if (!isLoading && blogs.length === 0) return null;
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden mb-8">
+    <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden mb-8" suppressHydrationWarning>
       <div className="p-6 border-b border-white/10 flex items-center gap-3">
         <TrendingUp className="text-primary" />
         <h3 className="font-black text-white">
@@ -86,7 +86,7 @@ export const TrendingCars = () => {
   if (!isLoading && cars.length === 0) return null;
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden mb-8">
+    <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden mb-8" suppressHydrationWarning>
       <div className="p-6 border-b border-white/10 flex items-center gap-3 bg-primary/5">
         <DirectionsCar className="text-primary" />
         <h3 className="font-black text-white uppercase tracking-tight text-sm">

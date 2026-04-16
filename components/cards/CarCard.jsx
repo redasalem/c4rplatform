@@ -25,6 +25,7 @@ const CarCard = ({ car }) => {
     <div
       className="bg-white rounded-[2rem] overflow-hidden border border-slate-100 hover:border-orange-500/30 shadow-md hover:shadow-[0_25px_50px_-12px_rgba(249,115,22,0.25)] transition-all duration-500 group flex flex-col h-full relative hover:-translate-y-2"
       dir={i18n.dir()}
+      suppressHydrationWarning
     >
       {/* Decorative Gradient Background (visible on hover) */}
       <div className="absolute inset-0 bg-gradient-to-br from-orange-50/50 via-white to-orange-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
