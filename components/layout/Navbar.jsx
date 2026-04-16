@@ -58,11 +58,12 @@ const Navbar = () => {
     }
   }, [i18n.language, mounted]);
 
-  // Prevent hydration mismatch: don't render on server
-  if (!mounted) return null;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 shadow-lg transition-all duration-300 font-sans">
+    <header 
+      className="fixed top-0 left-0 right-0 z-50 shadow-lg transition-all duration-300 font-sans"
+      suppressHydrationWarning
+    >
       {/* Top bar */}
 
 

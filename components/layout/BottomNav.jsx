@@ -52,7 +52,10 @@ const BottomNav = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-[100] bg-midnight/80 backdrop-blur-xl border-t border-white/10 md:hidden flex items-center justify-around px-2 py-2 pb-safe shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+    <nav 
+      className="fixed bottom-0 left-0 right-0 z-[100] bg-midnight/80 backdrop-blur-xl border-t border-white/10 md:hidden flex items-center justify-around px-2 py-2 pb-safe shadow-[0_-10px_30px_rgba(0,0,0,0.5)]"
+      suppressHydrationWarning
+    >
       {navLinks.map((link) => {
         const isActive = pathname === link.href;
         let iconColorClass = isActive ? "text-primary" : "text-slate-400";
@@ -73,6 +76,7 @@ const BottomNav = () => {
             </div>
             <span
               className={`text-[10px] font-black uppercase tracking-widest ${isActive ? "text-primary" : "text-slate-400"}`}
+              suppressHydrationWarning
             >
               {link.label}
             </span>

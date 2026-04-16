@@ -18,9 +18,10 @@ import { useTranslation } from "react-i18next";
 const Footer = () => {
   const { t, i18n } = useTranslation("common");
   return (
-    <footer
+    <footer 
       className="bg-midnight text-gray-300 font-sans border-t border-white/10"
       dir={i18n.dir()}
+      suppressHydrationWarning
     >
       {/* 
         Hero Footer Section - CTA 
