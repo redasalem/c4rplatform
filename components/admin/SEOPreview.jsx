@@ -5,6 +5,18 @@ import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { CheckCircle, Warning, Error, Google, Search } from "@mui/icons-material";
 
+const StatusIcon = ({ status }) => {
+  if (status === "ok") return <CheckCircle sx={{ fontSize: 14, color: "#22c55e" }} />;
+  if (status === "warning") return <Warning sx={{ fontSize: 14, color: "#eab308" }} />;
+  return <Error sx={{ fontSize: 14, color: "#ef4444" }} />;
+};
+
+const StatusText = ({ status, okText, warningText, errorText }) => {
+  if (status === "ok") return <span className="text-green-500 text-xs font-medium">{okText}</span>;
+  if (status === "warning") return <span className="text-yellow-500 text-xs font-medium">{warningText}</span>;
+  return <span className="text-red-500 text-xs font-medium">{errorText}</span>;
+};
+
 const SEOPreview = React.memo(({ title, metaTitle, metaDescription, slug, image, relatedCars = [], formData }) => {
   const { t, i18n } = useTranslation("common");
   const siteUrl = "https://c4rplatform.com";
@@ -86,17 +98,7 @@ const SEOPreview = React.memo(({ title, metaTitle, metaDescription, slug, image,
   const titleStatus = getTitleStatus();
   const descStatus = getDescStatus();
 
-  const StatusIcon = ({ status }) => {
-    if (status === "ok") return <CheckCircle sx={{ fontSize: 14, color: "#22c55e" }} />;
-    if (status === "warning") return <Warning sx={{ fontSize: 14, color: "#eab308" }} />;
-    return <Error sx={{ fontSize: 14, color: "#ef4444" }} />;
-  };
 
-  const StatusText = ({ status, okText, warningText, errorText }) => {
-    if (status === "ok") return <span className="text-green-500 text-xs font-medium">{okText}</span>;
-    if (status === "warning") return <span className="text-yellow-500 text-xs font-medium">{warningText}</span>;
-    return <span className="text-red-500 text-xs font-medium">{errorText}</span>;
-  };
 
   return (
     <div className="space-y-6 h-full">
