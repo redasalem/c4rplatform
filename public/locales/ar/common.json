@@ -837,6 +837,44 @@
       "searchResults": "نتائج البحث عن \"{{query}}\" | مدونة C4R",
       "defaultTitle": "المدونة | أخبار وعروض السيارات في السعودية - C4R",
       "defaultDescription": "تابع أحدث أخبار السيارات، نصائح الصيانة، وعروض الإيجار في السعودية عبر مدونة C4R."
+    },
+    "validation": {
+      "publishBlocked": "لا يمكن النشر - يرجى إكمال جميع الحقول المطلوبة",
+      "publishReady": "جاهز للنشر! جميع الحقول المطلوبة مكتملة",
+      "publishReadyHint": "اضغط نشر لإضافة المقال إلى المدونة",
+      "seoPreview": "معاينة البحث",
+      "seoPreviewHint": "هكذا سيظهر مقالك في نتائج بحث Google",
+      "seoStats": {
+        "title": "عنوان SEO",
+        "titleOk": "ممتاز - {{count}}/60 حرف",
+        "titleWarning": "تحذير - {{count}}/60 حرف",
+        "titleError": "مطلوب - يجب إضافة عنوان SEO",
+        "description": "وصف SEO",
+        "descriptionOk": "ممتاز - {{count}}/160 حرف",
+        "descriptionWarning": "تحذير - {{count}}/160 حرف",
+        "descriptionError": "مطلوب - يجب إضافة وصف SEO",
+        "image": "الصورة المميزة",
+        "imageOk": "تم رفع الصورة",
+        "imageMissing": "مطلوبة للنشر",
+        "keywords": "الكلمات المفتاحية",
+        "keywordsCount": "{{count}} كلمة"
+      },
+      "linkedCars": "السيارات المرتبطة",
+      "linkedCarsHint": "هذه السيارات ستظهر في الشريط الجانبي للمقال",
+      "noLinkedCars": "لم يتم ربط سيارات بعد",
+      "imageUpload": {
+        "title": "الصورة المميزة",
+        "dragDrop": "اسحب الصورة هنا",
+        "orClick": "أو اضغط للاختيار",
+        "hint": "PNG، JPG، WEBP • حتى 5 ميجابايت",
+        "changeImage": "تغيير الصورة",
+        "required": "الصورة مطلوبة للنشر"
+      },
+      "required": {
+        "title": "عنوان المقال",
+        "category": "اختيار القسم",
+        "content": "محتوى المقال"
+      }
     }
   }
 }

@@ -802,6 +802,44 @@
       "searchResults": "Search results for \"{{query}}\" | C4R Blog",
       "defaultTitle": "Blog | Car News & Rental Offers in Saudi Arabia - C4R",
       "defaultDescription": "Follow the latest car news, maintenance tips, and rental offers in Saudi Arabia via C4R Blog."
+    },
+    "validation": {
+      "publishBlocked": "Cannot publish - please complete all required fields",
+      "publishReady": "Ready to publish! All required fields are complete",
+      "publishReadyHint": "Press Publish to add the article to the blog",
+      "seoPreview": "Search Preview",
+      "seoPreviewHint": "This is how your article will appear in Google search",
+      "seoStats": {
+        "title": "SEO Title",
+        "titleOk": "Excellent - {{count}}/60 characters",
+        "titleWarning": "Warning - {{count}}/60 characters",
+        "titleError": "Required - Add an SEO title",
+        "description": "SEO Description",
+        "descriptionOk": "Excellent - {{count}}/160 characters",
+        "descriptionWarning": "Warning - {{count}}/160 characters",
+        "descriptionError": "Required - Add an SEO description",
+        "image": "Featured Image",
+        "imageOk": "Image uploaded",
+        "imageMissing": "Required for publishing",
+        "keywords": "Keywords",
+        "keywordsCount": "{{count}} keywords"
+      },
+      "linkedCars": "Linked Cars",
+      "linkedCarsHint": "These cars will appear in the article sidebar",
+      "noLinkedCars": "No cars linked yet",
+      "imageUpload": {
+        "title": "Featured Image",
+        "dragDrop": "Drag & drop image here",
+        "orClick": "or click to select",
+        "hint": "PNG, JPG, WEBP • Up to 5MB",
+        "changeImage": "Change Image",
+        "required": "Image required for publishing"
+      },
+      "required": {
+        "title": "Article Title",
+        "category": "Category Selection",
+        "content": "Article Content"
+      }
     }
   }
 }
