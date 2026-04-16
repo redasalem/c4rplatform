@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { List, Link as ScrollLink, KeyboardArrowDown } from "@mui/icons-material";
+import { List, KeyboardArrowDown } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 
 const TableOfContents = ({ contentSelector = ".prose" }) => {
@@ -26,7 +26,6 @@ const TableOfContents = ({ contentSelector = ".prose" }) => {
 
     setHeadings(headingData);
 
-    // ScrollSpy Logic
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -67,11 +66,13 @@ const TableOfContents = ({ contentSelector = ".prose" }) => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between p-6 md:cursor-default"
+        aria-expanded={isOpen}
+        aria-controls="table-of-contents-list"
       >
         <div className="flex items-center gap-3">
           <List className="text-primary" />
           <span className="font-black text-white">
-            {i18n.language === "ar" ? "فهرس المحتويات" : "Table of Contents"}
+            {t("blog.tableOfContents.title")}
           </span>
         </div>
         <KeyboardArrowDown 
@@ -79,7 +80,7 @@ const TableOfContents = ({ contentSelector = ".prose" }) => {
         />
       </button>
 
-      <div className={`${isOpen ? "block" : "hidden"} md:block p-2 pt-0`}>
+      <div id="table-of-contents-list" className={`${isOpen ? "block" : "hidden"} md:block p-2 pt-0`}>
         <ul className="space-y-1">
           {headings.map((heading) => (
             <li key={heading.id}>
@@ -90,6 +91,7 @@ const TableOfContents = ({ contentSelector = ".prose" }) => {
                     ? "bg-primary/20 text-primary font-black"
                     : "text-slate-400 hover:bg-white/5 hover:text-white font-bold"
                 } ${heading.level === 'h3' ? 'pr-8' : ''}`}
+                aria-current={activeId === heading.id ? "location" : undefined}
               >
                 {heading.level === 'h2' && (
                   <div className={`w-1.5 h-1.5 rounded-full transition-all ${

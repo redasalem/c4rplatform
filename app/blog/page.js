@@ -1,14 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Article } from "@mui/icons-material";
+import { Article, Search } from "@mui/icons-material";
 import { Suspense } from "react";
+import React from "react";
 
 export async function generateMetadata({ searchParams }) {
   const pParams = await searchParams;
   const q = pParams.q || "";
   const page = parseInt(pParams.page) || 1;
 
-  const title = q ? `نتائج البحث عن "${q}" | مدونة C4R` : "المدونة | أخبار وعروض السيارات في السعودية - C4R";
+  const title = q 
+    ? `نتائج البحث عن "${q}" | مدونة C4R` 
+    : "المدونة | أخبار وعروض السيارات في السعودية - C4R";
   const description = q 
     ? `نتائج البحث عن ${q} في مدونة C4R. اكتشف أحدث المقالات والنصائح حول السيارات.`
     : "تابع أحدث أخبار السيارات، نصائح الصيانة، وعروض الإيجار في السعودية عبر مدونة C4R.";
@@ -34,13 +37,33 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://c4r-platform-backend
 async function getBlogs(searchParams = {}) {
   const page = searchParams.page || 1;
   const search = searchParams.q || "";
-  const limit = 9; // Show 9 per page
+  const limit = 9;
   
   const res = await fetch(`${API_URL}/blogs?status=published&page=${page}&limit=${limit}&search=${search}`, {
     next: { revalidate: 60 },
   });
   if (!res.ok) return { data: [] };
   return res.json();
+}
+
+function BlogCardSkeleton() {
+  return (
+    <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden">
+      <div className="relative h-56 w-full bg-slate-800 animate-pulse" />
+      <div className="p-6 md:p-8 space-y-4">
+        <div className="h-6 bg-slate-700 rounded animate-pulse w-1/4" />
+        <div className="h-8 bg-slate-700 rounded animate-pulse w-3/4" />
+        <div className="space-y-2">
+          <div className="h-4 bg-slate-700 rounded animate-pulse w-full" />
+          <div className="h-4 bg-slate-700 rounded animate-pulse w-2/3" />
+        </div>
+        <div className="flex justify-between items-center pt-4 border-t border-white/5">
+          <div className="h-4 bg-slate-700 rounded animate-pulse w-24" />
+          <div className="h-4 bg-slate-700 rounded animate-pulse w-20" />
+        </div>
+      </div>
+    </div>
+  );
 }
 
 async function BlogList({ searchParams }) {
@@ -56,6 +79,7 @@ async function BlogList({ searchParams }) {
       </div>
     );
   }
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
@@ -105,22 +129,47 @@ async function BlogList({ searchParams }) {
         ))}
       </div>
 
-      {/* Pagination Controls */}
       {pagination.totalPages > 1 && (
-        <div className="mt-16 flex justify-center gap-3">
-            {[...Array(pagination.totalPages)].map((_, i) => (
-                <Link
-                    key={i}
-                    href={`/blog?page=${i + 1}${searchParams.q ? `&q=${searchParams.q}` : ''}`}
+        <div className="mt-16 flex justify-center gap-3" role="navigation" aria-label="Pagination">
+            {[...Array(pagination.totalPages)].map((_, i) => {
+              const pageNum = i + 1;
+              const isActive = pagination.currentPage === pageNum;
+              
+              const shouldShowPage = 
+                pageNum === 1 || 
+                pageNum === pagination.totalPages ||
+                Math.abs(pageNum - pagination.currentPage) <= 1 ||
+                (pageNum <= 3 && pagination.currentPage <= 4) ||
+                (pageNum >= pagination.totalPages - 2 && pagination.currentPage >= pagination.totalPages - 3);
+
+              const shouldShowEllipsisBefore = pageNum === 4 && pagination.currentPage > 5;
+              const shouldShowEllipsisAfter = pageNum === pagination.totalPages - 3 && pagination.currentPage < pagination.totalPages - 4;
+
+              if (!shouldShowPage) return null;
+
+              return (
+                <React.Fragment key={i}>
+                  {shouldShowEllipsisBefore && (
+                    <span className="w-12 h-12 flex items-center justify-center text-slate-500">...</span>
+                  )}
+                  <Link
+                    href={`/blog?page=${pageNum}${searchParams.q ? `&q=${searchParams.q}` : ''}`}
                     className={`w-12 h-12 flex items-center justify-center rounded-xl font-black transition-all ${
-                        pagination.currentPage === i + 1 
+                        isActive 
                         ? 'bg-primary text-white shadow-lg shadow-primary/20' 
                         : 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white'
                     }`}
-                >
-                    {i + 1}
-                </Link>
-            ))}
+                    aria-current={isActive ? "page" : undefined}
+                    aria-label={`Page ${pageNum}`}
+                  >
+                    {pageNum}
+                  </Link>
+                  {shouldShowEllipsisAfter && (
+                    <span className="w-12 h-12 flex items-center justify-center text-slate-500">...</span>
+                  )}
+                </React.Fragment>
+              );
+            })}
         </div>
       )}
     </>
@@ -165,26 +214,29 @@ export default async function BlogPage({ searchParams }) {
             </p>
         </div>
 
-        {/* Search Bar */}
         <div className="max-w-xl mx-auto mb-16">
-            <form action="/blog" method="GET" className="relative group">
+            <form action="/blog" method="GET" className="relative group" role="search">
+                <label htmlFor="blog-search" className="sr-only">البحث في المدونة</label>
                 <input 
+                    id="blog-search"
                     type="text" 
                     name="q"
                     placeholder="ابحث عن نصائح، صيانة، أو أخبار السيارات..."
                     defaultValue={spa.q || ""}
                     className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 pr-14 text-white font-bold focus:outline-none focus:border-primary/50 transition-all group-hover:bg-white/10"
+                    aria-label="البحث في المدونة"
                 />
-                <button type="submit" className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-primary transition-colors">
-                    <Article sx={{ fontSize: 24 }} />
+                <button type="submit" className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-primary transition-colors" aria-label="بحث">
+                    <Search sx={{ fontSize: 24 }} />
                 </button>
-                <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none">
-                     🔍
-                </div>
             </form>
         </div>
 
-        <Suspense fallback={<div className="h-96 flex items-center justify-center animate-pulse bg-white/5 rounded-[3rem]">جاري التحميل...</div>}>
+        <Suspense fallback={
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {[1, 2, 3, 4, 5, 6].map((i) => <BlogCardSkeleton key={i} />)}
+          </div>
+        }>
           <BlogList searchParams={spa} />
         </Suspense>
       </div>

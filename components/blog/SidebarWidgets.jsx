@@ -7,11 +7,8 @@ import { Article, TrendingUp, DirectionsCar, Star } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import api from "@/services/api";
 
-/**
- * Widget showing the most viewed articles
- */
 export const PopularArticles = ({ excludeId }) => {
-  const { i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
 
   const { data, isLoading } = useQuery({
     queryKey: ["popularBlogs"],
@@ -30,7 +27,7 @@ export const PopularArticles = ({ excludeId }) => {
       <div className="p-6 border-b border-white/10 flex items-center gap-3">
         <TrendingUp className="text-primary" />
         <h3 className="font-black text-white">
-          {i18n.language === "ar" ? "مقالات شائعة" : "Popular Articles"}
+          {t("blog.sidebar.popularArticles")}
         </h3>
       </div>
       <div className="p-4 space-y-4">
@@ -56,7 +53,7 @@ export const PopularArticles = ({ excludeId }) => {
                         {blog.title}
                     </h4>
                     <span className="text-[10px] text-slate-500 font-bold">
-                        👁 {blog.views} {i18n.language === "ar" ? "قراءة" : "views"}
+                        👁 {blog.views} {t("blog.article.views")}
                     </span>
                  </div>
               </Link>
@@ -66,16 +63,12 @@ export const PopularArticles = ({ excludeId }) => {
   );
 };
 
-/**
- * Widget for fallback when relatedCars is empty
- */
 export const TrendingCars = () => {
-  const { i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
 
   const { data, isLoading } = useQuery({
     queryKey: ["trendingCars"],
     queryFn: async () => {
-      // Fetch some high-performing cars or generic ones
       const res = await api.get("/cars?limit=4&sort=-averageRating,-createdAt");
       return res.data;
     },
@@ -90,7 +83,7 @@ export const TrendingCars = () => {
       <div className="p-6 border-b border-white/10 flex items-center gap-3 bg-primary/5">
         <DirectionsCar className="text-primary" />
         <h3 className="font-black text-white uppercase tracking-tight text-sm">
-          {i18n.language === "ar" ? "سيارات تريند" : "Trending Cars"}
+          {t("blog.sidebar.trendingCars")}
         </h3>
       </div>
       <div className="p-4 space-y-4">
@@ -126,7 +119,7 @@ export const TrendingCars = () => {
       </div>
       <div className="p-4 pt-0">
          <Link href="/cars" className="block w-full py-3 rounded-2xl bg-primary hover:bg-orange-600 text-white text-center text-xs font-black transition-all shadow-lg shadow-primary/20">
-            {i18n.language === "ar" ? "تصفّح كافة العروض" : "Browse All Offers"}
+            {t("blog.sidebar.browseAll")}
          </Link>
       </div>
     </div>

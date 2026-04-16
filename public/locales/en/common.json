@@ -743,5 +743,65 @@
     "uploadError": "Failed to upload image file, please check file size",
     "requiredFields": "Please fill in the specified mandatory fields",
     "fillAll": "Please complete all data to proceed"
+  },
+  "blog": {
+    "pageTitle": "Blog",
+    "pageTitleAccent": "C4R",
+    "pageSubtitle": "Discover the world of cars in Saudi Arabia. From the latest driving technology to the best maintenance tips and exclusive rental offers.",
+    "searchPlaceholder": "Search for tips, maintenance, or car news...",
+    "readMore": "Read More",
+    "noArticles": "No articles yet",
+    "emptyState": {
+      "title": "No articles yet",
+      "subtitle": "Check back soon for new articles"
+    },
+    "article": {
+      "backToArticles": "Back to Articles",
+      "views": "views",
+      "minutesRead": "min read",
+      "byAuthor": "By C4R Experts",
+      "loading": "Loading..."
+    },
+    "continueReading": {
+      "sectionTitle": "Continue Reading",
+      "nextArticle": "Next Article"
+    },
+    "relatedArticles": {
+      "sectionTitle": "Articles You Might Like",
+      "sectionSubtitle": "Keep reading and discover more about the car world",
+      "viewAll": "View All Articles"
+    },
+    "sidebar": {
+      "popularArticles": "Popular Articles",
+      "trendingCars": "Trending Cars",
+      "browseAll": "Browse All Offers",
+      "noCategory": "General"
+    },
+    "tableOfContents": {
+      "title": "Table of Contents"
+    },
+    "cta": {
+      "mobileSticky": {
+        "browseCars": "Browse available cars now",
+        "fastBooking": "Fast Booking"
+      },
+      "dynamic": {
+        "title": "Ready to book your car?",
+        "subtitle": "Browse the best deals starting from 150 SAR/day",
+        "button": "Browse Cars"
+      }
+    },
+    "author": {
+      "title": "C4R Automotive Experts",
+      "description": "A specialized team in analyzing the Saudi car market, we strive to provide the most accurate information and advice on renting and owning cars to help you make the best decision.",
+      "learnMore": "Learn more about us",
+      "trustedBadge": "Trusted Source"
+    },
+    "meta": {
+      "notFound": "Article Not Found | C4R",
+      "searchResults": "Search results for \"{{query}}\" | C4R Blog",
+      "defaultTitle": "Blog | Car News & Rental Offers in Saudi Arabia - C4R",
+      "defaultDescription": "Follow the latest car news, maintenance tips, and rental offers in Saudi Arabia via C4R Blog."
+    }
   }
 }

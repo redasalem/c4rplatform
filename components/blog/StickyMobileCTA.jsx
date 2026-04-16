@@ -5,7 +5,7 @@ import { DirectionsCar } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 
 const StickyMobileCTA = () => {
-  const { i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
   const [isVisible, setIsVisible] = useState(false);
 
   const handleScroll = useCallback(() => {
@@ -14,7 +14,6 @@ const StickyMobileCTA = () => {
     const documentHeight = document.documentElement.scrollHeight;
     const scrollPercent = (scrollY / (documentHeight - windowHeight)) * 100;
 
-    // Show after 40% scroll, hide near footer
     const nearFooter = scrollY + windowHeight > documentHeight - 600;
     setIsVisible(scrollPercent > 40 && !nearFooter);
   }, []);
@@ -44,6 +43,7 @@ const StickyMobileCTA = () => {
     >
       <Link
         href="/cars"
+        aria-label={t("blog.cta.mobileSticky.browseCars")}
         className="w-full flex items-center justify-between bg-primary hover:bg-orange-600 text-white p-5 rounded-3xl shadow-[0_20px_40px_-10px_rgba(249,115,22,0.6)] font-black transition-all active:scale-95 border border-white/10"
       >
         <div className="flex items-center gap-3">
@@ -51,11 +51,11 @@ const StickyMobileCTA = () => {
             <DirectionsCar sx={{ fontSize: 20 }} />
           </div>
           <span className="text-sm">
-            {i18n.language === "ar" ? "تصفّح السيارات المتاحة الآن" : "Browse available cars now"}
+            {t("blog.cta.mobileSticky.browseCars")}
           </span>
         </div>
         <div className="bg-black/20 px-3 py-1 rounded-xl text-[10px] uppercase">
-            {i18n.language === "ar" ? "حجز سريع" : "Fast Booking"}
+            {t("blog.cta.mobileSticky.fastBooking")}
         </div>
       </Link>
     </div>

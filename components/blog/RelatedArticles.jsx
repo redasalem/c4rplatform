@@ -29,10 +29,10 @@ const RelatedArticles = ({ currentBlogId }) => {
       <div className="flex flex-col md:flex-row items-end justify-between gap-6 mb-12">
         <div className="space-y-2">
           <h2 className="text-3xl font-black text-white tracking-tighter">
-            {i18n.language === "ar" ? "مقالات قد تهمك" : "Articles you might like"}
+            {t("blog.relatedArticles.sectionTitle")}
           </h2>
           <p className="text-slate-400 font-bold">
-            {i18n.language === "ar" ? "استمر في القراءة واكتشف المزيد عن عالم السيارات" : "Keep reading and discover more about the car world"}
+            {t("blog.relatedArticles.sectionSubtitle")}
           </p>
         </div>
         
@@ -40,7 +40,7 @@ const RelatedArticles = ({ currentBlogId }) => {
           href="/blog" 
           className="text-primary font-black flex items-center gap-2 hover:gap-4 transition-all"
         >
-          {i18n.language === "ar" ? "مشاهدة كافة المقالات" : "View all articles"}
+          {t("blog.relatedArticles.viewAll")}
           <ArrowBackIosNew sx={{ fontSize: 14, transform: isRtl ? "rotate(0deg)" : "rotate(180deg)" }} />
         </Link>
       </div>
@@ -72,7 +72,7 @@ const RelatedArticles = ({ currentBlogId }) => {
                 </div>
                 <div className="space-y-2">
                   <div className="text-[10px] text-primary font-black uppercase tracking-widest">
-                    {blog.category?.name || (i18n.language === "ar" ? "عام" : "General")}
+                    {blog.category?.name || t("blog.sidebar.noCategory")}
                   </div>
                   <h3 className="text-lg font-black text-white line-clamp-2 leading-tight group-hover:text-primary transition-colors">
                     {blog.title}

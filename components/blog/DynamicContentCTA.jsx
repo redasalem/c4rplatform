@@ -5,7 +5,7 @@ import { DirectionsCar } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 
 const DynamicContentCTA = () => {
-  const { i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
 
   return (
     <div className="my-12 p-8 md:p-10 rounded-3xl bg-gradient-to-r from-primary/10 to-transparent border border-primary/20 relative overflow-hidden">
@@ -16,12 +16,10 @@ const DynamicContentCTA = () => {
           </div>
           <div>
             <h4 className="text-xl md:text-2xl font-black text-white mb-2">
-               {i18n.language === "ar" ? "جاهز تحجز سيارتك؟" : "Ready to book your car?"}
+               {t("blog.cta.dynamic.title")}
             </h4>
             <p className="text-slate-400 font-bold text-sm">
-               {i18n.language === "ar" 
-                 ? "تصفّح أفضل العروض بأسعار تبدأ من 150 ريال يومياً" 
-                 : "Browse the best deals starting from 150 SAR/day"}
+               {t("blog.cta.dynamic.subtitle")}
             </p>
           </div>
         </div>
@@ -30,7 +28,7 @@ const DynamicContentCTA = () => {
           href="/cars" 
           className="px-8 py-4 rounded-2xl bg-primary hover:bg-orange-600 text-white font-black transition-all shadow-lg shadow-primary/20 shrink-0"
         >
-          {i18n.language === "ar" ? "تصفّح السيارات" : "Browse Cars"}
+          {t("blog.cta.dynamic.button")}
         </Link>
       </div>
     </div>
