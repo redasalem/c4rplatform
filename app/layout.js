@@ -88,7 +88,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body
         className={`${almarai.variable} font-sans antialiased`}
         suppressHydrationWarning
