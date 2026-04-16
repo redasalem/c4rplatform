@@ -65,9 +65,10 @@ import "react-quill-new/dist/quill.snow.css";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
+  if (value !== index) return null;
   return (
-    <div role="tabpanel" hidden={value !== index} {...other}>
-      {value === index && <Box sx={{ pt: 4 }}>{children}</Box>}
+    <div role="tabpanel" {...other}>
+      <Box sx={{ pt: 4 }}>{children}</Box>
     </div>
   );
 }
@@ -346,11 +347,11 @@ export default function AdminBlogs() {
       const finalData = {
         ...formData,
         image: currentImageUrl,
-        focusKeywords: typeof formData?.focusKeywords === 'string' 
+        focusKeywords: typeof formData?.focusKeywords === 'string' && formData?.focusKeywords
           ? formData.focusKeywords.split(",").map(k => k.trim()).filter(k => k) 
           : (Array.isArray(formData?.focusKeywords) ? formData.focusKeywords : []),
         relatedCars: Array.isArray(formData?.relatedCars) 
-          ? formData.relatedCars.map(c => typeof c === 'object' ? c._id : c)
+          ? formData?.relatedCars.map(c => typeof c === 'object' ? c?._id : c)
           : [],
         summary: formData?.summary || (formData?.content ? formData.content.replace(/<[^>]*>?/gm, '').substring(0, 160) : ""),
       };
@@ -418,7 +419,7 @@ export default function AdminBlogs() {
             <Button onClick={() => handleOpenDialog()} className="mt-6 text-primary font-black uppercase tracking-widest">{t("dashboard.admin.blog.elite.startNow")}</Button>
           </div>
         ) : (
-          blogs.map((blog) => (
+          (Array.isArray(blogs) ? blogs : []).map((blog) => (
             <div key={blog._id} className="bg-[#0f172a]/50 backdrop-blur-xl border border-white/10 rounded-[2.5rem] overflow-hidden hover:bg-[#0f172a] transition-all duration-500 group relative flex flex-col h-full shadow-xl">
               <div className="relative h-56 w-full overflow-hidden">
                 <Image src={blog.image || '/images/blog-placeholder.jpg'} alt={blog.title} fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
@@ -547,10 +548,10 @@ export default function AdminBlogs() {
                         onChange={(e) => setFormData(prev => ({ ...(prev || {}), category: e.target.value }))} 
                         label={t("dashboard.admin.blog.addDialog.categoryLabel")}
                       >
-                        {localCategories.length === 0 ? (
+                        {(Array.isArray(localCategories) && localCategories.length === 0) ? (
                           <MenuItem disabled>{t("dashboard.admin.blog.elite.loading")}</MenuItem>
                         ) : (
-                          localCategories.map(cat => <MenuItem key={cat._id} value={cat._id}>{cat.name}</MenuItem>)
+                          (Array.isArray(localCategories) ? localCategories : []).map(cat => <MenuItem key={cat._id} value={cat._id}>{cat.name}</MenuItem>)
                         )}
                       </Select>
                     </FormControl>

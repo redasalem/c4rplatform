@@ -191,15 +191,15 @@ const SEOPreview = ({ title, metaTitle, metaDescription, slug, image, relatedCar
         
         {linkedCars.length > 0 ? (
           <div className="flex flex-wrap gap-2">
-            {linkedCars.slice(0, 6).map((car) => (
+            {(Array.isArray(linkedCars) ? linkedCars : []).slice(0, 6).map((car) => (
               <div 
-                key={car._id} 
+                key={car?._id} 
                 className="w-10 h-10 rounded-full bg-slate-800 border-2 border-white/10 overflow-hidden hover:border-primary transition-colors group"
-                title={car.name}
+                title={car?.name || ""}
               >
                 <Image
-                  src={car.image && car.image !== 'no-photo.jpg' ? car.image : "/images/car-placeholder.png"}
-                  alt={car.name}
+                  src={car?.image && car.image !== 'no-photo.jpg' ? car.image : "/images/car-placeholder.png"}
+                  alt={car?.name || ""}
                   width={40}
                   height={40}
                   className="object-cover group-hover:scale-110 transition-transform"
