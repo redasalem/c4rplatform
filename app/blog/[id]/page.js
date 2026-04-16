@@ -262,16 +262,16 @@ export default async function BlogPostPage({ params }) {
               <TableOfContents />
               
               {blog.relatedCars && blog.relatedCars.filter(c => c && typeof c === 'object').length > 0 ? (
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 space-y-4">
+                <div className="space-y-4">
                   <h3 className="text-base font-bold text-white flex items-center gap-2">
                     <span className="w-1 h-5 bg-primary rounded-full" />
                     سيارات موصى بها
                   </h3>
-                  <div className="space-y-4">
+                  <div className="grid grid-cols-1 gap-4">
                     {blog.relatedCars.filter(c => c && typeof c === 'object').slice(0, 2).map((car) => {
                       const carImage = Array.isArray(car.image) ? car.image[0] : (car.image || "/images/car-placeholder.png");
                       const formattedCar = { ...car, image: carImage, name: car.name || `${car.brand || ""} ${car.model || ""}`.trim() };
-                      return <CarCard key={car._id} car={formattedCar} />;
+                      return <CarCard key={car._id} car={formattedCar} variant="dark" />;
                     })}
                   </div>
                 </div>
