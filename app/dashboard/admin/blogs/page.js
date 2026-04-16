@@ -340,7 +340,7 @@ export default function AdminBlogs() {
                   
                   <div className="flex justify-between items-center mt-4 pt-4 border-t border-white/5">
                      <div className="flex -space-x-2">
-                        {blog.relatedCars?.slice(0,3).map((car, i) => (
+                        {(blog.relatedCars || []).slice(0, 3).map((car, i) => (
                           <div key={i} className="w-8 h-8 rounded-full bg-slate-800 border-2 border-[#020617] overflow-hidden" title={car.name}>
                              <Image src={car.image || '/images/car-top.png'} alt="car" width={32} height={32} className="object-cover" />
                           </div>
