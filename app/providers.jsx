@@ -18,14 +18,17 @@ export default function Providers({ children }) {
     setMounted(true);
   }, []);
 
-  const dir = mounted ? i18n.dir() : "rtl"; // Default to RTL (matches layout.js)
+  // HYDRATION STABILIZATION: Force server-matching defaults during hydration pass.
+  // Once mounted, we adapt to the user's detected i18n settings.
+  const currentLang = mounted ? i18n.language : "ar";
+  const dir = (currentLang === "ar") ? "rtl" : "ltr";
 
   useEffect(() => {
     if (mounted) {
       document.dir = dir;
-      document.documentElement.lang = i18n.language;
+      document.documentElement.lang = currentLang;
     }
-  }, [dir, i18n.language, mounted]);
+  }, [dir, currentLang, mounted]);
 
   const theme = useMemo(
     () =>

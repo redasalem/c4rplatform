@@ -17,6 +17,12 @@ import { useTranslation } from "react-i18next";
 
 const Footer = () => {
   const { t, i18n } = useTranslation("common");
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <footer 
       className="bg-midnight text-gray-300 font-sans border-t border-white/10"
@@ -215,7 +221,7 @@ const Footer = () => {
       <div className="border-t border-white/5 bg-midnight/40 backdrop-blur-md pb-24 md:pb-8">
         <div className="container mx-auto px-6 py-8 flex flex-col lg:flex-row items-center justify-between gap-6 text-xs md:text-base text-gray-400 font-bold">
           <p className="text-center lg:text-right uppercase tracking-wider order-2 lg:order-1" suppressHydrationWarning>
-            © {new Date().getFullYear()} منصة C4R. جميع الحقوق محفوظة.
+            © {mounted ? new Date().getFullYear() : 2026} منصة C4R. جميع الحقوق محفوظة.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 order-1 lg:order-2">
             <Link

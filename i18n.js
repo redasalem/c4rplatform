@@ -23,13 +23,13 @@ i18n
   .init({
     resources,
     fallbackLng: "ar",
-    lng: "ar", // Default language is Arabic
+    lng: "ar", // Default language is Arabic - crucial for hydration matching
     supportedLngs: ["ar", "en"],
     ns: ["common"],
     defaultNS: "common",
-    debug: process.env.NODE_ENV === "development",
+    debug: false,
     interpolation: {
-      escapeValue: false, // React already escapes values
+      escapeValue: false,
     },
     detection: {
       order: ["localStorage", "cookie", "navigator"],
@@ -38,7 +38,11 @@ i18n
       lookupCookie: "i18next",
     },
     react: {
-      useSuspense: false, // Build-time safe
+      useSuspense: false, 
+      bindI18n: 'languageChanged',
+      bindI18nStore: '',
+      transEmptyNodeValue: '',
+      usePureComponent: true
     },
   });
 

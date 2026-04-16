@@ -20,6 +20,7 @@ const NotificationDropdown = ({ isAdminSettings = false }) => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const dropdownRef = useRef(null);
 
   // Close dropdown on outside click
@@ -48,6 +49,7 @@ const NotificationDropdown = ({ isAdminSettings = false }) => {
   };
 
   useEffect(() => {
+    setMounted(true);
     fetchNotifications();
     // Auto-refresh every 30 seconds
     const interval = setInterval(fetchNotifications, 30000);
@@ -184,7 +186,7 @@ const NotificationDropdown = ({ isAdminSettings = false }) => {
                         {notif.message}
                       </p>
                       <span className="text-[10px] text-gray-500 mt-2 block" suppressHydrationWarning>
-                        {getTimeAgo(notif.createdAt)}
+                        {mounted && getTimeAgo(notif.createdAt)}
                       </span>
                     </div>
                     {/* Delete button (shows on hover - Admin only) */}

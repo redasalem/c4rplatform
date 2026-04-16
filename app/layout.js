@@ -1,11 +1,12 @@
-import Navbar from "@/components/layout/Navbar";
-import BottomNav from "@/components/layout/BottomNav";
-import FloatingContact from "@/components/layout/FloatingContact";
-import FooterWrapper from "@/components/layout/FooterWrapper";
-import MainLayoutWrapper from "@/components/layout/MainLayoutWrapper";
+import ClientLayout from "@/components/layout/ClientLayout";
 import Providers from "./providers";
 import { Almarai } from "next/font/google";
 import "./globals.css";
+
+// NUCLEAR HYDRATION FIX: 
+// We use a dedicated ClientLayout (Client Component) to handle all 
+// components that rely on client-side state. 
+// The ClientLayout itself handles the dynamic loading with ssr: false.
 
 const almarai = Almarai({
   subsets: ["arabic"],
@@ -149,11 +150,7 @@ export default function RootLayout({ children }) {
         />
 
         <Providers>
-          <Navbar />
-          <BottomNav />
-          <FloatingContact />
-          <MainLayoutWrapper>{children}</MainLayoutWrapper>
-          <FooterWrapper />
+          <ClientLayout>{children}</ClientLayout>
         </Providers>
       </body>
     </html>
