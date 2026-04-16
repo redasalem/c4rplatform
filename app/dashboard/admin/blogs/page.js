@@ -518,7 +518,7 @@ export default function AdminBlogs() {
             borderRadius: "2rem", 
             bgcolor: "#020617", 
             border: "1px solid rgba(255,255,255,0.1)", 
-            backgroundImage: "radial-gradient(at top right, rgba(249, 115, 22, 0.05) 0%, transparent 70%)",
+            backgroundImage: "radial-gradient(at 100% 0%, rgba(249, 115, 22, 0.05) 0%, transparent 70%)",
             maxHeight: "90vh",
           } 
         }}
