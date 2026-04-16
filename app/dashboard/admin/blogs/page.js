@@ -246,9 +246,9 @@ export default function AdminBlogs() {
         focusKeywords: typeof formData.focusKeywords === 'string' 
             ? formData.focusKeywords.split(",").map(k => k.trim()).filter(k => k) 
             : (Array.isArray(formData.focusKeywords) ? formData.focusKeywords : []),
-        relatedCars: typeof formData.relatedCars === 'string'
-            ? formData.relatedCars.split(",").map(c => c.trim()).filter(c => c)
-            : (Array.isArray(formData.relatedCars) ? formData.relatedCars : []),
+        relatedCars: Array.isArray(formData.relatedCars) 
+            ? formData.relatedCars.map(c => typeof c === 'object' ? c._id : c)
+            : [],
         summary: formData.summary || (formData.content ? formData.content.replace(/<[^>]*>?/gm, '').substring(0, 160) : ""),
       };
 
