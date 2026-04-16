@@ -146,7 +146,8 @@ export default async function BlogPostPage({ params }) {
         ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling', 'target', 'src', 'alt', 'id'] 
       });
     } catch {
-      return blog.content || "";
+      console.error('[Security] DOMPurify failed to load — content blocked');
+      return "<p>Content could not be displayed safely.</p>";
     }
   })();
 

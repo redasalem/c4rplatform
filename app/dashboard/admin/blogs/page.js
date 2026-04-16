@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { blogService, categoryService, carService } from "@/services/api";
@@ -145,11 +145,22 @@ export default function AdminBlogs() {
   const [slugSync, setSlugSync] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [file, setFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Cleanup blob URLs on unmount or when previewUrl changes to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (previewUrl && previewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
+  // Safety-First: All array fields MUST initialize as [] — never null or undefined
   const initialForm = {
     title: "",
     slug: "",
@@ -187,7 +198,7 @@ export default function AdminBlogs() {
   useEffect(() => {
     if (slugSync && formData?.title) {
       const slug = formData.title.toLowerCase()
-        .replace(/[^a-z0-9-ء-ي]+/g, '-')
+        .replace(/[^a-z0-9\u0621-\u064A\u0660-\u0669-]+/g, '-')
         .replace(/(^-|-$)+/g, '');
       setFormData(prev => ({ ...prev, slug: slug }));
     }
@@ -220,7 +231,7 @@ export default function AdminBlogs() {
         metaDescription: !hasMetaDesc,
       }
     };
-  }, [formData]);
+  }, [formData?.title, formData?.category, formData?.content, formData?.image, formData?.metaTitle, formData?.metaDescription, file]);
 
   const createMutation = useMutation({
     mutationFn: blogService.create,
@@ -260,6 +271,12 @@ export default function AdminBlogs() {
 
   const resetForm = () => {
     if (!mounted) return;
+    
+    // Revoke any existing blob preview URL before resetting
+    if (previewUrl && previewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(previewUrl);
+    }
+    setPreviewUrl(null);
     
     setFormData({ 
       ...initialForm, 
@@ -376,7 +393,14 @@ export default function AdminBlogs() {
     }
   };
 
-  const blogs = blogsData?.data || blogsData?.data?.blogs || (Array.isArray(blogsData) ? blogsData : []);
+  // Safe blog data extraction with proper fallback chain
+  const blogs = (() => {
+    const raw = blogsData?.data;
+    if (Array.isArray(raw)) return raw;
+    if (raw?.blogs && Array.isArray(raw.blogs)) return raw.blogs;
+    if (Array.isArray(blogsData)) return blogsData;
+    return [];
+  })();
   const categories = Array.isArray(catData?.data) ? catData.data : (Array.isArray(catData) ? catData : []);
   const cars = localCars;
 
@@ -583,7 +607,16 @@ export default function AdminBlogs() {
                     <ImageUpload 
                       value={formData?.image || ""}
                       onChange={(url) => setFormData(prev => ({ ...(prev || {}), image: url || "" }))}
-                      onFileSelect={(f) => setFile(f)}
+                      onFileSelect={(f) => {
+                        setFile(f);
+                        // Create preview URL safely (client-side only)
+                        if (f && typeof window !== 'undefined') {
+                          if (previewUrl && previewUrl.startsWith('blob:')) {
+                            URL.revokeObjectURL(previewUrl);
+                          }
+                          setPreviewUrl(URL.createObjectURL(f));
+                        }
+                      }}
                       error={validation.errors.image}
                     />
                     <Autocomplete
@@ -774,7 +807,7 @@ export default function AdminBlogs() {
               <div className="sticky top-6">
                 <SEOPreview 
                   formData={formData}
-                  image={formData?.image || (file ? URL.createObjectURL(file) : null)}
+                  image={formData?.image || previewUrl}
                   relatedCars={localCars.filter(car => (formData?.relatedCars || []).includes(car._id))}
                 />
               </div>

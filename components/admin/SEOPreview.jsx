@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { CheckCircle, Warning, Error, Google, Search } from "@mui/icons-material";
 
-const SEOPreview = ({ title, metaTitle, metaDescription, slug, image, relatedCars = [], formData }) => {
+const SEOPreview = React.memo(({ title, metaTitle, metaDescription, slug, image, relatedCars = [], formData }) => {
   const { t, i18n } = useTranslation("common");
   const siteUrl = "https://c4rplatform.com";
   const [mounted, setMounted] = useState(false);
@@ -52,19 +52,18 @@ const SEOPreview = ({ title, metaTitle, metaDescription, slug, image, relatedCar
   }, [formData?.focusKeywords]);
   
   const linkedCars = React.useMemo(() => {
-    if (!relatedCars || !Array.isArray(relatedCars)) {
-      relatedCars = [];
+    // Safety-First: NEVER mutate props — use a local variable instead
+    const safeCars = Array.isArray(relatedCars) ? relatedCars : [];
+    
+    if (safeCars.length > 0) {
+      return safeCars;
     }
     
-    if (relatedCars.length > 0) {
-      return relatedCars;
-    }
+    const carIds = Array.isArray(formData?.relatedCars) ? formData.relatedCars : [];
+    if (carIds.length === 0) return [];
     
-    const carIds = formData?.relatedCars || [];
-    if (!Array.isArray(carIds)) return [];
-    
-    const allCars = formData?.allCars || [];
-    if (!Array.isArray(allCars)) return [];
+    const allCars = Array.isArray(formData?.allCars) ? formData.allCars : [];
+    if (allCars.length === 0) return [];
     
     return carIds.map(id => {
       const car = allCars.find(c => c && c._id === id);
@@ -262,6 +261,8 @@ const SEOPreview = ({ title, metaTitle, metaDescription, slug, image, relatedCar
       </div>
     </div>
   );
-};
+});
+
+SEOPreview.displayName = 'SEOPreview';
 
 export default SEOPreview;
