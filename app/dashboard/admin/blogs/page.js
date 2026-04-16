@@ -84,7 +84,7 @@ export default function AdminBlogs() {
 
   const { data: blogsData, isLoading: blogsLoading } = useQuery({
     queryKey: ["adminBlogs"],
-    queryFn: () => blogService.getAll({ limit: 50, sort: '-createdAt', status: '' }),
+    queryFn: () => blogService.getAll({ limit: 50, sort: '-createdAt' }),
   });
 
   const { data: catData } = useQuery({
@@ -265,7 +265,7 @@ export default function AdminBlogs() {
   };
 
   // Improved Data Mapping with Defensive Checks
-  const blogs = blogsData?.data?.blogs || (Array.isArray(blogsData?.data) ? blogsData.data : []);
+  const blogs = blogsData?.data || blogsData?.data?.blogs || (Array.isArray(blogsData) ? blogsData : []);
   const categories = Array.isArray(catData?.data) ? catData.data : (Array.isArray(catData) ? catData : []);
   const cars = Array.isArray(carData?.data?.cars) ? carData.data.cars : (Array.isArray(carData?.data) ? carData.data : (Array.isArray(carData) ? carData : []));
 
@@ -346,9 +346,39 @@ export default function AdminBlogs() {
                           </div>
                         ))}
                      </div>
-                     <div className="flex gap-1">
-                        <IconButton onClick={() => handleOpenDialog(blog)} sx={{ color: 'rgba(255,255,255,0.3)', '&:hover': { color: 'white' } }}><Edit fontSize="small" /></IconButton>
-                        <IconButton onClick={() => { setSelectedBlog(blog); setDeleteDialog(true); }} sx={{ color: 'rgba(249,115,22,0.3)', '&:hover': { color: '#f97316' } }}><Delete fontSize="small" /></IconButton>
+                     <div className="flex gap-2">
+                        <Button
+                          size="small"
+                          onClick={() => handleOpenDialog(blog)}
+                          startIcon={<Edit />}
+                          sx={{
+                            color: 'white',
+                            bgcolor: 'rgba(255,255,255,0.05)',
+                            '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' },
+                            borderRadius: '1rem',
+                            fontWeight: 900,
+                            px: 2,
+                            fontSize: '0.75rem'
+                          }}
+                        >
+                          {t("common.edit")}
+                        </Button>
+                        <Button
+                          size="small"
+                          onClick={() => { setSelectedBlog(blog); setDeleteDialog(true); }}
+                          startIcon={<Delete />}
+                          sx={{
+                            color: '#ef4444',
+                            bgcolor: 'rgba(239,68,68,0.05)',
+                            '&:hover': { bgcolor: 'rgba(239,68,68,0.1)' },
+                            borderRadius: '1rem',
+                            fontWeight: 900,
+                            px: 2,
+                            fontSize: '0.75rem'
+                          }}
+                        >
+                          {t("common.delete")}
+                        </Button>
                      </div>
                   </div>
                </div>

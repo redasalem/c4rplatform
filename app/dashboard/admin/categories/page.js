@@ -146,12 +146,39 @@ export default function AdminCategories() {
                     <CategoryIcon />
                   </div>
                   <div className="flex gap-2">
-                    <IconButton size="small" onClick={() => handleOpenDialog(cat)} sx={{ color: "rgba(255,255,255,0.5)", "&:hover": { color: "white" } }}>
-                      <Edit fontSize="small" />
-                    </IconButton>
-                    <IconButton size="small" color="error" onClick={() => { setSelectedCategory(cat); setDeleteDialog(true); }}>
-                      <Delete fontSize="small" />
-                    </IconButton>
+                    <Button
+                      size="small"
+                      onClick={() => handleOpenDialog(cat)}
+                      startIcon={<Edit />}
+                      sx={{
+                        color: 'white',
+                        bgcolor: 'rgba(255,255,255,0.05)',
+                        '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' },
+                        borderRadius: '0.75rem',
+                        fontWeight: 900,
+                        px: 2,
+                        fontSize: '0.75rem'
+                      }}
+                    >
+                      {t("common.edit")}
+                    </Button>
+                    <Button
+                      size="small"
+                      color="error"
+                      onClick={() => { setSelectedCategory(cat); setDeleteDialog(true); }}
+                      startIcon={<Delete />}
+                      sx={{
+                        color: '#ef4444',
+                        bgcolor: 'rgba(239,68,68,0.05)',
+                        '&:hover': { bgcolor: 'rgba(239,68,68,0.1)' },
+                        borderRadius: '0.75rem',
+                        fontWeight: 900,
+                        px: 2,
+                        fontSize: '0.75rem'
+                      }}
+                    >
+                      {t("common.delete")}
+                    </Button>
                   </div>
                 </div>
                 <h3 className="text-xl font-black text-white mb-2">{cat?.name || t("common.noData")}</h3>
