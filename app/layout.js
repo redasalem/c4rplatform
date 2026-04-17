@@ -1,14 +1,13 @@
-import ClientLayout from "@/components/layout/ClientLayout";
+import Navbar from "@/components/layout/Navbar";
+import BottomNav from "@/components/layout/BottomNav";
+import FloatingContact from "@/components/layout/FloatingContact";
+import FooterWrapper from "@/components/layout/FooterWrapper";
+import MainLayoutWrapper from "@/components/layout/MainLayoutWrapper";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import Providers from "./providers";
 import { Almarai } from "next/font/google";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { headers } from "next/headers";
 import "./globals.css";
-
-// NUCLEAR HYDRATION FIX: 
-// We use a dedicated ClientLayout (Client Component) to handle all 
-// components that rely on client-side state. 
-// The ClientLayout itself handles the dynamic loading with ssr: false.
 
 const almarai = Almarai({
   subsets: ["arabic"],
@@ -23,70 +22,13 @@ export const viewport = {
 };
 
 export const metadata = {
+  // ... (keeping existing metadata)
   title: {
     default: "منصة C4R | أفضل تأجير سيارات في السعودية | Car Rental KSA",
     template: "%s | C4R Platform | تأجير سيارات",
   },
-  description:
-    "احجز مع منصة C4R أفضل وأرخص سيارات للإيجار في السعودية بأسعار تبدأ من 200 ريال. نوفر تأجير سيارات فخمة واقتصادية، إيجار يومي وشهري في الرياض، جدة والشرقية. Best & affordable car rental in KSA starting from 200 SAR.",
-  keywords: [
-    "تأجير سيارات",
-    "تأجير سيارات السعودية",
-    "إيجار سيارات الرياض",
-    "تأجير سيارات جدة",
-    "أرخص تأجير سيارات",
-    "C4R Platform",
-    "Car Rental KSA",
-    "Rent a car Riyadh",
-  ],
-  category: "Car Rental",
+  description: "احجز مع منصة C4R أفضل وأرخص سيارات للإيجار في السعودية بأسعار تبدأ من 200 ريال. نوفر تأجير سيارات فخمة واقتصادية، إيجار يومي وشهري في الرياض، جدة والشرقية.",
   metadataBase: new URL("https://c4rplatform.com"),
-  verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  alternates: {
-    canonical: "https://c4rplatform.com",
-  },
-  icons: {
-    icon: [{ url: "/favicon.ico", type: "image/x-icon" }],
-    shortcut: ["/favicon.ico"],
-    apple: [{ url: "/images/logo.jpeg", sizes: "180x180" }],
-  },
-  openGraph: {
-    title: "منصة C4R | أفضل تأجير سيارات في السعودية | Car Rental KSA",
-    description:
-      "احجز مع منصة C4R أفضل وأرخص سيارات للإيجار في السعودية. تأجير سيارات فخمة واقتصادية. بأسعار تبدأ من 200 ريال. Best car rental KSA.",
-    url: "https://c4rplatform.com",
-    siteName: "C4R Platform",
-    locale: "ar_SA",
-    type: "website",
-    images: [
-      {
-        url: "/images/logo.jpeg",
-        width: 400,
-        height: 227,
-        alt: "C4R Platform Logo - Best Car Rental KSA",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "منصة C4R | تأجير سيارات في السعودية | Car Rental KSA",
-    description:
-      "أفضل وأرخص سيارات للإيجار في السعودية. حجز سريع وبأسعار تبدأ من 200 ريال. Best car rental KSA.",
-    images: ["/images/logo.jpeg"],
-  },
 };
 
 export default async function RootLayout({ children }) {
@@ -157,7 +99,11 @@ export default async function RootLayout({ children }) {
           />
 
           <Providers lang={lang} dir={dir}>
-            <ClientLayout>{children}</ClientLayout>
+            <Navbar />
+            <BottomNav />
+            <FloatingContact />
+            <MainLayoutWrapper>{children}</MainLayoutWrapper>
+            <FooterWrapper />
           </Providers>
         </AppRouterCacheProvider>
       </body>

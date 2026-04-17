@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
@@ -11,17 +11,23 @@ import {
   Email,
 } from "@mui/icons-material";
 
-/**
- * BottomNav Component
- * Provides a native-app-like navigation experience on mobile devices.
- * Visible on: default (mobile) to sm.
- * Hidden on: md (tablet) and above.
- */
 const BottomNav = () => {
   const { t } = useTranslation("common");
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // SAFE SHELL: Render an identical structural container on server 
+  // to prevent hook count mismatches during hydration pass.
+  if (!mounted) {
+    return <nav className="fixed bottom-0 left-0 right-0 h-16 bg-[#0D1117]/80 backdrop-blur-xl border-t border-white/5 md:hidden z-[100]" />;
+  }
 
   const navLinks = [
+    // ... matching existing links
     {
       label: t("bottomNav.home"),
       href: "/",
@@ -53,8 +59,7 @@ const BottomNav = () => {
 
   return (
     <nav 
-      className="fixed bottom-0 left-0 right-0 z-[100] bg-midnight/80 backdrop-blur-xl border-t border-white/10 md:hidden flex items-center justify-around px-2 py-2 pb-safe shadow-[0_-10px_30px_rgba(0,0,0,0.5)]"
-      suppressHydrationWarning
+      className="fixed bottom-0 left-0 right-0 z-[100] bg-[#0D1117]/80 backdrop-blur-xl border-t border-white/10 md:hidden flex items-center justify-around px-2 py-2 pb-safe shadow-[0_-10px_30px_rgba(0,0,0,0.5)]"
     >
       {navLinks.map((link) => {
         const isActive = pathname === link.href;

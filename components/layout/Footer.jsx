@@ -23,6 +23,12 @@ const Footer = () => {
     setMounted(true);
   }, []);
 
+  // SAFE SHELL: Render an identical structural container on server 
+  // to prevent hook count mismatches during hydration pass.
+  if (!mounted) {
+    return <footer className="bg-[#0D1117] py-12 border-t border-white/5 min-h-[400px]" dir={i18n.dir()} />;
+  }
+
   return (
     <footer 
       className="bg-midnight text-gray-300 font-sans border-t border-white/10"
