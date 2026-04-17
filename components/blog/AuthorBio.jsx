@@ -12,7 +12,6 @@ const AuthorBio = () => {
   return (
     <div className="bg-gradient-to-br from-slate-900/50 to-slate-900/30 backdrop-blur-sm border border-white/10 rounded-2xl p-6 my-10">
       <div className="flex items-start gap-5">
-        {/* Circle Avatar with Ring */}
         <div className="relative shrink-0">
           <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden ring-2 ring-primary/20 ring-offset-2 ring-offset-transparent">
             <Image 
@@ -27,7 +26,6 @@ const AuthorBio = () => {
           </div>
         </div>
 
-        {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-2">
             <h4 className="text-base md:text-lg font-bold text-white">

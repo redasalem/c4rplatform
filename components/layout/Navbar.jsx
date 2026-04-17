@@ -39,7 +39,6 @@ const Navbar = () => {
   useEffect(() => {
     setMounted(true);
     const handleScroll = () => {
-      // Hide top bar after scrolling 50px
       if (window.scrollY > 50) {
         setShowTopBar(false);
       } else {
@@ -50,13 +49,6 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  useEffect(() => {
-    if (mounted) {
-      document.dir = i18n.dir();
-      document.documentElement.lang = i18n.language;
-    }
-  }, [i18n.language, mounted]);
 
   // SAFE SHELL: Render an identical structural container on server 
   // to prevent hook count mismatches during hydration pass.
@@ -148,7 +140,12 @@ const Navbar = () => {
           <div className="hidden sm:flex items-center gap-4">
             <Select
               value={i18n.language}
-              onChange={(e) => i18n.changeLanguage(e.target.value)}
+              onChange={(e) => {
+                const newLang = e.target.value;
+                i18n.changeLanguage(newLang);
+                document.cookie = `i18nextLng=${newLang};path=/;max-age=31536000`;
+                document.cookie = `i18next=${newLang};path=/;max-age=31536000`;
+              }}
               variant="standard"
               disableUnderline
               sx={{
@@ -453,7 +450,12 @@ const Navbar = () => {
             </span>
             <Select
               value={i18n.language}
-              onChange={(e) => i18n.changeLanguage(e.target.value)}
+              onChange={(e) => {
+                const newLang = e.target.value;
+                i18n.changeLanguage(newLang);
+                document.cookie = `i18nextLng=${newLang};path=/;max-age=31536000`;
+                document.cookie = `i18next=${newLang};path=/;max-age=31536000`;
+              }}
               variant="outlined" // Outlined is better for mobile touch targets
               fullWidth
               sx={{

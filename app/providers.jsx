@@ -13,26 +13,31 @@ export default function Providers({ children, lang, dir }) {
   const [queryClient] = useState(() => new QueryClient());
   const { i18n } = useTranslation();
   const [mounted, setMounted] = useState(false);
-  
+  const [initialized, setInitialized] = useState(false);
+
   useEffect(() => {
     setMounted(true);
-    // Sync i18n with server-detected language if they differ
-    if (i18n.language !== lang) {
-      i18n.changeLanguage(lang);
+    if (!initialized && lang) {
+      if (i18n.language !== lang) {
+        i18n.changeLanguage(lang);
+      }
+      setInitialized(true);
     }
-  }, [lang, i18n]);
+  }, [lang, i18n, initialized]);
 
   useEffect(() => {
     if (mounted) {
-      document.dir = dir;
-      document.documentElement.lang = lang;
+      document.documentElement.lang = lang || "ar";
+      document.documentElement.dir = dir || "rtl";
     }
   }, [dir, lang, mounted]);
+
+  const effectiveDir = mounted ? (i18n.dir() === "rtl" ? "rtl" : "ltr") : (dir || "rtl");
 
   const theme = useMemo(
     () =>
       createTheme({
-        direction: dir,
+        direction: effectiveDir,
         typography: {
           fontFamily: "var(--font-almarai)",
         },
@@ -43,8 +48,10 @@ export default function Providers({ children, lang, dir }) {
           },
         },
       }),
-    [dir],
+    [effectiveDir],
   );
+
+  const toastPosition = effectiveDir === "rtl" ? "bottom-left" : "bottom-right";
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -53,8 +60,8 @@ export default function Providers({ children, lang, dir }) {
         <AuthProvider>
           {children}
           <ToastContainer
-            position={dir === "rtl" ? "bottom-right" : "bottom-left"}
-            rtl={dir === "rtl"}
+            position={toastPosition}
+            rtl={effectiveDir === "rtl"}
             theme="dark"
             pauseOnHover
             draggable

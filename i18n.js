@@ -2,7 +2,6 @@
 
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
 
 // Import translations directly (bundled approach for Next.js)
 import arCommon from "./public/locales/ar/common.json";
@@ -18,12 +17,11 @@ const resources = {
 };
 
 i18n
-  .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources,
     fallbackLng: "ar",
-    lng: "ar", // Default language is Arabic - crucial for hydration matching
+    lng: "ar",
     supportedLngs: ["ar", "en"],
     ns: ["common"],
     defaultNS: "common",
@@ -32,17 +30,18 @@ i18n
       escapeValue: false,
     },
     detection: {
-      order: ["cookie", "localStorage", "navigator"],
+      order: ["querystring", "cookie", "localStorage", "navigator"],
       caches: ["cookie", "localStorage"],
-      lookupCookie: "i18next",
+      lookupQuerystring: "lang",
+      lookupCookie: "i18nextLng",
       lookupLocalStorage: "i18nextLng",
     },
     react: {
-      useSuspense: false, 
-      bindI18n: 'languageChanged',
-      bindI18nStore: '',
-      transEmptyNodeValue: '',
-      usePureComponent: true
+      useSuspense: false,
+      bindI18n: "languageChanged",
+      bindI18nStore: "",
+      transEmptyNodeValue: "",
+      usePureComponent: true,
     },
   });
 

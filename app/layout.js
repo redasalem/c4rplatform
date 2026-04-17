@@ -3,6 +3,7 @@ import BottomNav from "@/components/layout/BottomNav";
 import FloatingContact from "@/components/layout/FloatingContact";
 import FooterWrapper from "@/components/layout/FooterWrapper";
 import MainLayoutWrapper from "@/components/layout/MainLayoutWrapper";
+import LanguageSync from "@/components/layout/LanguageSync";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import Providers from "./providers";
 import { Almarai } from "next/font/google";
@@ -99,6 +100,7 @@ export default async function RootLayout({ children }) {
           />
 
           <Providers lang={lang} dir={dir}>
+            <LanguageSync />
             <Navbar />
             <BottomNav />
             <FloatingContact />
