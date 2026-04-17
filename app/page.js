@@ -2,7 +2,6 @@ import HeroAd from "@/components/home/HeroAd";
 import Departments from "@/components/home/Departments";
 import FAQ from "@/components/home/FAQ";
 import ReviewMarquee from "@/components/home/ReviewMarquee";
-import LatestBlogs from "@/components/home/LatestBlogs";
 
 export const metadata = {
   title: "أرخص تأجير سيارات في السعودية | أسعار تبدأ من 200 ريال | C4R",
@@ -110,7 +109,6 @@ export default function Home() {
       <HeroAd />
       <Departments />
       <ReviewMarquee />
-      <LatestBlogs />
       {/* <Partners /> */}
       <FAQ />
     </main>
