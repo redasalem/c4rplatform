@@ -85,7 +85,8 @@ export default async function BlogPostPage({ params }) {
 
   // Since content is generated securely via admin backend (React Quill),
   // we can safely render it without isomorphic-dompurify to avoid jsdom crashes on Vercel.
-  const sanitizedContent = blog.content ? String(blog.content) : "";
+  // We replace &nbsp; with normal spaces to prevent text overflow clipping on the left side in RTL.
+  const sanitizedContent = blog.content ? String(blog.content).replace(/&nbsp;/g, ' ') : "";
 
   const shareUrl = `https://c4rplatform.com/blog/${id}`;
   const shareTitle = blog.title;
@@ -158,7 +159,7 @@ export default async function BlogPostPage({ params }) {
           </div>
 
           {/* Article Body Content - Optimized News-Style Narrow Column */}
-          <div className="max-w-3xl mx-auto px-6 md:px-0">
+          <div className="max-w-4xl mx-auto px-6 md:px-8">
             <div 
               className="prose md:prose-lg prose-invert w-full max-w-none
                 prose-headings:text-white prose-headings:font-black prose-headings:tracking-tight
