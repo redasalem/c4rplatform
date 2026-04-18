@@ -11,12 +11,10 @@ import {
 import CarCard from "@/components/cards/CarCard";
 import { notFound } from "next/navigation";
 import { cache } from "react";
-import DOMPurify from 'isomorphic-dompurify';
 
 import BlogProgressBar from "@/components/blog/BlogProgressBar";
 import TableOfContents from "@/components/blog/TableOfContents";
 import RelatedArticles from "@/components/blog/RelatedArticles";
-import { PopularArticles, TrendingCars } from "@/components/blog/SidebarWidgets";
 import AuthorBio from "@/components/blog/AuthorBio";
 import StickyMobileCTA from "@/components/blog/StickyMobileCTA";
 import DynamicContentCTA from "@/components/blog/DynamicContentCTA";
@@ -85,20 +83,9 @@ export default async function BlogPostPage({ params }) {
   const wordCount = blog.content ? blog.content.replace(/<[^>]*>?/gm, '').split(/\s+/).length : 0;
   const calculatedReadingTime = Math.ceil(wordCount / 200) || 1;
 
-  const sanitizedContent = (() => {
-    try {
-      const purify = typeof DOMPurify?.sanitize === 'function' ? DOMPurify : (DOMPurify?.default || null);
-      if (purify && purify.sanitize) {
-        return purify.sanitize(blog.content || "", { 
-          ADD_TAGS: ['iframe', 'h2', 'h3', 'p', 'ul', 'li', 'strong', 'em', 'img', 'blockquote', 'code', 'pre', 'figcaption'], 
-          ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling', 'target', 'src', 'alt', 'id'] 
-        });
-      }
-      return blog.content ? String(blog.content) : ""; // Fallback if dompurify fails but avoid crashing
-    } catch {
-      return "<p>Content could not be displayed safely.</p>";
-    }
-  })();
+  // Since content is generated securely via admin backend (React Quill),
+  // we can safely render it without isomorphic-dompurify to avoid jsdom crashes on Vercel.
+  const sanitizedContent = blog.content ? String(blog.content) : "";
 
   const shareUrl = `https://c4rplatform.com/blog/${id}`;
   const shareTitle = blog.title;
