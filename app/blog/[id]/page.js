@@ -19,6 +19,7 @@ import AuthorBio from "@/components/blog/AuthorBio";
 import StickyMobileCTA from "@/components/blog/StickyMobileCTA";
 import DynamicContentCTA from "@/components/blog/DynamicContentCTA";
 import ContinueReading from "@/components/blog/ContinueReading";
+import { SiLinktree } from "react-icons/si";
 
 import { Tooltip, IconButton } from "@mui/material";
 
@@ -74,10 +75,27 @@ export async function generateMetadata({ params }) {
   }
 }
 
+async function getSocialLinks() {
+  try {
+    const res = await fetch(`${API_URL}/settings/social_links`, { next: { revalidate: 3600 } });
+    if (!res.ok) return {};
+    const json = await res.json();
+    return json.data || {};
+  } catch (error) {
+    return {};
+  }
+}
+
 export default async function BlogPostPage({ params }) {
   const { id } = await params;
   if (!id) return notFound();
-  const blog = await getBlog(id);
+  
+  // Parallel fetch for blog and settings
+  const [blog, socials] = await Promise.all([
+    getBlog(id),
+    getSocialLinks()
+  ]);
+
   if (!blog) return notFound();
 
   const wordCount = blog.content ? blog.content.replace(/<[^>]*>?/gm, '').split(/\s+/).length : 0;
@@ -200,19 +218,32 @@ export default async function BlogPostPage({ params }) {
           {/* Share & Social Footer */}
           <footer className="mt-32 pt-20 border-t border-white/10 space-y-16">
             <AuthorBio />
-            
-            <div className="flex flex-col md:flex-row justify-between items-center gap-10 bg-[#0f172a]/40 p-12 rounded-[3rem] border border-white/10 backdrop-blur-xl">
-              <div className="text-center md:text-right">
-                <h4 className="text-2xl font-black text-white mb-3">هل أعجبك هذا المحتوى؟</h4>
-                <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">شاركه مع مجتمعك أو احفظه للعودة إليه لاحقاً</p>
+
+            {/* Premium Linktree CTA */}
+            <div className="relative group bg-linear-to-r from-orange-600 to-amber-500 p-[1px] rounded-[2.5rem] overflow-hidden transition-transform duration-500 hover:scale-[1.02]">
+              <div className="bg-[#020617] rounded-[2.45rem] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
+                <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-right">
+                  <div className="w-16 h-16 rounded-2xl bg-[#39E09B]/10 flex items-center justify-center text-[#39E09B] group-hover:scale-110 transition-transform duration-500 shadow-xl border border-[#39E09B]/20">
+                    <SiLinktree style={{ fontSize: 32 }} />
+                  </div>
+                  <div>
+                    <h4 className="text-xl md:text-2xl font-black text-white mb-2">تابعنا على جميع المنصات</h4>
+                    <p className="text-gray-400 text-sm md:text-base font-bold">تواصل معنا، احجز سيارتك، واعرف آخر عروضنا في مكان واحد</p>
+                  </div>
+                </div>
+                <Link 
+                  href={socials.linktree || "#"} 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full md:w-auto px-10 py-4 bg-[#39E09B] hover:bg-[#2bc486] text-black font-black rounded-2xl md:rounded-full text-center transition-all duration-300 shadow-lg shadow-[#39E09B]/25 active:scale-95 flex items-center justify-center gap-3 group"
+                >
+                  <span>جميع روابط التواصل</span>
+                  <SiLinktree className="text-black group-hover:rotate-12 transition-transform scale-125" />
+                </Link>
               </div>
-              <div className="flex items-center gap-6">
-                <Tooltip title="حفظ المقال"><IconButton sx={{ width: 64, height: 64, bg: 'white/5', color: 'white', '&:hover': { bgcolor: 'primary.main', transform: 'scale(1.1)' }, transition: 'all 0.4s' }}><BookmarkBorder fontSize="large" /></IconButton></Tooltip>
-                <div className="w-px h-12 bg-white/10 mx-2" />
-                <Tooltip title="فيسبوك"><IconButton component="a" href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} target="_blank" sx={{ width: 64, height: 64, bg: 'white/5', color: 'white', '&:hover': { color: '#1877f2', transform: 'scale(1.1)' }, transition: 'all 0.4s' }}><Facebook fontSize="large" /></IconButton></Tooltip>
-                <Tooltip title="تويتر"><IconButton component="a" href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`} target="_blank" sx={{ width: 64, height: 64, bg: 'white/5', color: 'white', '&:hover': { color: '#1da1f2', transform: 'scale(1.1)' }, transition: 'all 0.4s' }}><Twitter fontSize="large" /></IconButton></Tooltip>
-                <Tooltip title="واتساب"><IconButton component="a" href={`https://wa.me/?text=${encodeURIComponent(shareTitle + ' ' + shareUrl)}`} target="_blank" sx={{ width: 64, height: 64, bg: 'white/5', color: 'white', '&:hover': { color: '#25d366', transform: 'scale(1.1)' }, transition: 'all 0.4s' }}><WhatsApp fontSize="large" /></IconButton></Tooltip>
-              </div>
+              {/* Decorative elements */}
+              <div className="absolute top-0 left-0 w-32 h-32 bg-orange-500/10 blur-[60px] rounded-full -translate-x-1/2 -translate-y-1/2" />
+              <div className="absolute bottom-0 right-0 w-48 h-48 bg-orange-500/5 blur-[80px] rounded-full translate-x-1/3 translate-y-1/3" />
             </div>
           </footer>
         </article>

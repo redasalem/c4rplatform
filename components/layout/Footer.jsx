@@ -12,7 +12,7 @@ import {
   X,
   Facebook,
 } from "@mui/icons-material";
-import { SiTiktok } from "react-icons/si";
+import { SiTiktok, SiLinktree } from "react-icons/si";
 
 import { useTranslation } from "react-i18next";
 import { settingService } from "@/services/api";
@@ -166,6 +166,11 @@ const Footer = () => {
                 { label: t("footer.withDriver"), href: "/with-driver" },
                 { label: t("footer.companies"), href: "/corporate" },
                 { label: t("navbar.blog"), href: "/blog" },
+                { 
+                  label: "جميع روابطنا (Links)", 
+                  href: socials.linktree || "#",
+                  icon: <SiLinktree className="text-[#39E09B] text-sm" /> 
+                },
               ].map((link, index) => (
                 <li key={index}>
                   <Link
@@ -174,7 +179,9 @@ const Footer = () => {
                     aria-label={link.label}
                     title={link.label}
                   >
-                    <KeyboardArrowLeft className="text-gray-600 group-hover:text-orange-500 transition-colors hidden md:block" />
+                    <div className="hidden md:flex items-center gap-2">
+                       {link.icon || <KeyboardArrowLeft className="text-gray-600 group-hover:text-orange-500 transition-colors" />}
+                    </div>
                     <span className="group-hover:translate-x-[-6px] transition-transform">
                       {link.label}
                     </span>

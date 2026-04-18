@@ -37,12 +37,14 @@ import {
   AutoGraph,
   Handyman,
   WorkspacePremium,
+  Link as LinkIcon,
+  Language,
 } from "@mui/icons-material";
 import { MenuItem, Select, FormControl, InputLabel } from "@mui/material";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
-import { SiTiktok } from "react-icons/si";
+import { SiTiktok, SiLinktree } from "react-icons/si";
 
 // --- Static Constants Outside Component ---
 const eliteInputStyle = {
@@ -78,6 +80,14 @@ const iconOptions = [
   { key: "Handyman", label: "Maintenance" },
   { key: "WorkspacePremium", label: "Premium" },
   { key: "Info", label: "Info" },
+  { key: "WhatsApp", label: "WhatsApp" },
+  { key: "Instagram", label: "Instagram" },
+  { key: "Facebook", label: "Facebook" },
+  { key: "Twitter", label: "Twitter (X)" },
+  { key: "Tiktok", label: "TikTok" },
+  { key: "Language", label: "Website" },
+  { key: "LocationOn", label: "Location" },
+  { key: "Email", label: "Email" },
 ];
 
 export default function AdminSettings() {
@@ -93,6 +103,7 @@ export default function AdminSettings() {
     tiktok: "",
     whatsapp: "",
     snapchat: "",
+    linktree: "",
   });
 
   const [about, setAbout] = useState({
@@ -115,7 +126,15 @@ export default function AdminSettings() {
       AutoGraph: <AutoGraph />,
       Handyman: <Handyman />,
       WorkspacePremium: <WorkspacePremium />,
-      Info: <Info />
+      Info: <Info />,
+      WhatsApp: <WhatsApp />,
+      Instagram: <Instagram />,
+      Facebook: <Facebook />,
+      Twitter: <Twitter />,
+      Tiktok: <SiTiktok />,
+      Language: <Language />,
+      LocationOn: <LocationOn />,
+      Email: <Email />,
     };
     return icons[key] || <Info />;
   };
@@ -300,6 +319,16 @@ export default function AdminSettings() {
                     InputProps={{ startAdornment: <InputAdornment position="start"><SiTiktok sx={{ color: "var(--primary)", fontSize: '1.2rem' }} /></InputAdornment> }}
                   />
                 </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="رابط Linktree"
+                    value={socials.linktree}
+                    onChange={(e) => setSocials({ ...socials, linktree: e.target.value })}
+                    sx={eliteInputStyle}
+                    InputProps={{ startAdornment: <InputAdornment position="start"><SiLinktree style={{ color: "var(--primary)", fontSize: '1.2rem' }} /></InputAdornment> }}
+                  />
+                </Grid>
                 <Grid item xs={12}>
                   <Button
                     variant="contained"
@@ -421,7 +450,7 @@ export default function AdminSettings() {
                                           {iconOptions.map(opt => (
                                             <MenuItem key={opt.key} value={opt.key}>
                                               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                                {opt.icon} {opt.label}
+                                                {getIconByKey(opt.key)} {opt.label}
                                               </Box>
                                             </MenuItem>
                                           ))}
