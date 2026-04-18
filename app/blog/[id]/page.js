@@ -164,14 +164,14 @@ export default async function BlogPostPage({ params }) {
                 prose-headings:text-white prose-headings:font-black prose-headings:tracking-tight
                 prose-h2:text-3xl md:prose-h2:text-4xl prose-h2:mt-16 prose-h2:mb-8
                 prose-h3:text-2xl md:prose-h3:text-3xl prose-h3:mt-12 prose-h3:mb-6
-                prose-p:text-slate-300 prose-p:leading-loose prose-p:mb-8 prose-p:text-lg md:prose-p:text-xl
+                prose-p:text-slate-300 prose-p:leading-[2.2] prose-p:mb-10 prose-p:text-lg md:prose-p:text-xl prose-p:font-medium
                 prose-a:text-primary prose-a:font-bold hover:prose-a:text-primary-hover transition-colors
                 prose-strong:text-white prose-strong:font-black
                 prose-ul:text-slate-300 prose-ul:my-6
-                prose-li:text-lg md:prose-li:text-xl prose-li:my-2
+                prose-li:text-lg md:prose-li:text-xl prose-li:my-2 prose-li:font-medium
                 prose-blockquote:border-r-4 prose-blockquote:border-l-0 prose-blockquote:border-primary prose-blockquote:bg-white/5 prose-blockquote:py-4 prose-blockquote:px-8 prose-blockquote:rounded-l-2xl prose-blockquote:text-white prose-blockquote:font-bold prose-blockquote:not-italic prose-blockquote:my-12 prose-blockquote:text-xl md:prose-blockquote:text-2xl prose-blockquote:leading-relaxed
                 prose-img:rounded-3xl prose-img:shadow-2xl prose-img:my-16 prose-img:w-full prose-img:object-cover prose-img:ring-1 prose-img:ring-white/10
-                whitespace-normal break-words
+                whitespace-normal break-normal
               "
               dangerouslySetInnerHTML={{ __html: sanitizedContent }}
             />
