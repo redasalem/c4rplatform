@@ -87,10 +87,14 @@ export default async function BlogPostPage({ params }) {
 
   const sanitizedContent = (() => {
     try {
-      return DOMPurify.sanitize(blog.content || "", { 
-        ADD_TAGS: ['iframe', 'h2', 'h3', 'p', 'ul', 'li', 'strong', 'em', 'img', 'blockquote', 'code', 'pre', 'figcaption'], 
-        ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling', 'target', 'src', 'alt', 'id'] 
-      });
+      const purify = typeof DOMPurify?.sanitize === 'function' ? DOMPurify : (DOMPurify?.default || null);
+      if (purify && purify.sanitize) {
+        return purify.sanitize(blog.content || "", { 
+          ADD_TAGS: ['iframe', 'h2', 'h3', 'p', 'ul', 'li', 'strong', 'em', 'img', 'blockquote', 'code', 'pre', 'figcaption'], 
+          ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling', 'target', 'src', 'alt', 'id'] 
+        });
+      }
+      return blog.content ? String(blog.content) : ""; // Fallback if dompurify fails but avoid crashing
     } catch {
       return "<p>Content could not be displayed safely.</p>";
     }
