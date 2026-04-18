@@ -220,8 +220,8 @@ export default async function BlogPostPage({ params }) {
             <AuthorBio />
 
             {/* Premium Linktree CTA */}
-            <div className="relative group bg-linear-to-r from-orange-600 to-amber-500 p-[1px] rounded-[2.5rem] overflow-hidden transition-transform duration-500 hover:scale-[1.02]">
-              <div className="bg-[#020617] rounded-[2.45rem] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
+            <div className="relative group bg-linear-to-r from-orange-600 to-amber-500 p-[2px] rounded-[2.5rem] overflow-hidden transition-transform duration-500 hover:scale-[1.01]">
+              <div className="bg-[#020617] rounded-[2.4rem] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
                 <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-right">
                   <div className="w-16 h-16 rounded-2xl bg-[#39E09B]/10 flex items-center justify-center text-[#39E09B] group-hover:scale-110 transition-transform duration-500 shadow-xl border border-[#39E09B]/20">
                     <SiLinktree style={{ fontSize: 32 }} />
@@ -241,9 +241,6 @@ export default async function BlogPostPage({ params }) {
                   <SiLinktree className="text-black group-hover:rotate-12 transition-transform scale-125" />
                 </Link>
               </div>
-              {/* Decorative elements */}
-              <div className="absolute top-0 left-0 w-32 h-32 bg-orange-500/10 blur-[60px] rounded-full -translate-x-1/2 -translate-y-1/2" />
-              <div className="absolute bottom-0 right-0 w-48 h-48 bg-orange-500/5 blur-[80px] rounded-full translate-x-1/3 translate-y-1/3" />
             </div>
           </footer>
         </article>
