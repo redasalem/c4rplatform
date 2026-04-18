@@ -58,16 +58,6 @@ const Navbar = () => {
     }
   }, [i18n.language, mounted]);
 
-  // SAFE SHELL: Render an identical structural container on server 
-  // to prevent hook count mismatches during hydration pass.
-  if (!mounted) {
-    return (
-      <nav 
-        className="fixed top-0 left-0 right-0 h-20 bg-[#0D1117]/80 backdrop-blur-md z-50 border-b border-white/5" 
-        dir={i18n.dir()}
-      />
-    );
-  }
 
   return (
     <header 

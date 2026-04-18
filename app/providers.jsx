@@ -9,25 +9,26 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "@/context/AuthContext";
 
-export default function Providers({ children, lang, dir }) {
+export default function Providers({ children }) {
   const [queryClient] = useState(() => new QueryClient());
   const { i18n } = useTranslation();
   const [mounted, setMounted] = useState(false);
   
   useEffect(() => {
     setMounted(true);
-    // Sync i18n with server-detected language if they differ
-    if (i18n.language !== lang) {
-      i18n.changeLanguage(lang);
-    }
-  }, [lang, i18n]);
+  }, []);
+
+  // HYDRATION STABILIZATION: Force server-matching defaults during hydration pass.
+  // Once mounted, we adapt to the user's detected i18n settings.
+  const currentLang = mounted ? i18n.language : "ar";
+  const dir = (currentLang === "ar") ? "rtl" : "ltr";
 
   useEffect(() => {
     if (mounted) {
       document.dir = dir;
-      document.documentElement.lang = lang;
+      document.documentElement.lang = currentLang;
     }
-  }, [dir, lang, mounted]);
+  }, [dir, currentLang, mounted]);
 
   const theme = useMemo(
     () =>

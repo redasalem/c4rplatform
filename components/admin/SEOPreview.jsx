@@ -22,6 +22,32 @@ const SEOPreview = React.memo(({ title, metaTitle, metaDescription, slug, image,
   const siteUrl = "https://c4rplatform.com";
   const [mounted, setMounted] = useState(false);
 
+  const keywords = React.useMemo(() => {
+    if (!formData?.focusKeywords) return [];
+    if (typeof formData.focusKeywords === 'string' && formData.focusKeywords) {
+      return formData.focusKeywords.split(",").filter(k => k.trim());
+    }
+    if (Array.isArray(formData.focusKeywords)) {
+      return formData.focusKeywords;
+    }
+    return [];
+  }, [formData?.focusKeywords]);
+
+  const linkedCars = React.useMemo(() => {
+    const safeCars = Array.isArray(relatedCars) ? relatedCars : [];
+    if (safeCars.length > 0) {
+      return safeCars;
+    }
+    const carIds = Array.isArray(formData?.relatedCars) ? formData.relatedCars : [];
+    if (carIds.length === 0) return [];
+    const allCars = Array.isArray(formData?.allCars) ? formData.allCars : [];
+    if (allCars.length === 0) return [];
+    return carIds.map(id => {
+      const car = allCars.find(c => c && c._id === id);
+      return car ? { _id: id, name: car.name || '', image: car.image } : null;
+    }).filter(Boolean);
+  }, [relatedCars, formData?.relatedCars, formData?.allCars]);
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -39,49 +65,18 @@ const SEOPreview = React.memo(({ title, metaTitle, metaDescription, slug, image,
       </div>
     );
   }
-  
+
   const displayTitle = metaTitle || formData?.title || title || "";
-  const displaySlug = slug || (formData?.title 
+  const displaySlug = slug || (formData?.title
     ? formData.title.toLowerCase().replace(/[^a-z0-9-ء-ي]+/g, '-').replace(/(^-|-$)+/g, '')
     : "article-slug"
   );
   const displayDescription = metaDescription || formData?.summary || "";
   const fullUrl = `${siteUrl}/blog/${displaySlug}`;
-  
+
   const titleLength = displayTitle.length;
   const descLength = displayDescription.length;
   const hasImage = !!(image || formData?.image);
-  
-  const keywords = React.useMemo(() => {
-    if (!formData?.focusKeywords) return [];
-    if (typeof formData.focusKeywords === 'string' && formData.focusKeywords) {
-      return formData.focusKeywords.split(",").filter(k => k.trim());
-    }
-    if (Array.isArray(formData.focusKeywords)) {
-      return formData.focusKeywords;
-    }
-    return [];
-  }, [formData?.focusKeywords]);
-  
-  const linkedCars = React.useMemo(() => {
-    // Safety-First: NEVER mutate props — use a local variable instead
-    const safeCars = Array.isArray(relatedCars) ? relatedCars : [];
-    
-    if (safeCars.length > 0) {
-      return safeCars;
-    }
-    
-    const carIds = Array.isArray(formData?.relatedCars) ? formData.relatedCars : [];
-    if (carIds.length === 0) return [];
-    
-    const allCars = Array.isArray(formData?.allCars) ? formData.allCars : [];
-    if (allCars.length === 0) return [];
-    
-    return carIds.map(id => {
-      const car = allCars.find(c => c && c._id === id);
-      return car ? { _id: id, name: car.name || '', image: car.image } : null;
-    }).filter(Boolean);
-  }, [relatedCars, formData?.relatedCars, formData?.allCars]);
 
   const getTitleStatus = () => {
     if (!displayTitle) return "error";

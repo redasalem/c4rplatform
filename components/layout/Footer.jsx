@@ -10,10 +10,13 @@ import {
   DirectionsCar,
   KeyboardArrowLeft,
   X,
+  Facebook,
 } from "@mui/icons-material";
 import { SiTiktok } from "react-icons/si";
 
 import { useTranslation } from "react-i18next";
+import { settingService } from "@/services/api";
+import { useQuery } from "@tanstack/react-query";
 
 const Footer = () => {
   const { t, i18n } = useTranslation("common");
@@ -23,11 +26,33 @@ const Footer = () => {
     setMounted(true);
   }, []);
 
-  // SAFE SHELL: Render an identical structural container on server 
-  // to prevent hook count mismatches during hydration pass.
-  if (!mounted) {
-    return <footer className="bg-[#0D1117] py-12 border-t border-white/5 min-h-[400px]" dir={i18n.dir()} />;
-  }
+  // Fetch Site Settings
+  const { data: socialsData } = useQuery({
+    queryKey: ["setting", "social_links"],
+    queryFn: () => settingService.getOne("social_links"),
+    staleTime: 1000 * 60 * 10, // 10 minutes
+  });
+
+  const { data: contactData } = useQuery({
+    queryKey: ["setting", "contact_info"],
+    queryFn: () => settingService.getOne("contact_info"),
+    staleTime: 1000 * 60 * 10,
+  });
+
+  const socials = socialsData?.data || {
+    facebook: "https://www.facebook.com/C4Rplatform",
+    twitter: "https://x.com/C4Rplatform",
+    instagram: "https://www.instagram.com/c4rplatform",
+    whatsapp: "966554118873",
+    tiktok: "https://www.tiktok.com/@c4rplatform",
+  };
+
+  const contact = contactData?.data || {
+    phone: "966554118873",
+    whatsapp: "966554118873",
+    email: "Team@C4Rplatform.com",
+    address: ""
+  };
 
   return (
     <footer 
@@ -93,23 +118,32 @@ const Footer = () => {
               {[
                 {
                   icon: <Instagram />,
-                  href: "https://www.instagram.com/C4R_Platform/#",
+                  href: socials.instagram,
                   label: "Instagram",
                 },
-                { icon: <X />, href: "https://x.com/C4R_Platform", label: "X (Twitter)" },
+                { 
+                  icon: <X />, 
+                  href: socials.twitter, 
+                  label: "X (Twitter)" 
+                },
                 {
                   icon: <SiTiktok className="text-xl" />,
-                  href: "https://www.tiktok.com/@C4R.Platform",
+                  href: socials.tiktok,
                   label: "TikTok",
+                },
+                {
+                  icon: <Facebook />,
+                  href: socials.facebook,
+                  label: "Facebook",
                 },
               ].map((social, index) => (
                 <Link
                   key={index}
-                  href={social.href}
+                  href={social.href || "#"}
                   target="_blank"
-                  className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-orange-500 hover:text-white hover:border-orange-500 transition-all duration-500 shadow-xl group active:scale-90"
-                  aria-label={t("footer.followUsOn") + " " + social.label}
-                  title={t("footer.followUsOn") + " " + social.label}
+                  className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 group shadow-lg active:scale-90"
+                  aria-label={social.label}
+                  title={social.label}
                 >
                   <span className="group-hover:scale-110 transition-transform">
                     {social.icon}
@@ -194,10 +228,10 @@ const Footer = () => {
                     {t("footer.whatsapp")}
                   </span>
                   <a
-                    href="https://wa.me/966554118873"
+                    href={`https://wa.me/${contact.whatsapp.replace(/\+/g, "")}`}
                     className="text-xl md:text-2xl font-black text-white hover:text-orange-400 dir-ltr transition-colors tracking-tighter"
                   >
-                    +966554118873
+                    {contact.whatsapp.startsWith("+") ? contact.whatsapp : `+${contact.whatsapp}`}
                   </a>
                 </div>
               </li>
@@ -211,10 +245,10 @@ const Footer = () => {
                     {t("footer.email")}
                   </span>
                   <a
-                    href="mailto:Team@C4Rplatform.com"
+                    href={`mailto:${contact.email}`}
                     className="text-sm md:text-xl text-gray-300 hover:text-blue-400 transition-colors break-all"
                   >
-                    Team@C4Rplatform.com
+                    {contact.email}
                   </a>
                 </div>
               </li>

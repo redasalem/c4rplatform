@@ -232,4 +232,20 @@ export const blogService = {
   },
 };
 
+// Setting Services
+export const settingService = {
+  getAll: async () => {
+    const response = await api.get("/settings");
+    return response.data;
+  },
+  getOne: async (key) => {
+    const response = await api.get(`/settings/${key}`);
+    return response.data;
+  },
+  upsert: async (data) => {
+    const response = await api.post("/settings", data);
+    return response.data;
+  },
+};
+
 export default api;

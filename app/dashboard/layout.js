@@ -90,6 +90,11 @@ function DashboardSidebarContent({
       icon: <Article />,
     },
     {
+      name: t("dashboard.admin.tabs.settings"),
+      href: "/dashboard/admin/settings",
+      icon: <Settings />,
+    },
+    {
       name: t("dashboard.profile"),
       href: `${prefix}?tab=profile`,
       icon: <Person />,

@@ -3,36 +3,68 @@
 import React from "react";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import {
-  Info,
   SupportAgent,
   LibraryAddCheck,
   DirectionsCar,
+  VerifiedUser,
+  AutoGraph,
+  Handyman,
+  WorkspacePremium,
+  Info,
 } from "@mui/icons-material";
 import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
+import { settingService } from "@/services/api";
 
 const AboutPageClient = () => {
+  const { data: aboutData } = useQuery({
+    queryKey: ["setting", "about_content"],
+    queryFn: () => settingService.getOne("about_content"),
+    staleTime: 1000 * 60 * 30, // 30 minutes
+  });
+
+  const about = aboutData?.data || {
+    badge: "من نحن",
+    mainTitlePart1: "قصتنا في",
+    mainTitlePart2: "C4R",
+    description: "منصة C4R هي وجهتك الأولى لتأجير السيارات في المملكة العربية السعودية. بدأنا بهدف واحد: جعل عملية تأجير السيارات أسهل، أسرع، وأكثر شفافية. نحن لسنا مجرد موقع حجز؛ نحن شريكك في الطريق.",
+    storyTitle: "لماذا منصة C4R؟",
+    storyText: "نحن في منصة C4R نؤمن بأن استئجار سيارة يجب أن يكون تجربة ممتعة وخالية من القلق. لذلك قمنا ببناء نظام ذكي يربطك بأفضل مقدمي الخدمة في المملكة مع ضمان كامل الشفافية في الأسعار والجودة.",
+    featuresTitle: "مميزاتنا",
+    features: [
+      {
+        title: "منصة وسيطة موثوقة",
+        icon: "LibraryAddCheck",
+        description: "نعمل كوسيط بينك وبين أفضل مكاتب تأجير السيارات لضمان الجودة.",
+      },
+      {
+        title: "تنوع الخيارات",
+        icon: "DirectionsCar",
+        description: "نقدم تشكيلة هائلة من السيارات الفاخرة، الاقتصادية، والعائلية.",
+      },
+      {
+        title: "دعم على مدار الساعة",
+        icon: "SupportAgent",
+        description: "فريقنا متواجد دائماً لمساعدتك في أي استفسار أو مشكلة تواجهك.",
+      },
+    ],
+  };
+
+  const iconMap = {
+    LibraryAddCheck: <LibraryAddCheck />,
+    DirectionsCar: <DirectionsCar />,
+    SupportAgent: <SupportAgent />,
+    VerifiedUser: <VerifiedUser />,
+    AutoGraph: <AutoGraph />,
+    Handyman: <Handyman />,
+    WorkspacePremium: <WorkspacePremium />,
+    Info: <Info />,
+  };
+
   const breadcrumbItems = [{ label: "من نحن" }];
 
-  const features = [
-    {
-      title: "منصة وسيطة موثوقة",
-      icon: <LibraryAddCheck />,
-      description:
-        "نعمل كوسيط بينك وبين أفضل مكاتب تأجير السيارات لضمان الجودة.",
-    },
-    {
-      title: "تنوع الخيارات",
-      icon: <DirectionsCar />,
-      description:
-        "نقدم تشكيلة هائلة من السيارات الفاخرة، الاقتصادية، والعائلية.",
-    },
-    {
-      title: "دعم على مدار الساعة",
-      icon: <SupportAgent />,
-      description:
-        "فريقنا متواجد دائماً لمساعدتك في أي استفسار أو مشكلة تواجهك.",
-    },
-  ];
+  const features = about.features && about.features.length > 0 ? about.features : about.features;
+
 
   return (
     <div className="min-h-screen bg-transparent pt-32 pb-20 px-6">
@@ -52,23 +84,21 @@ const AboutPageClient = () => {
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full mb-6 border border-primary/20">
                 <Info fontSize="small" />
                 <span className="font-black text-xs uppercase tracking-widest">
-                  من نحن
+                  {about.badge}
                 </span>
               </div>
               <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-8 tracking-tighter leading-tight">
-                قصتنا في <span className="text-primary italic">C4R</span>
+                {about.mainTitlePart1} <span className="text-primary italic">{about.mainTitlePart2}</span>
               </h1>
               <p className="text-xl text-slate-400 font-bold leading-relaxed mb-10">
-                منصة C4R هي وجهتك الأولى لتأجير السيارات في المملكة العربية
-                السعودية. بدأنا بهدف واحد: جعل عملية تأجير السيارات أسهل، أسرع،
-                وأكثر شفافية. نحن لسنا مجرد موقع حجز؛ نحن شريكك في الطريق.
+                {about.description}
               </p>
 
               <div className="space-y-8">
                 {features.map((feature, idx) => (
                   <div key={idx} className="flex gap-5 group">
                     <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-xl shrink-0">
-                      {feature.icon}
+                      {iconMap[feature.icon] || <Info />}
                     </div>
                     <div>
                       <h2 className="text-2xl font-black text-white mb-2">
