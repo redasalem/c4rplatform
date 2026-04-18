@@ -11,6 +11,7 @@ import {
 import CarCard from "@/components/cards/CarCard";
 import { notFound } from "next/navigation";
 import { cache } from "react";
+import DOMPurify from 'isomorphic-dompurify';
 
 import BlogProgressBar from "@/components/blog/BlogProgressBar";
 import TableOfContents from "@/components/blog/TableOfContents";
@@ -86,8 +87,7 @@ export default async function BlogPostPage({ params }) {
 
   const sanitizedContent = (() => {
     try {
-      const createDOMPurify = require('isomorphic-dompurify');
-      return createDOMPurify.sanitize(blog.content || "", { 
+      return DOMPurify.sanitize(blog.content || "", { 
         ADD_TAGS: ['iframe', 'h2', 'h3', 'p', 'ul', 'li', 'strong', 'em', 'img', 'blockquote', 'code', 'pre', 'figcaption'], 
         ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling', 'target', 'src', 'alt', 'id'] 
       });
@@ -125,7 +125,7 @@ export default async function BlogPostPage({ params }) {
           <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-3 text-sm font-bold text-slate-500 border-t border-white/5 pt-8">
             <div className="flex items-center gap-2 font-black text-primary/80 uppercase tracking-widest">فريق C4R</div>
             <div className="w-1 h-1 bg-white/10 rounded-full" />
-            <div className="flex items-center gap-2">{formatArabicDate(blog.createdAt)}</div>
+            <div className="flex items-center gap-2" suppressHydrationWarning>{formatArabicDate(blog.createdAt)}</div>
             <div className="w-1 h-1 bg-white/10 rounded-full" />
             <div className="flex items-center gap-2">{calculatedReadingTime} دقائق للقراءة</div>
             <div className="w-1 h-1 bg-white/10 rounded-full" />
