@@ -364,7 +364,8 @@ export default function AdminBlogs() {
       toast.success(t("feedback.admin.blogDeleteSuccess"));
       queryClient.invalidateQueries({ queryKey: ["adminBlogs"] });
       setDeleteDialog(false);
-    }
+    },
+    onError: (err) => toast.error(err.response?.data?.message || err.message || t("common.error"))
   });
 
   const handleOpenDialog = (blog = null) => {
@@ -408,8 +409,8 @@ export default function AdminBlogs() {
   };
 
   const handleSubmit = async () => {
-    if (!formData.title.trim()) { toast.error("العنوان مطلوب"); setTabValue(0); return; }
-    if (!formData.category) { toast.error("التصنيف مطلوب"); setTabValue(0); return; }
+    if (!formData.title.trim()) { toast.error(t("notifications.requiredFields") || "العنوان مطلوب"); setTabValue(0); return; }
+    if (!formData.category) { toast.error(t("notifications.requiredFields") || "التصنيف مطلوب"); setTabValue(0); return; }
 
     setUploading(true);
     try {
@@ -419,7 +420,7 @@ export default function AdminBlogs() {
         uploadData.append("file", file);
         const res = await fetch("/api/upload", { method: "POST", body: uploadData });
         const result = await res.json();
-        if (!res.ok) throw new Error("Upload failed");
+        if (!res.ok) throw new Error(t("notifications.uploadError") || "Upload failed");
         currentImageUrl = result.url;
       }
 
@@ -435,7 +436,7 @@ export default function AdminBlogs() {
 
       if (selectedBlog) updateMutation.mutate({ slug: selectedBlog.slug, data: finalData });
       else createMutation.mutate(finalData);
-    } catch (error) { toast.error(error.message); }
+    } catch (error) { toast.error(error.message || t("common.error")); }
     finally { setUploading(false); }
   };
 
