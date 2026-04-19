@@ -252,7 +252,8 @@
         "security": "الأمان",
         "categories": "الأقسام",
         "blog": "المدونة",
-        "settings": "إدارة الموقع"
+        "settings": "إدارة الموقع",
+        "promos": "العروض والبنرات"
       },
       "settings": {
         "title": "إدارة محتوى الموقع",
@@ -914,6 +915,39 @@
         "category": "اختيار القسم",
         "content": "محتوى المقال"
       }
+    }
+  },
+  "promos": {
+    "title": "إدارة العروض والبنرات",
+    "subtitle": "تحكم في العروض الترويجية والبنرات الإعلانية في الصفحة الرئيسية",
+    "addNew": "إضافة عرض جديد",
+    "edit": "تعديل العرض",
+    "limitedOffer": "عرض لفترة محدودة",
+    "exploreOffer": "استكشف العرض",
+    "layout": {
+      "imageRight": "صورة لليمين",
+      "imageLeft": "صورة لليسار",
+      "fullBg": "خلفية كاملة"
+    },
+    "fields": {
+      "title": "العنوان",
+      "subtitle": "الوصف",
+      "linkUrl": "رابط التوجيه",
+      "priority": "الأولوية",
+      "isActive": "الحالة",
+      "layoutType": "نوع التنسيق"
+    },
+    "status": {
+      "active": "نشط",
+      "inactive": "غير نشط"
+    },
+    "messages": {
+      "createSuccess": "تم إنشاء العرض بنجاح",
+      "updateSuccess": "تم تحديث العرض بنجاح",
+      "deleteSuccess": "تم حذف العرض",
+      "uploadSuccess": "تم رفع الصورة بنجاح",
+      "uploadError": "فشل رفع الصورة",
+      "deleteConfirm": "هل أنت متأكد من حذف هذا العرض؟"
     }
   }
 }

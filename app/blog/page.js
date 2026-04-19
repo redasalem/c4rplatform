@@ -66,114 +66,12 @@ function BlogCardSkeleton() {
   );
 }
 
+import BlogListClient from "./BlogListClient";
+
 async function BlogList({ searchParams }) {
-  const data = await getBlogs(searchParams);
-  const blogs = data?.data || [];
-  const pagination = data?.pagination || { totalPages: 1, currentPage: 1 };
-
-  if (blogs.length === 0) {
-    return (
-      <div className="text-center py-20 border border-dashed border-white/10 rounded-[3rem] mt-4">
-        <Article sx={{ fontSize: 60, color: "rgba(255,255,255,0.2)" }} className="mb-4" />
-        <h2 className="text-2xl font-black text-slate-500">لا يوجد مقالات حتى الآن</h2>
-      </div>
-    );
-  }
-
-  return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-        {blogs.map((blog) => (
-          <Link 
-            key={blog._id} 
-            href={`/blog/${blog._id}`}
-            className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden hover:bg-white/10 transition-all duration-500 group flex flex-col items-start"
-          >
-            <div className="relative h-56 w-full bg-slate-800 overflow-hidden">
-              {blog.image && blog.image !== 'no-photo.jpg' ? (
-                <Image 
-                  src={blog.image} 
-                  alt={blog.title} 
-                  fill 
-                  className="object-cover transition-transform duration-700 group-hover:scale-110" 
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-slate-500">
-                  <Article sx={{ fontSize: 60, opacity: 0.5 }} />
-                </div>
-              )}
-              <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-xl text-xs text-white font-black">
-                {blog.category?.name || "عام"}
-              </div>
-            </div>
-            
-            <div className="p-6 md:p-8 flex-1 flex flex-col">
-              <h2 className="text-xl md:text-2xl font-black text-white mb-3 line-clamp-2 leading-tight group-hover:text-primary transition-colors">
-                {blog.title}
-              </h2>
-              <p className="text-sm md:text-base text-slate-400 font-medium mb-6 line-clamp-3 leading-relaxed flex-1">
-                {blog.summary}
-              </p>
-              
-              <div className="flex justify-between items-center w-full pt-4 border-t border-white/5 mt-auto">
-                <span className="text-xs font-bold text-slate-500" suppressHydrationWarning>
-                  {new Date(blog.createdAt).toLocaleDateString("ar-SA", { year: 'numeric', month: 'long', day: 'numeric' })}
-                </span>
-                <span className="text-primary font-black text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
-                  اقرأ المزيد <span>←</span>
-                </span>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
-
-      {pagination.totalPages > 1 && (
-        <div className="mt-16 flex justify-center gap-3" role="navigation" aria-label="Pagination">
-            {[...Array(pagination.totalPages)].map((_, i) => {
-              const pageNum = i + 1;
-              const isActive = pagination.currentPage === pageNum;
-              
-              const shouldShowPage = 
-                pageNum === 1 || 
-                pageNum === pagination.totalPages ||
-                Math.abs(pageNum - pagination.currentPage) <= 1 ||
-                (pageNum <= 3 && pagination.currentPage <= 4) ||
-                (pageNum >= pagination.totalPages - 2 && pagination.currentPage >= pagination.totalPages - 3);
-
-              const shouldShowEllipsisBefore = pageNum === 4 && pagination.currentPage > 5;
-              const shouldShowEllipsisAfter = pageNum === pagination.totalPages - 3 && pagination.currentPage < pagination.totalPages - 4;
-
-              if (!shouldShowPage) return null;
-
-              return (
-                <React.Fragment key={i}>
-                  {shouldShowEllipsisBefore && (
-                    <span className="w-12 h-12 flex items-center justify-center text-slate-500">...</span>
-                  )}
-                  <Link
-                    href={`/blog?page=${pageNum}${searchParams.q ? `&q=${searchParams.q}` : ''}`}
-                    className={`w-12 h-12 flex items-center justify-center rounded-xl font-black transition-all ${
-                        isActive 
-                        ? 'bg-primary text-white shadow-lg shadow-primary/20' 
-                        : 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white'
-                    }`}
-                    aria-current={isActive ? "page" : undefined}
-                    aria-label={`Page ${pageNum}`}
-                  >
-                    {pageNum}
-                  </Link>
-                  {shouldShowEllipsisAfter && (
-                    <span className="w-12 h-12 flex items-center justify-center text-slate-500">...</span>
-                  )}
-                </React.Fragment>
-              );
-            })}
-        </div>
-      )}
-    </>
-  );
+  const initialData = await getBlogs(searchParams);
+  
+  return <BlogListClient initialData={initialData} searchParams={searchParams} />;
 }
 
 export default async function BlogPage({ searchParams }) {

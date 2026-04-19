@@ -56,6 +56,9 @@ export const metadata = {
   },
   alternates: {
     canonical: "https://c4rplatform.com",
+    languages: {
+      "ar-SA": "https://c4rplatform.com",
+    },
   },
   icons: {
     icon: [{ url: "/favicon.ico", type: "image/x-icon" }],

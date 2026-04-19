@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL ||
@@ -7,6 +8,7 @@ const API_URL =
 
 const api = axios.create({
   baseURL: API_URL,
+  timeout: 10000, // 10 seconds timeout
   headers: {
     "Content-Type": "application/json",
   },
@@ -28,9 +30,21 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Handle 401 Unauthorized (optional: automatic logout)
-    if (error.response && error.response.status === 401) {
-      // dispatch logout action if needed or just reject
+    if (error.response) {
+      const status = error.response.status;
+      const message = error.response.data?.message || "حدث خطأ غير متوقع";
+
+      if (status === 401) {
+        // dispatch logout action if needed or just reject
+      } else if (status === 400) {
+        toast.error(`خطأ في البيانات: ${message}`);
+      } else if (status === 403) {
+        toast.error(`غير مصرح لك: ${message}`);
+      } else if (status === 500) {
+        toast.error(`خطأ في الخادم: يرجى المحاولة لاحقاً.`);
+      }
+    } else {
+      toast.error("تعذر الاتصال بالخادم. يرجى التحقق من الشبكة.");
     }
     return Promise.reject(error);
   },
@@ -70,68 +84,160 @@ export const authService = {
 // User Services
 export const userService = {
   getAll: async (params) => {
-    const response = await api.get("/users", { params });
-    return response.data;
+    try {
+      const response = await api.get("/users", { params });
+      return response.data;
+    } catch (error) {
+      console.error("userService.getAll error:", error);
+      throw error;
+    }
   },
   getProfile: async () => {
-    const response = await api.get("/users/profile");
-    return response.data;
+    try {
+      const response = await api.get("/users/profile");
+      return response.data;
+    } catch (error) {
+      console.error("userService.getProfile error:", error);
+      throw error;
+    }
   },
   updateProfile: async (userData) => {
-    const response = await api.put("/users/profile", userData);
-    return response.data;
+    try {
+      const response = await api.put("/users/profile", userData);
+      return response.data;
+    } catch (error) {
+      console.error("userService.updateProfile error:", error);
+      throw error;
+    }
+  },
+  // Admin only
+  update: async (id, userData) => {
+    try {
+      const response = await api.put(`/users/${id}`, userData);
+      return response.data;
+    } catch (error) {
+      console.error("userService.update error:", error);
+      throw error;
+    }
+  },
+  delete: async (id) => {
+    try {
+      const response = await api.delete(`/users/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("userService.delete error:", error);
+      throw error;
+    }
   },
 };
 
 // Booking Services (for Dashboard)
 export const bookingService = {
   create: async (bookingData) => {
-    const response = await api.post("/bookings", bookingData);
-    return response.data;
+    try {
+      const response = await api.post("/bookings", bookingData);
+      return response.data;
+    } catch (error) {
+      console.error("bookingService.create error:", error);
+      throw error;
+    }
   },
   getAll: async (params) => {
-    const response = await api.get("/bookings", { params });
-    return response.data;
+    try {
+      const response = await api.get("/bookings", { params });
+      return response.data;
+    } catch (error) {
+      console.error("bookingService.getAll error:", error);
+      throw error;
+    }
   },
   getOne: async (id) => {
-    const response = await api.get(`/bookings/${id}`);
-    return response.data;
+    try {
+      const response = await api.get(`/bookings/${id}`);
+      return response.data;
+    } catch (error) {
+      // If 404, we might want to return null for graceful UI handling
+      if (error.response?.status === 404) return null;
+      console.error("bookingService.getOne error:", error);
+      throw error;
+    }
   },
   approve: async (id) => {
-    const response = await api.patch(`/bookings/${id}/approve`);
-    return response.data;
+    try {
+      const response = await api.patch(`/bookings/${id}/approve`);
+      return response.data;
+    } catch (error) {
+      console.error("bookingService.approve error:", error);
+      throw error;
+    }
   },
   reject: async (id) => {
-    const response = await api.patch(`/bookings/${id}/reject`);
-    return response.data;
+    try {
+      const response = await api.patch(`/bookings/${id}/reject`);
+      return response.data;
+    } catch (error) {
+      console.error("bookingService.reject error:", error);
+      throw error;
+    }
   },
   delete: async (id) => {
-    const response = await api.delete(`/bookings/${id}`);
-    return response.data;
+    try {
+      const response = await api.delete(`/bookings/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("bookingService.delete error:", error);
+      throw error;
+    }
   },
 };
 
 // Car Services (for Admin Dashboard)
 export const carService = {
   getAll: async (params) => {
-    const response = await api.get("/cars", { params });
-    return response.data;
+    try {
+      const response = await api.get("/cars", { params });
+      return response.data;
+    } catch (error) {
+      console.error("carService.getAll error:", error);
+      throw error;
+    }
   },
   getOne: async (id) => {
-    const response = await api.get(`/cars/${id}`);
-    return response.data;
+    try {
+      const response = await api.get(`/cars/${id}`);
+      return response.data;
+    } catch (error) {
+      if (error.response?.status === 404) return null;
+      console.error("carService.getOne error:", error);
+      throw error;
+    }
   },
   create: async (carData) => {
-    const response = await api.post("/cars", carData);
-    return response.data;
+    try {
+      const response = await api.post("/cars", carData);
+      return response.data;
+    } catch (error) {
+      console.error("carService.create error:", error);
+      throw error;
+    }
   },
   update: async (id, carData) => {
-    const response = await api.put(`/cars/${id}`, carData);
-    return response.data;
+    try {
+      const response = await api.put(`/cars/${id}`, carData);
+      return response.data;
+    } catch (error) {
+      console.error("carService.update error:", error);
+      throw error;
+    }
   },
   delete: async (id) => {
-    const response = await api.delete(`/cars/${id}`);
-    return response.data;
+    try {
+      const response = await api.delete(`/cars/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("carService.delete error:", error);
+      throw error;
+    }
   },
 };
 
@@ -154,8 +260,8 @@ export const reviewService = {
     return response.data;
   },
   // Admin only
-  getAllAdmin: async () => {
-    const response = await api.get("/reviews/admin/all");
+  getAllAdmin: async (params) => {
+    const response = await api.get("/reviews/admin/all", { params });
     return response.data;
   },
   delete: async (id) => {
@@ -244,6 +350,30 @@ export const settingService = {
   },
   upsert: async (data) => {
     const response = await api.post("/settings", data);
+    return response.data;
+  },
+};
+
+// Promo Services
+export const promoService = {
+  getAllActive: async () => {
+    const response = await api.get("/promos");
+    return response.data;
+  },
+  getAllAdmin: async () => {
+    const response = await api.get("/promos/admin");
+    return response.data;
+  },
+  create: async (data) => {
+    const response = await api.post("/promos", data);
+    return response.data;
+  },
+  update: async (id, data) => {
+    const response = await api.put(`/promos/${id}`, data);
+    return response.data;
+  },
+  delete: async (id) => {
+    const response = await api.delete(`/promos/${id}`);
     return response.data;
   },
 };

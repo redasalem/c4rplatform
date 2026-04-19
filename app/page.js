@@ -1,5 +1,6 @@
 import HeroAd from "@/components/home/HeroAd";
 import Departments from "@/components/home/Departments";
+import PromoSection from "@/components/PromoSection";
 import FAQ from "@/components/home/FAQ";
 import ReviewMarquee from "@/components/home/ReviewMarquee";
 
@@ -108,6 +109,7 @@ export default function Home() {
 
       <HeroAd />
       <Departments />
+      <PromoSection />
       <ReviewMarquee />
       {/* <Partners /> */}
       <FAQ />

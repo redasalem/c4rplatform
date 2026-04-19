@@ -170,7 +170,7 @@ export default function CarDetailsClient({ initialCarData }) {
                   </span>
                 </div>
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 sm:mb-3 tracking-tighter">
-                  {car.name}
+                  تأجير {car.name} في السعودية | منصة C4R
                 </h1>
                 <div className="flex items-center gap-3">
                   <p className="text-slate-400 font-bold text-lg font-mono tracking-tight">
@@ -291,6 +291,16 @@ export default function CarDetailsClient({ initialCarData }) {
               <div className="mt-4 sm:mt-6 md:mt-8">
                 <Link
                   href={`/booking/${car._id}`}
+                  onClick={() => {
+                    if (typeof window !== "undefined" && window.gtag) {
+                      window.gtag("event", "begin_checkout", {
+                        item_id: car._id,
+                        item_name: car.name,
+                        currency: "SAR",
+                        value: car.pricePerDay
+                      });
+                    }
+                  }}
                   className="w-full bg-primary hover:bg-primary-hover text-white py-3 sm:py-4 md:py-5 rounded-xl sm:rounded-2xl md:rounded-[2rem] font-black text-base sm:text-lg md:text-xl transition-all shadow-[0_20px_40px_-10px_rgba(249,115,22,0.4)] flex items-center justify-center gap-2 sm:gap-4 group hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <span className="tracking-tighter">

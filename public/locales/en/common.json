@@ -249,7 +249,8 @@
         "password": "Password",
         "security": "Security",
         "categories": "Categories",
-        "blog": "Blog"
+        "blog": "Blog",
+        "promos": "Promos & Banners"
       },
       "bookings": {
         "title": "Manage Bookings",
@@ -840,6 +841,39 @@
         "category": "Category Selection",
         "content": "Article Content"
       }
+    }
+  },
+  "promos": {
+    "title": "Promos & Banners Management",
+    "subtitle": "Control promotional offers and banners on the homepage",
+    "addNew": "Add New Promo",
+    "edit": "Edit Promo",
+    "limitedOffer": "Limited Time Offer",
+    "exploreOffer": "Explore Offer",
+    "layout": {
+      "imageRight": "Image on Right",
+      "imageLeft": "Image on Left",
+      "fullBg": "Full Background"
+    },
+    "fields": {
+      "title": "Title",
+      "subtitle": "Subtitle",
+      "linkUrl": "Link URL",
+      "priority": "Priority",
+      "isActive": "Status",
+      "layoutType": "Layout Type"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "messages": {
+      "createSuccess": "Promo created successfully",
+      "updateSuccess": "Promo updated successfully",
+      "deleteSuccess": "Promo deleted successfully",
+      "uploadSuccess": "Image uploaded successfully",
+      "uploadError": "Failed to upload image",
+      "deleteConfirm": "Are you sure you want to delete this promo?"
     }
   }
 }

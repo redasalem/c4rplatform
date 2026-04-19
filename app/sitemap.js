@@ -32,7 +32,7 @@ export default async function sitemap() {
       const data = await res.json();
       const cars = data?.data?.cars || [];
       carRoutes = cars.map((car) => ({
-        url: `${BASE_URL}/cars/${car._id}`,
+        url: `${BASE_URL}/cars/${car.slug || car._id}`,
         lastModified: new Date(car.updatedAt || car.createdAt || Date.now()),
         changeFrequency: "weekly",
         priority: 0.7,
@@ -67,7 +67,7 @@ export default async function sitemap() {
       
       blogs.forEach((blog) => {
         blogRoutes.push({
-          url: `${BASE_URL}/blog/${blog._id}`,
+          url: `${BASE_URL}/blog/${blog.slug || blog._id}`,
           lastModified: new Date(blog.updatedAt || Date.now()),
           changeFrequency: "weekly",
           priority: 0.7,

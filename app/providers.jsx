@@ -10,7 +10,23 @@ import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "@/context/AuthContext";
 
 export default function Providers({ children }) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            retry: (failureCount, error) => {
+              // Don't retry for 404 errors - they won't fix themselves
+              if (error?.response?.status === 404) return false;
+              // Retry other errors up to 2 times
+              return failureCount < 2;
+            },
+            refetchOnWindowFocus: false, // Prevent excessive re-fetching
+            staleTime: 5 * 60 * 1000, // 5 minutes default stale time
+          },
+        },
+      }),
+  );
   const { i18n } = useTranslation();
   const [mounted, setMounted] = useState(false);
   

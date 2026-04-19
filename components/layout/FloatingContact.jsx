@@ -22,6 +22,11 @@ const FloatingContact = () => {
         href="https://wa.me/966554118873"
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => {
+          if (typeof window !== "undefined" && window.gtag) {
+            window.gtag("event", "generate_lead", { method: "WhatsApp" });
+          }
+        }}
         className="hidden md:flex fixed bottom-8 right-8 z-[9999] w-12 h-12 rounded-2xl bg-green-500/10 items-center justify-center text-green-500 group-hover:bg-green-500 group-hover:text-white transition-all duration-300 shadow-lg border border-green-500/20 active:scale-90"
         aria-label={t("floatingContact.whatsapp")}
       >

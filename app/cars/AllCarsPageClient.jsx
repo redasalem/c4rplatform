@@ -11,18 +11,35 @@ import { useTranslation } from "react-i18next";
 
 export default function AllCarsPageClient() {
   const { t, i18n } = useTranslation("common");
+  const [page, setPage] = React.useState(1);
+  const [allCars, setAllCars] = React.useState([]);
+  const limit = 9;
+
   const {
     data: carsData,
     isLoading,
+    isRefetching,
     error,
   } = useQuery({
-    queryKey: ["allCars"],
-    queryFn: () => carService.getAll().catch(() => ({ data: { cars: [] } })),
+    queryKey: ["allCars", page],
+    queryFn: () => carService.getAll({ page, limit }),
+    keepPreviousData: true,
   });
 
-  const cars = carsData?.data?.cars || [];
+  React.useEffect(() => {
+    if (carsData?.data?.cars) {
+      setAllCars((prev) => {
+        const newData = carsData.data.cars.filter(
+          (newCar) => !prev.some((oldCar) => oldCar._id === newCar._id)
+        );
+        return [...prev, ...newData];
+      });
+    }
+  }, [carsData]);
 
-  if (isLoading) {
+  const hasMore = carsData?.data?.pagination?.totalPages > page;
+
+  if (isLoading && page === 1) {
     return (
       <div className="min-h-screen flex items-center justify-center pt-20">
         <CircularProgress color="primary" />
@@ -56,18 +73,46 @@ export default function AllCarsPageClient() {
 
         {/* Cars Grid */}
         <section>
-          {cars.length === 0 ? (
+          {allCars.length === 0 ? (
             <div className="text-center py-24 bg-white/5 backdrop-blur-xl rounded-[3rem] border border-white/10 shadow-2xl">
               <p className="text-slate-500 font-black text-xl">
                 {t("carsPage.empty")}
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10">
-              {cars.map((car) => (
-                <CarCard key={car._id} car={car} />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10">
+                {allCars.map((car) => (
+                  <CarCard key={car._id} car={car} />
+                ))}
+              </div>
+              
+              {hasMore && (
+                <div className="mt-16 flex justify-center">
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={() => setPage((p) => p + 1)}
+                    disabled={isRefetching}
+                    sx={{
+                      borderRadius: "1.5rem",
+                      fontWeight: "900",
+                      px: 6,
+                      py: 2,
+                      bgcolor: "primary.main",
+                      "&:hover": { bgcolor: "primary.dark" },
+                      boxShadow: "0 20px 40px rgba(249, 115, 22, 0.2)",
+                    }}
+                  >
+                    {isRefetching ? (
+                      <CircularProgress size={24} color="inherit" />
+                    ) : (
+                      i18n.language === "ar" ? "تحميل المزيد" : "Load More"
+                    )}
+                  </Button>
+                </div>
+              )}
+            </>
           )}
         </section>
       </Container>

@@ -43,7 +43,6 @@ import {
   Close,
   Delete,
   Add,
-  UploadFile,
   AttachMoney,
   Description as DescIcon,
   Phone,
@@ -92,13 +91,16 @@ const AdminTabsContent = ({ user }) => {
   const tabParam = searchParams.get("tab");
   const getTabIndex = (tab) => {
     if (tab === "notifications") return 1;
-    if (tab === "blog") return 2;
-    if (tab === "cars") return 3;
-    if (tab === "reviews") return 4;
-    if (tab === "profile") return 5;
-    if (tab === "password") return 6;
+    if (tab === "users") return 2; // New Users Tab
+    if (tab === "blog") return 3;
+    if (tab === "cars") return 4;
+    if (tab === "reviews") return 5;
+    if (tab === "profile") return 6;
+    if (tab === "password") return 7;
+    if (tab === "promos") return 8;
     return 0; // default: bookings
   };
+
 
   const [value, setValue] = useState(getTabIndex(tabParam));
 
@@ -109,7 +111,7 @@ const AdminTabsContent = ({ user }) => {
   }, [searchParams]);
 
   const handleChange = (event, newValue) => {
-    if (newValue === 2) {
+    if (newValue === 3) {
       router.push(`/dashboard/admin/blogs`);
       return;
     }
@@ -117,16 +119,26 @@ const AdminTabsContent = ({ user }) => {
     const tabName =
       newValue === 1
         ? "notifications"
-        : newValue === 3
-          ? "cars"
+        : newValue === 2
+          ? "users"
           : newValue === 4
-            ? "reviews"
+            ? "cars"
             : newValue === 5
-              ? "profile"
+              ? "reviews"
               : newValue === 6
-                ? "password"
-                : "bookings";
+                ? "profile"
+                : newValue === 7
+                  ? "password"
+                  : newValue === 8
+                    ? "promos"
+                    : "bookings";
+
     router.push(`/dashboard/admin?tab=${tabName}`);
+  };
+
+  const handlePromosRedirect = () => {
+    setValue(8);
+    router.push(`/dashboard/admin?tab=promos`);
   };
 
   return (
@@ -192,6 +204,11 @@ const AdminTabsContent = ({ user }) => {
           label={t("dashboard.admin.tabs.blog")}
         />
         <Tab
+          icon={<Person sx={{ fontSize: { xs: 18, sm: 24 } }} />}
+          iconPosition="start"
+          label={t("dashboard.admin.tabs.users", "المستخدمين")}
+        />
+        <Tab
           icon={<DirectionsCar sx={{ fontSize: { xs: 18, sm: 24 } }} />}
           iconPosition="start"
           label={t("dashboard.admin.tabs.cars")}
@@ -211,7 +228,13 @@ const AdminTabsContent = ({ user }) => {
           iconPosition="start"
           label={t("dashboard.admin.tabs.security")}
         />
+        <Tab
+          icon={<SettingsIcon sx={{ fontSize: { xs: 18, sm: 24 } }} />}
+          iconPosition="start"
+          label={t("dashboard.admin.tabs.promos", "العروض والبنرات")}
+        />
       </Tabs>
+
 
       <TabPanel value={value} index={0}>
         <ManageBookings />
@@ -220,6 +243,9 @@ const AdminTabsContent = ({ user }) => {
         <ManageNotifications />
       </TabPanel>
       <TabPanel value={value} index={2}>
+        <ManageUsers />
+      </TabPanel>
+      <TabPanel value={value} index={3}>
         <Box className="text-center py-20 bg-white/5 rounded-[3rem] border border-dashed border-white/10">
            <Article sx={{ fontSize: 80, color: "rgba(255,255,255,0.05)", mb: 4 }} />
            <Typography className="text-2xl font-black text-slate-400 mb-6">جاري الانتقال لصفحة الإدارة المتطورة...</Typography>
@@ -232,18 +258,22 @@ const AdminTabsContent = ({ user }) => {
            </Button>
         </Box>
       </TabPanel>
-      <TabPanel value={value} index={3}>
+      <TabPanel value={value} index={4}>
         <ManageCars />
       </TabPanel>
-      <TabPanel value={value} index={4}>
+      <TabPanel value={value} index={5}>
         <ManageReviews />
       </TabPanel>
-      <TabPanel value={value} index={5}>
+      <TabPanel value={value} index={6}>
         <ProfileSection user={user} />
       </TabPanel>
-      <TabPanel value={value} index={6}>
+      <TabPanel value={value} index={7}>
         <ChangePasswordSection />
       </TabPanel>
+      <TabPanel value={value} index={8}>
+        <ManagePromos />
+      </TabPanel>
+
     </div>
   );
 };
@@ -391,13 +421,312 @@ export default function AdminDashboard() {
     </div>
   );
 }
+function JumpToPagePagination({ totalPages, currentPage, onPageChange }) {
+  const [inputPage, setInputPage] = useState(currentPage);
+
+  useEffect(() => {
+    setInputPage(currentPage);
+  }, [currentPage]);
+
+  const handleJump = (e) => {
+    e.preventDefault();
+    const pageNum = parseInt(inputPage);
+    if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= totalPages) {
+      onPageChange(pageNum);
+    } else {
+      setInputPage(currentPage);
+    }
+  };
+
+  if (totalPages <= 1) return null;
+
+  return (
+    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 bg-white/5 backdrop-blur-xl p-4 rounded-2xl border border-white/10">
+      <div className="flex items-center gap-2">
+        <Button
+          disabled={currentPage <= 1}
+          onClick={() => onPageChange(currentPage - 1)}
+          sx={{ minWidth: 40, height: 40, borderRadius: "10px", color: "white" }}
+        >
+          {i18n?.language === "ar" ? "السابق" : "Prev"}
+        </Button>
+        <div className="flex gap-1">
+          {[...Array(Math.min(5, totalPages))].map((_, i) => {
+            let page;
+            if (totalPages <= 5) page = i + 1;
+            else if (currentPage <= 3) page = i + 1;
+            else if (currentPage >= totalPages - 2) page = totalPages - 4 + i;
+            else page = currentPage - 2 + i;
+
+            return (
+              <Button
+                key={page}
+                onClick={() => onPageChange(page)}
+                sx={{
+                  minWidth: 40,
+                  height: 40,
+                  borderRadius: "10px",
+                  bgcolor: currentPage === page ? "primary.main" : "transparent",
+                  color: "white",
+                  "&:hover": { bgcolor: currentPage === page ? "primary.dark" : "rgba(255,255,255,0.1)" },
+                }}
+              >
+                {page}
+              </Button>
+            );
+          })}
+        </div>
+        <Button
+          disabled={currentPage >= totalPages}
+          onClick={() => onPageChange(currentPage + 1)}
+          sx={{ minWidth: 40, height: 40, borderRadius: "10px", color: "white" }}
+        >
+          {i18n?.language === "ar" ? "التالي" : "Next"}
+        </Button>
+      </div>
+
+      <div className="h-8 w-[1px] bg-white/10 hidden sm:block" />
+
+      <form onSubmit={handleJump} className="flex items-center gap-2">
+        <Typography sx={{ color: "slate.400", fontSize: "0.875rem", fontWeight: "bold" }}>
+          {i18n?.language === "ar" ? "انتقال لصفحة:" : "Jump to:"}
+        </Typography>
+        <TextField
+          size="small"
+          value={inputPage}
+          onChange={(e) => setInputPage(e.target.value)}
+          sx={{
+            width: 60,
+            "& .MuiInputBase-input": {
+              color: "white",
+              textAlign: "center",
+              fontWeight: "black",
+              py: 0.5,
+            },
+            "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(255,255,255,0.2)" },
+          }}
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          size="small"
+          sx={{ borderRadius: "8px", fontWeight: "bold" }}
+        >
+          OK
+        </Button>
+        <Typography sx={{ color: "slate.400", fontSize: "0.875rem" }}>
+          / {totalPages}
+        </Typography>
+      </form>
+    </div>
+  );
+}
+
+function ManageUsers() {
+  const { t, i18n } = useTranslation("common");
+  const queryClient = useQueryClient();
+  const [page, setPage] = useState(1);
+  const limit = 20;
+
+  const { data: usersData, isLoading } = useQuery({
+    queryKey: ["allUsers", page],
+    queryFn: () => userService.getAll({ page, limit }),
+  });
+
+  const [editingUser, setEditingUser] = useState(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }) => userService.update(id, data),
+    onSuccess: () => {
+      toast.success(t("dashboard.admin.users.updateSuccess", "تم تحديث المستخدم بنجاح"));
+      queryClient.invalidateQueries({ queryKey: ["allUsers"] });
+      setIsEditDialogOpen(false);
+    },
+    onError: (err) => toast.error(err.response?.data?.message || "Error updating user"),
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id) => userService.delete(id),
+    onSuccess: () => {
+      toast.success(t("dashboard.admin.users.deleteSuccess", "تم إلغاء تفعيل المستخدم"));
+      queryClient.invalidateQueries({ queryKey: ["allUsers"] });
+    },
+    onError: (err) => toast.error(err.response?.data?.message || "Error deleting user"),
+  });
+
+  const handleToggleStatus = (user) => {
+    updateMutation.mutate({
+      id: user._id,
+      data: { isActive: !user.isActive },
+    });
+  };
+
+  const handleEditClick = (user) => {
+    setEditingUser({ ...user });
+    setIsEditDialogOpen(true);
+  };
+
+  const handleUpdateUser = () => {
+    updateMutation.mutate({
+      id: editingUser._id,
+      data: {
+        name: editingUser.name,
+        email: editingUser.email,
+        phone: editingUser.phone,
+        role: editingUser.role,
+      },
+    });
+  };
+
+  if (isLoading) return <CircularProgress className="m-auto block" />;
+
+  const users = usersData?.data?.users || [];
+  const pagination = usersData?.data?.pagination || { totalPages: 1 };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center bg-white/5 p-6 rounded-[2rem] border border-white/10">
+        <div>
+          <h2 className="text-2xl font-black text-white">{t("dashboard.admin.tabs.users")}</h2>
+          <p className="text-slate-400 font-bold">{t("dashboard.admin.users.total", "إجمالي المستخدمين المسجلين")}: {pagination.total || users.length}</p>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto bg-white/5 rounded-[2rem] border border-white/10 shadow-2xl">
+        <table className="w-full text-right border-collapse">
+          <thead>
+            <tr className="border-b border-white/10">
+              <th className="p-6 font-black text-slate-500 uppercase text-xs tracking-widest">{t("dashboard.admin.users.name", "الاسم")}</th>
+              <th className="p-6 font-black text-slate-500 uppercase text-xs tracking-widest">Email</th>
+              <th className="p-6 font-black text-slate-500 uppercase text-xs tracking-widest">{t("dashboard.admin.users.role", "الدور")}</th>
+              <th className="p-6 font-black text-slate-500 uppercase text-xs tracking-widest">{t("dashboard.admin.users.status", "الحالة")}</th>
+              <th className="p-6 font-black text-slate-500 uppercase text-xs tracking-widest">{t("dashboard.admin.users.actions", "الإجراءات")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(Array.isArray(users) ? users : []).map((u) => (
+              <tr key={u._id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
+                <td className="p-6">
+                  <div className="flex items-center gap-3">
+                    <Avatar sx={{ bgcolor: "primary.main", fontWeight: "900" }}>{u.name?.charAt(0)}</Avatar>
+                    <span className="font-bold text-white">{u.name}</span>
+                  </div>
+                </td>
+                <td className="p-6 text-slate-300 font-medium">{u.email}</td>
+                <td className="p-6">
+                  <Chip 
+                    label={u.role} 
+                    size="small" 
+                    sx={{ 
+                      fontWeight: "900", 
+                      bgcolor: u.role === "admin" ? "rgba(249,115,22,0.1)" : "rgba(255,255,255,0.05)",
+                      color: u.role === "admin" ? "primary.main" : "white",
+                      border: "1px solid currentColor"
+                    }} 
+                  />
+                </td>
+                <td className="p-6">
+                  <Chip 
+                    label={u.isActive !== false ? "Active" : "Inactive"} 
+                    size="small"
+                    sx={{ 
+                      fontWeight: "900",
+                      bgcolor: u.isActive !== false ? "rgba(34,197,94,0.1)" : "rgba(220,38,38,0.1)",
+                      color: u.isActive !== false ? "#4ade80" : "#f87171",
+                    }}
+                  />
+                </td>
+                <td className="p-6">
+                  <div className="flex gap-2">
+                    <IconButton size="small" onClick={() => handleEditClick(u)} sx={{ color: "white", bgcolor: "white/5" }}><Edit /></IconButton>
+                    <IconButton 
+                      size="small" 
+                      color={u.isActive !== false ? "error" : "success"} 
+                      onClick={() => handleToggleStatus(u)}
+                      sx={{ bgcolor: u.isActive !== false ? "rgba(220,38,38,0.1)" : "rgba(34,197,94,0.1)" }}
+                    >
+                      {u.isActive !== false ? <Close /> : <Check />}
+                    </IconButton>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <JumpToPagePagination 
+        totalPages={pagination.totalPages} 
+        currentPage={page} 
+        onPageChange={setPage} 
+      />
+
+      {/* Edit User Dialog */}
+      <Dialog 
+        open={isEditDialogOpen} 
+        onClose={() => setIsEditDialogOpen(false)}
+        PaperProps={{
+          sx: {
+            bgcolor: "#0f172a",
+            backgroundImage: "none",
+            borderRadius: "2rem",
+            border: "1px solid rgba(255,255,255,0.1)",
+            color: "white",
+            p: 2,
+          }
+        }}
+      >
+        <DialogTitle sx={{ fontWeight: "900", fontSize: "1.5rem" }}>{t("dashboard.admin.users.editTitle", "تعديل المستخدم")}</DialogTitle>
+        <DialogContent>
+          <div className="space-y-4 pt-4">
+            <TextField
+              fullWidth
+              label="Name"
+              value={editingUser?.name || ""}
+              onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })}
+              InputLabelProps={{ style: { color: "#94a3b8" } }}
+              sx={{ "& .MuiOutlinedInput-root": { color: "white", "& fieldset": { borderColor: "rgba(255,255,255,0.2)" } } }}
+            />
+            <TextField
+              fullWidth
+              label="Email"
+              value={editingUser?.email || ""}
+              onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
+              InputLabelProps={{ style: { color: "#94a3b8" } }}
+              sx={{ "& .MuiOutlinedInput-root": { color: "white", "& fieldset": { borderColor: "rgba(255,255,255,0.2)" } } }}
+            />
+            <FormControl fullWidth sx={{ "& .MuiOutlinedInput-root": { color: "white", "& fieldset": { borderColor: "rgba(255,255,255,0.2)" } } }}>
+              <InputLabel sx={{ color: "#94a3b8" }}>Role</InputLabel>
+              <Select
+                value={editingUser?.role || "user"}
+                label="Role"
+                onChange={(e) => setEditingUser({ ...editingUser, role: e.target.value })}
+              >
+                <MenuItem value="user">User</MenuItem>
+                <MenuItem value="admin">Admin</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+        </DialogContent>
+        <DialogActions sx={{ p: 3 }}>
+          <Button onClick={() => setIsEditDialogOpen(false)} sx={{ color: "slate.400", fontWeight: "bold" }}>Cancel</Button>
+          <Button variant="contained" onClick={handleUpdateUser} sx={{ borderRadius: "1rem", fontWeight: "900" }}>Update</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
 
 function ManageBookings() {
   const { t, i18n } = useTranslation("common");
   const queryClient = useQueryClient();
+  const [page, setPage] = useState(1);
+  const limit = 20;
+
   const { data, isLoading } = useQuery({
-    queryKey: ["allBookings"],
-    queryFn: () => bookingService.getAll(),
+    queryKey: ["allBookings", page],
+    queryFn: () => bookingService.getAll({ page, limit }),
   });
 
   const [deleteId, setDeleteId] = useState(null);
@@ -820,6 +1149,12 @@ function ManageBookings() {
         ))}
       </div>
 
+      <JumpToPagePagination 
+        totalPages={data?.data?.pagination?.totalPages || 1} 
+        currentPage={page} 
+        onPageChange={setPage} 
+      />
+
       {/* Delete Confirmation Dialog */}
       <Dialog
         open={!!deleteId}
@@ -980,9 +1315,12 @@ function ManageBookings() {
 function ManageCars() {
   const { t, i18n } = useTranslation("common");
   const queryClient = useQueryClient();
+  const [page, setPage] = useState(1);
+  const limit = 20;
+
   const { data: carsData, isLoading } = useQuery({
-    queryKey: ["allCars"],
-    queryFn: () => carService.getAll(),
+    queryKey: ["allCars", page],
+    queryFn: () => carService.getAll({ page, limit }),
   });
 
   const [deleteId, setDeleteId] = useState(null); // For Dialog
@@ -1181,6 +1519,12 @@ function ManageCars() {
         </div>
       )}
 
+      <JumpToPagePagination 
+        totalPages={carsData?.data?.pagination?.totalPages || 1} 
+        currentPage={page} 
+        onPageChange={setPage} 
+      />
+
       <AddCarDialog open={isAddOpen} onClose={() => setIsAddOpen(false)} />
       <EditCarDialog
         open={!!editingCar}
@@ -1249,9 +1593,11 @@ function ManageCars() {
 function ManageReviews() {
   const { t, i18n } = useTranslation("common");
   const queryClient = useQueryClient();
+  const [page, setPage] = useState(1);
+  const limit = 20;
   const { data, isLoading } = useQuery({
-    queryKey: ["allReviewsAdmin"],
-    queryFn: () => reviewService.getAllAdmin(),
+    queryKey: ["allReviewsAdmin", page],
+    queryFn: () => reviewService.getAllAdmin({ page, limit }),
   });
 
   const [deleteId, setDeleteId] = useState(null);
@@ -1368,6 +1714,12 @@ function ManageReviews() {
           </div>
         ))}
       </div>
+
+      <JumpToPagePagination 
+        totalPages={data?.data?.pagination?.totalPages || 1} 
+        currentPage={page} 
+        onPageChange={setPage} 
+      />
 
       {/* Delete Confirmation Dialog */}
       <Dialog
@@ -2790,6 +3142,8 @@ function ChangePasswordSection() {
 function ManageNotifications() {
   const { t, i18n } = useTranslation("common");
   const queryClient = useQueryClient();
+  const [deleteDialog, setDeleteDialog] = useState(false);
+  const [selectedNotif, setSelectedNotif] = useState(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ["adminNotifications"],
@@ -2801,6 +3155,8 @@ function ManageNotifications() {
     onSuccess: () => {
       toast.success(t("notifications.deleteSuccess", "تم حذف الإشعار بنجاح"));
       queryClient.invalidateQueries({ queryKey: ["adminNotifications"] });
+      setDeleteDialog(false);
+      setSelectedNotif(null);
     },
     onError: () => toast.error(t("common.error")),
   });
@@ -2883,7 +3239,10 @@ function ManageNotifications() {
                 </div>
               </div>
               <IconButton
-                onClick={() => deleteMutation.mutate(notif._id)}
+                onClick={() => {
+                  setSelectedNotif(notif);
+                  setDeleteDialog(true);
+                }}
                 className="opacity-0 group-hover:opacity-100 transition-opacity"
                 sx={{
                   color: "#ef4444",
@@ -2891,15 +3250,313 @@ function ManageNotifications() {
                   "&:hover": { bgcolor: "rgba(239, 68, 68, 0.2)" },
                 }}
               >
-                <Delete size="small" />
+                <Delete fontSize="small" />
               </IconButton>
             </div>
           ))}
         </div>
       )}
+
+      {/* Delete Notification Dialog */}
+      <Dialog
+        open={deleteDialog}
+        onClose={() => setDeleteDialog(false)}
+        PaperProps={{
+          sx: {
+            borderRadius: "2rem",
+            bgcolor: "#0f172a",
+            color: "white",
+            p: 2,
+            border: "1px solid rgba(255,255,255,0.1)",
+          }
+        }}
+      >
+        <DialogTitle sx={{ fontWeight: "900" }}>{t("notifications.deleteConfirmTitle", "حذف الإشعار")}</DialogTitle>
+        <DialogContent>
+          <Typography sx={{ color: "slate.400", fontWeight: "bold" }}>
+            {t("notifications.deleteConfirmMessage", "هل أنت متأكد من حذف هذا الإشعار؟")}
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ p: 3 }}>
+          <Button onClick={() => setDeleteDialog(false)} sx={{ color: "slate.400", fontWeight: "bold" }}>
+            {t("common.cancel")}
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => deleteMutation.mutate(selectedNotif?._id)}
+            disabled={deleteMutation.isPending}
+            sx={{ borderRadius: "1rem", fontWeight: "900", px: 4 }}
+          >
+            {deleteMutation.isPending ? t("common.deleting") : t("common.delete")}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
+
+function ManagePromos() {
+  const { t, i18n } = useTranslation("common");
+  const queryClient = useQueryClient();
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingPromo, setEditingPromo] = useState(null);
+  const [uploadLoading, setUploadLoading] = useState(false);
+
+  const initialForm = {
+    title: "",
+    subtitle: "",
+    imageUrl: "",
+    linkUrl: "",
+    layoutType: "image-right",
+    isActive: true,
+    priority: 0,
+  };
+  const [formData, setFormData] = useState(initialForm);
+
+  const { data: promoData, isLoading } = useQuery({
+    queryKey: ["allPromosAdmin"],
+    queryFn: () => promoService.getAllAdmin(),
+  });
+
+  const createMutation = useMutation({
+    mutationFn: (data) => promoService.create(data),
+    onSuccess: () => {
+      toast.success(t("promos.messages.createSuccess"));
+      queryClient.invalidateQueries({ queryKey: ["allPromosAdmin"] });
+      setIsFormOpen(false);
+      setFormData(initialForm);
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }) => promoService.update(id, data),
+    onSuccess: () => {
+      toast.success(t("promos.messages.updateSuccess"));
+      queryClient.invalidateQueries({ queryKey: ["allPromosAdmin"] });
+      setIsFormOpen(false);
+      setEditingPromo(null);
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id) => promoService.delete(id),
+    onSuccess: () => {
+      toast.success(t("promos.messages.deleteSuccess"));
+      queryClient.invalidateQueries({ queryKey: ["allPromosAdmin"] });
+    },
+  });
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploadLoading(true);
+    const formDataUpload = new FormData();
+    formDataUpload.append("file", file);
+    try {
+      const response = await api.post("/upload", formDataUpload, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setFormData((prev) => ({ ...prev, imageUrl: response.data.url }));
+      toast.success(t("promos.messages.uploadSuccess"));
+    } catch (error) {
+      toast.error(t("promos.messages.uploadError"));
+    } finally {
+      setUploadLoading(false);
+    }
+  };
+
+  const handleOpenForm = (promo = null) => {
+    if (promo) {
+      setEditingPromo(promo);
+      setFormData({ ...promo });
+    } else {
+      setEditingPromo(null);
+      setFormData(initialForm);
+    }
+    setIsFormOpen(true);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (editingPromo) {
+      updateMutation.mutate({ id: editingPromo._id, data: formData });
+    } else {
+      createMutation.mutate(formData);
+    }
+  };
+
+  if (isLoading) return <CircularProgress />;
+
+  const promos = promoData?.data || [];
+
+  return (
+    <div className="space-y-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white/5 p-6 rounded-[2rem] border border-white/10">
+        <div>
+          <Typography className="text-2xl font-black text-white">{t("promos.title")}</Typography>
+          <Typography className="text-slate-400 font-bold">{t("promos.subtitle")}</Typography>
+        </div>
+        <Button
+          variant="contained"
+          startIcon={<Add />}
+          onClick={() => handleOpenForm()}
+          sx={{ borderRadius: "1.25rem", fontWeight: "900", px: 4, py: 1.5 }}
+        >
+          {t("promos.addNew")}
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        {promos.map((promo) => (
+          <div key={promo._id} className="group bg-white/5 rounded-[2rem] border border-white/10 p-5 flex flex-col md:flex-row gap-5 items-center hover:bg-white/10 transition-all duration-300">
+            <div className="relative w-full md:w-40 aspect-video rounded-2xl overflow-hidden shrink-0 border border-white/10">
+              <Image src={promo.imageUrl} alt={promo.title} fill className="object-cover" />
+              {!promo.isActive && (
+                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
+                  <Chip label={t("promos.status.inactive")} size="small" color="error" sx={{ fontWeight: "900" }} />
+                </div>
+              )}
+            </div>
+            <div className="flex-1 min-w-0 space-y-2">
+              <div className="flex justify-between items-start gap-4">
+                <Typography className="text-lg font-black text-white truncate">{promo.title}</Typography>
+                <div className="flex gap-1 shrink-0">
+                  <IconButton size="small" onClick={() => handleOpenForm(promo)} sx={{ color: "var(--primary)", bgcolor: "rgba(249,115,22,0.1)" }}><Edit fontSize="small" /></IconButton>
+                  <IconButton size="small" onClick={() => { if(window.confirm(t("promos.messages.deleteConfirm"))) deleteMutation.mutate(promo._id)}} sx={{ color: "#ef4444", bgcolor: "rgba(239,68,68,0.1)" }}><Delete fontSize="small" /></IconButton>
+                </div>
+              </div>
+              <Typography className="text-slate-400 text-sm font-bold line-clamp-1">{promo.subtitle}</Typography>
+              <div className="flex gap-2">
+                <Chip label={t(`promos.layout.${promo.layoutType.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}`)} size="small" sx={{ bgcolor: "rgba(255,255,255,0.05)", color: "slate.400", fontWeight: "900", fontSize: "0.6rem" }} />
+                <Chip label={`${t("promos.fields.priority")}: ${promo.priority}`} size="small" sx={{ bgcolor: "rgba(249,115,22,0.1)", color: "var(--primary)", fontWeight: "900", fontSize: "0.6rem" }} />
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {promos.length === 0 && (
+          <Box className="col-span-full py-20 bg-white/5 rounded-[3rem] border border-dashed border-white/10 text-center">
+            <Typography className="text-slate-400 font-black">{t("promos.messages.noData")}</Typography>
+          </Box>
+        )}
+      </div>
+
+      <Dialog
+        open={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        maxWidth="lg"
+        fullWidth
+        PaperProps={{
+          sx: {
+            bgcolor: "#0f172a",
+            borderRadius: "2.5rem",
+            border: "1px solid rgba(255,255,255,0.1)",
+            color: "white",
+            p: { xs: 2, md: 4 },
+          }
+        }}
+      >
+        <DialogTitle sx={{ fontWeight: "900", fontSize: "1.5rem" }}>
+          {editingPromo ? t("promos.edit") : t("promos.addNew")}
+        </DialogTitle>
+        <DialogContent sx={{ mt: 2 }}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <TextField fullWidth label={t("promos.fields.title")} required value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} sx={formInputStyle} />
+              <TextField fullWidth label={t("promos.fields.subtitle")} required multiline rows={2} value={formData.subtitle} onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })} sx={formInputStyle} />
+              <TextField fullWidth label={t("promos.fields.linkUrl")} required value={formData.linkUrl} placeholder="https://..." onChange={(e) => setFormData({ ...formData, linkUrl: e.target.value })} sx={formInputStyle} />
+              <div className="grid grid-cols-2 gap-4">
+                <FormControl fullWidth sx={formInputStyle}>
+                  <InputLabel>{t("promos.fields.layoutType")}</InputLabel>
+                  <Select value={formData.layoutType} label={t("promos.fields.layoutType")} onChange={(e) => setFormData({ ...formData, layoutType: e.target.value })}>
+                    <MenuItem value="image-right">{t("promos.layout.imageRight")}</MenuItem>
+                    <MenuItem value="image-left">{t("promos.layout.imageLeft")}</MenuItem>
+                    <MenuItem value="full-bg">{t("promos.layout.fullBg")}</MenuItem>
+                  </Select>
+                </FormControl>
+                <TextField fullWidth type="number" label={t("promos.fields.priority")} value={formData.priority} onChange={(e) => setFormData({ ...formData, priority: parseInt(e.target.value) })} sx={formInputStyle} />
+              </div>
+              <FormControl fullWidth sx={formInputStyle}>
+                <InputLabel>{t("promos.fields.isActive")}</InputLabel>
+                <Select value={formData.isActive} label={t("promos.fields.isActive")} onChange={(e) => setFormData({ ...formData, isActive: e.target.value })}>
+                  <MenuItem value={true}>{t("promos.status.active")}</MenuItem>
+                  <MenuItem value={false}>{t("promos.status.inactive")}</MenuItem>
+                </Select>
+              </FormControl>
+              <Button
+                variant="outlined"
+                component="label"
+                fullWidth
+                disabled={uploadLoading}
+                startIcon={uploadLoading ? <CircularProgress size={20} /> : <Add />}
+                sx={{ borderRadius: "1rem", py: 1.5, borderColor: "rgba(255,255,255,0.1)", color: "white", fontWeight: "900" }}
+              >
+                {uploadLoading ? t("common.loading") : t("addCar.uploadImage")}
+                <input type="file" hidden accept="image/*" onChange={handleImageUpload} />
+              </Button>
+            </form>
+            <div className="hidden lg:block space-y-4">
+              <Typography className="text-center text-primary font-black uppercase tracking-widest text-xs">{t("blog.validation.seoPreview")}</Typography>
+              <PromoPreviewCard data={formData} />
+            </div>
+          </div>
+        </DialogContent>
+        <DialogActions sx={{ p: 4, gap: 2 }}>
+          <Button onClick={() => setIsFormOpen(false)} sx={{ color: "slate.400", fontWeight: "900" }}>{t("common.cancel")}</Button>
+          <Button variant="contained" onClick={handleSubmit} disabled={createMutation.isPending || updateMutation.isPending} sx={{ borderRadius: "1rem", fontWeight: "900", px: 4 }}>
+            {editingPromo ? t("common.save") : t("promos.addNew")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
+
+function PromoPreviewCard({ data }) {
+  const { t } = useTranslation("common");
+  const { title, subtitle, imageUrl, layoutType } = data;
+
+  return (
+    <div className={`relative overflow-hidden rounded-[2rem] border border-white/10 glass shadow-2xl min-h-[280px] flex items-center group ${
+      layoutType === 'full-bg' ? 'p-8' : ''
+    }`}>
+      {layoutType === 'full-bg' && imageUrl && (
+        <div className="absolute inset-0 z-0">
+          <Image src={imageUrl} alt="preview" fill className="object-cover opacity-30" />
+          <div className="absolute inset-0 bg-linear-to-r from-[#0f172a] via-[#0f172a]/80 to-transparent" />
+        </div>
+      )}
+      <div className={`relative z-10 w-full flex flex-col md:flex-row items-center gap-6 ${layoutType === 'image-left' ? 'md:flex-row-reverse' : ''}`}>
+        <div className="flex-1 text-right">
+          <div className="inline-block px-3 py-1 bg-primary/20 rounded-full border border-primary/30 mb-4">
+             <Typography sx={{ color: "primary.main", fontWeight: "900", fontSize: "0.6rem" }}>{t("promos.limitedOffer")}</Typography>
+          </div>
+          <Typography className="text-xl md:text-2xl font-black text-white mb-2 leading-tight">{title || t("promos.fields.title")}</Typography>
+          <Typography className="text-slate-400 font-bold text-sm leading-relaxed mb-6 line-clamp-3">{subtitle || t("promos.fields.subtitle")}</Typography>
+          <Button variant="contained" size="small" sx={{ borderRadius: '0.75rem', fontWeight: '900', px: 4 }}>{t("booking.bookNow")}</Button>
+        </div>
+        {layoutType !== 'full-bg' && (
+          <div className="w-full md:w-1/2 aspect-video relative rounded-2xl overflow-hidden border border-white/10">
+             {imageUrl ? <Image src={imageUrl} alt="preview" fill className="object-cover" /> : <div className="absolute inset-0 bg-white/5 flex items-center justify-center text-[10px] uppercase text-slate-500 font-black">No Image</div>}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const formInputStyle = {
+    "& .MuiOutlinedInput-root": {
+      color: "white",
+      borderRadius: "1rem",
+      bgcolor: "rgba(255,255,255,0.03)",
+      "& fieldset": { borderColor: "rgba(255,255,255,0.08)" },
+      "&:hover fieldset": { borderColor: "rgba(255,255,255,0.2)" },
+      "&.Mui-focused fieldset": { borderColor: "#f97316" }
+    },
+    "& .MuiInputLabel-root": { color: "slate.400", fontWeight: "bold" }
+};
 
 
 

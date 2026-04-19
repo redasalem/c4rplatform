@@ -42,7 +42,16 @@ export async function generateMetadata({ params }) {
       title,
       description: desc,
       url: `https://c4rplatform.com/cars/${id}`,
-      images: car.image ? [{ url: car.image, alt: carName }] : [],
+      images: car.image
+        ? [
+            {
+              url: car.image,
+              width: 1200,
+              height: 630,
+              alt: `تأجير سيارة ${carName} في السعودية`,
+            },
+          ]
+        : [],
     },
     twitter: {
       title,
@@ -119,18 +128,24 @@ export default async function CarDetailsPage({ params }) {
     ],
   };
 
-  return (
-    <main>
-      {productSchema && (
+  const SafeSchema = ({ data }) => {
+    if (!data) return null;
+    try {
+      return (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
         />
-      )}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
+      );
+    } catch {
+      return null;
+    }
+  };
+
+  return (
+    <main>
+      <SafeSchema data={productSchema} />
+      <SafeSchema data={breadcrumbSchema} />
       <CarDetailsClient initialCarData={car} />
     </main>
   );

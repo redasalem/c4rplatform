@@ -59,7 +59,7 @@ export async function generateMetadata({ params }) {
     if (!blog) return { title: "مقال غير موجود | C4R" };
     const imageUrl = blog.image && blog.image !== 'no-photo.jpg' ? blog.image : "https://c4rplatform.com/images/blog-default.jpg";
     return {
-      title: blog.metaTitle || `${blog.title} | مدونة C4R`,
+      title: blog.metaTitle || `${blog.title} | تأجير سيارات في السعودية`,
       description: blog.metaDescription || blog.summary || blog.title,
       alternates: { canonical: `https://c4rplatform.com/blog/${id}` },
       openGraph: {

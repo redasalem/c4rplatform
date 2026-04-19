@@ -12,10 +12,12 @@ import {
 import { useTranslation } from "react-i18next";
 import { notificationService } from "@/services/api";
 import { useAuth } from "@/context/AuthContext";
+import { useQueryClient } from "@tanstack/react-query";
 
 const NotificationDropdown = ({ isAdminSettings = false }) => {
   const { user } = useAuth();
   const { t, i18n } = useTranslation("common");
+  const queryClient = useQueryClient();
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -77,6 +79,7 @@ const NotificationDropdown = ({ isAdminSettings = false }) => {
     try {
       await notificationService.delete(id);
       setNotifications(prev => prev.filter(n => n._id !== id));
+      queryClient.invalidateQueries({ queryKey: ["adminNotifications"] });
     } catch (error) {
       console.error("Error deleting notification", error);
     }

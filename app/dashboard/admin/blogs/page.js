@@ -24,6 +24,7 @@ import {
   Tooltip,
   Tabs,
   Tab,
+  Pagination,
 } from "@mui/material";
 import {
   Add,
@@ -285,6 +286,7 @@ export default function AdminBlogs() {
   const [file, setFile] = useState(null);
   const [tabValue, setTabValue] = useState(0);
   const [imageMetadata, setImageMetadata] = useState(null);
+  const [page, setPage] = useState(1);
 
   // Initial Form State
   const initialForm = {
@@ -299,6 +301,7 @@ export default function AdminBlogs() {
     metaTitle: "",
     metaDescription: "",
     focusKeywords: "",
+    faqs: [],
   };
   const [formData, setFormData] = useState(initialForm);
 
@@ -311,8 +314,9 @@ export default function AdminBlogs() {
 
   // Queries
   const { data: blogsData, isLoading: blogsLoading } = useQuery({
-    queryKey: ["adminBlogs"],
-    queryFn: () => blogService.getAll({ sort: '-createdAt' }),
+    queryKey: ["adminBlogs", page],
+    queryFn: () => blogService.getAll({ sort: '-createdAt', page, limit: 20 }),
+    keepPreviousData: true,
   });
 
   const { data: catData } = useQuery({
@@ -327,15 +331,7 @@ export default function AdminBlogs() {
 
   useEffect(() => { setMounted(true); }, []);
 
-  // Slug Generation
-  useEffect(() => {
-    if (slugSync && formData.title) {
-      const slug = formData.title.toLowerCase()
-        .replace(/[^a-z0-9\u0621-\u064A\u0660-\u0669-]+/g, '-')
-        .replace(/(^-|-$)+/g, '');
-      setFormData(prev => ({ ...prev, slug }));
-    }
-  }, [formData.title, slugSync]);
+  // Slug Generation relying on Backend completely to prevent 404 mismatch
 
   // Mutations
   const createMutation = useMutation({
@@ -384,6 +380,7 @@ export default function AdminBlogs() {
         metaTitle: blog.metaTitle || "",
         metaDescription: blog.metaDescription || "",
         focusKeywords: Array.isArray(blog.focusKeywords) ? blog.focusKeywords.join(", ") : (blog.focusKeywords || ""),
+        faqs: blog.faqs || [],
       });
       setSlugSync(false);
     } else {
@@ -432,8 +429,6 @@ export default function AdminBlogs() {
           : formData.focusKeywords
       };
       
-      console.log("Submitting Blog Data:", finalData);
-
       if (selectedBlog) updateMutation.mutate({ slug: selectedBlog.slug, data: finalData });
       else createMutation.mutate(finalData);
     } catch (error) { toast.error(error.message || t("common.error")); }
@@ -497,6 +492,28 @@ export default function AdminBlogs() {
           ))
         )}
       </div>
+
+      {/* Pagination component */}
+      {!blogsLoading && blogsData?.pagination?.totalPages > 1 && (
+        <div className="flex justify-center mt-12 mb-8">
+          <Pagination
+            count={blogsData.pagination.totalPages}
+            page={page}
+            onChange={(e, value) => {
+              setPage(value);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            color="primary"
+            sx={{
+              "& .MuiPaginationItem-root": { color: "white", borderColor: "rgba(255,255,255,0.2)" },
+              "& .Mui-selected": { bgcolor: "var(--primary)", color: "white", borderColor: "var(--primary)" }
+            }}
+            variant="outlined"
+            shape="rounded"
+            size="large"
+          />
+        </div>
+      )}
 
       {/* Main Dialog with Tabs */}
       <Dialog
