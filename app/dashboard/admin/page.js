@@ -1897,21 +1897,28 @@ function AddCarDialog({ open, onClose }) {
       const uploadData = new FormData();
       uploadData.append("file", file);
 
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: uploadData,
+      // Use the configured 'api' instance instead of native fetch
+      const res = await api.post("/upload", uploadData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.error || "فشل رفع الصورة");
+      if (!res.data?.url) throw new Error("فشل الحصول على رابط الصورة");
 
       createMutation.mutate({
         ...formData,
-        imageUrl: result.url,
+        year: Number(formData.year),
+        pricePerDay: Number(formData.pricePerDay),
+        priceWeekly: Number(formData.priceWeekly),
+        priceHalfMonth: Number(formData.priceHalfMonth),
+        priceMonthly: Number(formData.priceMonthly),
+        seats: Number(formData.seats),
+        order: Number(formData.order || 0),
+        imageUrl: res.data.url,
       });
     } catch (error) {
       console.error(error);
-      toast.error(error.message || t("dashboard.admin.addCar.error"));
+      const errorMsg = error.response?.data?.message || error.message || t("dashboard.admin.addCar.error");
+      toast.error(errorMsg);
     } finally {
       setUploading(false);
     }
