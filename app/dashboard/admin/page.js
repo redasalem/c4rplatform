@@ -422,6 +422,7 @@ export default function AdminDashboard() {
   );
 }
 function JumpToPagePagination({ totalPages, currentPage, onPageChange }) {
+  const { i18n } = useTranslation("common");
   const [inputPage, setInputPage] = useState(currentPage);
 
   useEffect(() => {
