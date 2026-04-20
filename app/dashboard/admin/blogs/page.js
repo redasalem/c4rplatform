@@ -463,29 +463,87 @@ export default function AdminBlogs() {
         </Button>
       </div>
 
-      {/* Articles Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {blogsLoading ? (
-          <div className="col-span-full py-20 flex flex-col items-center gap-4">
-            <CircularProgress color="primary" />
-            <span className="text-white font-bold animate-pulse">جاري التحميل...</span>
+          <div className="col-span-full py-32 flex flex-col items-center gap-6">
+            <CircularProgress size={50} thickness={5} sx={{ color: 'var(--primary)' }} />
+            <span className="text-white font-black text-xl animate-pulse tracking-[0.2em]">جاري تحميل البيانات...</span>
           </div>
         ) : (
           blogs.map((blog) => (
-            <div key={blog._id} className="bg-[#0f172a]/50 backdrop-blur-xl border border-white/10 rounded-[2rem] overflow-hidden group hover:border-primary/40 transition-all">
-              <div className="relative h-48 w-full">
-                <Image src={blog.image || '/images/blog-placeholder.jpg'} alt={blog.title} fill className="object-cover" />
-              </div>
-              <div className="p-6 space-y-4">
-                <h3 className="text-xl font-black text-white group-hover:text-primary transition-colors line-clamp-2 leading-tight h-14">{blog.title}</h3>
-                <div className="flex justify-between items-center text-[11px] text-white/40 font-black uppercase tracking-widest">
-                  <div className="flex items-center gap-1.5"><AccessTime sx={{ fontSize: 14, color: 'primary.main' }} /> {blog.content ? Math.ceil(blog.content.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).length / 200) : 1} MIN</div>
-                  <div className="flex items-center gap-1.5"><Analytics sx={{ fontSize: 14, color: 'primary.main' }} /> {blog.views || 0} VIEWS</div>
+            <div 
+              key={blog._id} 
+              className="bg-[#0f172a]/80 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] overflow-hidden group hover:border-primary/40 transition-all duration-500 shadow-2xl flex flex-col"
+            >
+              <div className="relative h-56 w-full overflow-hidden">
+                <Image src={blog.image || '/images/blog-placeholder.jpg'} alt={blog.title} fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div className="absolute top-4 left-4">
+                   <Chip 
+                     label={t(`blog.statuses.${blog.status || 'draft'}`)} 
+                     size="small" 
+                     sx={{ 
+                       bgcolor: blog.status === 'published' ? 'rgba(16,185,129,0.9)' : 'rgba(249,115,22,0.9)', 
+                       color: 'white', 
+                       fontWeight: '900',
+                       backdropFilter: 'blur(10px)'
+                     }} 
+                   />
                 </div>
-                <div className="flex gap-2 pt-2">
-                  <IconButton onClick={() => handleOpenDialog(blog)} sx={{ bgcolor: 'white/5', color: 'white' }}><Edit fontSize="small" /></IconButton>
-                  <IconButton onClick={() => { setSelectedBlog(blog); setDeleteDialog(true); }} sx={{ bgcolor: 'red-500/10', color: '#ef4444' }}><Delete fontSize="small" /></IconButton>
-                  <Button component={Link} href={`/blog/${blog._id}`} target="_blank" variant="outlined" fullWidth sx={{ borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}>معاينة</Button>
+              </div>
+              <div className="p-8 flex flex-col flex-1 gap-5">
+                <div className="space-y-4 flex-1">
+                   <h3 className="text-xl md:text-2xl font-black text-white group-hover:text-primary transition-colors line-clamp-2 leading-snug min-h-[3.5rem] text-right">
+                     {blog.title}
+                   </h3>
+                   <Typography className="text-white/40 text-sm font-bold line-clamp-2 leading-relaxed text-right">
+                     {blog.summary || (blog.content ? blog.content.replace(/<[^>]*>/g, ' ').substring(0, 100) + "..." : "")}
+                   </Typography>
+                </div>
+
+                <div className="flex justify-between items-center text-[10px] text-white/30 font-black uppercase tracking-[0.15em] pt-4 border-t border-white/5">
+                  <div className="flex items-center gap-2">
+                    <AccessTime sx={{ fontSize: 16, color: 'primary.main' }} /> 
+                    <span>{blog.content ? Math.ceil(blog.content.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).length / 200) : 1} MIN</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Analytics sx={{ fontSize: 16, color: 'primary.main' }} /> 
+                    <span>{blog.views || 0} VIEWS</span>
+                  </div>
+                </div>
+
+                <div className="flex gap-3 pt-2">
+                  <Tooltip title="تعديل">
+                    <IconButton 
+                      onClick={() => handleOpenDialog(blog)} 
+                      sx={{ bgcolor: 'white/5', color: 'white', "&:hover": { bgcolor: 'primary.main' } }}
+                    >
+                      <Edit fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="حذف">
+                    <IconButton 
+                      onClick={() => { setSelectedBlog(blog); setDeleteDialog(true); }} 
+                      sx={{ bgcolor: 'rgba(239,68,68,0.1)', color: '#ef4444', "&:hover": { bgcolor: '#ef4444', color: 'white' } }}
+                    >
+                      <Delete fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  <Button 
+                    component={Link} 
+                    href={`/blog/${blog.slug}`} 
+                    target="_blank" 
+                    variant="outlined" 
+                    fullWidth 
+                    sx={{ 
+                      borderRadius: '1rem', 
+                      border: '1px solid rgba(255,255,255,0.1)', 
+                      color: 'white',
+                      fontWeight: '900',
+                      "&:hover": { borderColor: 'white', bgcolor: 'white/5' }
+                    }}
+                  >
+                    معاينة
+                  </Button>
                 </div>
               </div>
             </div>

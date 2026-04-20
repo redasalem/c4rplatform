@@ -1904,17 +1904,25 @@ function AddCarDialog({ open, onClose }) {
 
       if (!res.data?.url) throw new Error("فشل الحصول على رابط الصورة");
 
-      createMutation.mutate({
-        ...formData,
-        year: Number(formData.year),
-        pricePerDay: Number(formData.pricePerDay),
-        priceWeekly: Number(formData.priceWeekly),
-        priceHalfMonth: Number(formData.priceHalfMonth),
-        priceMonthly: Number(formData.priceMonthly),
-        seats: Number(formData.seats),
-        order: Number(formData.order || 0),
-        imageUrl: res.data.url,
-      });
+      const payload = { ...formData, imageUrl: res.data.url };
+
+      const parseIntSafe = (val) => (val ? parseInt(val, 10) : undefined);
+      const parseFloatSafe = (val) => (val ? parseFloat(val) : undefined);
+
+      payload.year = parseIntSafe(formData.year);
+      payload.pricePerDay = parseFloatSafe(formData.pricePerDay);
+      payload.priceWeekly = parseFloatSafe(formData.priceWeekly);
+      payload.priceHalfMonth = parseFloatSafe(formData.priceHalfMonth);
+      payload.priceMonthly = parseFloatSafe(formData.priceMonthly);
+      payload.seats = parseIntSafe(formData.seats);
+      payload.order = formData.order ? parseInt(formData.order, 10) : 0;
+
+      // Clean up undefined values dynamically to prevent sending explicit empty fields
+      Object.keys(payload).forEach(
+        (key) => payload[key] === undefined && delete payload[key]
+      );
+
+      createMutation.mutate(payload);
     } catch (error) {
       console.error(error);
       const errorMsg = error.response?.data?.message || error.message || t("dashboard.admin.addCar.error");
@@ -2404,10 +2412,25 @@ function EditCarDialog({ open, car, onClose }) {
         currentImageUrl = result.url;
       }
 
-      updateMutation.mutate({
-        ...formData,
-        imageUrl: currentImageUrl,
-      });
+      const payload = { ...formData, imageUrl: currentImageUrl };
+
+      const parseIntSafe = (val) => (val ? parseInt(val, 10) : undefined);
+      const parseFloatSafe = (val) => (val ? parseFloat(val) : undefined);
+
+      payload.year = parseIntSafe(formData.year);
+      payload.pricePerDay = parseFloatSafe(formData.pricePerDay);
+      payload.priceWeekly = parseFloatSafe(formData.priceWeekly);
+      payload.priceHalfMonth = parseFloatSafe(formData.priceHalfMonth);
+      payload.priceMonthly = parseFloatSafe(formData.priceMonthly);
+      payload.seats = parseIntSafe(formData.seats);
+      payload.order = formData.order !== undefined && formData.order !== "" ? parseInt(formData.order, 10) : 0;
+
+      // Clean up undefined values dynamically to prevent sending explicit empty fields
+      Object.keys(payload).forEach(
+        (key) => payload[key] === undefined && delete payload[key]
+      );
+
+      updateMutation.mutate(payload);
     } catch (error) {
       console.error(error);
       toast.error(error.message || t("dashboard.admin.editCar.error"));
@@ -3401,43 +3424,95 @@ function ManagePromos() {
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white/5 p-6 rounded-[2rem] border border-white/10">
-        <div>
-          <Typography className="text-2xl font-black text-white">{t("promos.title")}</Typography>
-          <Typography className="text-slate-400 font-bold">{t("promos.subtitle")}</Typography>
+        <div className="text-right">
+          <Typography className="text-xl sm:text-2xl font-black text-white mb-1">
+            {t("promos.title", "إدارة العروض والبنرات")}
+          </Typography>
+          <Typography className="text-slate-400 font-bold text-sm sm:text-base">
+            {t("promos.subtitle", "تحكم في العروض الترويجية والبنرات الإعلانية")}
+          </Typography>
         </div>
         <Button
           variant="contained"
           startIcon={<Add />}
           onClick={() => handleOpenForm()}
-          sx={{ borderRadius: "1.25rem", fontWeight: "900", px: 4, py: 1.5 }}
+          sx={{ 
+            borderRadius: "1.25rem", 
+            fontWeight: "900", 
+            px: { xs: 3, sm: 4 }, 
+            py: 1.5,
+            bgcolor: "primary.main",
+            boxShadow: "0 10px 30px rgba(249,115,22,0.3)",
+            "&:hover": { bgcolor: "primary.dark", transform: "translateY(-2px)" },
+            transition: "all 0.3s ease"
+          }}
         >
-          {t("promos.addNew")}
+          {t("promos.addNew", "إضافة عرض جديد")}
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6">
         {promos.map((promo) => (
-          <div key={promo._id} className="group bg-white/5 rounded-[2rem] border border-white/10 p-5 flex flex-col md:flex-row gap-5 items-center hover:bg-white/10 transition-all duration-300">
-            <div className="relative w-full md:w-40 aspect-video rounded-2xl overflow-hidden shrink-0 border border-white/10">
-              <Image src={promo.imageUrl} alt={promo.title} fill className="object-cover" />
+          <div 
+            key={promo._id} 
+            className="group bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 p-5 flex flex-col gap-5 hover:bg-white/10 transition-all duration-500 overflow-hidden relative shadow-2xl"
+          >
+            <div className="absolute top-0 right-0 w-1.5 h-full bg-primary/20" />
+            
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden shrink-0 border border-white/10 shadow-inner">
+              <Image src={promo.imageUrl} alt={promo.title} fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
               {!promo.isActive && (
-                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center">
                   <Chip label={t("promos.status.inactive")} size="small" color="error" sx={{ fontWeight: "900" }} />
                 </div>
               )}
             </div>
-            <div className="flex-1 min-w-0 space-y-2">
-              <div className="flex justify-between items-start gap-4">
-                <Typography className="text-lg font-black text-white truncate">{promo.title}</Typography>
-                <div className="flex gap-1 shrink-0">
-                  <IconButton size="small" onClick={() => handleOpenForm(promo)} sx={{ color: "var(--primary)", bgcolor: "rgba(249,115,22,0.1)" }}><Edit fontSize="small" /></IconButton>
-                  <IconButton size="small" onClick={() => { if(window.confirm(t("promos.messages.deleteConfirm"))) deleteMutation.mutate(promo._id)}} sx={{ color: "#ef4444", bgcolor: "rgba(239,68,68,0.1)" }}><Delete fontSize="small" /></IconButton>
+            
+            <div className="flex-1 min-w-0 space-y-4">
+              <div className="flex justify-between items-start gap-3">
+                <Typography className="text-lg font-black text-white truncate leading-tight flex-1">
+                  {promo.title}
+                </Typography>
+                <div className="flex gap-2 shrink-0">
+                  <IconButton 
+                    size="small" 
+                    onClick={() => handleOpenForm(promo)} 
+                    sx={{ color: "white", bgcolor: "white/5", "&:hover": { bgcolor: "primary.main", color: "white" } }}
+                  >
+                    <Edit fontSize="small" />
+                  </IconButton>
+                  <IconButton 
+                    size="small" 
+                    onClick={() => { if(window.confirm(t("promos.messages.deleteConfirm"))) deleteMutation.mutate(promo._id)}} 
+                    sx={{ color: "#ef4444", bgcolor: "rgba(239,68,68,0.1)", "&:hover": { bgcolor: "#ef4444", color: "white" } }}
+                  >
+                    <Delete fontSize="small" />
+                  </IconButton>
                 </div>
               </div>
-              <Typography className="text-slate-400 text-sm font-bold line-clamp-1">{promo.subtitle}</Typography>
-              <div className="flex gap-2">
-                <Chip label={t(`promos.layout.${promo.layoutType.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}`)} size="small" sx={{ bgcolor: "rgba(255,255,255,0.05)", color: "slate.400", fontWeight: "900", fontSize: "0.6rem" }} />
-                <Chip label={`${t("promos.fields.priority")}: ${promo.priority}`} size="small" sx={{ bgcolor: "rgba(249,115,22,0.1)", color: "var(--primary)", fontWeight: "900", fontSize: "0.6rem" }} />
+              
+              <Typography className="text-slate-400 text-sm font-bold line-clamp-2 leading-relaxed min-h-[40px]">
+                {promo.subtitle}
+              </Typography>
+              
+              <div className="flex flex-wrap gap-2 pt-2 border-t border-white/5 mt-2">
+                <Chip 
+                  label={t(`promos.layout.${promo.layoutType.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}`)} 
+                  size="small" 
+                  sx={{ bgcolor: "rgba(255,255,255,0.05)", color: "slate.300", fontWeight: "900", fontSize: "0.65rem", textTransform: "uppercase" }} 
+                />
+                <Chip 
+                  label={`${t("promos.fields.priority")}: ${promo.priority}`} 
+                  size="small" 
+                  sx={{ bgcolor: "rgba(249,115,22,0.1)", color: "primary.main", fontWeight: "900", fontSize: "0.65rem" }} 
+                />
+                {promo.isActive && (
+                  <Chip 
+                    label={t("promos.status.active")} 
+                    size="small" 
+                    sx={{ bgcolor: "rgba(16,185,129,0.1)", color: "#10b981", fontWeight: "900", fontSize: "0.65rem" }} 
+                  />
+                )}
               </div>
             </div>
           </div>

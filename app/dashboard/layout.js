@@ -107,128 +107,131 @@ function DashboardSidebarContent({
   ];
 
   const links = isAdmin ? adminLinks : userLinks;
-  const currentTab =
-    searchParams.get("tab") || (isAdmin ? "bookings" : "profile");
 
   return (
     <>
-      {/* Sidebar - Premium Midnight Glassmorphism */}
-      <aside className="w-80 bg-midnight/80 backdrop-blur-2xl border-l border-white/10 hidden md:flex flex-col fixed h-full overflow-y-auto right-0 z-40 shadow-[20px_0_50px_rgba(0,0,0,0.5)] pt-24">
-        {/* User Info Card */}
-        <div className="p-8 border-b border-white/5 bg-white/5">
-          <div className="flex items-center gap-5">
-            <div className="relative group">
-              <div className="absolute inset-0 bg-primary/40 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <style dangerouslySetInnerHTML={{__html: `
+        .sidebar-scroll::-webkit-scrollbar {
+          width: 4px;
+        }
+        .sidebar-scroll::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+          background: rgba(255,255,255,0.1);
+          border-radius: 10px;
+        }
+        .sidebar-scroll:hover::-webkit-scrollbar-thumb {
+          background: rgba(255,255,255,0.2);
+        }
+      `}} />
+      <aside 
+        className="w-[280px] bg-[#020617]/95 backdrop-blur-3xl border-l border-white/5 hidden md:flex flex-col fixed right-0 z-40 sidebar-scroll shadow-[-10px_0_30px_rgba(0,0,0,0.5)] transition-all duration-300 rounded-tl-3xl rounded-bl-3xl overflow-hidden" 
+        style={{ top: "100px", height: "calc(100vh - 120px)" }}
+      >
+
+        {/* User Card Modernized */}
+        <div className="px-6 pt-8 pb-6 relative group overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-[50px] rounded-full z-0 pointer-events-none" />
+          <div className="flex items-center gap-4 relative z-10">
+            <div className="relative">
               <Avatar
                 sx={{
-                  width: 60,
-                  height: 60,
-                  bgcolor: "var(--primary)",
+                  width: 54,
+                  height: 54,
+                  bgcolor: "rgba(249,115,22,0.15)",
+                  color: "#f97316",
                   fontFamily: "inherit",
                   fontWeight: "900",
                   fontSize: "1.2rem",
-                  border: "2px solid rgba(255,255,255,0.1)",
-                  boxShadow: "0 10px 20px rgba(0,0,0,0.4)",
-                  position: "relative",
-                  zIndex: 1,
+                  border: "1px solid rgba(249,115,22,0.3)",
+                  boxShadow: "0 4px 20px rgba(0,0,0,0.5)",
                 }}
               >
                 {getInitials(user?.name)}
               </Avatar>
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-[#020617]" title="Online" />
             </div>
-            <div>
-              <h3 className="font-black text-white text-base tracking-tight mb-1">
+            <div className="flex-1 min-w-0">
+              <h3 className="font-black text-white text-[15px] tracking-tight truncate">
                 {user?.name}
               </h3>
-              <div className="inline-flex items-center gap-1.5 bg-primary/10 text-primary px-2.5 py-0.5 rounded-full border border-primary/20">
-                <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
-                <span className="text-[10px] font-black uppercase tracking-wider">
-                  {isAdmin
-                    ? t("dashboard.roleAdmin")
-                    : t("dashboard.roleClient")}
-                </span>
-              </div>
+              <p className="text-primary text-[11px] uppercase tracking-widest font-bold mt-0.5">
+                {isAdmin ? t("dashboard.roleAdmin") : t("dashboard.roleClient")}
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Home Link */}
-        <div className="px-6 pt-6">
+        <div className="px-6 pb-2">
           <Link
             href="/"
-            className="flex items-center gap-4 px-5 py-4 rounded-2xl font-black text-slate-400 hover:bg-white/5 hover:text-white transition-all duration-500 border border-white/5 group"
+            className="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-slate-400 bg-white/5 hover:bg-white/10 hover:text-white transition-all duration-300 border border-white/5 group"
           >
-            <Home className="text-slate-500 group-hover:text-primary group-hover:scale-110 transition-all" />
-            <span className="text-sm">{t("dashboard.backToHome")}</span>
+            <div className="bg-white/5 p-1.5 rounded-lg group-hover:bg-primary/20 transition-colors">
+              <Home className="text-slate-500 group-hover:text-primary transition-colors" sx={{ fontSize: 18 }} />
+            </div>
+            <span className="text-xs tracking-wide">{t("dashboard.backToHome")}</span>
           </Link>
         </div>
 
-        {/* Navigation Title */}
-        <div className="px-8 pt-8 pb-3">
-          <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">
+        <div className="px-8 pt-4 pb-2">
+          <div className="h-px w-full bg-linear-to-r from-transparent via-white/10 to-transparent mb-4" />
+          <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
             {t("dashboard.mainMenu")}
           </p>
         </div>
 
-        <nav className="flex-1 px-6 space-y-2.5">
+        <nav className="flex-1 px-4 space-y-1 overflow-y-auto sidebar-scroll pb-6">
           {links.map((link) => {
-            const linkTab = link.href.includes('?tab=') 
-              ? link.href.split("?tab=")[1] 
-              : null;
+            const basePath = pathname;
+            const currentTabUrl = searchParams.get("tab");
             
-            // Improved active state logic
-            const isBaseAdmin = pathname === "/dashboard/admin";
-            const pathMatch = pathname === link.href;
-            const tabInUrl = searchParams.get("tab");
+            const [linkPath, linkQuery] = link.href.split("?");
+            const linkTabObj = new URLSearchParams(linkQuery || "");
+            const linkTabVal = linkTabObj.get("tab");
             
-            // If we are on /dashboard/admin/blogs, ONLY the blog link should be active.
-            // If we are on /dashboard/admin with ?tab=bookings, ONLY bookings should be active.
             let isActive = false;
             
-            if (link.href.startsWith('/dashboard/admin/')) {
-              // Exact path match for dedicated pages like /blogs or /categories
-              isActive = pathname.startsWith(link.href);
-            } else if (linkTab) {
-              // Tab match for query-based routes, but only if we ARE on the base dashboard page
-              isActive = isBaseAdmin && tabInUrl === linkTab;
-              // Fallback for default tab (bookings) if no tab is in URL
-              if (!tabInUrl && linkTab === 'bookings' && isBaseAdmin) isActive = true;
+            if (linkTabVal) {
+              const isDefaultTab = (linkTabVal === "bookings" && isAdmin) || (linkTabVal === "profile" && !isAdmin);
+              const isPathMatch = basePath === linkPath;
+              const isTabMatch = currentTabUrl === linkTabVal || (!currentTabUrl && isDefaultTab && isPathMatch);
+              isActive = isPathMatch && isTabMatch;
             } else {
-              isActive = pathMatch;
+              isActive = basePath.startsWith(linkPath) && linkPath !== "/dashboard/admin" && linkPath !== "/dashboard/user";
             }
 
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`flex items-center gap-4 px-5 py-4 rounded-2xl font-black transition-all duration-500 group relative ${
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all duration-300 group relative ${
                   isActive
-                    ? "bg-primary text-white shadow-[0_15px_30px_rgba(249,115,22,0.3)]"
-                    : "text-slate-500 hover:bg-white/5 hover:text-slate-200"
+                    ? "bg-linear-to-r from-primary/20 to-transparent text-white border border-primary/20"
+                    : "text-slate-400 hover:bg-white/5 hover:text-slate-200 border border-transparent"
                 }`}
               >
                 {isActive && (
-                  <div className="absolute left-0 w-1.5 h-6 bg-white rounded-r-full" />
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-l-full shadow-[0_0_10px_#f97316]" />
                 )}
-                <span
-                  className={`transition-all duration-500 ${isActive ? "text-white scale-110" : "text-primary/70 group-hover:text-primary group-hover:scale-110"}`}
-                >
+                <div className={`transition-all duration-300 p-1.5 rounded-lg ${isActive ? "bg-primary text-white shadow-lg shadow-primary/30" : "bg-white/5 text-slate-500 group-hover:bg-white/10 group-hover:text-slate-300"}`}>
                   {link.icon}
-                </span>
-                <span className="text-sm tracking-tight">{link.name}</span>
+                </div>
+                <span className={`text-[13px] tracking-wide ${isActive ? "font-black" : "font-semibold"}`}>{link.name}</span>
               </Link>
             );
           })}
         </nav>
 
-        {/* Logout Button */}
-        <div className="p-6 border-t border-white/5 mt-auto">
+        {/* Improved Logout Panel */}
+        <div className="p-4 mt-auto">
           <button
             onClick={logout}
-            className="w-full flex items-center justify-center gap-3 px-5 py-4 rounded-2xl font-black text-white bg-linear-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 transition-all duration-500 shadow-xl shadow-red-900/40 border border-red-500/20 group"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl font-bold text-red-400 bg-red-500/10 hover:bg-red-500 hover:text-white transition-all duration-300 border border-red-500/20 group"
           >
-            <Logout className="group-hover:-translate-x-1 transition-transform" />
-            <span className="text-sm">{t("dashboard.secureLogout")}</span>
+            <Logout className="group-hover:-translate-x-1 transition-transform" sx={{ fontSize: 20 }} />
+            <span className="text-[13px] tracking-wide">{t("dashboard.secureLogout")}</span>
           </button>
         </div>
       </aside>

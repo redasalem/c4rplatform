@@ -101,10 +101,31 @@ export default function BookingPage() {
     const diffTime = end - start;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays > 0) {
+    if (diffDays > 0 && diffDays !== numberOfDays) {
       setNumberOfDays(diffDays);
     }
   }, [dates.startDate, dates.endDate]);
+
+  const handleStartDateChange = (e) => {
+    const start = e.target.value;
+    setDates(prev => ({
+      ...prev,
+      startDate: start,
+      endDate: start && numberOfDays > 0 ? addDaysToDate(start, numberOfDays) : prev.endDate
+    }));
+  };
+
+  const handleDaysChange = (e) => {
+    const days = Number(e.target.value);
+    setNumberOfDays(days);
+    if (dates.startDate) {
+      setDates(prev => ({
+        ...prev,
+        endDate: addDaysToDate(prev.startDate, days)
+      }));
+    }
+  };
+
 
   // Redirect to login if NOT authenticated
   useEffect(() => {
@@ -314,9 +335,7 @@ export default function BookingPage() {
                           size="small"
                           InputLabelProps={{ shrink: true }}
                           value={dates.startDate}
-                          onChange={(e) =>
-                            setDates({ ...dates, startDate: e.target.value })
-                          }
+                          onChange={handleStartDateChange}
                           required
                           sx={{
                             "& .MuiOutlinedInput-root": {
@@ -374,7 +393,7 @@ export default function BookingPage() {
                         </InputLabel>
                         <Select
                           value={numberOfDays}
-                          onChange={(e) => setNumberOfDays(Number(e.target.value))}
+                          onChange={handleDaysChange}
                           label={t("booking.totalDays")}
                           sx={{
                             borderRadius: 3,
