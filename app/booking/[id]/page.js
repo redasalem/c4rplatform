@@ -149,16 +149,19 @@ export default function BookingPage() {
     onSuccess: () => {
       setShowSuccessDialog(true);
     },
-    onError: (err) => {
-      console.error("Booking Error:", err.response?.data || err);
-
-      if (err?.response?.status === 403) {
-        toast.info(t("booking.adminCannotBook"));
-        return;
-      }
-
-      toast.error(t("booking.submitError"));
-    },
+    onError: (error) => {
+      console.error("Booking creation error:", error);
+      
+      const errorMessage = error?.response?.data?.message || 
+                          error?.response?.data?.error || 
+                          error?.message || 
+                          t("booking.submitError");
+      
+      toast.error(errorMessage, {
+        duration: 5000,
+        position: 'top-center'
+      });
+    }
   });
 
   const uploadToSecureAPI = async (file) => {
