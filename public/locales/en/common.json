@@ -77,6 +77,7 @@
     "titlePart3": "Perfect Car",
     "subtitle": "A variety of luxury and economy cars to suit all your needs",
     "breadcrumb": "Cars",
+    "loadingFleet": "Loading Fleet...",
     "empty": "No cars available at the moment"
   },
   "departments": {

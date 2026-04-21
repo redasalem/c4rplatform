@@ -209,7 +209,7 @@ export default function AllCarsPageClient() {
                   label={t("dashboard.admin.addCar.categoryLabel")}
                   onChange={(e) => handleFilterChange({ category: e.target.value })}
                 >
-                  <MenuItem value="">{i18n.language === "ar" ? "الكل" : "All"}</MenuItem>
+                  <MenuItem value="">{t("common.all", "All")}</MenuItem>
                   <MenuItem value="regular">{t("carCard.categories.regular")}</MenuItem>
                   <MenuItem value="with_driver">{t("carCard.categories.with_driver")}</MenuItem>
                   <MenuItem value="corporate">{t("carCard.categories.corporate")}</MenuItem>

@@ -121,18 +121,20 @@ const AdminTabsContent = ({ user }) => {
       newValue === 1
         ? "notifications"
         : newValue === 2
-          ? "users"
-          : newValue === 4
-            ? "cars"
-            : newValue === 5
-              ? "reviews"
-              : newValue === 6
-                ? "profile"
-                : newValue === 7
-                  ? "password"
-                  : newValue === 8
-                    ? "promos"
-                    : "bookings";
+          ? "blog"
+          : newValue === 3
+            ? "users"
+            : newValue === 4
+              ? "cars"
+              : newValue === 5
+                ? "reviews"
+                : newValue === 6
+                  ? "profile"
+                  : newValue === 7
+                    ? "password"
+                    : newValue === 8
+                      ? "promos"
+                      : "bookings";
 
     router.push(`/dashboard/admin?tab=${tabName}`);
   };

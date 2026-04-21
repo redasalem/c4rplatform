@@ -127,7 +127,7 @@ function DashboardSidebarContent({
       `}} />
       <aside 
         className="w-[280px] bg-[#020617]/95 backdrop-blur-3xl border-l border-white/5 hidden md:flex flex-col fixed right-0 z-40 sidebar-scroll shadow-[-10px_0_30px_rgba(0,0,0,0.5)] transition-all duration-300 rounded-tl-3xl rounded-bl-3xl overflow-hidden" 
-        style={{ top: "100px", height: "calc(100vh - 120px)" }}
+        style={{ top: "125px", height: "calc(100vh - 145px)" }}
       >
 
         {/* User Card Modernized */}
