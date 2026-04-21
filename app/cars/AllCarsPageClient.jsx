@@ -36,10 +36,10 @@ export default function AllCarsPageClient() {
     region: "",
     category: "",
     minPrice: 0,
-    maxPrice: 5000,
+    maxPrice: 15000,
   });
 
-  const [tempPrice, setTempPrice] = useState([0, 5000]);
+  const [tempPrice, setTempPrice] = useState([0, 15000]);
 
   // Query Key includes filters to refetch on change
   const {
@@ -86,21 +86,21 @@ export default function AllCarsPageClient() {
   };
 
   const resetFilters = () => {
-    setFilters({ region: "", category: "", minPrice: 0, maxPrice: 5000 });
-    setTempPrice([0, 5000]);
+    setFilters({ region: "", category: "", minPrice: 0, maxPrice: 15000 });
+    setTempPrice([0, 15000]);
     setPage(1);
     setAllCars([]);
   };
 
   const hasMore = carsData?.data?.pagination?.totalPages > page;
-  const activeFiltersCount = Object.values(filters).filter(v => v !== "" && v !== 0 && v !== 5000).length;
+  const activeFiltersCount = Object.values(filters).filter(v => v !== "" && v !== 0 && v !== 15000).length;
 
   if (isLoading && page === 1 && allCars.length === 0) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center pt-20 bg-[#020617]">
         <CircularProgress size={60} thickness={5} sx={{ color: 'var(--primary)' }} />
         <Typography className="mt-6 text-white/40 font-black animate-pulse uppercase tracking-[0.2em]">
-          {i18n.language === "ar" ? "جاري تحميل الأسطول..." : "Loading Fleet..."}
+          {t("carsPage.loadingFleet", "Loading Fleet...")}
         </Typography>
       </div>
     );
@@ -178,7 +178,7 @@ export default function AllCarsPageClient() {
           </div>
           
           <Typography className="text-slate-500 font-black text-sm uppercase tracking-widest">
-             {i18n.language === "ar" ? "إجمالي النتائج:" : "Total Results:"} <span className="text-white ml-2">{carsData?.data?.pagination?.total || allCars.length}</span>
+             {t("common.totalResults", "Total Results:")} <span className="text-white ml-2">{carsData?.data?.pagination?.total || allCars.length}</span>
           </Typography>
         </section>
 
@@ -188,13 +188,13 @@ export default function AllCarsPageClient() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {/* Region Filter */}
               <FormControl fullWidth variant="outlined" sx={filterInputStyle}>
-                <InputLabel>{t("editCar.regionLabel")}</InputLabel>
+                <InputLabel>{t("dashboard.admin.addCar.regionLabel")}</InputLabel>
                 <Select
                   value={filters.region}
-                  label={t("editCar.regionLabel")}
+                  label={t("dashboard.admin.addCar.regionLabel")}
                   onChange={(e) => handleFilterChange({ region: e.target.value })}
                 >
-                  <MenuItem value="">{i18n.language === "ar" ? "الكل" : "All"}</MenuItem>
+                  <MenuItem value="">{t("common.all", "All")}</MenuItem>
                   <MenuItem value="riyadh">{t("regions.riyadh")}</MenuItem>
                   <MenuItem value="jeddah">{t("regions.jeddah")}</MenuItem>
                   <MenuItem value="eastern">{t("regions.eastern")}</MenuItem>
@@ -203,10 +203,10 @@ export default function AllCarsPageClient() {
 
               {/* Category Filter */}
               <FormControl fullWidth variant="outlined" sx={filterInputStyle}>
-                <InputLabel>{t("editCar.categoryLabel")}</InputLabel>
+                <InputLabel>{t("dashboard.admin.addCar.categoryLabel")}</InputLabel>
                 <Select
                   value={filters.category}
-                  label={t("editCar.categoryLabel")}
+                  label={t("dashboard.admin.addCar.categoryLabel")}
                   onChange={(e) => handleFilterChange({ category: e.target.value })}
                 >
                   <MenuItem value="">{i18n.language === "ar" ? "الكل" : "All"}</MenuItem>
@@ -219,7 +219,7 @@ export default function AllCarsPageClient() {
               {/* Price Range Filter */}
               <div className="lg:col-span-2 px-4">
                 <div className="flex justify-between items-center mb-4">
-                  <Typography className="text-white/60 font-black text-xs uppercase tracking-widest">{t("cars.sort") || "نطاق السعر"}</Typography>
+                  <Typography className="text-white/60 font-black text-xs uppercase tracking-widest">{t("common.priceRange", "Price Range")}</Typography>
                   <Typography className="text-primary font-black">{tempPrice[0]} - {tempPrice[1]} <span className="text-xs">{t("common.currency")}</span></Typography>
                 </div>
                 <Slider
@@ -228,7 +228,7 @@ export default function AllCarsPageClient() {
                   onChangeCommitted={(_, newValue) => handleFilterChange({ minPrice: newValue[0], maxPrice: newValue[1] })}
                   valueLabelDisplay="auto"
                   min={0}
-                  max={5000}
+                  max={15000}
                   step={50}
                   sx={{
                     color: "primary.main",

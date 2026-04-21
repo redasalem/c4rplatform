@@ -122,7 +122,7 @@ const NotificationDropdown = ({ isAdminSettings = false }) => {
       <button 
         onClick={handleToggle}
         className="relative flex items-center justify-center text-primary hover:text-primary-hover transition-colors active:scale-95 min-h-[44px] min-w-[44px]"
-        title={t("navbar.notifications")}
+        title={t("navbar.notification")}
       >
         {unreadCount > 0 ? (
           <>

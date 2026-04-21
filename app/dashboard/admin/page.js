@@ -60,6 +60,7 @@ import {
   Error as ErrorIcon,
   Info as InfoIcon,
   Article,
+  UploadFile,
 } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import Image from "next/image";
@@ -91,8 +92,8 @@ const AdminTabsContent = ({ user }) => {
   const tabParam = searchParams.get("tab");
   const getTabIndex = (tab) => {
     if (tab === "notifications") return 1;
-    if (tab === "users") return 2; // New Users Tab
-    if (tab === "blog") return 3;
+    if (tab === "blog") return 2;
+    if (tab === "users") return 3;
     if (tab === "cars") return 4;
     if (tab === "reviews") return 5;
     if (tab === "profile") return 6;
@@ -243,9 +244,6 @@ const AdminTabsContent = ({ user }) => {
         <ManageNotifications />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <ManageUsers />
-      </TabPanel>
-      <TabPanel value={value} index={3}>
         <Box className="text-center py-20 bg-white/5 rounded-[3rem] border border-dashed border-white/10">
            <Article sx={{ fontSize: 80, color: "rgba(255,255,255,0.05)", mb: 4 }} />
            <Typography className="text-2xl font-black text-slate-400 mb-6">جاري الانتقال لصفحة الإدارة المتطورة...</Typography>
@@ -257,6 +255,9 @@ const AdminTabsContent = ({ user }) => {
               فتح إدارة المدونة (Elite)
            </Button>
         </Box>
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        <ManageUsers />
       </TabPanel>
       <TabPanel value={value} index={4}>
         <ManageCars />
@@ -606,7 +607,7 @@ function ManageUsers() {
             </tr>
           </thead>
           <tbody>
-            {(Array.isArray(users) ? users : []).map((u) => (
+            {(Array.isArray(users) ? users : []).filter(u => u !== null).map((u) => (
               <tr key={u._id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
                 <td className="p-6">
                   <div className="flex items-center gap-3">
@@ -1355,7 +1356,7 @@ function ManageCars() {
             {t("dashboard.admin.cars.title")}
           </h2>
           <p className="text-[8px] sm:text-sm text-slate-400 mt-0.5 sm:mt-2 font-bold uppercase tracking-widest">
-            {t("dashboard.admin.cars.count", { count: cars.length })}
+            {t("dashboard.admin.cars.count", { count: carsData?.data?.pagination?.total || cars.length })}
           </p>
         </div>
 
@@ -1399,7 +1400,7 @@ function ManageCars() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
-          {(Array.isArray(cars) ? cars : []).map((car) => (
+          {(Array.isArray(cars) ? cars : []).filter(car => car !== null).map((car) => (
             <div
               key={car._id}
               className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl hover:bg-white/10 transition-all duration-500 group relative"

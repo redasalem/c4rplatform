@@ -479,7 +479,7 @@ export default function AdminBlogs() {
                 <Image src={blog.image || '/images/blog-placeholder.jpg'} alt={blog.title} fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
                 <div className="absolute top-4 left-4">
                    <Chip 
-                     label={t(`blog.statuses.${blog.status || 'draft'}`)} 
+                     label={t(`dashboard.admin.blog.statuses.${blog.status || 'draft'}`)} 
                      size="small" 
                      sx={{ 
                        bgcolor: blog.status === 'published' ? 'rgba(16,185,129,0.9)' : 'rgba(249,115,22,0.9)', 
@@ -769,7 +769,7 @@ export default function AdminBlogs() {
               boxShadow: '0 10px 20px rgba(249, 115, 22, 0.2)'
             }}
           >
-            {uploading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : (selectedBlog ? "تحديث المقال" : "نشر المقال الآن")}
+            {uploading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : (selectedBlog ? t("dashboard.admin.blog.elite.update") : t("dashboard.admin.blog.elite.publish"))}
           </Button>
         </DialogActions>
       </Dialog>
@@ -777,11 +777,11 @@ export default function AdminBlogs() {
       {/* Delete Dialog */}
       <Dialog open={deleteDialog} onClose={() => setDeleteDialog(false)} PaperProps={{ sx: { bgcolor: "#020617", p: 4, borderRadius: "2rem", border: '1px solid white/10' } }}>
         <div className="text-center space-y-4">
-          <Typography variant="h6" color="white">تأكيد الحذف</Typography>
-          <Typography color="white/60">هل أنت متأكد من حذف هذا المقال نهائياً؟</Typography>
+          <Typography variant="h6" color="white">{t("dashboard.admin.blog.deleteDialog.title")}</Typography>
+          <Typography color="white/60">{t("dashboard.admin.blog.deleteDialog.message")}</Typography>
           <div className="flex gap-4">
-            <Button onClick={() => setDeleteDialog(false)} sx={{ color: 'white' }}>إلغاء</Button>
-            <Button variant="contained" color="error" onClick={() => deleteMutation.mutate(selectedBlog.slug)}>حذف</Button>
+            <Button onClick={() => setDeleteDialog(false)} sx={{ color: 'white' }}>{t("common.cancel")}</Button>
+            <Button variant="contained" color="error" onClick={() => deleteMutation.mutate(selectedBlog.slug)}>{t("common.delete")}</Button>
           </div>
         </div>
       </Dialog>

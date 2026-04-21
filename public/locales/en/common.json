@@ -14,8 +14,8 @@
     "adminPanel": "Admin Panel",
     "logout": "Logout",
     "menu": "Menu",
-    "language": "Language",
-    "blog": "Blog"
+    "blog": "Blog",
+    "notification": "Notifications"
   },
   "bottomNav": {
     "home": "Home",
@@ -243,6 +243,7 @@
       "tabs": {
         "bookings": "Bookings",
         "notifications": "Notifications",
+        "users": "Users",
         "cars": "Cars",
         "reviews": "Reviews",
         "profile": "Profile",
@@ -580,6 +581,7 @@
     "errorMessage": "Booking failed",
     "loginRequired": "Please login first to complete your booking",
     "adminCannotBook": "Booking is for customers only.",
+    "bookNow": "Book Now",
     "datePlaceholder": "DD / MM / YYYY",
     "submitError": "Failed to submit booking request",
     "uploadError": "Failed to upload file",
@@ -644,7 +646,10 @@
     "yes": "Yes",
     "no": "No",
     "confirm": "Confirm",
-    "close": "Close"
+    "close": "Close",
+    "totalResults": "Total Results:",
+    "all": "All",
+    "priceRange": "Price Range"
   },
   "breadcrumbs": {
     "home": "Home",
@@ -873,6 +878,7 @@
       "deleteSuccess": "Promo deleted successfully",
       "uploadSuccess": "Image uploaded successfully",
       "uploadError": "Failed to upload image",
+      "noData": "No promotions available currently",
       "deleteConfirm": "Are you sure you want to delete this promo?"
     }
   }
