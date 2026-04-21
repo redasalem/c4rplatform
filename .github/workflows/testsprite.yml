@@ -9,10 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run TestSprite Autonomous Testing on Vercel
-        uses: TestSprite/run-action@main
+        uses: TestSprite/run-action@v1
         with:
-          api-key: ${{ secrets.TESTSPRITE_API_KEY }}
-          project-path: ./
-          test-type: frontend
-          target-url: ${{ github.event.deployment_status.target_url }}
-          additional-instructions: "Ensure complete network API mocking for backend routes. Use AI-powered visual comparisons for booking flow. Rely on DOM-level assertions for RTL checks."
+          testsprite-api-key: ${{ secrets.TESTSPRITE_API_KEY }}
+          base_url: ${{ github.event.deployment_status.target_url }}
