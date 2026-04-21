@@ -13,14 +13,18 @@ cloudinary.config({
 
 export async function POST(request) {
   try {
-    // 1. Auth Check - Only Admins can upload
+    // 1. Auth Check - Any authenticated user can upload (users need it for booking documents)
     const cookieStore = await cookies();
     const token = cookieStore.get(AUTH_TOKEN_COOKIE)?.value;
     const session = await fetchSessionFromToken(token);
 
-    if (!session.success || session.user.role !== "admin") {
+    if (!session.success) {
       return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
     }
+
+    // Determine upload folder based on role for organization
+    const isAdmin = session.user.role === "admin";
+    const uploadFolder = isAdmin ? "car-rental-platform" : "car-rental-platform/user-docs";
 
     const formData = await request.formData();
     const file = formData.get("file");
@@ -39,10 +43,6 @@ export async function POST(request) {
     }
 
 
-    if (!file) {
-      return NextResponse.json({ error: "No file provided" }, { status: 400 });
-    }
-
     // Convert file to buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
@@ -51,7 +51,7 @@ export async function POST(request) {
     const result = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          folder: "car-rental-platform",
+          folder: uploadFolder,
           resource_type: "image",
           transformation: [
             { width: 1200, height: 630, crop: "limit", quality: "auto:good", format: "webp" }

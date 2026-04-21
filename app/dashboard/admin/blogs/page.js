@@ -337,50 +337,66 @@ export default function AdminBlogs() {
   const createMutation = useMutation({
     mutationFn: blogService.create,
     onSuccess: () => {
-      toast.success(t("feedback.admin.blogCreateSuccess"));
+      toast.success(t("feedback.admin.blogCreateSuccess") || "تم إضافة المقال بنجاح");
       queryClient.invalidateQueries({ queryKey: ["adminBlogs"] });
       setOpenDialog(false);
     },
-    onError: (err) => toast.error(err.response?.data?.message || err.message)
+    onError: (err) => toast.error(err.response?.data?.message || err.message || "حدث خطأ أثناء الإضافة")
   });
 
   const updateMutation = useMutation({
     mutationFn: ({ slug, data }) => blogService.update(slug, data),
     onSuccess: () => {
-      toast.success(t("feedback.admin.blogUpdateSuccess"));
+      toast.success(t("feedback.admin.blogUpdateSuccess") || "تم تحديث المقال بنجاح");
       queryClient.invalidateQueries({ queryKey: ["adminBlogs"] });
       setOpenDialog(false);
     },
-    onError: (err) => toast.error(err.response?.data?.message || err.message)
+    onError: (err) => toast.error(err.response?.data?.message || err.message || "حدث خطأ أثناء التحديث")
   });
 
   const deleteMutation = useMutation({
     mutationFn: blogService.delete,
     onSuccess: () => {
-      toast.success(t("feedback.admin.blogDeleteSuccess"));
+      toast.success(t("feedback.admin.blogDeleteSuccess") || "تم حذف المقال بنجاح");
       queryClient.invalidateQueries({ queryKey: ["adminBlogs"] });
       setDeleteDialog(false);
     },
-    onError: (err) => toast.error(err.response?.data?.message || err.message || t("common.error"))
+    onError: (err) => toast.error(err.response?.data?.message || err.message || t("common.error") || "حدث خطأ أثناء الحذف")
   });
 
-  const handleOpenDialog = (blog = null) => {
+  const handleOpenDialog = async (blog = null) => {
     setTabValue(0);
     if (blog) {
-      setSelectedBlog(blog);
+      let fullBlog = blog;
+      
+      // Fetch full blog data because the paginated list excludes the 'content' field
+      try {
+        const loadingToast = toast.loading("جاري جلب تفاصيل المقال...");
+        const response = await blogService.getOne(blog.slug);
+        if (response?.data) {
+          fullBlog = response.data;
+        }
+        toast.dismiss(loadingToast);
+      } catch (err) {
+        toast.dismiss();
+        toast.error("حدث خطأ أثناء استرداد بيانات المقال من الخادم");
+        return;
+      }
+
+      setSelectedBlog(fullBlog);
       setFormData({
-        title: blog.title || "",
-        slug: blog.slug || "",
-        category: blog.category?._id || blog.category || "",
-        content: blog.content || "",
-        summary: blog.summary || "",
-        status: blog.status || "draft",
-        image: blog.image === 'no-photo.jpg' ? '' : (blog.image || ""),
-        relatedCars: Array.isArray(blog.relatedCars) ? blog.relatedCars.map(c => typeof c === 'object' ? c._id : c) : [],
-        metaTitle: blog.metaTitle || "",
-        metaDescription: blog.metaDescription || "",
-        focusKeywords: Array.isArray(blog.focusKeywords) ? blog.focusKeywords.join(", ") : (blog.focusKeywords || ""),
-        faqs: blog.faqs || [],
+        title: fullBlog.title || "",
+        slug: fullBlog.slug || "",
+        category: fullBlog.category?._id || fullBlog.category || "",
+        content: fullBlog.content || "",
+        summary: fullBlog.summary || "",
+        status: fullBlog.status || "draft",
+        image: fullBlog.image === 'no-photo.jpg' ? '' : (fullBlog.image || ""),
+        relatedCars: Array.isArray(fullBlog.relatedCars) ? fullBlog.relatedCars.map(c => typeof c === 'object' ? c._id : c) : [],
+        metaTitle: fullBlog.metaTitle || "",
+        metaDescription: fullBlog.metaDescription || "",
+        focusKeywords: Array.isArray(fullBlog.focusKeywords) ? fullBlog.focusKeywords.join(", ") : (fullBlog.focusKeywords || ""),
+        faqs: fullBlog.faqs || [],
       });
       setSlugSync(false);
     } else {

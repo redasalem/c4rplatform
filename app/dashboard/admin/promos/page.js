@@ -230,11 +230,11 @@ export default function PromosManagementPage() {
           PaperProps={{
             sx: {
               bgcolor: "#0f172a",
-              backgroundImage: "radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.1) 0px, transparent 50%)",
-              borderRadius: "4rem",
+              backgroundImage: "radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.08) 0px, transparent 50%)",
+              borderRadius: "2rem",
               border: "1px solid rgba(255,255,255,0.1)",
               color: "white",
-              p: { xs: 2, md: 5 },
+              p: { xs: 2, md: 4 },
               margin: 2,
             }
           }}
@@ -384,38 +384,40 @@ function PromoPreviewCard({ data }) {
   const { title, subtitle, imageUrl, layoutType } = data;
 
   return (
-    <div className={`relative overflow-hidden rounded-[3rem] border border-white/10 glass shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] transition-all duration-700 min-h-[320px] flex items-center group ${
-      layoutType === 'full-bg' ? 'p-12 md:p-16' : ''
+    <div className={`relative overflow-hidden rounded-3xl border border-white/10 shadow-2xl transition-all duration-700 min-h-[280px] flex items-center group ${
+      layoutType === 'full-bg' ? 'p-8 md:p-12' : 'bg-gradient-to-br from-white/[0.06] to-white/[0.02]'
     }`}>
       {layoutType === 'full-bg' && imageUrl && (
         <div className="absolute inset-0 z-0">
-          <Image src={imageUrl} alt="preview" fill className="object-cover opacity-40 blur-[2px] group-hover:scale-105 transition-transform duration-1000" />
-          <div className="absolute inset-0 bg-linear-to-r from-[#0f172a] via-[#0f172a]/90 to-transparent" />
+          <Image src={imageUrl} alt="preview" fill className="object-cover opacity-40 blur-[1px] group-hover:scale-105 transition-transform duration-1000" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0f172a] via-[#0f172a]/80 to-transparent" />
         </div>
       )}
 
-      <div className={`relative z-10 w-full flex flex-col md:flex-row items-center gap-10 ${
+      <div className={`relative z-10 w-full flex flex-col md:flex-row items-center gap-6 p-6 ${
         layoutType === 'image-left' ? 'md:flex-row-reverse' : ''
       }`}>
-        <div className={`flex-1 ${layoutType === 'full-bg' ? 'text-right' : 'text-right'}`}>
-          <div className="inline-block px-4 py-1.5 bg-primary/20 rounded-full border border-primary/30 mb-6">
-             <Typography sx={{ color: "primary.main", fontWeight: "900", fontSize: "0.7rem", textTransform: "uppercase" }}>Limited Offer</Typography>
+        <div className="flex-1 text-right space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/15 rounded-full border border-primary/25">
+             <span className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
+             <span className="text-primary font-black text-[0.65rem] uppercase tracking-wider">عرض حصري</span>
           </div>
-          <h3 className="text-3xl md:text-5xl font-black text-white mb-4 leading-[1.1] animate-in slide-in-from-right duration-500">
-            {title || "اكتب عنوان العرض الجذاب هنا"}
+          <h3 className="text-2xl md:text-3xl font-black text-white leading-tight">
+            {title || "عنوان العرض الجذاب"}
           </h3>
-          <p className="text-slate-400 font-bold text-lg md:text-xl leading-relaxed mb-8 max-w-xl animate-in fade-in duration-700 delay-200">
-            {subtitle || "أضف وصفاً يشجع المستخدمين على اتخاذ إجراء فوري، سيظهر هذا المحتوى بشكل رائع هنا..."}
+          <p className="text-slate-400 font-bold text-sm md:text-base leading-relaxed max-w-md">
+            {subtitle || "أضف وصفاً يشجع المستخدمين على اتخاذ إجراء فوري..."}
           </p>
           <Button 
             variant="contained" 
+            size="small"
             sx={{ 
-                borderRadius: '1.25rem', 
+                borderRadius: '0.875rem', 
                 fontWeight: '900', 
-                px: 6, 
-                py: 2, 
-                fontSize: "1.1rem",
-                boxShadow: "0 10px 30px rgba(249, 115, 22, 0.3)" 
+                px: 4, 
+                py: 1.5, 
+                fontSize: "0.85rem",
+                boxShadow: "0 8px 24px rgba(249, 115, 22, 0.3)" 
             }}
           >
              احجز الآن
@@ -423,15 +425,16 @@ function PromoPreviewCard({ data }) {
         </div>
 
         {layoutType !== 'full-bg' && (
-          <div className="w-full md:w-1/2 aspect-video relative rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl group/img">
+          <div className="w-full md:w-2/5 aspect-[4/3] relative rounded-2xl overflow-hidden border border-white/10 shadow-xl shrink-0">
              {imageUrl ? (
-               <Image src={imageUrl} alt="preview" fill className="object-cover group-hover/img:scale-110 transition-transform duration-1000" />
+               <Image src={imageUrl} alt="preview" fill className="object-cover group-hover:scale-110 transition-transform duration-1000" />
              ) : (
-               <div className="absolute inset-0 bg-white/5 flex items-center justify-center text-slate-600 italic font-black text-xs uppercase tracking-widest">
-                  Preview Image Waitlist
+               <div className="absolute inset-0 bg-gradient-to-br from-white/[0.04] to-white/[0.01] flex flex-col items-center justify-center gap-2 text-slate-600">
+                  <UploadFile sx={{ fontSize: 32, opacity: 0.3 }} />
+                  <span className="font-bold text-[0.65rem] uppercase tracking-widest">معاينة الصورة</span>
                </div>
              )}
-             <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
+             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
           </div>
         )}
       </div>
@@ -442,11 +445,12 @@ function PromoPreviewCard({ data }) {
 const formInputStyle = {
     "& .MuiOutlinedInput-root": {
       color: "white",
-      borderRadius: "1.5rem",
+      borderRadius: "1rem",
       bgcolor: "rgba(255,255,255,0.03)",
       "& fieldset": { borderColor: "rgba(255,255,255,0.08)" },
       "&:hover fieldset": { borderColor: "rgba(255,255,255,0.2)" },
       "&.Mui-focused fieldset": { borderColor: "#f97316" }
     },
-    "& .MuiInputLabel-root": { color: "slate.400", fontWeight: "bold" }
+    "& .MuiInputLabel-root": { color: "rgba(255,255,255,0.4)", fontWeight: "bold" }
 };
+

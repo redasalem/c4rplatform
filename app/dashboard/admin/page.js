@@ -3356,29 +3356,32 @@ function ManagePromos() {
   const createMutation = useMutation({
     mutationFn: (data) => promoService.create(data),
     onSuccess: () => {
-      toast.success(t("promos.messages.createSuccess"));
+      toast.success(t("promos.messages.createSuccess", "تم إضافة العرض بنجاح"));
       queryClient.invalidateQueries({ queryKey: ["allPromosAdmin"] });
       setIsFormOpen(false);
       setFormData(initialForm);
     },
+    onError: (err) => toast.error(err.response?.data?.message || err.message || "حدث خطأ أثناء الإضافة")
   });
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data }) => promoService.update(id, data),
     onSuccess: () => {
-      toast.success(t("promos.messages.updateSuccess"));
+      toast.success(t("promos.messages.updateSuccess", "تم تحديث العرض بنجاح"));
       queryClient.invalidateQueries({ queryKey: ["allPromosAdmin"] });
       setIsFormOpen(false);
       setEditingPromo(null);
     },
+    onError: (err) => toast.error(err.response?.data?.message || err.message || "حدث خطأ أثناء التحديث")
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id) => promoService.delete(id),
     onSuccess: () => {
-      toast.success(t("promos.messages.deleteSuccess"));
+      toast.success(t("promos.messages.deleteSuccess", "تم حذف العرض بنجاح"));
       queryClient.invalidateQueries({ queryKey: ["allPromosAdmin"] });
     },
+    onError: (err) => toast.error(err.response?.data?.message || err.message || "حدث خطأ أثناء الحذف")
   });
 
   const handleImageUpload = async (e) => {
@@ -3392,9 +3395,9 @@ function ManagePromos() {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setFormData((prev) => ({ ...prev, imageUrl: response.data.url }));
-      toast.success(t("promos.messages.uploadSuccess"));
+      toast.success(t("promos.messages.uploadSuccess", "تم رفع الصورة بنجاح"));
     } catch (error) {
-      toast.error(t("promos.messages.uploadError"));
+      toast.error(t("promos.messages.uploadError", "حدث خطأ أثناء رفع الصورة"));
     } finally {
       setUploadLoading(false);
     }
@@ -3544,54 +3547,93 @@ function ManagePromos() {
         }}
       >
         <DialogTitle sx={{ fontWeight: "900", fontSize: "1.5rem" }}>
-          {editingPromo ? t("promos.edit") : t("promos.addNew")}
+          {editingPromo ? t("promos.edit", "تعديل العرض") : t("promos.addNew", "إضافة عرض جديد")}
         </DialogTitle>
         <DialogContent sx={{ mt: 2 }}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <TextField fullWidth label={t("promos.fields.title")} required value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} sx={formInputStyle} />
-              <TextField fullWidth label={t("promos.fields.subtitle")} required multiline rows={2} value={formData.subtitle} onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })} sx={formInputStyle} />
-              <TextField fullWidth label={t("promos.fields.linkUrl")} required value={formData.linkUrl} placeholder="https://..." onChange={(e) => setFormData({ ...formData, linkUrl: e.target.value })} sx={formInputStyle} />
-              <div className="grid grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-4 bg-white/5 p-6 rounded-[2rem] border border-white/10 shadow-inner">
+                <Typography className="text-slate-400 font-black mb-2 px-1 text-sm text-right">{t("common.data", "البيانات الأساسية")}</Typography>
+                <TextField fullWidth label={t("promos.fields.title", "العنوان")} required value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} sx={formInputStyle} />
+                <TextField fullWidth label={t("promos.fields.subtitle", "الوصف")} required multiline rows={2} value={formData.subtitle} onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })} sx={formInputStyle} />
+                <TextField fullWidth label={t("promos.fields.linkUrl", "رابط التوجيه")} required value={formData.linkUrl} placeholder="https://..." onChange={(e) => setFormData({ ...formData, linkUrl: e.target.value })} sx={formInputStyle} />
+                <div className="grid grid-cols-2 gap-4">
+                  <FormControl fullWidth sx={formInputStyle}>
+                    <InputLabel>{t("promos.fields.layoutType", "نوع التنسيق")}</InputLabel>
+                    <Select value={formData.layoutType} label={t("promos.fields.layoutType", "نوع التنسيق")} onChange={(e) => setFormData({ ...formData, layoutType: e.target.value })}>
+                      <MenuItem value="image-right">{t("promos.layout.imageRight", "صورة لليمين")}</MenuItem>
+                      <MenuItem value="image-left">{t("promos.layout.imageLeft", "صورة لليسار")}</MenuItem>
+                      <MenuItem value="full-bg">{t("promos.layout.fullBg", "خلفية كاملة")}</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <TextField fullWidth type="number" label={t("promos.fields.priority", "الأولوية")} value={formData.priority} onChange={(e) => setFormData({ ...formData, priority: parseInt(e.target.value) || 0 })} sx={formInputStyle} />
+                </div>
                 <FormControl fullWidth sx={formInputStyle}>
-                  <InputLabel>{t("promos.fields.layoutType")}</InputLabel>
-                  <Select value={formData.layoutType} label={t("promos.fields.layoutType")} onChange={(e) => setFormData({ ...formData, layoutType: e.target.value })}>
-                    <MenuItem value="image-right">{t("promos.layout.imageRight")}</MenuItem>
-                    <MenuItem value="image-left">{t("promos.layout.imageLeft")}</MenuItem>
-                    <MenuItem value="full-bg">{t("promos.layout.fullBg")}</MenuItem>
+                  <InputLabel>{t("promos.fields.isActive", "الحالة")}</InputLabel>
+                  <Select value={formData.isActive} label={t("promos.fields.isActive", "الحالة")} onChange={(e) => setFormData({ ...formData, isActive: e.target.value === "true" || e.target.value === true })}>
+                    <MenuItem value={true}>{t("promos.status.active", "نشط")}</MenuItem>
+                    <MenuItem value={false}>{t("promos.status.inactive", "غير نشط")}</MenuItem>
                   </Select>
                 </FormControl>
-                <TextField fullWidth type="number" label={t("promos.fields.priority")} value={formData.priority} onChange={(e) => setFormData({ ...formData, priority: parseInt(e.target.value) })} sx={formInputStyle} />
               </div>
-              <FormControl fullWidth sx={formInputStyle}>
-                <InputLabel>{t("promos.fields.isActive")}</InputLabel>
-                <Select value={formData.isActive} label={t("promos.fields.isActive")} onChange={(e) => setFormData({ ...formData, isActive: e.target.value })}>
-                  <MenuItem value={true}>{t("promos.status.active")}</MenuItem>
-                  <MenuItem value={false}>{t("promos.status.inactive")}</MenuItem>
-                </Select>
-              </FormControl>
-              <Button
-                variant="outlined"
-                component="label"
-                fullWidth
-                disabled={uploadLoading}
-                startIcon={uploadLoading ? <CircularProgress size={20} /> : <Add />}
-                sx={{ borderRadius: "1rem", py: 1.5, borderColor: "rgba(255,255,255,0.1)", color: "white", fontWeight: "900" }}
-              >
-                {uploadLoading ? t("common.loading") : t("addCar.uploadImage")}
-                <input type="file" hidden accept="image/*" onChange={handleImageUpload} />
-              </Button>
+
+              <div className="bg-white/5 p-6 rounded-[2rem] border border-white/10 text-center shadow-inner">
+                <Typography className="text-slate-400 font-black mb-4 text-sm text-right px-1">
+                  {t("promos.imageLabel", "صورة العرض / البانر")}
+                </Typography>
+                
+                {formData.imageUrl && (
+                   <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-2 border border-white/10 group cursor-pointer">
+                      <Image src={formData.imageUrl} alt="uploaded preview" fill className="object-cover" />
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <Typography className="text-white font-bold text-sm tracking-wide">
+                          {t("common.changeImage", "انقر لتغيير الصورة")}
+                        </Typography>
+                      </div>
+                      <input type="file" className="absolute inset-0 opacity-0 cursor-pointer z-10 w-full h-full" accept="image/*" onChange={handleImageUpload} />
+                   </div>
+                )}
+                
+                {!formData.imageUrl && (
+                  <Button
+                    variant="outlined"
+                    component="label"
+                    fullWidth
+                    disabled={uploadLoading}
+                    startIcon={uploadLoading ? <CircularProgress size={20} /> : <UploadFile sx={{ fontSize: "2rem !important" }} />}
+                    sx={{ 
+                      borderRadius: "1.5rem", py: 4, borderColor: "rgba(255,255,255,0.1)", color: "slate.400", fontWeight: "900",
+                      borderStyle: 'dashed', borderWidth: 2, 
+                      "&:hover": { borderColor: "primary.main", bgcolor: "rgba(249,115,22,0.05)", color: "primary.main" },
+                      display: 'flex', flexDirection: 'column', gap: 1
+                    }}
+                  >
+                    <span>{uploadLoading ? t("common.loading", "جاري الرفع...") : t("promos.uploadImage", "الرجاء رفع صورة للعرض")}</span>
+                    <input type="file" hidden accept="image/*" onChange={handleImageUpload} />
+                  </Button>
+                )}
+              </div>
             </form>
-            <div className="hidden lg:block space-y-4">
-              <Typography className="text-center text-primary font-black uppercase tracking-widest text-xs">{t("blog.validation.seoPreview")}</Typography>
+            
+            <div className="hidden lg:block space-y-4 sticky top-0 self-start">
+              <Typography className="text-center text-primary font-black uppercase tracking-widest text-xs">
+                {t("promos.preview", "معاينة العرض")}
+              </Typography>
               <PromoPreviewCard data={formData} />
             </div>
           </div>
         </DialogContent>
-        <DialogActions sx={{ p: 4, gap: 2 }}>
-          <Button onClick={() => setIsFormOpen(false)} sx={{ color: "slate.400", fontWeight: "900" }}>{t("common.cancel")}</Button>
-          <Button variant="contained" onClick={handleSubmit} disabled={createMutation.isPending || updateMutation.isPending} sx={{ borderRadius: "1rem", fontWeight: "900", px: 4 }}>
-            {editingPromo ? t("common.save") : t("promos.addNew")}
+        <DialogActions sx={{ p: 4, gap: 2, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+          <Button onClick={() => setIsFormOpen(false)} sx={{ color: "slate.400", fontWeight: "900", borderRadius: "1rem", px: 4 }}>
+            {t("common.cancel", "إلغاء")}
+          </Button>
+          <Button 
+            variant="contained" 
+            onClick={handleSubmit} 
+            disabled={createMutation.isPending || updateMutation.isPending || uploadLoading} 
+            sx={{ borderRadius: "1rem", fontWeight: "900", px: 6, py: 1.5, background: "linear-gradient(135deg, var(--primary) 0%, #f97316 100%)", boxShadow: "0 10px 20px rgba(249,115,22,0.2)", "&:hover": { transform: "translateY(-2px)" }, transition: "all 0.2s" }}
+          >
+            {uploadLoading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : (editingPromo ? t("common.save", "حفظ التعديلات") : t("promos.addNew", "إضافة عرض جديد"))}
           </Button>
         </DialogActions>
       </Dialog>
