@@ -24,6 +24,12 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const getSafeReturnUrl = (value) => {
+    if (!value || typeof value !== "string") return "/";
+    if (!value.startsWith("/") || value.startsWith("//")) return "/";
+    return value;
+  };
+
   useEffect(() => {
     if (user) {
       const params =
@@ -31,7 +37,7 @@ export default function LoginPage() {
           ? new URLSearchParams(window.location.search)
           : null;
       const returnUrl = params?.get("returnUrl");
-      router.push(returnUrl || "/");
+      router.push(getSafeReturnUrl(returnUrl));
     }
   }, [user, router]);
 

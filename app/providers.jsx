@@ -71,7 +71,7 @@ export default function Providers({ children }) {
           },
         },
       }),
-    [mounted], // Recreate theme after mount
+    [],
   );
 
   return (

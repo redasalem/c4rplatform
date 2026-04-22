@@ -9,6 +9,12 @@ import { useTranslation } from "react-i18next";
 
 const AuthContext = createContext();
 
+const getSafeReturnUrl = (value) => {
+  if (!value || typeof value !== "string") return "/";
+  if (!value.startsWith("/") || value.startsWith("//")) return "/";
+  return value;
+};
+
 export const AuthProvider = ({ children }) => {
   const { t } = useTranslation("common");
   // HYDRATION FIX: Always start with null to match the server render.
@@ -109,7 +115,7 @@ export const AuthProvider = ({ children }) => {
         // Handle redirection
         const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
         const returnUrl = searchParams ? searchParams.get("returnUrl") : null;
-        const targetUrl = returnUrl || "/";
+        const targetUrl = getSafeReturnUrl(returnUrl);
 
         if (typeof window !== "undefined") {
           window.location.assign(targetUrl);

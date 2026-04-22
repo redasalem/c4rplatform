@@ -104,7 +104,7 @@ export default function BookingPage() {
     if (diffDays > 0 && diffDays !== numberOfDays) {
       setNumberOfDays(diffDays);
     }
-  }, [dates.startDate, dates.endDate]);
+  }, [dates.startDate, dates.endDate, numberOfDays]);
 
   const handleStartDateChange = (e) => {
     const start = e.target.value;
@@ -263,6 +263,19 @@ export default function BookingPage() {
   }
 
   if (!user) return null;
+
+  if (!car) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center">
+        <h2 className="text-2xl font-black text-white mb-4">
+          {t("carDetails.notFound")}
+        </h2>
+        <Link href="/cars" className="text-primary font-bold hover:text-primary-hover transition-colors">
+          {t("booking.browseCars")}
+        </Link>
+      </div>
+    );
+  }
 
   const imageUrl =
     car?.image ||

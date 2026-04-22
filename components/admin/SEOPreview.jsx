@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useSyncExternalStore } from "react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { CheckCircle, Warning, Error, Google, Search } from "@mui/icons-material";
+
+const subscribeToHydration = () => () => {};
 
 const StatusIcon = ({ status }) => {
   if (status === "ok") return <CheckCircle sx={{ fontSize: 14, color: "#22c55e" }} />;
@@ -20,37 +22,37 @@ const StatusText = ({ status, okText, warningText, errorText }) => {
 const SEOPreview = React.memo(({ title, metaTitle, metaDescription, slug, image, relatedCars = [], formData }) => {
   const { t, i18n } = useTranslation("common");
   const siteUrl = "https://c4rplatform.com";
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    subscribeToHydration,
+    () => true,
+    () => false,
+  );
 
-  const keywords = React.useMemo(() => {
-    if (!formData?.focusKeywords) return [];
-    if (typeof formData.focusKeywords === 'string' && formData.focusKeywords) {
-      return formData.focusKeywords.split(",").filter(k => k.trim());
-    }
-    if (Array.isArray(formData.focusKeywords)) {
-      return formData.focusKeywords;
-    }
-    return [];
-  }, [formData?.focusKeywords]);
+  let keywords = [];
+  if (typeof formData?.focusKeywords === "string" && formData.focusKeywords) {
+    keywords = formData.focusKeywords.split(",").filter((keyword) => keyword.trim());
+  } else if (Array.isArray(formData?.focusKeywords)) {
+    keywords = formData.focusKeywords;
+  }
 
-  const linkedCars = React.useMemo(() => {
-    const safeCars = Array.isArray(relatedCars) ? relatedCars : [];
-    if (safeCars.length > 0) {
-      return safeCars;
-    }
-    const carIds = Array.isArray(formData?.relatedCars) ? formData.relatedCars : [];
-    if (carIds.length === 0) return [];
-    const allCars = Array.isArray(formData?.allCars) ? formData.allCars : [];
-    if (allCars.length === 0) return [];
-    return carIds.map(id => {
-      const car = allCars.find(c => c && c._id === id);
-      return car ? { _id: id, name: car.name || '', image: car.image } : null;
-    }).filter(Boolean);
-  }, [relatedCars, formData?.relatedCars, formData?.allCars]);
+  const safeCars = Array.isArray(relatedCars) ? relatedCars : [];
+  const linkedCars = safeCars.length > 0
+    ? safeCars
+    : (() => {
+        const carIds = Array.isArray(formData?.relatedCars) ? formData.relatedCars : [];
+        const allCars = Array.isArray(formData?.allCars) ? formData.allCars : [];
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+        if (carIds.length === 0 || allCars.length === 0) {
+          return [];
+        }
+
+        return carIds
+          .map((id) => {
+            const car = allCars.find((candidate) => candidate && candidate._id === id);
+            return car ? { _id: id, name: car.name || "", image: car.image } : null;
+          })
+          .filter(Boolean);
+      })();
 
   if (!mounted) {
     return (

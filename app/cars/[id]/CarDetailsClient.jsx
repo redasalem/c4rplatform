@@ -401,11 +401,11 @@ export default function CarDetailsClient({ initialCarData }) {
 
                   <p className="text-slate-300 text-xs sm:text-[15px] leading-relaxed font-bold bg-white/5 p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/5 min-h-[80px] sm:min-h-[100px] md:min-h-[120px] relative">
                     <span className="text-primary text-4xl absolute -top-2 right-4 opacity-50 font-serif">
-                      "
+                      &quot;
                     </span>
                     {review.comment}
                     <span className="text-primary text-4xl absolute -bottom-6 left-4 opacity-50 font-serif">
-                      "
+                      &quot;
                     </span>
                   </p>
                 </article>

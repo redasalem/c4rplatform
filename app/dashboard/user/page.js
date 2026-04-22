@@ -82,16 +82,9 @@ function UserDashboardContent({ user }) {
     return 0; // default: profile
   };
 
-  const [value, setValue] = useState(getTabIndex(tabParam));
-
-  // Sync tab state with URL
-  useEffect(() => {
-    const tab = searchParams.get("tab");
-    setValue(getTabIndex(tab));
-  }, [searchParams]);
+  const value = getTabIndex(tabParam);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
     const tabName =
       newValue === 1
         ? "bookings"

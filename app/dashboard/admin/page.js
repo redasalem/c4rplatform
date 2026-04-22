@@ -103,21 +103,13 @@ const AdminTabsContent = ({ user }) => {
     return 0; // default: bookings
   };
 
-
-  const [value, setValue] = useState(getTabIndex(tabParam));
-
-  // Sync tab state with URL
-  useEffect(() => {
-    const tab = searchParams.get("tab");
-    setValue(getTabIndex(tab));
-  }, [searchParams]);
+  const value = getTabIndex(tabParam);
 
   const handleChange = (event, newValue) => {
     if (newValue === 3) {
       router.push(`/dashboard/admin/blogs`);
       return;
     }
-    setValue(newValue);
     const tabName =
       newValue === 1
         ? "notifications"
@@ -141,7 +133,6 @@ const AdminTabsContent = ({ user }) => {
   };
 
   const handlePromosRedirect = () => {
-    setValue(8);
     router.push(`/dashboard/admin?tab=promos`);
   };
 
@@ -1702,7 +1693,7 @@ function ManageReviews() {
             </div>
 
             <p className="text-slate-400 leading-relaxed font-bold text-base md:text-lg italic relative z-10 border-r-2 border-primary/30 pr-4 line-clamp-4 md:line-clamp-none">
-              "{review.comment || t("dashboard.admin.reviews.noComment")}"
+              &quot;{review.comment || t("dashboard.admin.reviews.noComment")}&quot;
             </p>
 
             <div className="mt-8 pt-8 border-t border-white/5 flex justify-between items-center relative z-10">

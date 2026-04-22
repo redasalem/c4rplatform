@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useSyncExternalStore } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
@@ -29,15 +29,20 @@ import { useAuth } from "@/context/AuthContext";
 import Tooltip from "@/components/ui/Tooltip";
 import NotificationDropdown from "@/components/ui/NotificationDropdown";
 
+const subscribeToHydration = () => () => {};
+
 const Navbar = () => {
   const { user, logout } = useAuth();
   const { t, i18n } = useTranslation("common");
   const [showTopBar, setShowTopBar] = useState(true);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    subscribeToHydration,
+    () => true,
+    () => false,
+  );
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     const handleScroll = () => {
       // Hide top bar after scrolling 50px
       if (window.scrollY > 50) {
@@ -56,7 +61,7 @@ const Navbar = () => {
       document.dir = i18n.dir();
       document.documentElement.lang = i18n.language;
     }
-  }, [i18n.language, mounted]);
+  }, [i18n, mounted]);
 
 
   return (

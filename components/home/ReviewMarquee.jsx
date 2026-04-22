@@ -99,7 +99,7 @@ export default function ReviewMarquee() {
                 />
 
                 <p className="text-slate-200 text-sm sm:text-base leading-relaxed font-bold italic mb-6 line-clamp-3 sm:line-clamp-none">
-                  "{review.comment}"
+                  &quot;{review.comment}&quot;
                 </p>
 
                 <div className="mt-auto pt-4 flex items-center justify-between border-t border-white/5">

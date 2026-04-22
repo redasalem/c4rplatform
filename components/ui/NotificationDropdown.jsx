@@ -80,6 +80,7 @@ const NotificationDropdown = ({ isAdminSettings = false }) => {
 
   const handleDelete = async (e, id) => {
     e.stopPropagation(); // prevent closing
+    if (user?.role !== "admin") return;
     try {
       await notificationService.delete(id);
       setNotifications(prev => prev.filter(n => n._id !== id));

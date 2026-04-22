@@ -62,20 +62,30 @@ export default function AllCarsPageClient() {
 
   // Handle data appending and filter resets
   useEffect(() => {
-    if (carsData?.data?.cars) {
+    if (!carsData?.data?.cars) return;
+
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (cancelled) return;
+
       if (page === 1) {
         // Reset list on new filter/page 1
         setAllCars(carsData.data.cars);
-      } else {
-        // Append on next pages
-        setAllCars((prev) => {
-          const newData = carsData.data.cars.filter(
-            (newCar) => !prev.some((oldCar) => oldCar._id === newCar._id)
-          );
-          return [...prev, ...newData];
-        });
+        return;
       }
-    }
+
+      // Append on next pages
+      setAllCars((prev) => {
+        const newData = carsData.data.cars.filter(
+          (newCar) => !prev.some((oldCar) => oldCar._id === newCar._id)
+        );
+        return [...prev, ...newData];
+      });
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, [carsData, page]);
 
   // Reset page to 1 when filters change

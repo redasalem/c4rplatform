@@ -24,7 +24,12 @@ const TableOfContentsDrawer = ({ contentSelector = ".prose" }) => {
       };
     });
 
-    setHeadings(headingData);
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (!cancelled) {
+        setHeadings(headingData);
+      }
+    });
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -39,7 +44,10 @@ const TableOfContentsDrawer = ({ contentSelector = ".prose" }) => {
 
     elements.forEach((el) => observer.observe(el));
 
-    return () => observer.disconnect();
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+    };
   }, [contentSelector]);
 
   if (headings.length === 0) return null;

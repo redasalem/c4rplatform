@@ -17,6 +17,24 @@ async function getCarData(id) {
   }
 }
 
+function SafeSchemaScript({ data }) {
+  if (!data) return null;
+
+  let schemaJson = "";
+  try {
+    schemaJson = JSON.stringify(data);
+  } catch {
+    return null;
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: schemaJson }}
+    />
+  );
+}
+
 export async function generateMetadata({ params }) {
   const { id } = await params;
   const car = await getCarData(id);
@@ -135,24 +153,10 @@ export default async function CarDetailsPage({ params }) {
     ],
   };
 
-  const SafeSchema = ({ data }) => {
-    if (!data) return null;
-    try {
-      return (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-        />
-      );
-    } catch {
-      return null;
-    }
-  };
-
   return (
     <main>
-      <SafeSchema data={productSchema} />
-      <SafeSchema data={breadcrumbSchema} />
+      <SafeSchemaScript data={productSchema} />
+      <SafeSchemaScript data={breadcrumbSchema} />
       <CarDetailsClient initialCarData={car} />
     </main>
   );
