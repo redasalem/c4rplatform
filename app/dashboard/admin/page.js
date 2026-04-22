@@ -3391,10 +3391,14 @@ function ManagePromos() {
     const formDataUpload = new FormData();
     formDataUpload.append("file", file);
     try {
-      const response = await api.post("/upload", formDataUpload, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formDataUpload,
       });
-      setFormData((prev) => ({ ...prev, imageUrl: response.data.url }));
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Upload failed");
+      
+      setFormData((prev) => ({ ...prev, imageUrl: data.url }));
       toast.success(t("promos.messages.uploadSuccess", "تم رفع الصورة بنجاح"));
     } catch (error) {
       toast.error(t("promos.messages.uploadError", "حدث خطأ أثناء رفع الصورة"));
@@ -3576,7 +3580,9 @@ function ManagePromos() {
                   </Select>
                 </FormControl>
               </div>
-
+            </form>
+            
+            <div className="space-y-6 sticky top-0 self-start">
               <div className="bg-white/5 p-6 rounded-[2rem] border border-white/10 text-center shadow-inner">
                 <Typography className="text-slate-400 font-black mb-4 text-sm text-right px-1">
                   {t("promos.imageLabel", "صورة العرض / البانر")}
@@ -3613,13 +3619,13 @@ function ManagePromos() {
                   </Button>
                 )}
               </div>
-            </form>
-            
-            <div className="hidden lg:block space-y-4 sticky top-0 self-start">
-              <Typography className="text-center text-primary font-black uppercase tracking-widest text-xs">
-                {t("promos.preview", "معاينة العرض")}
-              </Typography>
-              <PromoPreviewCard data={formData} />
+
+              <div className="hidden lg:block space-y-4">
+                <Typography className="text-center text-primary font-black uppercase tracking-widest text-xs">
+                  {t("promos.preview", "معاينة العرض")}
+                </Typography>
+                <PromoPreviewCard data={formData} />
+              </div>
             </div>
           </div>
         </DialogContent>
