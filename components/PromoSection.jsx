@@ -72,29 +72,31 @@ const PromoSection = () => {
                   {promo.subtitle}
                 </p>
 
-                <div className="pt-4 flex flex-wrap gap-4">
-                  <Button 
-                    variant="contained" 
-                    component={Link}
-                    href={promo.linkUrl}
-                    sx={{ 
-                      borderRadius: '1.5rem', 
-                      fontWeight: '900', 
-                      px: { xs: 6, sm: 10 }, 
-                      py: { xs: 1.5, sm: 2.5 }, 
-                      fontSize: { xs: '1.1rem', sm: '1.4rem' },
-                      boxShadow: '0 20px 40px -10px rgba(249, 115, 22, 0.4)',
-                      background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
-                      '&:hover': {
-                        transform: 'translateY(-5px) scale(1.02)',
-                        boxShadow: '0 30px 60px -12px rgba(249, 115, 22, 0.6)',
-                      },
-                      transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
-                    }}
-                  >
-                     {t("promos.exploreOffer")}
-                  </Button>
-                </div>
+                {promo.linkUrl && (
+                  <div className="pt-4 flex flex-wrap gap-4">
+                    <Button 
+                      variant="contained" 
+                      component={Link}
+                      href={promo.linkUrl}
+                      sx={{ 
+                        borderRadius: '1.5rem', 
+                        fontWeight: '900', 
+                        px: { xs: 6, sm: 10 }, 
+                        py: { xs: 1.5, sm: 2.5 }, 
+                        fontSize: { xs: '1.1rem', sm: '1.4rem' },
+                        boxShadow: '0 20px 40px -10px rgba(249, 115, 22, 0.4)',
+                        background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
+                        '&:hover': {
+                          transform: 'translateY(-5px) scale(1.02)',
+                          boxShadow: '0 30px 60px -12px rgba(249, 115, 22, 0.6)',
+                        },
+                        transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+                      }}
+                    >
+                       {t("promos.exploreOffer")}
+                    </Button>
+                  </div>
+                )}
               </div>
 
               {/* Visual Asset Area */}

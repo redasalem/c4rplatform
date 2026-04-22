@@ -12,6 +12,7 @@ import api, {
   userService,
   authService,
   notificationService,
+  promoService,
 } from "@/services/api";
 import {
   Button,
@@ -3560,7 +3561,7 @@ function ManagePromos() {
                 <Typography className="text-slate-400 font-black mb-2 px-1 text-sm text-right">{t("common.data", "البيانات الأساسية")}</Typography>
                 <TextField fullWidth label={t("promos.fields.title", "العنوان")} required value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} sx={formInputStyle} />
                 <TextField fullWidth label={t("promos.fields.subtitle", "الوصف")} required multiline rows={2} value={formData.subtitle} onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })} sx={formInputStyle} />
-                <TextField fullWidth label={t("promos.fields.linkUrl", "رابط التوجيه")} required value={formData.linkUrl} placeholder="https://..." onChange={(e) => setFormData({ ...formData, linkUrl: e.target.value })} sx={formInputStyle} />
+                <TextField fullWidth label={t("promos.fields.linkUrl", "رابط التوجيه")} value={formData.linkUrl} placeholder="(اختياري) https://..." onChange={(e) => setFormData({ ...formData, linkUrl: e.target.value })} sx={formInputStyle} />
                 <div className="grid grid-cols-2 gap-4">
                   <FormControl fullWidth sx={formInputStyle}>
                     <InputLabel>{t("promos.fields.layoutType", "نوع التنسيق")}</InputLabel>
@@ -3668,7 +3669,9 @@ function PromoPreviewCard({ data }) {
           </div>
           <Typography className="text-xl md:text-2xl font-black text-white mb-2 leading-tight">{title || t("promos.fields.title")}</Typography>
           <Typography className="text-slate-400 font-bold text-sm leading-relaxed mb-6 line-clamp-3">{subtitle || t("promos.fields.subtitle")}</Typography>
-          <Button variant="contained" size="small" sx={{ borderRadius: '0.75rem', fontWeight: '900', px: 4 }}>{t("booking.bookNow")}</Button>
+          {data.linkUrl && (
+            <Button variant="contained" size="small" sx={{ borderRadius: '0.75rem', fontWeight: '900', px: 4 }}>{t("booking.bookNow")}</Button>
+          )}
         </div>
         {layoutType !== 'full-bg' && (
           <div className="w-full md:w-1/2 aspect-video relative rounded-2xl overflow-hidden border border-white/10">
