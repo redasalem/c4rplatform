@@ -3359,6 +3359,7 @@ function ManagePromos() {
     onSuccess: () => {
       toast.success(t("promos.messages.createSuccess", "تم إضافة العرض بنجاح"));
       queryClient.invalidateQueries({ queryKey: ["allPromosAdmin"] });
+      queryClient.invalidateQueries({ queryKey: ["activePromos"] });
       setIsFormOpen(false);
       setFormData(initialForm);
     },
@@ -3370,6 +3371,7 @@ function ManagePromos() {
     onSuccess: () => {
       toast.success(t("promos.messages.updateSuccess", "تم تحديث العرض بنجاح"));
       queryClient.invalidateQueries({ queryKey: ["allPromosAdmin"] });
+      queryClient.invalidateQueries({ queryKey: ["activePromos"] });
       setIsFormOpen(false);
       setEditingPromo(null);
     },
@@ -3381,6 +3383,7 @@ function ManagePromos() {
     onSuccess: () => {
       toast.success(t("promos.messages.deleteSuccess", "تم حذف العرض بنجاح"));
       queryClient.invalidateQueries({ queryKey: ["allPromosAdmin"] });
+      queryClient.invalidateQueries({ queryKey: ["activePromos"] });
     },
     onError: (err) => toast.error(err.response?.data?.message || err.message || "حدث خطأ أثناء الحذف")
   });
