@@ -31,6 +31,7 @@ export async function generateMetadata({ params }) {
   const carName = car.name || `${car.brand} ${car.model}`;
   const price = car.pricePerDay || "";
   const region = car.region || "";
+  const carSlug = car.slug || id;
 
   const title = `تأجير سيارة ${carName} | ضمان التميز - C4R`;
   const desc = `استأجر ${carName} في السعودية${region ? ` في ${region}` : ""}. أسعار تبدأ من ${price} ريال يومياً. حجز سريع وتوصيل مجاني مع منصة C4R.`;
@@ -41,7 +42,8 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title,
       description: desc,
-      url: `https://c4rplatform.com/cars/${id}`,
+      url: `https://c4rplatform.com/cars/${carSlug}`,
+      type: "website",
       images: car.image
         ? [
             {
@@ -54,12 +56,13 @@ export async function generateMetadata({ params }) {
         : [],
     },
     twitter: {
+      card: 'summary_large_image',
       title,
       description: desc,
       images: car.image ? [car.image] : [],
     },
     alternates: {
-      canonical: `https://c4rplatform.com/cars/${id}`,
+      canonical: `https://c4rplatform.com/cars/${carSlug}`,
     },
   };
 }
@@ -68,16 +71,19 @@ export default async function CarDetailsPage({ params }) {
   const { id } = await params;
   const car = await getCarData(id);
 
+  const carName = car ? (car.name || `${car.brand} ${car.model}`) : null;
+  const carSlug = car?.slug || id;
+
   // Product JSON-LD Schema
   const productSchema = car
     ? {
         "@context": "https://schema.org",
         "@type": "Product",
-        "name": car.name || `${car.brand} ${car.model}`,
+        "name": carName,
         "image": car.image || car.imageUrl || "",
         "description":
           car.description ||
-          `تأجير ${car.name || car.brand} بأفضل الأسعار في السعودية`,
+          `تأجير ${carName} بأفضل الأسعار في السعودية`,
         "brand": { "@type": "Brand", "name": car.brand || "C4R" },
         "offers": {
           "@type": "Offer",
@@ -89,7 +95,7 @@ export default async function CarDetailsPage({ params }) {
             1,
           ).toISOString().split("T")[0],
           "availability": "https://schema.org/InStock",
-          "url": `https://c4rplatform.com/cars/${id}`,
+          "url": `https://c4rplatform.com/cars/${carSlug}`,
         },
         "aggregateRating": {
           "@type": "AggregateRating",
@@ -121,7 +127,8 @@ export default async function CarDetailsPage({ params }) {
             {
               "@type": "ListItem",
               "position": 3,
-              "name": car.name || `${car.brand} ${car.model}`,
+              "name": carName,
+              "item": `https://c4rplatform.com/cars/${carSlug}`,
             },
           ]
         : []),

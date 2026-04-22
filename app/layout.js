@@ -58,12 +58,13 @@ export const metadata = {
     canonical: "https://c4rplatform.com",
     languages: {
       "ar-SA": "https://c4rplatform.com",
+      "x-default": "https://c4rplatform.com",
     },
   },
   icons: {
     icon: [{ url: "/favicon.ico", type: "image/x-icon" }],
     shortcut: ["/favicon.ico"],
-    apple: [{ url: "/images/logo.jpeg", sizes: "180x180" }],
+    apple: [{ url: "/images/logo.jpeg", sizes: "180x180", type: "image/jpeg" }],
   },
   openGraph: {
     title: "منصة C4R | أفضل تأجير سيارات في السعودية | Car Rental KSA",
@@ -75,10 +76,10 @@ export const metadata = {
     type: "website",
     images: [
       {
-        url: "/images/logo.jpeg",
-        width: 400,
-        height: 227,
-        alt: "C4R Platform Logo - Best Car Rental KSA",
+        url: "https://c4rplatform.com/images/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "C4R Platform - أفضل تأجير سيارات في السعودية | Best Car Rental KSA",
       },
     ],
   },

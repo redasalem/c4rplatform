@@ -58,16 +58,28 @@ export async function generateMetadata({ params }) {
     const blog = await getBlog(id);
     if (!blog) return { title: "مقال غير موجود | C4R" };
     const imageUrl = blog.image && blog.image !== 'no-photo.jpg' ? blog.image : "https://c4rplatform.com/images/blog-default.jpg";
+    const canonicalSlug = blog.slug || id;
     return {
       title: blog.metaTitle || `${blog.title} | تأجير سيارات في السعودية`,
       description: blog.metaDescription || blog.summary || blog.title,
-      alternates: { canonical: `https://c4rplatform.com/blog/${id}` },
+      keywords: Array.isArray(blog.focusKeywords) ? blog.focusKeywords.join(', ') : (blog.focusKeywords || ''),
+      alternates: { canonical: `https://c4rplatform.com/blog/${canonicalSlug}` },
       openGraph: {
         title: blog.metaTitle || blog.title,
         description: blog.metaDescription || blog.summary,
-        images: [{ url: imageUrl, width: 1200, height: 630 }],
+        url: `https://c4rplatform.com/blog/${canonicalSlug}`,
+        images: [{ url: imageUrl, width: 1200, height: 630, alt: blog.title }],
         type: "article",
         publishedTime: blog.createdAt,
+        modifiedTime: blog.updatedAt,
+        section: blog.category?.name || 'تأجير سيارات',
+        tags: Array.isArray(blog.focusKeywords) ? blog.focusKeywords : [],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: blog.metaTitle || blog.title,
+        description: blog.metaDescription || blog.summary,
+        images: [imageUrl],
       },
     };
   } catch (error) {
@@ -106,11 +118,57 @@ export default async function BlogPostPage({ params }) {
   // We replace &nbsp; with normal spaces to prevent text overflow clipping on the left side in RTL.
   const sanitizedContent = blog.content ? String(blog.content).replace(/&nbsp;/g, ' ') : "";
 
-  const shareUrl = `https://c4rplatform.com/blog/${id}`;
+  const canonicalSlug = blog.slug || id;
+  const shareUrl = `https://c4rplatform.com/blog/${canonicalSlug}`;
   const shareTitle = blog.title;
+
+  // Article JSON-LD Schema
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": blog.title,
+    "description": blog.metaDescription || blog.summary || blog.title,
+    "image": blog.image && blog.image !== 'no-photo.jpg' ? blog.image : "https://c4rplatform.com/images/blog-default.jpg",
+    "url": shareUrl,
+    "datePublished": blog.createdAt,
+    "dateModified": blog.updatedAt || blog.createdAt,
+    "inLanguage": "ar-SA",
+    "author": {
+      "@type": "Organization",
+      "name": "فريق C4R",
+      "url": "https://c4rplatform.com"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "C4R Platform",
+      "url": "https://c4rplatform.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://c4rplatform.com/images/logo.jpeg"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": shareUrl
+    },
+    ...(blog.category?.name ? { "articleSection": blog.category.name } : {}),
+    ...(Array.isArray(blog.focusKeywords) && blog.focusKeywords.length > 0 ? { "keywords": blog.focusKeywords.join(', ') } : {}),
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "الرئيسية", "item": "https://c4rplatform.com" },
+      { "@type": "ListItem", "position": 2, "name": "المدونة", "item": "https://c4rplatform.com/blog" },
+      { "@type": "ListItem", "position": 3, "name": blog.title, "item": shareUrl },
+    ]
+  };
 
   return (
     <main className="min-h-screen bg-[#020617] text-slate-100 overflow-x-hidden" dir="rtl">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <BlogProgressBar />
       <StickyMobileCTA />
       

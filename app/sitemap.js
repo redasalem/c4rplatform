@@ -31,12 +31,14 @@ export default async function sitemap() {
     if (res.ok) {
       const data = await res.json();
       const cars = data?.data?.cars || [];
-      carRoutes = cars.map((car) => ({
-        url: `${BASE_URL}/cars/${car.slug || car._id}`,
-        lastModified: new Date(car.updatedAt || car.createdAt || Date.now()),
-        changeFrequency: "weekly",
-        priority: 0.7,
-      }));
+      carRoutes = cars
+        .filter((car) => car.slug || car._id)
+        .map((car) => ({
+          url: `${BASE_URL}/cars/${car.slug || car._id}`,
+          lastModified: new Date(car.updatedAt || car.createdAt || Date.now()),
+          changeFrequency: "weekly",
+          priority: 0.7,
+        }));
     }
   } catch (error) {
     console.error("Sitemap: Failed to fetch cars", error);
@@ -57,7 +59,7 @@ export default async function sitemap() {
     let hasMore = true;
     
     while (hasMore) {
-      const res = await fetch(`${API_URL}/blogs?status=published&page=${page}&limit=100&select=_id,updatedAt`, {
+      const res = await fetch(`${API_URL}/blogs?status=published&page=${page}&limit=100&select=slug,_id,updatedAt`, {
         next: { revalidate: 3600 },
       });
       
@@ -65,14 +67,16 @@ export default async function sitemap() {
       
       const { data: blogs, pagination } = await res.json();
       
-      blogs.forEach((blog) => {
-        blogRoutes.push({
-          url: `${BASE_URL}/blog/${blog.slug || blog._id}`,
-          lastModified: new Date(blog.updatedAt || Date.now()),
-          changeFrequency: "weekly",
-          priority: 0.7,
+      blogs
+        .filter((blog) => blog.slug || blog._id)
+        .forEach((blog) => {
+          blogRoutes.push({
+            url: `${BASE_URL}/blog/${blog.slug || blog._id}`,
+            lastModified: new Date(blog.updatedAt || Date.now()),
+            changeFrequency: "weekly",
+            priority: 0.7,
+          });
         });
-      });
       
       hasMore = pagination && pagination.next;
       page++;
