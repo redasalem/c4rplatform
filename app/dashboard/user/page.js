@@ -96,10 +96,8 @@ function UserDashboardContent({ user }) {
       newValue === 1
         ? "bookings"
         : newValue === 2
-          ? "notifications"
-          : newValue === 3
-            ? "password"
-            : "profile";
+          ? "password"
+          : "profile";
     router.push(`/dashboard/user?tab=${tabName}`);
   };
 
@@ -421,7 +419,7 @@ function ProfileSection({ user }) {
 
 function BookingsSection() {
   const { t, i18n } = useTranslation("common");
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["myBookings"],
     queryFn: () => bookingService.getAll(), // Assuming this returns user's bookings if not admin
   });
@@ -473,6 +471,37 @@ function BookingsSection() {
   };
 
   if (isLoading) return <CircularProgress className="m-auto block" />;
+
+  if (isError) {
+    return (
+      <div className="text-center py-24 bg-white/5 backdrop-blur-xl rounded-[3rem] border border-white/10 shadow-2xl">
+        <EventNote
+          sx={{ fontSize: 100, color: "rgba(255,255,255,0.05)", mb: 4 }}
+        />
+        <p className="text-slate-300 font-black text-2xl">
+          {t("common.error")}
+        </p>
+        <p className="text-slate-500 font-bold mt-3">
+          {t("booking.errorMessage")}
+        </p>
+        <Button
+          variant="contained"
+          onClick={() => refetch()}
+          sx={{
+            mt: 4,
+            borderRadius: "1.25rem",
+            px: 6,
+            py: 1.5,
+            fontWeight: "black",
+            bgcolor: "var(--primary)",
+            "&:hover": { bgcolor: "var(--primary-hover)" },
+          }}
+        >
+          {t("common.retry")}
+        </Button>
+      </div>
+    );
+  }
 
   // Safety check for array
   const bookings = data?.data?.bookings || [];

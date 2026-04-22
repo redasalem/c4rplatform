@@ -47,11 +47,6 @@ function DashboardSidebarContent({
       icon: <EventNote />,
     },
     {
-      name: t("notifications.title"),
-      href: `${prefix}?tab=notifications`,
-      icon: <Notifications />,
-    },
-    {
       name: t("dashboard.changePassword"),
       href: `${prefix}?tab=password`,
       icon: <Settings />,
