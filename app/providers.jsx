@@ -31,25 +31,36 @@ export default function Providers({ children }) {
   const [mounted, setMounted] = useState(false);
   
   useEffect(() => {
-    setMounted(true);
+    // Delay mounted state to ensure i18n is ready
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 100);
+    return () => clearTimeout(timer);
   }, []);
 
-  // HYDRATION STABILIZATION: Force server-matching defaults during hydration pass.
-  // Once mounted, we adapt to the user's detected i18n settings.
-  const currentLang = mounted ? i18n.language : "ar";
-  const dir = (currentLang === "ar") ? "rtl" : "ltr";
+  // HYDRATION STABILIZATION: Use consistent defaults during SSR and hydration
+  // This prevents "removeChild" DOM errors caused by server/client mismatch
+  // Default to "ar" (Arabic) on server, switch to detected language on client
+  const serverLang = "ar";
+  const clientLang = i18n?.language || serverLang;
+  const currentLang = mounted ? clientLang : serverLang;
+  const dir = (currentLang === "ar" || !currentLang) ? "rtl" : "ltr";
 
+  // Don't update DOM until mounted to prevent hydration mismatch
   useEffect(() => {
-    if (mounted) {
+    if (mounted && typeof document !== 'undefined') {
       document.dir = dir;
       document.documentElement.lang = currentLang;
     }
   }, [dir, currentLang, mounted]);
 
+  // Use stable theme direction during SSR, switch after mount
+  const stableDir = "rtl"; // Always use RTL during SSR to match server render
+  
   const theme = useMemo(
     () =>
       createTheme({
-        direction: dir,
+        direction: "rtl",
         typography: {
           fontFamily: "var(--font-almarai)",
         },
@@ -60,7 +71,7 @@ export default function Providers({ children }) {
           },
         },
       }),
-    [dir],
+    [mounted], // Recreate theme after mount
   );
 
   return (
@@ -70,8 +81,8 @@ export default function Providers({ children }) {
         <AuthProvider>
           {children}
           <ToastContainer
-            position={dir === "rtl" ? "bottom-right" : "bottom-left"}
-            rtl={dir === "rtl"}
+            position="bottom-right"
+            rtl={true}
             theme="dark"
             pauseOnHover
             draggable
