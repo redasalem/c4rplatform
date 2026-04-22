@@ -33,7 +33,7 @@ const ContinueReading = ({ currentBlogId, categoryId }) => {
       </div>
 
       <Link
-        href={`/blog/${nextBlog._id}`}
+        href={`/blog/${nextBlog.slug}`}
         className="block relative p-10 md:p-16 rounded-[3rem] bg-white/5 border border-white/10 overflow-hidden hover:bg-white/10 transition-all duration-500 text-center"
       >
         <div className="relative z-10 flex flex-col items-center gap-6">

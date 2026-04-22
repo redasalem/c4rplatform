@@ -70,7 +70,7 @@ const LatestBlogs = () => {
             : blogs.map((blog) => (
                 <Link
                   key={blog._id}
-                  href={`/blog/${blog.category?.slug || "general"}/${blog.slug}`}
+                  href={`/blog/${blog.slug}`}
                   className="group bg-white/5 border border-white/10 rounded-[2.5rem] overflow-hidden hover:bg-white/10 transition-all duration-500 flex flex-col items-start h-full shadow-2xl hover:shadow-primary/5 shadow-none"
                 >
                   <div className="relative h-64 w-full bg-slate-800 overflow-hidden">

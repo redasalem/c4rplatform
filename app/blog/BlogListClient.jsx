@@ -60,7 +60,7 @@ export default function BlogListClient({ initialData, searchParams }) {
         {blogs.map((blog) => (
           <Link 
             key={blog._id} 
-            href={`/blog/${blog._id}`}
+            href={`/blog/${blog.slug}`}
             className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden hover:bg-white/10 transition-all duration-500 group flex flex-col items-start"
           >
             <div className="relative h-56 w-full bg-slate-800 overflow-hidden">
