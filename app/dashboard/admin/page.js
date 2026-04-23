@@ -106,7 +106,7 @@ const AdminTabsContent = ({ user }) => {
   const value = getTabIndex(tabParam);
 
   const handleChange = (event, newValue) => {
-    if (newValue === 3) {
+    if (newValue === 2) {
       router.push(`/dashboard/admin/blogs`);
       return;
     }
@@ -569,7 +569,7 @@ function ManageUsers() {
       data: {
         name: editingUser.name,
         email: editingUser.email,
-        phone: editingUser.phone,
+        phoneNumber: editingUser.phoneNumber,
         role: editingUser.role,
       },
     });
@@ -689,6 +689,14 @@ function ManageUsers() {
               label="Email"
               value={editingUser?.email || ""}
               onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
+              InputLabelProps={{ style: { color: "#94a3b8" } }}
+              sx={{ "& .MuiOutlinedInput-root": { color: "white", "& fieldset": { borderColor: "rgba(255,255,255,0.2)" } } }}
+            />
+            <TextField
+              fullWidth
+              label={i18n.language === "ar" ? "رقم الهاتف" : "Phone Number"}
+              value={editingUser?.phoneNumber || ""}
+              onChange={(e) => setEditingUser({ ...editingUser, phoneNumber: e.target.value })}
               InputLabelProps={{ style: { color: "#94a3b8" } }}
               sx={{ "& .MuiOutlinedInput-root": { color: "white", "& fieldset": { borderColor: "rgba(255,255,255,0.2)" } } }}
             />
