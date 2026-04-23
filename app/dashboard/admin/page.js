@@ -230,7 +230,6 @@ const AdminTabsContent = ({ user }) => {
         />
       </Tabs>
 
-
       <TabPanel value={value} index={0}>
         <ManageBookings />
       </TabPanel>
@@ -239,15 +238,19 @@ const AdminTabsContent = ({ user }) => {
       </TabPanel>
       <TabPanel value={value} index={2}>
         <Box className="text-center py-20 bg-white/5 rounded-[3rem] border border-dashed border-white/10">
-           <Article sx={{ fontSize: 80, color: "rgba(255,255,255,0.05)", mb: 4 }} />
-           <Typography className="text-2xl font-black text-slate-400 mb-6">جاري الانتقال لصفحة الإدارة المتطورة...</Typography>
-           <Button 
-             variant="contained" 
-             onClick={() => router.push('/dashboard/admin/blogs')}
-             sx={{ borderRadius: '1.5rem', fontWeight: '900', px: 6, py: 2 }}
-           >
-              فتح إدارة المدونة (Elite)
-           </Button>
+          <Article
+            sx={{ fontSize: 80, color: "rgba(255,255,255,0.05)", mb: 4 }}
+          />
+          <Typography className="text-2xl font-black text-slate-400 mb-6">
+            جاري الانتقال لصفحة الإدارة المتطورة...
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={() => router.push("/dashboard/admin/blogs")}
+            sx={{ borderRadius: "1.5rem", fontWeight: "900", px: 6, py: 2 }}
+          >
+            فتح إدارة المدونة (Elite)
+          </Button>
         </Box>
       </TabPanel>
       <TabPanel value={value} index={3}>
@@ -268,7 +271,6 @@ const AdminTabsContent = ({ user }) => {
       <TabPanel value={value} index={8}>
         <ManagePromos />
       </TabPanel>
-
     </div>
   );
 };
@@ -341,7 +343,11 @@ function AdminStatsSection() {
                 {stat.label}
               </p>
               <div className="mt-3 text-2xl sm:text-3xl font-black text-white tracking-tighter">
-                {stat.loading ? <CircularProgress size={22} color="inherit" /> : stat.value}
+                {stat.loading ? (
+                  <CircularProgress size={22} color="inherit" />
+                ) : (
+                  stat.value
+                )}
               </div>
             </div>
             <div className="w-11 h-11 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
@@ -442,7 +448,12 @@ function JumpToPagePagination({ totalPages, currentPage, onPageChange }) {
         <Button
           disabled={currentPage <= 1}
           onClick={() => onPageChange(currentPage - 1)}
-          sx={{ minWidth: 40, height: 40, borderRadius: "10px", color: "white" }}
+          sx={{
+            minWidth: 40,
+            height: 40,
+            borderRadius: "10px",
+            color: "white",
+          }}
         >
           {i18n?.language === "ar" ? "السابق" : "Prev"}
         </Button>
@@ -462,9 +473,15 @@ function JumpToPagePagination({ totalPages, currentPage, onPageChange }) {
                   minWidth: 40,
                   height: 40,
                   borderRadius: "10px",
-                  bgcolor: currentPage === page ? "primary.main" : "transparent",
+                  bgcolor:
+                    currentPage === page ? "primary.main" : "transparent",
                   color: "white",
-                  "&:hover": { bgcolor: currentPage === page ? "primary.dark" : "rgba(255,255,255,0.1)" },
+                  "&:hover": {
+                    bgcolor:
+                      currentPage === page
+                        ? "primary.dark"
+                        : "rgba(255,255,255,0.1)",
+                  },
                 }}
               >
                 {page}
@@ -475,7 +492,12 @@ function JumpToPagePagination({ totalPages, currentPage, onPageChange }) {
         <Button
           disabled={currentPage >= totalPages}
           onClick={() => onPageChange(currentPage + 1)}
-          sx={{ minWidth: 40, height: 40, borderRadius: "10px", color: "white" }}
+          sx={{
+            minWidth: 40,
+            height: 40,
+            borderRadius: "10px",
+            color: "white",
+          }}
         >
           {i18n?.language === "ar" ? "التالي" : "Next"}
         </Button>
@@ -484,7 +506,9 @@ function JumpToPagePagination({ totalPages, currentPage, onPageChange }) {
       <div className="h-8 w-[1px] bg-white/10 hidden sm:block" />
 
       <form onSubmit={handleJump} className="flex items-center gap-2">
-        <Typography sx={{ color: "slate.400", fontSize: "0.875rem", fontWeight: "bold" }}>
+        <Typography
+          sx={{ color: "slate.400", fontSize: "0.875rem", fontWeight: "bold" }}
+        >
           {i18n?.language === "ar" ? "انتقال لصفحة:" : "Jump to:"}
         </Typography>
         <TextField
@@ -499,7 +523,9 @@ function JumpToPagePagination({ totalPages, currentPage, onPageChange }) {
               fontWeight: "black",
               py: 0.5,
             },
-            "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(255,255,255,0.2)" },
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "rgba(255,255,255,0.2)",
+            },
           }}
         />
         <Button
@@ -535,23 +561,30 @@ function ManageUsers() {
   const updateMutation = useMutation({
     mutationFn: ({ id, data }) => userService.update(id, data),
     onSuccess: () => {
-      toast.success(t("dashboard.admin.users.updateSuccess", "تم تحديث المستخدم بنجاح"));
+      toast.success(
+        t("dashboard.admin.users.updateSuccess", "تم تحديث المستخدم بنجاح"),
+      );
       queryClient.invalidateQueries({ queryKey: ["allUsers"] });
       setIsEditDialogOpen(false);
     },
-    onError: (err) => toast.error(err.response?.data?.message || "Error updating user"),
+    onError: (err) =>
+      toast.error(err.response?.data?.message || "Error updating user"),
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id) => userService.delete(id),
     onSuccess: () => {
-      toast.success(t("dashboard.admin.users.deleteSuccess", "تم إلغاء تفعيل المستخدم"));
+      toast.success(
+        t("dashboard.admin.users.deleteSuccess", "تم إلغاء تفعيل المستخدم"),
+      );
       queryClient.invalidateQueries({ queryKey: ["allUsers"] });
     },
-    onError: (err) => toast.error(err.response?.data?.message || "Error deleting user"),
+    onError: (err) =>
+      toast.error(err.response?.data?.message || "Error deleting user"),
   });
 
   const handleToggleStatus = (user) => {
+    if (!user?._id) return;
     updateMutation.mutate({
       id: user._id,
       data: { isActive: !user.isActive },
@@ -564,6 +597,7 @@ function ManageUsers() {
   };
 
   const handleUpdateUser = () => {
+    if (!editingUser?._id) return;
     updateMutation.mutate({
       id: editingUser._id,
       data: {
@@ -584,8 +618,13 @@ function ManageUsers() {
     <div className="space-y-6">
       <div className="flex justify-between items-center bg-white/5 p-6 rounded-[2rem] border border-white/10">
         <div>
-          <h2 className="text-2xl font-black text-white">{t("dashboard.admin.tabs.users")}</h2>
-          <p className="text-slate-400 font-bold">{t("dashboard.admin.users.total", "إجمالي المستخدمين المسجلين")}: {pagination.total || users.length}</p>
+          <h2 className="text-2xl font-black text-white">
+            {t("dashboard.admin.tabs.users")}
+          </h2>
+          <p className="text-slate-400 font-bold">
+            {t("dashboard.admin.users.total", "إجمالي المستخدمين المسجلين")}:{" "}
+            {pagination.total || users.length}
+          </p>
         </div>
       </div>
 
@@ -593,74 +632,110 @@ function ManageUsers() {
         <table className="w-full text-right border-collapse">
           <thead>
             <tr className="border-b border-white/10">
-              <th className="p-6 font-black text-slate-500 uppercase text-xs tracking-widest">{t("dashboard.admin.users.name", "الاسم")}</th>
-              <th className="p-6 font-black text-slate-500 uppercase text-xs tracking-widest">Email</th>
-              <th className="p-6 font-black text-slate-500 uppercase text-xs tracking-widest">{t("dashboard.admin.users.role", "الدور")}</th>
-              <th className="p-6 font-black text-slate-500 uppercase text-xs tracking-widest">{t("dashboard.admin.users.status", "الحالة")}</th>
-              <th className="p-6 font-black text-slate-500 uppercase text-xs tracking-widest">{t("dashboard.admin.users.actions", "الإجراءات")}</th>
+              <th className="p-6 font-black text-slate-500 uppercase text-xs tracking-widest">
+                {t("dashboard.admin.users.name", "الاسم")}
+              </th>
+              <th className="p-6 font-black text-slate-500 uppercase text-xs tracking-widest">
+                Email
+              </th>
+              <th className="p-6 font-black text-slate-500 uppercase text-xs tracking-widest">
+                {t("dashboard.admin.users.role", "الدور")}
+              </th>
+              <th className="p-6 font-black text-slate-500 uppercase text-xs tracking-widest">
+                {t("dashboard.admin.users.status", "الحالة")}
+              </th>
+              <th className="p-6 font-black text-slate-500 uppercase text-xs tracking-widest">
+                {t("dashboard.admin.users.actions", "الإجراءات")}
+              </th>
             </tr>
           </thead>
           <tbody>
-            {(Array.isArray(users) ? users : []).filter(u => u !== null).map((u) => (
-              <tr key={u._id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
-                <td className="p-6">
-                  <div className="flex items-center gap-3">
-                    <Avatar sx={{ bgcolor: "primary.main", fontWeight: "900" }}>{u.name?.charAt(0)}</Avatar>
-                    <span className="font-bold text-white">{u.name}</span>
-                  </div>
-                </td>
-                <td className="p-6 text-slate-300 font-medium">{u.email}</td>
-                <td className="p-6">
-                  <Chip 
-                    label={u.role} 
-                    size="small" 
-                    sx={{ 
-                      fontWeight: "900", 
-                      bgcolor: u.role === "admin" ? "rgba(249,115,22,0.1)" : "rgba(255,255,255,0.05)",
-                      color: u.role === "admin" ? "primary.main" : "white",
-                      border: "1px solid currentColor"
-                    }} 
-                  />
-                </td>
-                <td className="p-6">
-                  <Chip 
-                    label={u.isActive !== false ? "Active" : "Inactive"} 
-                    size="small"
-                    sx={{ 
-                      fontWeight: "900",
-                      bgcolor: u.isActive !== false ? "rgba(34,197,94,0.1)" : "rgba(220,38,38,0.1)",
-                      color: u.isActive !== false ? "#4ade80" : "#f87171",
-                    }}
-                  />
-                </td>
-                <td className="p-6">
-                  <div className="flex gap-2">
-                    <IconButton size="small" onClick={() => handleEditClick(u)} sx={{ color: "white", bgcolor: "white/5" }}><Edit /></IconButton>
-                    <IconButton 
-                      size="small" 
-                      color={u.isActive !== false ? "error" : "success"} 
-                      onClick={() => handleToggleStatus(u)}
-                      sx={{ bgcolor: u.isActive !== false ? "rgba(220,38,38,0.1)" : "rgba(34,197,94,0.1)" }}
-                    >
-                      {u.isActive !== false ? <Close /> : <Check />}
-                    </IconButton>
-                  </div>
-                </td>
-              </tr>
-            ))}
+            {(Array.isArray(users) ? users : [])
+              .filter((u) => u != null)
+              .map((u, idx) => (
+                <tr
+                  key={u?._id || idx}
+                  className="border-b border-white/5 hover:bg-white/5 transition-colors group"
+                >
+                  <td className="p-6">
+                    <div className="flex items-center gap-3">
+                      <Avatar
+                        sx={{ bgcolor: "primary.main", fontWeight: "900" }}
+                      >
+                        {u.name?.charAt(0)}
+                      </Avatar>
+                      <span className="font-bold text-white">{u.name}</span>
+                    </div>
+                  </td>
+                  <td className="p-6 text-slate-300 font-medium">{u.email}</td>
+                  <td className="p-6">
+                    <Chip
+                      label={u.role}
+                      size="small"
+                      sx={{
+                        fontWeight: "900",
+                        bgcolor:
+                          u.role === "admin"
+                            ? "rgba(249,115,22,0.1)"
+                            : "rgba(255,255,255,0.05)",
+                        color: u.role === "admin" ? "primary.main" : "white",
+                        border: "1px solid currentColor",
+                      }}
+                    />
+                  </td>
+                  <td className="p-6">
+                    <Chip
+                      label={u.isActive !== false ? "Active" : "Inactive"}
+                      size="small"
+                      sx={{
+                        fontWeight: "900",
+                        bgcolor:
+                          u.isActive !== false
+                            ? "rgba(34,197,94,0.1)"
+                            : "rgba(220,38,38,0.1)",
+                        color: u.isActive !== false ? "#4ade80" : "#f87171",
+                      }}
+                    />
+                  </td>
+                  <td className="p-6">
+                    <div className="flex gap-2">
+                      <IconButton
+                        size="small"
+                        onClick={() => handleEditClick(u)}
+                        sx={{ color: "white", bgcolor: "white/5" }}
+                      >
+                        <Edit />
+                      </IconButton>
+                      <IconButton
+                        size="small"
+                        color={u.isActive !== false ? "error" : "success"}
+                        onClick={() => handleToggleStatus(u)}
+                        sx={{
+                          bgcolor:
+                            u.isActive !== false
+                              ? "rgba(220,38,38,0.1)"
+                              : "rgba(34,197,94,0.1)",
+                        }}
+                      >
+                        {u.isActive !== false ? <Close /> : <Check />}
+                      </IconButton>
+                    </div>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
 
-      <JumpToPagePagination 
-        totalPages={pagination.totalPages} 
-        currentPage={page} 
-        onPageChange={setPage} 
+      <JumpToPagePagination
+        totalPages={pagination.totalPages}
+        currentPage={page}
+        onPageChange={setPage}
       />
 
       {/* Edit User Dialog */}
-      <Dialog 
-        open={isEditDialogOpen} 
+      <Dialog
+        open={isEditDialogOpen}
         onClose={() => setIsEditDialogOpen(false)}
         PaperProps={{
           sx: {
@@ -670,42 +745,75 @@ function ManageUsers() {
             border: "1px solid rgba(255,255,255,0.1)",
             color: "white",
             p: 2,
-          }
+          },
         }}
       >
-        <DialogTitle sx={{ fontWeight: "900", fontSize: "1.5rem" }}>{t("dashboard.admin.users.editTitle", "تعديل المستخدم")}</DialogTitle>
+        <DialogTitle sx={{ fontWeight: "900", fontSize: "1.5rem" }}>
+          {t("dashboard.admin.users.editTitle", "تعديل المستخدم")}
+        </DialogTitle>
         <DialogContent>
           <div className="space-y-4 pt-4">
             <TextField
               fullWidth
               label="Name"
               value={editingUser?.name || ""}
-              onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })}
+              onChange={(e) =>
+                setEditingUser({ ...editingUser, name: e.target.value })
+              }
               InputLabelProps={{ style: { color: "#94a3b8" } }}
-              sx={{ "& .MuiOutlinedInput-root": { color: "white", "& fieldset": { borderColor: "rgba(255,255,255,0.2)" } } }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": { borderColor: "rgba(255,255,255,0.2)" },
+                },
+              }}
             />
             <TextField
               fullWidth
               label="Email"
               value={editingUser?.email || ""}
-              onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
+              onChange={(e) =>
+                setEditingUser({ ...editingUser, email: e.target.value })
+              }
               InputLabelProps={{ style: { color: "#94a3b8" } }}
-              sx={{ "& .MuiOutlinedInput-root": { color: "white", "& fieldset": { borderColor: "rgba(255,255,255,0.2)" } } }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": { borderColor: "rgba(255,255,255,0.2)" },
+                },
+              }}
             />
             <TextField
               fullWidth
               label={i18n.language === "ar" ? "رقم الهاتف" : "Phone Number"}
               value={editingUser?.phoneNumber || ""}
-              onChange={(e) => setEditingUser({ ...editingUser, phoneNumber: e.target.value })}
+              onChange={(e) =>
+                setEditingUser({ ...editingUser, phoneNumber: e.target.value })
+              }
               InputLabelProps={{ style: { color: "#94a3b8" } }}
-              sx={{ "& .MuiOutlinedInput-root": { color: "white", "& fieldset": { borderColor: "rgba(255,255,255,0.2)" } } }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": { borderColor: "rgba(255,255,255,0.2)" },
+                },
+              }}
             />
-            <FormControl fullWidth sx={{ "& .MuiOutlinedInput-root": { color: "white", "& fieldset": { borderColor: "rgba(255,255,255,0.2)" } } }}>
+            <FormControl
+              fullWidth
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": { borderColor: "rgba(255,255,255,0.2)" },
+                },
+              }}
+            >
               <InputLabel sx={{ color: "#94a3b8" }}>Role</InputLabel>
               <Select
                 value={editingUser?.role || "user"}
                 label="Role"
-                onChange={(e) => setEditingUser({ ...editingUser, role: e.target.value })}
+                onChange={(e) =>
+                  setEditingUser({ ...editingUser, role: e.target.value })
+                }
               >
                 <MenuItem value="user">User</MenuItem>
                 <MenuItem value="admin">Admin</MenuItem>
@@ -714,8 +822,19 @@ function ManageUsers() {
           </div>
         </DialogContent>
         <DialogActions sx={{ p: 3 }}>
-          <Button onClick={() => setIsEditDialogOpen(false)} sx={{ color: "slate.400", fontWeight: "bold" }}>Cancel</Button>
-          <Button variant="contained" onClick={handleUpdateUser} sx={{ borderRadius: "1rem", fontWeight: "900" }}>Update</Button>
+          <Button
+            onClick={() => setIsEditDialogOpen(false)}
+            sx={{ color: "slate.400", fontWeight: "bold" }}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleUpdateUser}
+            sx={{ borderRadius: "1rem", fontWeight: "900" }}
+          >
+            Update
+          </Button>
         </DialogActions>
       </Dialog>
     </div>
@@ -754,7 +873,12 @@ function ManageBookings() {
       // Localize the "already reviewed" error or fallback to general error
       const msg = err.response?.data?.message;
       if (msg === "You have already reviewed this booking") {
-        toast.error(t("dashboard.user.reviews.alreadyReviewed", "لقد قمت بتقييم هذا الحجز مسبقاً"));
+        toast.error(
+          t(
+            "dashboard.user.reviews.alreadyReviewed",
+            "لقد قمت بتقييم هذا الحجز مسبقاً",
+          ),
+        );
       } else {
         toast.error(t("dashboard.user.reviews.error", "حدث خطأ أثناء التقييم"));
       }
@@ -769,7 +893,12 @@ function ManageBookings() {
   const handleSubmitReview = () => {
     if (!selectedBooking) return;
     if (!comment.trim()) {
-      toast.warning(t("dashboard.user.reviews.emptyCommentError", "الرجاء كتابة تعليق مع التقييم"));
+      toast.warning(
+        t(
+          "dashboard.user.reviews.emptyCommentError",
+          "الرجاء كتابة تعليق مع التقييم",
+        ),
+      );
       return;
     }
     createReviewMutation.mutate({
@@ -789,7 +918,7 @@ function ManageBookings() {
     onError: (err) =>
       toast.error(
         err.response?.data?.message ||
-        t("dashboard.admin.bookings.approveError"),
+          t("dashboard.admin.bookings.approveError"),
       ),
   });
 
@@ -802,7 +931,7 @@ function ManageBookings() {
     onError: (err) =>
       toast.error(
         err.response?.data?.message ||
-        t("dashboard.admin.bookings.rejectError"),
+          t("dashboard.admin.bookings.rejectError"),
       ),
   });
 
@@ -837,326 +966,344 @@ function ManageBookings() {
   return (
     <div className="space-y-8 pb-10">
       <div className="grid grid-cols-1 gap-8">
-        {(Array.isArray(bookings) ? bookings : []).filter(b => b !== null).map((booking) => (
-          <div
-            key={booking._id}
-            className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl sm:rounded-3xl p-3 sm:p-8 lg:p-10 shadow-2xl hover:bg-white/10 transition-all duration-500 relative overflow-hidden group"
-          >
-            {/* Status Strip Mobile */}
+        {(Array.isArray(bookings) ? bookings : [])
+          .filter((b) => b != null)
+          .map((booking, idx) => (
             <div
-              className={`absolute top-0 right-0 w-1 sm:hidden h-full ${booking.status === "approved"
-                ? "bg-green-500"
-                : booking.status === "rejected"
-                  ? "bg-red-500"
-                  : "bg-primary"
+              key={booking?._id || idx}
+              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl sm:rounded-3xl p-3 sm:p-8 lg:p-10 shadow-2xl hover:bg-white/10 transition-all duration-500 relative overflow-hidden group"
+            >
+              {/* Status Strip Mobile */}
+              <div
+                className={`absolute top-0 right-0 w-1 sm:hidden h-full ${
+                  booking.status === "approved"
+                    ? "bg-green-500"
+                    : booking.status === "rejected"
+                      ? "bg-red-500"
+                      : "bg-primary"
                 }`}
-            />
-            {/* Status Strip */}
-            <div
-              className={`absolute top-0 right-0 w-2 h-full ${booking.status === "approved"
-                ? "bg-green-500"
-                : booking.status === "rejected"
-                  ? "bg-red-500"
-                  : "bg-primary"
+              />
+              {/* Status Strip */}
+              <div
+                className={`absolute top-0 right-0 w-2 h-full ${
+                  booking.status === "approved"
+                    ? "bg-green-500"
+                    : booking.status === "rejected"
+                      ? "bg-red-500"
+                      : "bg-primary"
                 }`}
-            />
+              />
 
-            <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
-              {/* Car Info Column */}
-              <div className="lg:w-1/3 border-b lg:border-b-0 lg:border-l border-white/5 pb-4 sm:pb-6 lg:pb-0 lg:pl-8">
-                <div className="flex items-center gap-2 sm:gap-5 mb-3 sm:mb-6">
-                  <div className="hidden sm:flex bg-primary/10 p-2 sm:p-4 rounded-xl sm:rounded-2xl text-primary shadow-2xl border border-primary/20">
-                    <DirectionsCar sx={{ fontSize: { xs: 20, sm: 32 } }} />
+              <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
+                {/* Car Info Column */}
+                <div className="lg:w-1/3 border-b lg:border-b-0 lg:border-l border-white/5 pb-4 sm:pb-6 lg:pb-0 lg:pl-8">
+                  <div className="flex items-center gap-2 sm:gap-5 mb-3 sm:mb-6">
+                    <div className="hidden sm:flex bg-primary/10 p-2 sm:p-4 rounded-xl sm:rounded-2xl text-primary shadow-2xl border border-primary/20">
+                      <DirectionsCar sx={{ fontSize: { xs: 20, sm: 32 } }} />
+                    </div>
+                    <div>
+                      <h3 className="font-black text-base sm:text-2xl text-white tracking-tight">
+                        {booking.car?.name || "سيارة غير محددة"}
+                      </h3>
+                      <p className="text-[9px] sm:text-sm text-slate-400 font-black uppercase tracking-widest mt-0.5 sm:mt-1">
+                        إصدار {booking.car?.year || "2024"}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-black text-base sm:text-2xl text-white tracking-tight">
-                      {booking.car?.name || "سيارة غير محددة"}
-                    </h3>
-                    <p className="text-[9px] sm:text-sm text-slate-400 font-black uppercase tracking-widest mt-0.5 sm:mt-1">
-                      إصدار {booking.car?.year || "2024"}
-                    </p>
-                  </div>
-                </div>
 
-                <div className="space-y-4">
-                  <div className="flex items-center gap-1.5 sm:gap-3 bg-white/5 p-1.5 sm:p-3 rounded-lg sm:rounded-xl border border-white/5">
-                    <EventNote
-                      className="text-primary"
-                      sx={{ fontSize: { xs: 12, sm: 20 } }}
-                    />
-                    <div className="flex flex-row sm:flex-col gap-2 sm:gap-0 font-bold">
-                      <span className="text-[8px] sm:text-[10px] text-slate-500 uppercase">
-                        {t("dashboard.admin.bookings.start")}
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-1.5 sm:gap-3 bg-white/5 p-1.5 sm:p-3 rounded-lg sm:rounded-xl border border-white/5">
+                      <EventNote
+                        className="text-primary"
+                        sx={{ fontSize: { xs: 12, sm: 20 } }}
+                      />
+                      <div className="flex flex-row sm:flex-col gap-2 sm:gap-0 font-bold">
+                        <span className="text-[8px] sm:text-[10px] text-slate-500 uppercase">
+                          {t("dashboard.admin.bookings.start")}
+                        </span>
+                        <span
+                          className="text-[9px] sm:text-xs text-white"
+                          suppressHydrationWarning
+                        >
+                          {booking.startDate
+                            ? new Date(booking.startDate).toLocaleDateString(
+                                i18n.language,
+                              )
+                            : "---"}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5 sm:gap-3 bg-white/5 p-1.5 sm:p-3 rounded-lg sm:rounded-xl border border-white/5">
+                      <EventNote
+                        className="text-primary"
+                        sx={{ fontSize: { xs: 12, sm: 20 } }}
+                      />
+                      <div className="flex flex-row sm:flex-col gap-2 sm:gap-0 font-bold">
+                        <span className="text-[8px] sm:text-[10px] text-slate-500 uppercase">
+                          {t("dashboard.admin.bookings.end")}
+                        </span>
+                        <span
+                          className="text-[9px] sm:text-xs text-white"
+                          suppressHydrationWarning
+                        >
+                          {booking.endDate
+                            ? new Date(booking.endDate).toLocaleDateString(
+                                i18n.language,
+                              )
+                            : "---"}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center text-xs sm:text-sm pt-2 sm:pt-4 border-t border-white/5">
+                      <span className="text-slate-500 font-bold text-[9px] sm:text-sm">
+                        {t("dashboard.admin.bookings.cost")}
                       </span>
-                      <span className="text-[9px] sm:text-xs text-white" suppressHydrationWarning>
-                        {booking.startDate
-                          ? new Date(booking.startDate).toLocaleDateString(
-                            i18n.language,
-                          )
-                          : "---"}
+                      <span className="font-black text-primary text-base sm:text-2xl tracking-tighter">
+                        {booking.totalPrice}{" "}
+                        <span className="text-[8px] sm:text-xs font-bold text-slate-500">
+                          {t("dashboard.user.bookings.sar")}
+                        </span>
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1.5 sm:gap-3 bg-white/5 p-1.5 sm:p-3 rounded-lg sm:rounded-xl border border-white/5">
-                    <EventNote
-                      className="text-primary"
-                      sx={{ fontSize: { xs: 12, sm: 20 } }}
-                    />
-                    <div className="flex flex-row sm:flex-col gap-2 sm:gap-0 font-bold">
-                      <span className="text-[8px] sm:text-[10px] text-slate-500 uppercase">
-                        {t("dashboard.admin.bookings.end")}
+                </div>
+
+                {/* Client Info Column */}
+                <div className="lg:w-1/3 border-b lg:border-b-0 lg:border-l border-white/5 pb-4 sm:pb-6 lg:pb-0 lg:pl-8">
+                  <h4 className="text-[7px] sm:text-[10px] font-black text-slate-500 uppercase mb-2 sm:mb-6 tracking-[0.3em]">
+                    {t("dashboard.admin.bookings.clientData")}
+                  </h4>
+                  <div className="space-y-3 sm:space-y-6">
+                    <div className="flex items-center gap-2 sm:gap-4">
+                      <Avatar
+                        sx={{
+                          bgcolor: "rgba(255,255,255,0.05)",
+                          color: "var(--primary)",
+                          width: { xs: 24, sm: 44 },
+                          height: { xs: 24, sm: 44 },
+                          fontSize: { xs: "0.6rem", sm: "1.1rem" },
+                          fontWeight: "900",
+                          border: "1px solid rgba(255,255,255,0.1)",
+                        }}
+                      >
+                        {booking.user?.name?.charAt(0)}
+                      </Avatar>
+                      <span className="font-black text-white text-xs sm:text-lg">
+                        {booking.user?.name}
                       </span>
-                      <span className="text-[9px] sm:text-xs text-white" suppressHydrationWarning>
-                        {booking.endDate
-                          ? new Date(booking.endDate).toLocaleDateString(
-                            i18n.language,
-                          )
-                          : "---"}
+                    </div>
+                    <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-lg text-white/80 font-bold bg-white/5 p-1.5 sm:p-2.5 rounded-lg border border-white/5">
+                      <Phone
+                        className="text-primary"
+                        sx={{ fontSize: { xs: 12, sm: 20 } }}
+                      />
+                      <span className="text-[9px] sm:text-base">
+                        {booking.phoneNumber}
+                      </span>
+                      <IconButton
+                        size="small"
+                        component="a"
+                        href={`https://wa.me/${booking.phoneNumber.replace(/\D/g, "").replace(/^00/, "").replace(/^0/, "966")}`}
+                        target="_blank"
+                        sx={{
+                          color: "#22c55e",
+                          bgcolor: "rgba(34, 197, 94, 0.1)",
+                          "&:hover": { bgcolor: "rgba(34, 197, 94, 0.2)" },
+                          border: "1px solid rgba(34, 197, 94, 0.2)",
+                          ml: "auto",
+                          width: { xs: 24, sm: 32 },
+                          height: { xs: 24, sm: 32 },
+                        }}
+                      >
+                        <WhatsApp sx={{ fontSize: { xs: 12, sm: 18 } }} />
+                      </IconButton>
+                    </div>
+                    <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-lg text-white/80 font-bold bg-white/5 p-1.5 sm:p-2.5 rounded-lg border border-white/5">
+                      <Speed
+                        className="text-primary"
+                        sx={{ fontSize: { xs: 12, sm: 20 } }}
+                      />
+                      <span className="text-[9px] sm:text-base">
+                        {booking.kmPerDay} {t("booking.kmPerDay", "km/day")}
                       </span>
                     </div>
                   </div>
-                  <div className="flex justify-between items-center text-xs sm:text-sm pt-2 sm:pt-4 border-t border-white/5">
-                    <span className="text-slate-500 font-bold text-[9px] sm:text-sm">
-                      {t("dashboard.admin.bookings.cost")}
-                    </span>
-                    <span className="font-black text-primary text-base sm:text-2xl tracking-tighter">
-                      {booking.totalPrice}{" "}
-                      <span className="text-[8px] sm:text-xs font-bold text-slate-500">
-                        {t("dashboard.user.bookings.sar")}
-                      </span>
-                    </span>
-                  </div>
                 </div>
-              </div>
 
-              {/* Client Info Column */}
-              <div className="lg:w-1/3 border-b lg:border-b-0 lg:border-l border-white/5 pb-4 sm:pb-6 lg:pb-0 lg:pl-8">
-                <h4 className="text-[7px] sm:text-[10px] font-black text-slate-500 uppercase mb-2 sm:mb-6 tracking-[0.3em]">
-                  {t("dashboard.admin.bookings.clientData")}
-                </h4>
-                <div className="space-y-3 sm:space-y-6">
-                  <div className="flex items-center gap-2 sm:gap-4">
-                    <Avatar
+                {/* Actions Column */}
+                <div className="lg:w-1/3 flex flex-col justify-between">
+                  <div className="flex justify-between items-start mb-auto">
+                    <Chip
+                      label={
+                        booking.status === "approved"
+                          ? t("dashboard.admin.bookings.approved")
+                          : booking.status === "rejected"
+                            ? t("dashboard.admin.bookings.rejected")
+                            : t("dashboard.admin.bookings.pending")
+                      }
+                      icon={
+                        booking.status === "approved" ? (
+                          <Check />
+                        ) : booking.status === "rejected" ? (
+                          <Close />
+                        ) : (
+                          <EventNote />
+                        )
+                      }
                       sx={{
-                        bgcolor: "rgba(255,255,255,0.05)",
-                        color: "var(--primary)",
-                        width: { xs: 24, sm: 44 },
-                        height: { xs: 24, sm: 44 },
-                        fontSize: { xs: "0.6rem", sm: "1.1rem" },
                         fontWeight: "900",
-                        border: "1px solid rgba(255,255,255,0.1)",
+                        borderRadius: "15px",
+                        px: { xs: 1.5, md: 2 },
+                        py: 2,
+                        fontSize: { xs: "0.75rem", md: "0.85rem" },
+                        bgcolor:
+                          booking.status === "approved"
+                            ? "rgba(22, 163, 74, 0.1)"
+                            : booking.status === "rejected"
+                              ? "rgba(220, 38, 38, 0.1)"
+                              : "rgba(249, 115, 22, 0.1)",
+                        color:
+                          booking.status === "approved"
+                            ? "#4ade80"
+                            : booking.status === "rejected"
+                              ? "#f87171"
+                              : "#fb923c",
+                        border: "1px solid currentColor",
+                        "& .MuiChip-icon": {
+                          color: "inherit",
+                          fontSize: { xs: "0.9rem", md: "1.1rem" },
+                        },
                       }}
-                    >
-                      {booking.user?.name?.charAt(0)}
-                    </Avatar>
-                    <span className="font-black text-white text-xs sm:text-lg">
-                      {booking.user?.name}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-lg text-white/80 font-bold bg-white/5 p-1.5 sm:p-2.5 rounded-lg border border-white/5">
-                    <Phone
-                      className="text-primary"
-                      sx={{ fontSize: { xs: 12, sm: 20 } }}
                     />
-                    <span className="text-[9px] sm:text-base">
-                      {booking.phoneNumber}
-                    </span>
                     <IconButton
                       size="small"
-                      component="a"
-                      href={`https://wa.me/${booking.phoneNumber.replace(/\D/g, "").replace(/^00/, "").replace(/^0/, "966")}`}
-                      target="_blank"
+                      color="error"
+                      onClick={() => setDeleteId(booking._id)}
                       sx={{
-                        color: "#22c55e",
-                        bgcolor: "rgba(34, 197, 94, 0.1)",
-                        "&:hover": { bgcolor: "rgba(34, 197, 94, 0.2)" },
-                        border: "1px solid rgba(34, 197, 94, 0.2)",
-                        ml: "auto",
-                        width: { xs: 24, sm: 32 },
-                        height: { xs: 24, sm: 32 },
+                        bgcolor: "rgba(220, 38, 38, 0.1)",
+                        border: "1px solid rgba(220, 38, 38, 0.2)",
+                        "&:hover": { bgcolor: "rgba(220, 38, 38, 0.2)" },
+                        width: { xs: 28, sm: 40 },
+                        height: { xs: 28, sm: 40 },
                       }}
                     >
-                      <WhatsApp sx={{ fontSize: { xs: 12, sm: 18 } }} />
+                      <Delete sx={{ fontSize: { xs: 14, sm: 20 } }} />
                     </IconButton>
                   </div>
-                  <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-lg text-white/80 font-bold bg-white/5 p-1.5 sm:p-2.5 rounded-lg border border-white/5">
-                    <Speed
-                      className="text-primary"
-                      sx={{ fontSize: { xs: 12, sm: 20 } }}
-                    />
-                    <span className="text-[9px] sm:text-base">
-                      {booking.kmPerDay} {t("booking.kmPerDay", "km/day")}
-                    </span>
+
+                  <div className="flex gap-4 mt-8 pb-6 mb-6 border-b border-white/5">
+                    <a
+                      href={booking.idCardImage}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex-1 flex items-center justify-center gap-1 sm:gap-2 py-1.5 sm:py-3.5 bg-white/5 text-white rounded-lg sm:rounded-2xl text-[8px] sm:text-xs font-black hover:bg-white/10 transition-all border border-white/10 group/btn"
+                    >
+                      <DescIcon
+                        sx={{ fontSize: { xs: 10, sm: 18 } }}
+                        className="text-primary/70 group-hover/btn:text-primary transition-colors"
+                      />
+                      {t("dashboard.admin.bookings.id")}
+                    </a>
+                    <a
+                      href={booking.licenseImage}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex-1 flex items-center justify-center gap-1 sm:gap-2 py-1.5 sm:py-3.5 bg-white/5 text-white rounded-lg sm:rounded-2xl text-[8px] sm:text-xs font-black hover:bg-white/10 transition-all border border-white/10 group/btn"
+                    >
+                      <DescIcon
+                        sx={{ fontSize: { xs: 10, sm: 18 } }}
+                        className="text-primary/70 group-hover/btn:text-primary transition-colors"
+                      />
+                      {t("dashboard.admin.bookings.license")}
+                    </a>
                   </div>
-                </div>
-              </div>
 
-              {/* Actions Column */}
-              <div className="lg:w-1/3 flex flex-col justify-between">
-                <div className="flex justify-between items-start mb-auto">
-                  <Chip
-                    label={
-                      booking.status === "approved"
-                        ? t("dashboard.admin.bookings.approved")
-                        : booking.status === "rejected"
-                          ? t("dashboard.admin.bookings.rejected")
-                          : t("dashboard.admin.bookings.pending")
-                    }
-                    icon={
-                      booking.status === "approved" ? (
-                        <Check />
-                      ) : booking.status === "rejected" ? (
-                        <Close />
-                      ) : (
-                        <EventNote />
-                      )
-                    }
-                    sx={{
-                      fontWeight: "900",
-                      borderRadius: "15px",
-                      px: { xs: 1.5, md: 2 },
-                      py: 2,
-                      fontSize: { xs: "0.75rem", md: "0.85rem" },
-                      bgcolor:
-                        booking.status === "approved"
-                          ? "rgba(22, 163, 74, 0.1)"
-                          : booking.status === "rejected"
-                            ? "rgba(220, 38, 38, 0.1)"
-                            : "rgba(249, 115, 22, 0.1)",
-                      color:
-                        booking.status === "approved"
-                          ? "#4ade80"
-                          : booking.status === "rejected"
-                            ? "#f87171"
-                            : "#fb923c",
-                      border: "1px solid currentColor",
-                      "& .MuiChip-icon": {
-                        color: "inherit",
-                        fontSize: { xs: "0.9rem", md: "1.1rem" },
-                      },
-                    }}
-                  />
-                  <IconButton
-                    size="small"
-                    color="error"
-                    onClick={() => setDeleteId(booking._id)}
-                    sx={{
-                      bgcolor: "rgba(220, 38, 38, 0.1)",
-                      border: "1px solid rgba(220, 38, 38, 0.2)",
-                      "&:hover": { bgcolor: "rgba(220, 38, 38, 0.2)" },
-                      width: { xs: 28, sm: 40 },
-                      height: { xs: 28, sm: 40 },
-                    }}
-                  >
-                    <Delete sx={{ fontSize: { xs: 14, sm: 20 } }} />
-                  </IconButton>
-                </div>
-
-                <div className="flex gap-4 mt-8 pb-6 mb-6 border-b border-white/5">
-                  <a
-                    href={booking.idCardImage}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex-1 flex items-center justify-center gap-1 sm:gap-2 py-1.5 sm:py-3.5 bg-white/5 text-white rounded-lg sm:rounded-2xl text-[8px] sm:text-xs font-black hover:bg-white/10 transition-all border border-white/10 group/btn"
-                  >
-                    <DescIcon
-                      sx={{ fontSize: { xs: 10, sm: 18 } }}
-                      className="text-primary/70 group-hover/btn:text-primary transition-colors"
-                    />
-                    {t("dashboard.admin.bookings.id")}
-                  </a>
-                  <a
-                    href={booking.licenseImage}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex-1 flex items-center justify-center gap-1 sm:gap-2 py-1.5 sm:py-3.5 bg-white/5 text-white rounded-lg sm:rounded-2xl text-[8px] sm:text-xs font-black hover:bg-white/10 transition-all border border-white/10 group/btn"
-                  >
-                    <DescIcon
-                      sx={{ fontSize: { xs: 10, sm: 18 } }}
-                      className="text-primary/70 group-hover/btn:text-primary transition-colors"
-                    />
-                    {t("dashboard.admin.bookings.license")}
-                  </a>
-                </div>
-
-                <div className="flex gap-3">
-                  {booking.status === "pending" ? (
-                    <>
-                      <Button
-                        variant="contained"
-                        fullWidth
-                        onClick={() => approveMutation.mutate(booking._id)}
-                        disabled={approveMutation.isPending}
-                        sx={{
-                          borderRadius: "1.25rem",
-                          fontWeight: "900",
-                          bgcolor: "#16a34a",
-                          "&:hover": { bgcolor: "#15803d" },
-                          py: 1.5,
-                          fontSize: "1rem",
-                          boxShadow: "0 15px 25px -5px rgba(22, 163, 74, 0.3)",
-                        }}
-                      >
-                        {t("dashboard.admin.bookings.acceptButton")}
-                      </Button>
-                      <Button
-                        variant="contained"
-                        fullWidth
-                        onClick={() => rejectMutation.mutate(booking._id)}
-                        disabled={rejectMutation.isPending}
-                        sx={{
-                          borderRadius: "1.25rem",
-                          fontWeight: "900",
-                          bgcolor: "#dc2626",
-                          "&:hover": { bgcolor: "#b91c1c" },
-                          py: 1.5,
-                          fontSize: "1rem",
-                          boxShadow: "0 15px 25px -5px rgba(220, 38, 38, 0.3)",
-                        }}
-                      >
-                        {t("dashboard.admin.bookings.rejectButton")}
-                      </Button>
-                    </>
-                  ) : (
-                    <div className="w-full flex gap-3">
-                      <div className="flex-1 text-center py-2.5 sm:py-3.5 bg-white/5 text-slate-500 rounded-xl sm:rounded-2xl text-[10px] sm:text-sm font-black border border-white/5 italic flex items-center justify-center">
-                        {t("dashboard.admin.bookings.finalAction")}
-                      </div>
-                      {booking.status === "approved" && !booking.isReviewed && (
+                  <div className="flex gap-3">
+                    {booking.status === "pending" ? (
+                      <>
                         <Button
                           variant="contained"
-                          onClick={() => handleOpenReview(booking)}
+                          fullWidth
+                          onClick={() => approveMutation.mutate(booking._id)}
+                          disabled={approveMutation.isPending}
                           sx={{
                             borderRadius: "1.25rem",
                             fontWeight: "900",
-                            bgcolor: "var(--primary)",
-                            "&:hover": { bgcolor: "var(--primary-hover)" },
-                            px: 3,
-                            fontSize: "0.9rem",
-                            boxShadow: "0 10px 20px -5px rgba(249, 115, 22, 0.3)",
+                            bgcolor: "#16a34a",
+                            "&:hover": { bgcolor: "#15803d" },
+                            py: 1.5,
+                            fontSize: "1rem",
+                            boxShadow:
+                              "0 15px 25px -5px rgba(22, 163, 74, 0.3)",
                           }}
                         >
-                          {t("dashboard.user.bookings.rateButton", "تقييم")}
+                          {t("dashboard.admin.bookings.acceptButton")}
                         </Button>
-                      )}
-                      {booking.status === "approved" && booking.isReviewed && (
-                        <div className="flex-1 text-center py-2.5 sm:py-3.5 bg-green-500/10 text-green-500 rounded-xl sm:rounded-2xl text-[10px] sm:text-sm font-black border border-green-500/20 italic flex items-center justify-center">
-                          {t("dashboard.user.bookings.rated", "تم التقييم بنجاح")}
+                        <Button
+                          variant="contained"
+                          fullWidth
+                          onClick={() => rejectMutation.mutate(booking._id)}
+                          disabled={rejectMutation.isPending}
+                          sx={{
+                            borderRadius: "1.25rem",
+                            fontWeight: "900",
+                            bgcolor: "#dc2626",
+                            "&:hover": { bgcolor: "#b91c1c" },
+                            py: 1.5,
+                            fontSize: "1rem",
+                            boxShadow:
+                              "0 15px 25px -5px rgba(220, 38, 38, 0.3)",
+                          }}
+                        >
+                          {t("dashboard.admin.bookings.rejectButton")}
+                        </Button>
+                      </>
+                    ) : (
+                      <div className="w-full flex gap-3">
+                        <div className="flex-1 text-center py-2.5 sm:py-3.5 bg-white/5 text-slate-500 rounded-xl sm:rounded-2xl text-[10px] sm:text-sm font-black border border-white/5 italic flex items-center justify-center">
+                          {t("dashboard.admin.bookings.finalAction")}
                         </div>
-                      )}
-                    </div>
-                  )}
+                        {booking.status === "approved" &&
+                          !booking.isReviewed && (
+                            <Button
+                              variant="contained"
+                              onClick={() => handleOpenReview(booking)}
+                              sx={{
+                                borderRadius: "1.25rem",
+                                fontWeight: "900",
+                                bgcolor: "var(--primary)",
+                                "&:hover": { bgcolor: "var(--primary-hover)" },
+                                px: 3,
+                                fontSize: "0.9rem",
+                                boxShadow:
+                                  "0 10px 20px -5px rgba(249, 115, 22, 0.3)",
+                              }}
+                            >
+                              {t("dashboard.user.bookings.rateButton", "تقييم")}
+                            </Button>
+                          )}
+                        {booking.status === "approved" &&
+                          booking.isReviewed && (
+                            <div className="flex-1 text-center py-2.5 sm:py-3.5 bg-green-500/10 text-green-500 rounded-xl sm:rounded-2xl text-[10px] sm:text-sm font-black border border-green-500/20 italic flex items-center justify-center">
+                              {t(
+                                "dashboard.user.bookings.rated",
+                                "تم التقييم بنجاح",
+                              )}
+                            </div>
+                          )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
 
-      <JumpToPagePagination 
-        totalPages={data?.data?.pagination?.totalPages || 1} 
-        currentPage={page} 
-        onPageChange={setPage} 
+      <JumpToPagePagination
+        totalPages={data?.data?.pagination?.totalPages || 1}
+        currentPage={page}
+        onPageChange={setPage}
       />
 
       {/* Delete Confirmation Dialog */}
@@ -1243,7 +1390,10 @@ function ManageBookings() {
             variant="body2"
             className="text-slate-400 font-bold text-center mb-2"
           >
-            {t("dashboard.user.reviews.dialogSubtitle", "كيف كانت تجربتك لسيارة")}{" "}
+            {t(
+              "dashboard.user.reviews.dialogSubtitle",
+              "كيف كانت تجربتك لسيارة",
+            )}{" "}
             {selectedBooking?.car?.name}
           </Typography>
 
@@ -1264,7 +1414,10 @@ function ManageBookings() {
           />
 
           <TextField
-            placeholder={t("dashboard.user.reviews.placeholder", "صِف لنا تجربتك...")}
+            placeholder={t(
+              "dashboard.user.reviews.placeholder",
+              "صِف لنا تجربتك...",
+            )}
             multiline
             rows={4}
             fullWidth
@@ -1358,7 +1511,9 @@ function ManageCars() {
             {t("dashboard.admin.cars.title")}
           </h2>
           <p className="text-[8px] sm:text-sm text-slate-400 mt-0.5 sm:mt-2 font-bold uppercase tracking-widest">
-            {t("dashboard.admin.cars.count", { count: carsData?.data?.pagination?.total || cars.length })}
+            {t("dashboard.admin.cars.count", {
+              count: carsData?.data?.pagination?.total || cars.length,
+            })}
           </p>
         </div>
 
@@ -1402,131 +1557,135 @@ function ManageCars() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
-          {(Array.isArray(cars) ? cars : []).filter(car => car !== null).map((car) => (
-            <div
-              key={car._id}
-              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl hover:bg-white/10 transition-all duration-500 group relative"
-            >
-              <div className="relative h-48 w-full bg-slate-100">
-                {car.image || car.imageUrl ? (
-                  <Image
-                    src={car.image || car.imageUrl}
-                    fill
-                    alt={car.name}
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
-                ) : (
-                  <div className="flex items-center justify-center h-full text-slate-400">
-                    <DirectionsCar fontSize="large" />
+          {(Array.isArray(cars) ? cars : [])
+            .filter((car) => car != null)
+            .map((car, idx) => (
+              <div
+                key={car?._id || idx}
+                className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl hover:bg-white/10 transition-all duration-500 group relative"
+              >
+                <div className="relative h-48 w-full bg-slate-100">
+                  {car.image || car.imageUrl ? (
+                    <Image
+                      src={car.image || car.imageUrl}
+                      fill
+                      alt={car.name}
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center h-full text-slate-400">
+                      <DirectionsCar fontSize="large" />
+                    </div>
+                  )}
+                  <div className="absolute top-1.5 sm:top-4 left-1.5 sm:left-4 z-20 flex flex-col gap-1">
+                    <Chip
+                      label={
+                        car.pricePerDay +
+                        " " +
+                        t("dashboard.admin.cars.priceDay")
+                      }
+                      size="small"
+                      sx={{
+                        bgcolor: "rgba(0,0,0,0.6)",
+                        backdropFilter: "blur(10px)",
+                        color: "white",
+                        fontWeight: "900",
+                        fontSize: { xs: "0.6rem", sm: "0.75rem" },
+                        height: { xs: 20, sm: 24 },
+                        border: "1px solid rgba(255,255,255,0.1)",
+                      }}
+                    />
+                    <Chip
+                      label={"#" + (car.order || 0)}
+                      size="small"
+                      sx={{
+                        bgcolor: "var(--primary)",
+                        color: "white",
+                        fontWeight: "900",
+                        fontSize: { xs: "0.6rem", sm: "0.75rem" },
+                        height: { xs: 20, sm: 24 },
+                        border: "1px solid rgba(255,255,255,0.1)",
+                        boxShadow: "0 0 10px rgba(249,115,22,0.4)",
+                      }}
+                    />
                   </div>
-                )}
-                <div className="absolute top-1.5 sm:top-4 left-1.5 sm:left-4 z-20 flex flex-col gap-1">
-                  <Chip
-                    label={
-                      car.pricePerDay + " " + t("dashboard.admin.cars.priceDay")
-                    }
-                    size="small"
-                    sx={{
-                      bgcolor: "rgba(0,0,0,0.6)",
-                      backdropFilter: "blur(10px)",
-                      color: "white",
-                      fontWeight: "900",
-                      fontSize: { xs: "0.6rem", sm: "0.75rem" },
-                      height: { xs: 20, sm: 24 },
-                      border: "1px solid rgba(255,255,255,0.1)",
-                    }}
-                  />
-                  <Chip
-                    label={"#" + (car.order || 0)}
-                    size="small"
-                    sx={{
-                      bgcolor: "var(--primary)",
-                      color: "white",
-                      fontWeight: "900",
-                      fontSize: { xs: "0.6rem", sm: "0.75rem" },
-                      height: { xs: 20, sm: 24 },
-                      border: "1px solid rgba(255,255,255,0.1)",
-                      boxShadow: "0 0 10px rgba(249,115,22,0.4)",
-                    }}
-                  />
                 </div>
-              </div>
 
-              {/* Car Details Info */}
-              <div className="p-2 sm:p-5">
-                <div className="flex justify-between items-start mb-2 sm:mb-4">
-                  <div>
-                    <h4 className="text-sm sm:text-xl font-black text-white group-hover:text-primary transition-colors truncate max-w-[120px] sm:max-w-none">
-                      {car.name}
-                    </h4>
+                {/* Car Details Info */}
+                <div className="p-2 sm:p-5">
+                  <div className="flex justify-between items-start mb-2 sm:mb-4">
+                    <div>
+                      <h4 className="text-sm sm:text-xl font-black text-white group-hover:text-primary transition-colors truncate max-w-[120px] sm:max-w-none">
+                        {car.name}
+                      </h4>
+                    </div>
+                    <div className="flex gap-1">
+                      <IconButton
+                        size="small"
+                        color="primary"
+                        onClick={() => setEditingCar(car)}
+                        sx={{
+                          bgcolor: "rgba(249, 115, 22, 0.1)",
+                          width: { xs: 24, sm: 32 },
+                          height: { xs: 24, sm: 32 },
+                          "&:hover": { bgcolor: "rgba(249, 115, 22, 0.2)" },
+                        }}
+                      >
+                        <Edit sx={{ fontSize: { xs: 12, sm: 16 } }} />
+                      </IconButton>
+                      <IconButton
+                        size="small"
+                        color="error"
+                        onClick={() => setDeleteId(car._id)}
+                        sx={{
+                          bgcolor: "rgba(220, 38, 38, 0.1)",
+                          width: { xs: 24, sm: 32 },
+                          height: { xs: 24, sm: 32 },
+                          "&:hover": { bgcolor: "rgba(220, 38, 38, 0.2)" },
+                        }}
+                      >
+                        <Delete sx={{ fontSize: { xs: 12, sm: 16 } }} />
+                      </IconButton>
+                    </div>
                   </div>
-                  <div className="flex gap-1">
-                    <IconButton
-                      size="small"
-                      color="primary"
-                      onClick={() => setEditingCar(car)}
-                      sx={{
-                        bgcolor: "rgba(249, 115, 22, 0.1)",
-                        width: { xs: 24, sm: 32 },
-                        height: { xs: 24, sm: 32 },
-                        "&:hover": { bgcolor: "rgba(249, 115, 22, 0.2)" },
-                      }}
-                    >
-                      <Edit sx={{ fontSize: { xs: 12, sm: 16 } }} />
-                    </IconButton>
-                    <IconButton
-                      size="small"
+                  <div className="flex gap-3 mt-6 pt-5 border-t border-white/5">
+                    <Button
+                      fullWidth
+                      variant="contained"
                       color="error"
+                      size="small"
                       onClick={() => setDeleteId(car._id)}
+                      startIcon={<Delete />}
                       sx={{
+                        borderRadius: "1.25rem",
+                        fontWeight: "900",
+                        py: 1.5,
                         bgcolor: "rgba(220, 38, 38, 0.1)",
-                        width: { xs: 24, sm: 32 },
-                        height: { xs: 24, sm: 32 },
-                        "&:hover": { bgcolor: "rgba(220, 38, 38, 0.2)" },
+                        color: "#ef4444",
+                        border: "1px solid rgba(220, 38, 38, 0.2)",
+                        "&:hover": {
+                          bgcolor: "rgba(220, 38, 38, 0.2)",
+                          border: "1px solid #ef4444",
+                        },
+                        transition: "all 0.3s ease",
                       }}
                     >
-                      <Delete sx={{ fontSize: { xs: 12, sm: 16 } }} />
-                    </IconButton>
+                      <span className="ml-1">
+                        {t("dashboard.admin.cars.deleteButton")}
+                      </span>
+                    </Button>
                   </div>
-                </div>
-                <div className="flex gap-3 mt-6 pt-5 border-t border-white/5">
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    color="error"
-                    size="small"
-                    onClick={() => setDeleteId(car._id)}
-                    startIcon={<Delete />}
-                    sx={{
-                      borderRadius: "1.25rem",
-                      fontWeight: "900",
-                      py: 1.5,
-                      bgcolor: "rgba(220, 38, 38, 0.1)",
-                      color: "#ef4444",
-                      border: "1px solid rgba(220, 38, 38, 0.2)",
-                      "&:hover": {
-                        bgcolor: "rgba(220, 38, 38, 0.2)",
-                        border: "1px solid #ef4444",
-                      },
-                      transition: "all 0.3s ease",
-                    }}
-                  >
-                    <span className="ml-1">
-                      {t("dashboard.admin.cars.deleteButton")}
-                    </span>
-                  </Button>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       )}
 
-      <JumpToPagePagination 
-        totalPages={carsData?.data?.pagination?.totalPages || 1} 
-        currentPage={page} 
-        onPageChange={setPage} 
+      <JumpToPagePagination
+        totalPages={carsData?.data?.pagination?.totalPages || 1}
+        currentPage={page}
+        onPageChange={setPage}
       />
 
       <AddCarDialog open={isAddOpen} onClose={() => setIsAddOpen(false)} />
@@ -1640,89 +1799,97 @@ function ManageReviews() {
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-        {(Array.isArray(reviews) ? reviews : []).filter(r => r !== null).map((review) => (
-          <div
-            key={review._id}
-            className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl md:rounded-[2.5rem] p-3 sm:p-8 md:p-10 shadow-2xl hover:bg-white/10 transition-all duration-500 group relative overflow-hidden"
-          >
-            {/* Decorative element */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {(Array.isArray(reviews) ? reviews : [])
+          .filter((r) => r != null)
+          .map((review, idx) => (
+            <div
+              key={review?._id || idx}
+              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl md:rounded-[2.5rem] p-3 sm:p-8 md:p-10 shadow-2xl hover:bg-white/10 transition-all duration-500 group relative overflow-hidden"
+            >
+              {/* Decorative element */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-            <div className="flex items-start justify-between mb-6 md:mb-8 relative z-10">
-              <div className="flex items-center gap-4 sm:gap-5">
-                <Avatar
+              <div className="flex items-start justify-between mb-6 md:mb-8 relative z-10">
+                <div className="flex items-center gap-4 sm:gap-5">
+                  <Avatar
+                    sx={{
+                      width: { xs: 40, sm: 80 },
+                      height: { xs: 40, sm: 80 },
+                      border: "2px solid rgba(249,115,22,0.3)",
+                      boxShadow: "0 15px 30px rgba(0,0,0,0.3)",
+                      fontSize: { xs: "1rem", sm: "2rem" },
+                      fontWeight: "900",
+                      bgcolor: "rgba(255,255,255,0.05)",
+                    }}
+                  >
+                    {review.user?.name?.charAt(0)}
+                  </Avatar>
+                  <div className="text-center sm:text-right">
+                    <h4 className="text-base sm:text-2xl font-black text-white mb-0.5 sm:mb-1">
+                      {review.user?.name}
+                    </h4>
+                    <p className="text-[8px] sm:text-xs text-slate-500 font-black uppercase tracking-widest">
+                      {review.car?.name}
+                    </p>
+                  </div>
+                </div>
+                <IconButton
+                  onClick={() => setDeleteId(review._id)}
                   sx={{
-                    width: { xs: 40, sm: 80 },
-                    height: { xs: 40, sm: 80 },
-                    border: "2px solid rgba(249,115,22,0.3)",
-                    boxShadow: "0 15px 30px rgba(0,0,0,0.3)",
-                    fontSize: { xs: "1rem", sm: "2rem" },
-                    fontWeight: "900",
-                    bgcolor: "rgba(255,255,255,0.05)",
+                    bgcolor: "rgba(239, 68, 68, 0.1)",
+                    color: "#ef4444",
+                    "&:hover": { bgcolor: "rgba(239, 68, 68, 0.2)" },
+                    border: "1px solid rgba(239, 68, 68, 0.2)",
                   }}
                 >
-                  {review.user?.name?.charAt(0)}
-                </Avatar>
-                <div className="text-center sm:text-right">
-                  <h4 className="text-base sm:text-2xl font-black text-white mb-0.5 sm:mb-1">
-                    {review.user?.name}
-                  </h4>
-                  <p className="text-[8px] sm:text-xs text-slate-500 font-black uppercase tracking-widest">
+                  <Delete />
+                </IconButton>
+              </div>
+
+              <div className="bg-white/5 backdrop-blur-sm rounded-2xl md:rounded-[1.5rem] p-4 sm:p-6 mb-6 md:mb-8 relative z-10 border border-white/5">
+                <div className="flex items-center gap-2 mb-2">
+                  <DirectionsCar
+                    className="text-primary"
+                    sx={{ fontSize: 18 }}
+                  />
+                  <span className="text-xs md:text-sm font-black text-white uppercase tracking-tight">
                     {review.car?.name}
-                  </p>
+                  </span>
+                </div>
+                <Rating
+                  value={review.rating}
+                  readOnly
+                  size="small"
+                  sx={{
+                    "& .MuiRating-iconFilled": { color: "var(--primary)" },
+                  }}
+                />
+              </div>
+
+              <p className="text-slate-400 leading-relaxed font-bold text-base md:text-lg italic relative z-10 border-r-2 border-primary/30 pr-4 line-clamp-4 md:line-clamp-none">
+                &quot;{review.comment || t("dashboard.admin.reviews.noComment")}
+                &quot;
+              </p>
+
+              <div className="mt-8 pt-8 border-t border-white/5 flex justify-between items-center relative z-10">
+                <span className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em]">
+                  {new Date(review.createdAt).toLocaleDateString(i18n.language)}
+                </span>
+                <div className="flex items-center gap-2 bg-green-500/10 px-3 py-1 rounded-full border border-green-500/20">
+                  <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                  <span className="text-[10px] text-green-500 font-black uppercase tracking-wider">
+                    {t("dashboard.admin.reviews.verified")}
+                  </span>
                 </div>
               </div>
-              <IconButton
-                onClick={() => setDeleteId(review._id)}
-                sx={{
-                  bgcolor: "rgba(239, 68, 68, 0.1)",
-                  color: "#ef4444",
-                  "&:hover": { bgcolor: "rgba(239, 68, 68, 0.2)" },
-                  border: "1px solid rgba(239, 68, 68, 0.2)",
-                }}
-              >
-                <Delete />
-              </IconButton>
             </div>
-
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl md:rounded-[1.5rem] p-4 sm:p-6 mb-6 md:mb-8 relative z-10 border border-white/5">
-              <div className="flex items-center gap-2 mb-2">
-                <DirectionsCar className="text-primary" sx={{ fontSize: 18 }} />
-                <span className="text-xs md:text-sm font-black text-white uppercase tracking-tight">
-                  {review.car?.name}
-                </span>
-              </div>
-              <Rating
-                value={review.rating}
-                readOnly
-                size="small"
-                sx={{ "& .MuiRating-iconFilled": { color: "var(--primary)" } }}
-              />
-            </div>
-
-            <p className="text-slate-400 leading-relaxed font-bold text-base md:text-lg italic relative z-10 border-r-2 border-primary/30 pr-4 line-clamp-4 md:line-clamp-none">
-              &quot;{review.comment || t("dashboard.admin.reviews.noComment")}&quot;
-            </p>
-
-            <div className="mt-8 pt-8 border-t border-white/5 flex justify-between items-center relative z-10">
-              <span className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em]">
-                {new Date(review.createdAt).toLocaleDateString(i18n.language)}
-              </span>
-              <div className="flex items-center gap-2 bg-green-500/10 px-3 py-1 rounded-full border border-green-500/20">
-                <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-[10px] text-green-500 font-black uppercase tracking-wider">
-                  {t("dashboard.admin.reviews.verified")}
-                </span>
-              </div>
-            </div>
-          </div>
-        ))}
+          ))}
       </div>
 
-      <JumpToPagePagination 
-        totalPages={data?.data?.pagination?.totalPages || 1} 
-        currentPage={page} 
-        onPageChange={setPage} 
+      <JumpToPagePagination
+        totalPages={data?.data?.pagination?.totalPages || 1}
+        currentPage={page}
+        onPageChange={setPage}
       />
 
       {/* Delete Confirmation Dialog */}
@@ -1922,13 +2089,16 @@ function AddCarDialog({ open, onClose }) {
 
       // Clean up undefined values dynamically to prevent sending explicit empty fields
       Object.keys(payload).forEach(
-        (key) => payload[key] === undefined && delete payload[key]
+        (key) => payload[key] === undefined && delete payload[key],
       );
 
       createMutation.mutate(payload);
     } catch (error) {
       console.error(error);
-      const errorMsg = error.response?.data?.message || error.message || t("dashboard.admin.addCar.error");
+      const errorMsg =
+        error.response?.data?.message ||
+        error.message ||
+        t("dashboard.admin.addCar.error");
       toast.error(errorMsg);
     } finally {
       setUploading(false);
@@ -1980,10 +2150,11 @@ function AddCarDialog({ open, onClose }) {
         <div className="flex flex-col gap-8 pt-2">
           {/* Image Upload Area */}
           <div
-            className={`border-2 border-dashed rounded-[2rem] p-8 transition-all cursor-pointer relative group overflow-hidden ${file
-              ? "border-primary/50 bg-primary/5"
-              : "border-white/10 hover:border-primary/30 hover:bg-white/5"
-              }`}
+            className={`border-2 border-dashed rounded-[2rem] p-8 transition-all cursor-pointer relative group overflow-hidden ${
+              file
+                ? "border-primary/50 bg-primary/5"
+                : "border-white/10 hover:border-primary/30 hover:bg-white/5"
+            }`}
           >
             <input
               type="file"
@@ -2426,11 +2597,14 @@ function EditCarDialog({ open, car, onClose }) {
       payload.priceHalfMonth = parseFloatSafe(formData.priceHalfMonth);
       payload.priceMonthly = parseFloatSafe(formData.priceMonthly);
       payload.seats = parseIntSafe(formData.seats);
-      payload.order = formData.order !== undefined && formData.order !== "" ? parseInt(formData.order, 10) : 0;
+      payload.order =
+        formData.order !== undefined && formData.order !== ""
+          ? parseInt(formData.order, 10)
+          : 0;
 
       // Clean up undefined values dynamically to prevent sending explicit empty fields
       Object.keys(payload).forEach(
-        (key) => payload[key] === undefined && delete payload[key]
+        (key) => payload[key] === undefined && delete payload[key],
       );
 
       updateMutation.mutate(payload);
@@ -2487,10 +2661,11 @@ function EditCarDialog({ open, car, onClose }) {
         <div className="flex flex-col gap-8 pt-2">
           {/* Image Upload Area */}
           <div
-            className={`border-2 border-dashed rounded-[2rem] p-8 transition-all cursor-pointer relative group overflow-hidden ${file || formData.imageUrl
+            className={`border-2 border-dashed rounded-[2rem] p-8 transition-all cursor-pointer relative group overflow-hidden ${
+              file || formData.imageUrl
                 ? "border-primary/50 bg-primary/5"
                 : "border-white/10 hover:border-primary/30 hover:bg-white/5"
-              }`}
+            }`}
           >
             <input
               type="file"
@@ -2819,7 +2994,7 @@ function ProfileSection({ user }) {
       console.error("Profile update error:", error);
       toast.error(
         error.response?.data?.message ||
-        t("dashboard.user.profile.updateError"),
+          t("dashboard.user.profile.updateError"),
       );
     } finally {
       setLoading(false);
@@ -3198,7 +3373,9 @@ function ManageNotifications() {
   const markAllReadMutation = useMutation({
     mutationFn: notificationService.markAllAsRead,
     onSuccess: () => {
-      toast.success(t("notifications.markAllReadSuccess", "تم تحديد الكل كمقروء"));
+      toast.success(
+        t("notifications.markAllReadSuccess", "تم تحديد الكل كمقروء"),
+      );
       queryClient.invalidateQueries({ queryKey: ["adminNotifications"] });
     },
     onError: () => toast.error(t("common.error")),
@@ -3209,11 +3386,17 @@ function ManageNotifications() {
       const date = new Date(dateStr);
       const now = new Date();
       const diffInSeconds = Math.floor((now - date) / 1000);
-      const rtf = new Intl.RelativeTimeFormat(i18n.language === "ar" ? "ar" : "en", { numeric: "auto" });
+      const rtf = new Intl.RelativeTimeFormat(
+        i18n.language === "ar" ? "ar" : "en",
+        { numeric: "auto" },
+      );
       if (diffInSeconds < 60) return rtf.format(-diffInSeconds, "second");
-      if (diffInSeconds < 3600) return rtf.format(-Math.floor(diffInSeconds / 60), "minute");
-      if (diffInSeconds < 86400) return rtf.format(-Math.floor(diffInSeconds / 3600), "hour");
-      if (diffInSeconds < 2592000) return rtf.format(-Math.floor(diffInSeconds / 86400), "day");
+      if (diffInSeconds < 3600)
+        return rtf.format(-Math.floor(diffInSeconds / 60), "minute");
+      if (diffInSeconds < 86400)
+        return rtf.format(-Math.floor(diffInSeconds / 3600), "hour");
+      if (diffInSeconds < 2592000)
+        return rtf.format(-Math.floor(diffInSeconds / 86400), "day");
       return rtf.format(-Math.floor(diffInSeconds / 2592000), "month");
     } catch (e) {
       return "";
@@ -3227,7 +3410,9 @@ function ManageNotifications() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-black text-white">{t("dashboard.admin.tabs.notifications")}</h2>
+        <h2 className="text-2xl font-black text-white">
+          {t("dashboard.admin.tabs.notifications")}
+        </h2>
         {notifications.length > 0 && (
           <Button
             onClick={() => markAllReadMutation.mutate()}
@@ -3238,7 +3423,10 @@ function ManageNotifications() {
               borderRadius: "1rem",
               borderColor: "rgba(255,255,255,0.1)",
               color: "white",
-              "&:hover": { borderColor: "var(--primary)", bgcolor: "rgba(249,115,22,0.05)" },
+              "&:hover": {
+                borderColor: "var(--primary)",
+                bgcolor: "rgba(249,115,22,0.05)",
+              },
             }}
           >
             {t("notifications.markAllRead", "تحديد الكل كمقروء")}
@@ -3248,46 +3436,66 @@ function ManageNotifications() {
 
       {notifications.length === 0 ? (
         <div className="text-center py-20 bg-white/5 rounded-[3rem] border border-dashed border-white/10">
-          <Notifications sx={{ fontSize: 64, color: "rgba(255,255,255,0.1)", mb: 2 }} />
+          <Notifications
+            sx={{ fontSize: 64, color: "rgba(255,255,255,0.1)", mb: 2 }}
+          />
           <p className="text-slate-500 font-bold">{t("notifications.empty")}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4">
-          {(Array.isArray(notifications) ? notifications : []).filter(n => n !== null).map((notif) => (
-            <div
-              key={notif._id}
-              className={`p-6 rounded-3xl border transition-all flex justify-between items-center group ${
-                notif.isRead ? "bg-white/5 border-white/5" : "bg-primary/5 border-primary/20 shadow-[0_0_20px_rgba(249,115,22,0.1)]"
-              }`}
-            >
-              <div className="flex gap-4">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${
-                  notif.type === 'booking_new' ? 'bg-blue-500/10 text-blue-500' : 'bg-primary/10 text-primary'
-                }`}>
-                  {notif.type === 'booking_new' ? <InfoIcon /> : <Notifications />}
-                </div>
-                <div>
-                  <h4 className="font-black text-white text-lg">{notif.title}</h4>
-                  <p className="text-slate-400 font-medium">{notif.message}</p>
-                  <span className="text-xs text-slate-500 mt-2 block font-bold">{getTimeAgo(notif.createdAt)}</span>
-                </div>
-              </div>
-              <IconButton
-                onClick={() => {
-                  setSelectedNotif(notif);
-                  setDeleteDialog(true);
-                }}
-                className="opacity-0 group-hover:opacity-100 transition-opacity"
-                sx={{
-                  color: "#ef4444",
-                  bgcolor: "rgba(239, 68, 68, 0.1)",
-                  "&:hover": { bgcolor: "rgba(239, 68, 68, 0.2)" },
-                }}
+          {(Array.isArray(notifications) ? notifications : [])
+            .filter((n) => n !== null)
+            .map((notif) => (
+              <div
+                key={notif._id}
+                className={`p-6 rounded-3xl border transition-all flex justify-between items-center group ${
+                  notif.isRead
+                    ? "bg-white/5 border-white/5"
+                    : "bg-primary/5 border-primary/20 shadow-[0_0_20px_rgba(249,115,22,0.1)]"
+                }`}
               >
-                <Delete fontSize="small" />
-              </IconButton>
-            </div>
-          ))}
+                <div className="flex gap-4">
+                  <div
+                    className={`w-12 h-12 rounded-2xl flex items-center justify-center ${
+                      notif.type === "booking_new"
+                        ? "bg-blue-500/10 text-blue-500"
+                        : "bg-primary/10 text-primary"
+                    }`}
+                  >
+                    {notif.type === "booking_new" ? (
+                      <InfoIcon />
+                    ) : (
+                      <Notifications />
+                    )}
+                  </div>
+                  <div>
+                    <h4 className="font-black text-white text-lg">
+                      {notif.title}
+                    </h4>
+                    <p className="text-slate-400 font-medium">
+                      {notif.message}
+                    </p>
+                    <span className="text-xs text-slate-500 mt-2 block font-bold">
+                      {getTimeAgo(notif.createdAt)}
+                    </span>
+                  </div>
+                </div>
+                <IconButton
+                  onClick={() => {
+                    setSelectedNotif(notif);
+                    setDeleteDialog(true);
+                  }}
+                  className="opacity-0 group-hover:opacity-100 transition-opacity"
+                  sx={{
+                    color: "#ef4444",
+                    bgcolor: "rgba(239, 68, 68, 0.1)",
+                    "&:hover": { bgcolor: "rgba(239, 68, 68, 0.2)" },
+                  }}
+                >
+                  <Delete fontSize="small" />
+                </IconButton>
+              </div>
+            ))}
         </div>
       )}
 
@@ -3302,17 +3510,25 @@ function ManageNotifications() {
             color: "white",
             p: 2,
             border: "1px solid rgba(255,255,255,0.1)",
-          }
+          },
         }}
       >
-        <DialogTitle sx={{ fontWeight: "900" }}>{t("notifications.deleteConfirmTitle", "حذف الإشعار")}</DialogTitle>
+        <DialogTitle sx={{ fontWeight: "900" }}>
+          {t("notifications.deleteConfirmTitle", "حذف الإشعار")}
+        </DialogTitle>
         <DialogContent>
           <Typography sx={{ color: "slate.400", fontWeight: "bold" }}>
-            {t("notifications.deleteConfirmMessage", "هل أنت متأكد من حذف هذا الإشعار؟")}
+            {t(
+              "notifications.deleteConfirmMessage",
+              "هل أنت متأكد من حذف هذا الإشعار؟",
+            )}
           </Typography>
         </DialogContent>
         <DialogActions sx={{ p: 3 }}>
-          <Button onClick={() => setDeleteDialog(false)} sx={{ color: "slate.400", fontWeight: "bold" }}>
+          <Button
+            onClick={() => setDeleteDialog(false)}
+            sx={{ color: "slate.400", fontWeight: "bold" }}
+          >
             {t("common.cancel")}
           </Button>
           <Button
@@ -3322,7 +3538,9 @@ function ManageNotifications() {
             disabled={deleteMutation.isPending}
             sx={{ borderRadius: "1rem", fontWeight: "900", px: 4 }}
           >
-            {deleteMutation.isPending ? t("common.deleting") : t("common.delete")}
+            {deleteMutation.isPending
+              ? t("common.deleting")
+              : t("common.delete")}
           </Button>
         </DialogActions>
       </Dialog>
@@ -3362,7 +3580,10 @@ function ManagePromos() {
       setIsFormOpen(false);
       setFormData(initialForm);
     },
-    onError: (err) => toast.error(err.response?.data?.message || err.message || "حدث خطأ أثناء الإضافة")
+    onError: (err) =>
+      toast.error(
+        err.response?.data?.message || err.message || "حدث خطأ أثناء الإضافة",
+      ),
   });
 
   const updateMutation = useMutation({
@@ -3374,7 +3595,10 @@ function ManagePromos() {
       setIsFormOpen(false);
       setEditingPromo(null);
     },
-    onError: (err) => toast.error(err.response?.data?.message || err.message || "حدث خطأ أثناء التحديث")
+    onError: (err) =>
+      toast.error(
+        err.response?.data?.message || err.message || "حدث خطأ أثناء التحديث",
+      ),
   });
 
   const deleteMutation = useMutation({
@@ -3384,7 +3608,10 @@ function ManagePromos() {
       queryClient.invalidateQueries({ queryKey: ["allPromosAdmin"] });
       queryClient.invalidateQueries({ queryKey: ["activePromos"] });
     },
-    onError: (err) => toast.error(err.response?.data?.message || err.message || "حدث خطأ أثناء الحذف")
+    onError: (err) =>
+      toast.error(
+        err.response?.data?.message || err.message || "حدث خطأ أثناء الحذف",
+      ),
   });
 
   const handleImageUpload = async (e) => {
@@ -3400,7 +3627,7 @@ function ManagePromos() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Upload failed");
-      
+
       setFormData((prev) => ({ ...prev, imageUrl: data.url }));
       toast.success(t("promos.messages.uploadSuccess", "تم رفع الصورة بنجاح"));
     } catch (error) {
@@ -3442,22 +3669,28 @@ function ManagePromos() {
             {t("promos.title", "إدارة العروض والبنرات")}
           </Typography>
           <Typography className="text-slate-400 font-bold text-sm sm:text-base">
-            {t("promos.subtitle", "تحكم في العروض الترويجية والبنرات الإعلانية")}
+            {t(
+              "promos.subtitle",
+              "تحكم في العروض الترويجية والبنرات الإعلانية",
+            )}
           </Typography>
         </div>
         <Button
           variant="contained"
           startIcon={<Add />}
           onClick={() => handleOpenForm()}
-          sx={{ 
-            borderRadius: "1.25rem", 
-            fontWeight: "900", 
-            px: { xs: 3, sm: 4 }, 
+          sx={{
+            borderRadius: "1.25rem",
+            fontWeight: "900",
+            px: { xs: 3, sm: 4 },
             py: 1.5,
             bgcolor: "primary.main",
             boxShadow: "0 10px 30px rgba(249,115,22,0.3)",
-            "&:hover": { bgcolor: "primary.dark", transform: "translateY(-2px)" },
-            transition: "all 0.3s ease"
+            "&:hover": {
+              bgcolor: "primary.dark",
+              transform: "translateY(-2px)",
+            },
+            transition: "all 0.3s ease",
           }}
         >
           {t("promos.addNew", "إضافة عرض جديد")}
@@ -3465,75 +3698,118 @@ function ManagePromos() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6">
-        {(Array.isArray(promos) ? promos : []).filter(p => p !== null).map((promo) => (
-          <div 
-            key={promo._id} 
-            className="group bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 p-5 flex flex-col gap-5 hover:bg-white/10 transition-all duration-500 overflow-hidden relative shadow-2xl"
-          >
-            <div className="absolute top-0 right-0 w-1.5 h-full bg-primary/20" />
-            
-            <div className="relative w-full aspect-video rounded-2xl overflow-hidden shrink-0 border border-white/10 shadow-inner">
-              <Image src={promo.imageUrl} alt={promo.title} fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
-              {!promo.isActive && (
-                <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center">
-                  <Chip label={t("promos.status.inactive")} size="small" color="error" sx={{ fontWeight: "900" }} />
-                </div>
-              )}
-            </div>
-            
-            <div className="flex-1 min-w-0 space-y-4">
-              <div className="flex justify-between items-start gap-3">
-                <Typography className="text-lg font-black text-white truncate leading-tight flex-1">
-                  {promo.title}
-                </Typography>
-                <div className="flex gap-2 shrink-0">
-                  <IconButton 
-                    size="small" 
-                    onClick={() => handleOpenForm(promo)} 
-                    sx={{ color: "white", bgcolor: "white/5", "&:hover": { bgcolor: "primary.main", color: "white" } }}
-                  >
-                    <Edit fontSize="small" />
-                  </IconButton>
-                  <IconButton 
-                    size="small" 
-                    onClick={() => { if(window.confirm(t("promos.messages.deleteConfirm"))) deleteMutation.mutate(promo._id)}} 
-                    sx={{ color: "#ef4444", bgcolor: "rgba(239,68,68,0.1)", "&:hover": { bgcolor: "#ef4444", color: "white" } }}
-                  >
-                    <Delete fontSize="small" />
-                  </IconButton>
-                </div>
-              </div>
-              
-              <Typography className="text-slate-400 text-sm font-bold line-clamp-2 leading-relaxed min-h-[40px]">
-                {promo.subtitle}
-              </Typography>
-              
-              <div className="flex flex-wrap gap-2 pt-2 border-t border-white/5 mt-2">
-                <Chip 
-                  label={t(`promos.layout.${promo.layoutType.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}`)} 
-                  size="small" 
-                  sx={{ bgcolor: "rgba(255,255,255,0.05)", color: "slate.300", fontWeight: "900", fontSize: "0.65rem", textTransform: "uppercase" }} 
+        {(Array.isArray(promos) ? promos : [])
+          .filter((p) => p !== null)
+          .map((promo) => (
+            <div
+              key={promo._id}
+              className="group bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 p-5 flex flex-col gap-5 hover:bg-white/10 transition-all duration-500 overflow-hidden relative shadow-2xl"
+            >
+              <div className="absolute top-0 right-0 w-1.5 h-full bg-primary/20" />
+
+              <div className="relative w-full aspect-video rounded-2xl overflow-hidden shrink-0 border border-white/10 shadow-inner">
+                <Image
+                  src={promo.imageUrl}
+                  alt={promo.title}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                <Chip 
-                  label={`${t("promos.fields.priority")}: ${promo.priority}`} 
-                  size="small" 
-                  sx={{ bgcolor: "rgba(249,115,22,0.1)", color: "primary.main", fontWeight: "900", fontSize: "0.65rem" }} 
-                />
-                {promo.isActive && (
-                  <Chip 
-                    label={t("promos.status.active")} 
-                    size="small" 
-                    sx={{ bgcolor: "rgba(16,185,129,0.1)", color: "#10b981", fontWeight: "900", fontSize: "0.65rem" }} 
-                  />
+                {!promo.isActive && (
+                  <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center">
+                    <Chip
+                      label={t("promos.status.inactive")}
+                      size="small"
+                      color="error"
+                      sx={{ fontWeight: "900" }}
+                    />
+                  </div>
                 )}
               </div>
+
+              <div className="flex-1 min-w-0 space-y-4">
+                <div className="flex justify-between items-start gap-3">
+                  <Typography className="text-lg font-black text-white truncate leading-tight flex-1">
+                    {promo.title}
+                  </Typography>
+                  <div className="flex gap-2 shrink-0">
+                    <IconButton
+                      size="small"
+                      onClick={() => handleOpenForm(promo)}
+                      sx={{
+                        color: "white",
+                        bgcolor: "white/5",
+                        "&:hover": { bgcolor: "primary.main", color: "white" },
+                      }}
+                    >
+                      <Edit fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      onClick={() => {
+                        if (window.confirm(t("promos.messages.deleteConfirm")))
+                          deleteMutation.mutate(promo._id);
+                      }}
+                      sx={{
+                        color: "#ef4444",
+                        bgcolor: "rgba(239,68,68,0.1)",
+                        "&:hover": { bgcolor: "#ef4444", color: "white" },
+                      }}
+                    >
+                      <Delete fontSize="small" />
+                    </IconButton>
+                  </div>
+                </div>
+
+                <Typography className="text-slate-400 text-sm font-bold line-clamp-2 leading-relaxed min-h-[40px]">
+                  {promo.subtitle}
+                </Typography>
+
+                <div className="flex flex-wrap gap-2 pt-2 border-t border-white/5 mt-2">
+                  <Chip
+                    label={t(
+                      `promos.layout.${promo.layoutType.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}`,
+                    )}
+                    size="small"
+                    sx={{
+                      bgcolor: "rgba(255,255,255,0.05)",
+                      color: "slate.300",
+                      fontWeight: "900",
+                      fontSize: "0.65rem",
+                      textTransform: "uppercase",
+                    }}
+                  />
+                  <Chip
+                    label={`${t("promos.fields.priority")}: ${promo.priority}`}
+                    size="small"
+                    sx={{
+                      bgcolor: "rgba(249,115,22,0.1)",
+                      color: "primary.main",
+                      fontWeight: "900",
+                      fontSize: "0.65rem",
+                    }}
+                  />
+                  {promo.isActive && (
+                    <Chip
+                      label={t("promos.status.active")}
+                      size="small"
+                      sx={{
+                        bgcolor: "rgba(16,185,129,0.1)",
+                        color: "#10b981",
+                        fontWeight: "900",
+                        fontSize: "0.65rem",
+                      }}
+                    />
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
 
         {promos.length === 0 && (
           <Box className="col-span-full py-20 bg-white/5 rounded-[3rem] border border-dashed border-white/10 text-center">
-            <Typography className="text-slate-400 font-black">{t("promos.messages.noData")}</Typography>
+            <Typography className="text-slate-400 font-black">
+              {t("promos.messages.noData")}
+            </Typography>
           </Box>
         )}
       </div>
@@ -3550,75 +3826,186 @@ function ManagePromos() {
             border: "1px solid rgba(255,255,255,0.1)",
             color: "white",
             p: { xs: 2, md: 4 },
-          }
+          },
         }}
       >
         <DialogTitle sx={{ fontWeight: "900", fontSize: "1.5rem" }}>
-          {editingPromo ? t("promos.edit", "تعديل العرض") : t("promos.addNew", "إضافة عرض جديد")}
+          {editingPromo
+            ? t("promos.edit", "تعديل العرض")
+            : t("promos.addNew", "إضافة عرض جديد")}
         </DialogTitle>
         <DialogContent sx={{ mt: 2 }}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-4 bg-white/5 p-6 rounded-[2rem] border border-white/10 shadow-inner">
-                <Typography className="text-slate-400 font-black mb-2 px-1 text-sm text-right">{t("common.data", "البيانات الأساسية")}</Typography>
-                <TextField fullWidth label={t("promos.fields.title", "العنوان")} required value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} sx={formInputStyle} />
-                <TextField fullWidth label={t("promos.fields.subtitle", "الوصف")} required multiline rows={2} value={formData.subtitle} onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })} sx={formInputStyle} />
-                <TextField fullWidth label={t("promos.fields.linkUrl", "رابط التوجيه")} value={formData.linkUrl} placeholder="(اختياري) https://..." onChange={(e) => setFormData({ ...formData, linkUrl: e.target.value })} sx={formInputStyle} />
+                <Typography className="text-slate-400 font-black mb-2 px-1 text-sm text-right">
+                  {t("common.data", "البيانات الأساسية")}
+                </Typography>
+                <TextField
+                  fullWidth
+                  label={t("promos.fields.title", "العنوان")}
+                  required
+                  value={formData.title}
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
+                  sx={formInputStyle}
+                />
+                <TextField
+                  fullWidth
+                  label={t("promos.fields.subtitle", "الوصف")}
+                  required
+                  multiline
+                  rows={2}
+                  value={formData.subtitle}
+                  onChange={(e) =>
+                    setFormData({ ...formData, subtitle: e.target.value })
+                  }
+                  sx={formInputStyle}
+                />
+                <TextField
+                  fullWidth
+                  label={t("promos.fields.linkUrl", "رابط التوجيه")}
+                  value={formData.linkUrl}
+                  placeholder="(اختياري) https://..."
+                  onChange={(e) =>
+                    setFormData({ ...formData, linkUrl: e.target.value })
+                  }
+                  sx={formInputStyle}
+                />
                 <div className="grid grid-cols-2 gap-4">
                   <FormControl fullWidth sx={formInputStyle}>
-                    <InputLabel>{t("promos.fields.layoutType", "نوع التنسيق")}</InputLabel>
-                    <Select value={formData.layoutType} label={t("promos.fields.layoutType", "نوع التنسيق")} onChange={(e) => setFormData({ ...formData, layoutType: e.target.value })}>
-                      <MenuItem value="image-right">{t("promos.layout.imageRight", "صورة لليمين")}</MenuItem>
-                      <MenuItem value="image-left">{t("promos.layout.imageLeft", "صورة لليسار")}</MenuItem>
-                      <MenuItem value="full-bg">{t("promos.layout.fullBg", "خلفية كاملة")}</MenuItem>
+                    <InputLabel>
+                      {t("promos.fields.layoutType", "نوع التنسيق")}
+                    </InputLabel>
+                    <Select
+                      value={formData.layoutType}
+                      label={t("promos.fields.layoutType", "نوع التنسيق")}
+                      onChange={(e) =>
+                        setFormData({ ...formData, layoutType: e.target.value })
+                      }
+                    >
+                      <MenuItem value="image-right">
+                        {t("promos.layout.imageRight", "صورة لليمين")}
+                      </MenuItem>
+                      <MenuItem value="image-left">
+                        {t("promos.layout.imageLeft", "صورة لليسار")}
+                      </MenuItem>
+                      <MenuItem value="full-bg">
+                        {t("promos.layout.fullBg", "خلفية كاملة")}
+                      </MenuItem>
                     </Select>
                   </FormControl>
-                  <TextField fullWidth type="number" label={t("promos.fields.priority", "الأولوية")} value={formData.priority} onChange={(e) => setFormData({ ...formData, priority: parseInt(e.target.value) || 0 })} sx={formInputStyle} />
+                  <TextField
+                    fullWidth
+                    type="number"
+                    label={t("promos.fields.priority", "الأولوية")}
+                    value={formData.priority}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        priority: parseInt(e.target.value) || 0,
+                      })
+                    }
+                    sx={formInputStyle}
+                  />
                 </div>
                 <FormControl fullWidth sx={formInputStyle}>
-                  <InputLabel>{t("promos.fields.isActive", "الحالة")}</InputLabel>
-                  <Select value={formData.isActive} label={t("promos.fields.isActive", "الحالة")} onChange={(e) => setFormData({ ...formData, isActive: e.target.value === "true" || e.target.value === true })}>
-                    <MenuItem value={true}>{t("promos.status.active", "نشط")}</MenuItem>
-                    <MenuItem value={false}>{t("promos.status.inactive", "غير نشط")}</MenuItem>
+                  <InputLabel>
+                    {t("promos.fields.isActive", "الحالة")}
+                  </InputLabel>
+                  <Select
+                    value={formData.isActive}
+                    label={t("promos.fields.isActive", "الحالة")}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        isActive:
+                          e.target.value === "true" || e.target.value === true,
+                      })
+                    }
+                  >
+                    <MenuItem value={true}>
+                      {t("promos.status.active", "نشط")}
+                    </MenuItem>
+                    <MenuItem value={false}>
+                      {t("promos.status.inactive", "غير نشط")}
+                    </MenuItem>
                   </Select>
                 </FormControl>
               </div>
             </form>
-            
+
             <div className="space-y-6 sticky top-0 self-start">
               <div className="bg-white/5 p-6 rounded-[2rem] border border-white/10 text-center shadow-inner">
                 <Typography className="text-slate-400 font-black mb-4 text-sm text-right px-1">
                   {t("promos.imageLabel", "صورة العرض / البانر")}
                 </Typography>
-                
+
                 {formData.imageUrl && (
-                   <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-2 border border-white/10 group cursor-pointer">
-                      <Image src={formData.imageUrl} alt="uploaded preview" fill className="object-cover" />
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <Typography className="text-white font-bold text-sm tracking-wide">
-                          {t("common.changeImage", "انقر لتغيير الصورة")}
-                        </Typography>
-                      </div>
-                      <input type="file" className="absolute inset-0 opacity-0 cursor-pointer z-10 w-full h-full" accept="image/*" onChange={handleImageUpload} />
-                   </div>
+                  <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-2 border border-white/10 group cursor-pointer">
+                    <Image
+                      src={formData.imageUrl}
+                      alt="uploaded preview"
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <Typography className="text-white font-bold text-sm tracking-wide">
+                        {t("common.changeImage", "انقر لتغيير الصورة")}
+                      </Typography>
+                    </div>
+                    <input
+                      type="file"
+                      className="absolute inset-0 opacity-0 cursor-pointer z-10 w-full h-full"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                    />
+                  </div>
                 )}
-                
+
                 {!formData.imageUrl && (
                   <Button
                     variant="outlined"
                     component="label"
                     fullWidth
                     disabled={uploadLoading}
-                    startIcon={uploadLoading ? <CircularProgress size={20} /> : <UploadFile sx={{ fontSize: "2rem !important" }} />}
-                    sx={{ 
-                      borderRadius: "1.5rem", py: 4, borderColor: "rgba(255,255,255,0.1)", color: "slate.400", fontWeight: "900",
-                      borderStyle: 'dashed', borderWidth: 2, 
-                      "&:hover": { borderColor: "primary.main", bgcolor: "rgba(249,115,22,0.05)", color: "primary.main" },
-                      display: 'flex', flexDirection: 'column', gap: 1
+                    startIcon={
+                      uploadLoading ? (
+                        <CircularProgress size={20} />
+                      ) : (
+                        <UploadFile sx={{ fontSize: "2rem !important" }} />
+                      )
+                    }
+                    sx={{
+                      borderRadius: "1.5rem",
+                      py: 4,
+                      borderColor: "rgba(255,255,255,0.1)",
+                      color: "slate.400",
+                      fontWeight: "900",
+                      borderStyle: "dashed",
+                      borderWidth: 2,
+                      "&:hover": {
+                        borderColor: "primary.main",
+                        bgcolor: "rgba(249,115,22,0.05)",
+                        color: "primary.main",
+                      },
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 1,
                     }}
                   >
-                    <span>{uploadLoading ? t("common.loading", "جاري الرفع...") : t("promos.uploadImage", "الرجاء رفع صورة للعرض")}</span>
-                    <input type="file" hidden accept="image/*" onChange={handleImageUpload} />
+                    <span>
+                      {uploadLoading
+                        ? t("common.loading", "جاري الرفع...")
+                        : t("promos.uploadImage", "الرجاء رفع صورة للعرض")}
+                    </span>
+                    <input
+                      type="file"
+                      hidden
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                    />
                   </Button>
                 )}
               </div>
@@ -3632,17 +4019,47 @@ function ManagePromos() {
             </div>
           </div>
         </DialogContent>
-        <DialogActions sx={{ p: 4, gap: 2, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-          <Button onClick={() => setIsFormOpen(false)} sx={{ color: "slate.400", fontWeight: "900", borderRadius: "1rem", px: 4 }}>
+        <DialogActions
+          sx={{ p: 4, gap: 2, borderTop: "1px solid rgba(255,255,255,0.05)" }}
+        >
+          <Button
+            onClick={() => setIsFormOpen(false)}
+            sx={{
+              color: "slate.400",
+              fontWeight: "900",
+              borderRadius: "1rem",
+              px: 4,
+            }}
+          >
             {t("common.cancel", "إلغاء")}
           </Button>
-          <Button 
-            variant="contained" 
-            onClick={handleSubmit} 
-            disabled={createMutation.isPending || updateMutation.isPending || uploadLoading} 
-            sx={{ borderRadius: "1rem", fontWeight: "900", px: 6, py: 1.5, background: "linear-gradient(135deg, var(--primary) 0%, #f97316 100%)", boxShadow: "0 10px 20px rgba(249,115,22,0.2)", "&:hover": { transform: "translateY(-2px)" }, transition: "all 0.2s" }}
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            disabled={
+              createMutation.isPending ||
+              updateMutation.isPending ||
+              uploadLoading
+            }
+            sx={{
+              borderRadius: "1rem",
+              fontWeight: "900",
+              px: 6,
+              py: 1.5,
+              background:
+                "linear-gradient(135deg, var(--primary) 0%, #f97316 100%)",
+              boxShadow: "0 10px 20px rgba(249,115,22,0.2)",
+              "&:hover": { transform: "translateY(-2px)" },
+              transition: "all 0.2s",
+            }}
           >
-            {uploadLoading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : (editingPromo ? t("common.save", "حفظ التعديلات") : t("promos.addNew", "إضافة عرض جديد"))}
+            {uploadLoading ? (
+              <CircularProgress size={24} sx={{ color: "white" }} />
+            ) : editingPromo ? (
+              t("common.save", "حفظ التعديلات")
+            ) : (
+              t("promos.addNew", "إضافة عرض جديد")
+            )}
           </Button>
         </DialogActions>
       </Dialog>
@@ -3655,29 +4072,67 @@ function PromoPreviewCard({ data }) {
   const { title, subtitle, imageUrl, layoutType } = data;
 
   return (
-    <div className={`relative overflow-hidden rounded-[2rem] border border-white/10 glass shadow-2xl min-h-[280px] flex items-center group ${
-      layoutType === 'full-bg' ? 'p-8' : ''
-    }`}>
-      {layoutType === 'full-bg' && imageUrl && (
+    <div
+      className={`relative overflow-hidden rounded-[2rem] border border-white/10 glass shadow-2xl min-h-[280px] flex items-center group ${
+        layoutType === "full-bg" ? "p-8" : ""
+      }`}
+    >
+      {layoutType === "full-bg" && imageUrl && (
         <div className="absolute inset-0 z-0">
-          <Image src={imageUrl} alt="preview" fill className="object-cover opacity-30" />
+          <Image
+            src={imageUrl}
+            alt="preview"
+            fill
+            className="object-cover opacity-30"
+          />
           <div className="absolute inset-0 bg-linear-to-r from-[#0f172a] via-[#0f172a]/80 to-transparent" />
         </div>
       )}
-      <div className={`relative z-10 w-full flex flex-col md:flex-row items-center gap-6 ${layoutType === 'image-left' ? 'md:flex-row-reverse' : ''}`}>
+      <div
+        className={`relative z-10 w-full flex flex-col md:flex-row items-center gap-6 ${layoutType === "image-left" ? "md:flex-row-reverse" : ""}`}
+      >
         <div className="flex-1 text-right">
           <div className="inline-block px-3 py-1 bg-primary/20 rounded-full border border-primary/30 mb-4">
-             <Typography sx={{ color: "primary.main", fontWeight: "900", fontSize: "0.6rem" }}>{t("promos.limitedOffer")}</Typography>
+            <Typography
+              sx={{
+                color: "primary.main",
+                fontWeight: "900",
+                fontSize: "0.6rem",
+              }}
+            >
+              {t("promos.limitedOffer")}
+            </Typography>
           </div>
-          <Typography className="text-xl md:text-2xl font-black text-white mb-2 leading-tight">{title || t("promos.fields.title")}</Typography>
-          <Typography className="text-slate-400 font-bold text-sm leading-relaxed mb-6 line-clamp-3">{subtitle || t("promos.fields.subtitle")}</Typography>
+          <Typography className="text-xl md:text-2xl font-black text-white mb-2 leading-tight">
+            {title || t("promos.fields.title")}
+          </Typography>
+          <Typography className="text-slate-400 font-bold text-sm leading-relaxed mb-6 line-clamp-3">
+            {subtitle || t("promos.fields.subtitle")}
+          </Typography>
           {data.linkUrl && (
-            <Button variant="contained" size="small" sx={{ borderRadius: '0.75rem', fontWeight: '900', px: 4 }}>{t("booking.bookNow")}</Button>
+            <Button
+              variant="contained"
+              size="small"
+              sx={{ borderRadius: "0.75rem", fontWeight: "900", px: 4 }}
+            >
+              {t("booking.bookNow")}
+            </Button>
           )}
         </div>
-        {layoutType !== 'full-bg' && (
+        {layoutType !== "full-bg" && (
           <div className="w-full md:w-1/2 aspect-video relative rounded-2xl overflow-hidden border border-white/10">
-             {imageUrl ? <Image src={imageUrl} alt="preview" fill className="object-cover" /> : <div className="absolute inset-0 bg-white/5 flex items-center justify-center text-[10px] uppercase text-slate-500 font-black">No Image</div>}
+            {imageUrl ? (
+              <Image
+                src={imageUrl}
+                alt="preview"
+                fill
+                className="object-cover"
+              />
+            ) : (
+              <div className="absolute inset-0 bg-white/5 flex items-center justify-center text-[10px] uppercase text-slate-500 font-black">
+                No Image
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -3686,16 +4141,13 @@ function PromoPreviewCard({ data }) {
 }
 
 const formInputStyle = {
-    "& .MuiOutlinedInput-root": {
-      color: "white",
-      borderRadius: "1rem",
-      bgcolor: "rgba(255,255,255,0.03)",
-      "& fieldset": { borderColor: "rgba(255,255,255,0.08)" },
-      "&:hover fieldset": { borderColor: "rgba(255,255,255,0.2)" },
-      "&.Mui-focused fieldset": { borderColor: "#f97316" }
-    },
-    "& .MuiInputLabel-root": { color: "slate.400", fontWeight: "bold" }
+  "& .MuiOutlinedInput-root": {
+    color: "white",
+    borderRadius: "1rem",
+    bgcolor: "rgba(255,255,255,0.03)",
+    "& fieldset": { borderColor: "rgba(255,255,255,0.08)" },
+    "&:hover fieldset": { borderColor: "rgba(255,255,255,0.2)" },
+    "&.Mui-focused fieldset": { borderColor: "#f97316" },
+  },
+  "& .MuiInputLabel-root": { color: "slate.400", fontWeight: "bold" },
 };
-
-
-
