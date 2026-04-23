@@ -11,6 +11,7 @@ import {
 import CarCard from "@/components/cards/CarCard";
 import { notFound } from "next/navigation";
 import { cache } from "react";
+import { sanitizeHtml } from "@/lib/sanitizeHtml";
 
 import BlogProgressBar from "@/components/blog/BlogProgressBar";
 import TableOfContents from "@/components/blog/TableOfContents";
@@ -113,10 +114,11 @@ export default async function BlogPostPage({ params }) {
   const wordCount = blog.content ? blog.content.replace(/<[^>]*>?/gm, '').split(/\s+/).length : 0;
   const calculatedReadingTime = Math.ceil(wordCount / 200) || 1;
 
-  // Since content is generated securely via admin backend (React Quill),
-  // we can safely render it without isomorphic-dompurify to avoid jsdom crashes on Vercel.
-  // We replace &nbsp; with normal spaces to prevent text overflow clipping on the left side in RTL.
-  const sanitizedContent = blog.content ? String(blog.content).replace(/&nbsp;/g, ' ') : "";
+  // Sanitize HTML content to prevent XSS attacks.
+  // Uses a lightweight server-safe sanitizer (no jsdom dependency) to strip
+  // script tags, event handlers, and dangerous URI schemes while preserving formatting.
+  const sanitizedContent = sanitizeHtml(blog.content);
+  const sanitizedSummary = sanitizeHtml(blog.summary);
 
   const canonicalSlug = blog.slug || id;
   const shareUrl = `https://c4rplatform.com/blog/${canonicalSlug}`;
@@ -228,7 +230,7 @@ export default async function BlogPostPage({ params }) {
                 
                 <div 
                   className="text-xl md:text-2xl font-bold text-white leading-[1.8] text-center whitespace-normal"
-                  dangerouslySetInnerHTML={{ __html: blog.summary }}
+                  dangerouslySetInnerHTML={{ __html: sanitizedSummary }}
                 />
               </div>
             )}

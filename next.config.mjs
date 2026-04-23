@@ -17,11 +17,32 @@ const nextConfig = {
   async headers() {
     return [
       {
+        // API routes should not be cached
+        source: "/api/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "no-store, no-cache, must-revalidate",
+          },
+        ],
+      },
+      {
+        // Static assets can be cached long-term (they have content hashes)
+        source: "/_next/static/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        // Dynamic pages: allow short caching with revalidation
         source: "/:path*",
         headers: [
           {
             key: "Cache-Control",
-            value: "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+            value: "public, s-maxage=60, stale-while-revalidate=300",
           },
         ],
       },
