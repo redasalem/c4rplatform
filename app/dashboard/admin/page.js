@@ -837,7 +837,7 @@ function ManageBookings() {
   return (
     <div className="space-y-8 pb-10">
       <div className="grid grid-cols-1 gap-8">
-        {(Array.isArray(bookings) ? bookings : []).map((booking) => (
+        {(Array.isArray(bookings) ? bookings : []).filter(b => b !== null).map((booking) => (
           <div
             key={booking._id}
             className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl sm:rounded-3xl p-3 sm:p-8 lg:p-10 shadow-2xl hover:bg-white/10 transition-all duration-500 relative overflow-hidden group"
@@ -1640,7 +1640,7 @@ function ManageReviews() {
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-        {(Array.isArray(reviews) ? reviews : []).map((review) => (
+        {(Array.isArray(reviews) ? reviews : []).filter(r => r !== null).map((review) => (
           <div
             key={review._id}
             className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl md:rounded-[2.5rem] p-3 sm:p-8 md:p-10 shadow-2xl hover:bg-white/10 transition-all duration-500 group relative overflow-hidden"
@@ -3253,7 +3253,7 @@ function ManageNotifications() {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4">
-          {(Array.isArray(notifications) ? notifications : []).map((notif) => (
+          {(Array.isArray(notifications) ? notifications : []).filter(n => n !== null).map((notif) => (
             <div
               key={notif._id}
               className={`p-6 rounded-3xl border transition-all flex justify-between items-center group ${
@@ -3465,7 +3465,7 @@ function ManagePromos() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6">
-        {promos.map((promo) => (
+        {(Array.isArray(promos) ? promos : []).filter(p => p !== null).map((promo) => (
           <div 
             key={promo._id} 
             className="group bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 p-5 flex flex-col gap-5 hover:bg-white/10 transition-all duration-500 overflow-hidden relative shadow-2xl"
