@@ -284,7 +284,7 @@ export default function BookingPage() {
     "/images/car-home.png";
   const diffDays = Number(numberOfDays || 1);
   const tieredPricing = getTieredPricing(car, diffDays, t);
-  const totalPrice = tieredPricing.rate * diffDays;
+  const totalPrice = Math.round(tieredPricing.rate * diffDays);
   const appliedTierLabel = t("booking.appliedTier");
   const datePlaceholder = t("booking.datePlaceholder");
   const datePlaceholderPosition =
@@ -450,12 +450,27 @@ export default function BookingPage() {
                             },
                           }}
                         >
-                          {Array.from({ length: 30 }, (_, index) => index + 1).map(
-                            (day) => (
-                              <MenuItem key={day} value={day}>
-                                {getDayOptionLabel(day, t)}
-                              </MenuItem>
-                            ),
+                          {car?.category === "with_driver" ? (
+                            [
+                              <MenuItem key={0.166667} value={0.166667}>4 ساعات</MenuItem>,
+                              <MenuItem key={0.333333} value={0.333333}>8 ساعات</MenuItem>,
+                              <MenuItem key={0.5} value={0.5}>12 ساعة</MenuItem>,
+                              ...Array.from({ length: 30 }, (_, index) => index + 1).map(
+                                (day) => (
+                                  <MenuItem key={day} value={day}>
+                                    {getDayOptionLabel(day, t)}
+                                  </MenuItem>
+                                ),
+                              )
+                            ]
+                          ) : (
+                            Array.from({ length: 30 }, (_, index) => index + 1).map(
+                              (day) => (
+                                <MenuItem key={day} value={day}>
+                                  {getDayOptionLabel(day, t)}
+                                </MenuItem>
+                              ),
+                            )
                           )}
                         </Select>
                       </FormControl>

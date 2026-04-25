@@ -2067,14 +2067,16 @@ function AddCarDialog({ open, onClose }) {
       const uploadData = new FormData();
       uploadData.append("file", file);
 
-      // Use the configured 'api' instance instead of native fetch
-      const res = await api.post("/upload", uploadData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      // Use native fetch to call Next.js API route instead of backend API
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: uploadData,
       });
 
-      if (!res.data?.url) throw new Error("فشل الحصول على رابط الصورة");
+      const result = await res.json();
+      if (!res.ok || !result.url) throw new Error(result.error || "فشل الحصول على رابط الصورة");
 
-      const payload = { ...formData, imageUrl: res.data.url };
+      const payload = { ...formData, imageUrl: result.url };
 
       const parseIntSafe = (val) => (val ? parseInt(val, 10) : undefined);
       const parseFloatSafe = (val) => (val ? parseFloat(val) : undefined);
