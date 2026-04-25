@@ -33,9 +33,15 @@ export async function POST(request) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
-    // 2. File Validation (Type and Size)
+    // 2. File Validation (Type, Extension, and Size)
     if (!file.type.startsWith("image/")) {
       return NextResponse.json({ error: "Invalid file type. Only images are allowed." }, { status: 400 });
+    }
+
+    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
+    const fileName = file.name.toLowerCase();
+    if (!allowedExtensions.some(ext => fileName.endsWith(ext))) {
+      return NextResponse.json({ error: "Invalid file extension. Only image files are allowed." }, { status: 400 });
     }
 
     if (file.size > 5 * 1024 * 1024) { // 5MB limit
