@@ -39,12 +39,15 @@ import {
   WorkspacePremium,
   Link as LinkIcon,
   Language,
+  QrCode2,
+  CloudUpload,
 } from "@mui/icons-material";
 import { MenuItem, Select, FormControl, InputLabel } from "@mui/material";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { SiTiktok, SiLinktree } from "react-icons/si";
+import Image from "next/image";
 
 // --- Static Constants Outside Component ---
 const eliteInputStyle = {
@@ -104,7 +107,10 @@ export default function AdminSettings() {
     whatsapp: "",
     snapchat: "",
     linktree: "",
+    qrCode: "",
   });
+
+  const [qrUploading, setQrUploading] = useState(false);
 
   const [about, setAbout] = useState({
     badge: "",
@@ -329,6 +335,97 @@ export default function AdminSettings() {
                     InputProps={{ startAdornment: <InputAdornment position="start"><SiLinktree style={{ color: "var(--primary)", fontSize: '1.2rem' }} /></InputAdornment> }}
                   />
                 </Grid>
+
+                {/* QR Code Upload Section */}
+                <Grid item xs={12}>
+                  <Paper sx={{ p: 4, borderRadius: '1.5rem', bgcolor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
+                      <QrCode2 sx={{ color: 'var(--primary)', fontSize: 28 }} />
+                      <Typography sx={{ color: 'white', fontWeight: '900', fontSize: '1.1rem' }}>
+                        QR Code (يظهر في الفوتر)
+                      </Typography>
+                    </Box>
+                    
+                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3, alignItems: 'center' }}>
+                      {/* QR Preview */}
+                      {socials.qrCode && (
+                        <Box sx={{ 
+                          width: 120, height: 120, borderRadius: '1rem', overflow: 'hidden', 
+                          border: '2px solid rgba(255,255,255,0.1)', bgcolor: 'white', p: 0.5,
+                          flexShrink: 0, position: 'relative'
+                        }}>
+                          <Image src={socials.qrCode} alt="QR Code" fill style={{ objectFit: 'contain' }} />
+                        </Box>
+                      )}
+                      
+                      <Box sx={{ flex: 1, width: '100%' }}>
+                        <TextField
+                          fullWidth
+                          label="رابط صورة QR Code"
+                          value={socials.qrCode}
+                          onChange={(e) => setSocials({ ...socials, qrCode: e.target.value })}
+                          sx={eliteInputStyle}
+                          placeholder="الصق رابط الصورة أو ارفع صورة"
+                          InputProps={{ 
+                            startAdornment: <InputAdornment position="start"><QrCode2 sx={{ color: 'var(--primary)' }} /></InputAdornment>
+                          }}
+                        />
+                        <Box sx={{ mt: 2, display: 'flex', gap: 2, alignItems: 'center' }}>
+                          <Button
+                            variant="outlined"
+                            component="label"
+                            disabled={qrUploading}
+                            startIcon={qrUploading ? <CircularProgress size={18} /> : <CloudUpload />}
+                            sx={{
+                              borderRadius: '1rem', fontWeight: '700', color: 'white',
+                              borderColor: 'rgba(255,255,255,0.15)',
+                              '&:hover': { borderColor: 'var(--primary)', bgcolor: 'rgba(249,115,22,0.05)' },
+                              '& .MuiButton-startIcon': { ml: 1, mr: -0.5 }
+                            }}
+                          >
+                            {qrUploading ? 'جاري الرفع...' : 'رفع صورة QR'}
+                            <input
+                              type="file"
+                              hidden
+                              accept="image/*"
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+                                if (!file.type.startsWith('image/')) { toast.error('يجب اختيار صورة فقط'); return; }
+                                if (file.size > 5 * 1024 * 1024) { toast.error('حجم الصورة أكبر من 5MB'); return; }
+                                setQrUploading(true);
+                                try {
+                                  const formData = new FormData();
+                                  formData.append('file', file);
+                                  const res = await fetch('/api/upload', { method: 'POST', body: formData });
+                                  const result = await res.json();
+                                  if (!res.ok) throw new Error(result.error || 'Upload failed');
+                                  setSocials(prev => ({ ...prev, qrCode: result.url }));
+                                  toast.success('تم رفع صورة QR بنجاح');
+                                } catch (err) {
+                                  toast.error(err.message || 'فشل رفع الصورة');
+                                } finally {
+                                  setQrUploading(false);
+                                }
+                              }}
+                            />
+                          </Button>
+                          {socials.qrCode && (
+                            <Button
+                              variant="text"
+                              color="error"
+                              onClick={() => setSocials(prev => ({ ...prev, qrCode: '' }))}
+                              sx={{ borderRadius: '1rem', fontWeight: '700', fontSize: '0.85rem' }}
+                            >
+                              حذف
+                            </Button>
+                          )}
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Paper>
+                </Grid>
+
                 <Grid item xs={12}>
                   <Button
                     variant="contained"

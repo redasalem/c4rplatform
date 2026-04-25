@@ -366,6 +366,10 @@ export default function AdminBlogs() {
 
   const handleOpenDialog = async (blog = null) => {
     setTabValue(0);
+    // Reset file-related state to prevent stale data from previous dialog sessions
+    setFile(null);
+    setImageMetadata(null);
+
     if (blog) {
       let fullBlog = blog;
       
@@ -424,6 +428,9 @@ export default function AdminBlogs() {
   const handleSubmit = async () => {
     if (!formData.title.trim()) { toast.error(t("notifications.requiredFields") || "العنوان مطلوب"); setTabValue(0); return; }
     if (!formData.category) { toast.error(t("notifications.requiredFields") || "التصنيف مطلوب"); setTabValue(0); return; }
+    // Validate content — strip HTML tags to check if there's actual text
+    const strippedContent = formData.content.replace(/<[^>]*>/g, '').trim();
+    if (!strippedContent) { toast.error("محتوى المقال مطلوب — اكتب محتوى المقال أولاً"); setTabValue(1); return; }
 
     setUploading(true);
     try {
@@ -444,6 +451,11 @@ export default function AdminBlogs() {
           ? formData.focusKeywords.split(",").map(k => k.trim()).filter(Boolean) 
           : formData.focusKeywords
       };
+
+      // Remove empty slug so backend auto-generates it from title
+      if (!finalData.slug || !finalData.slug.trim()) {
+        delete finalData.slug;
+      }
       
       if (selectedBlog) updateMutation.mutate({ slug: selectedBlog.slug, data: finalData });
       else createMutation.mutate(finalData);
@@ -797,7 +809,7 @@ export default function AdminBlogs() {
           <Typography color="white/60">{t("dashboard.admin.blog.deleteDialog.message")}</Typography>
           <div className="flex gap-4">
             <Button onClick={() => setDeleteDialog(false)} sx={{ color: 'white' }}>{t("common.cancel")}</Button>
-            <Button variant="contained" color="error" onClick={() => deleteMutation.mutate(selectedBlog.slug)}>{t("common.delete")}</Button>
+            <Button variant="contained" color="error" disabled={deleteMutation.isPending || !selectedBlog?.slug} onClick={() => selectedBlog?.slug && deleteMutation.mutate(selectedBlog.slug)}>{deleteMutation.isPending ? <CircularProgress size={20} sx={{ color: 'white' }} /> : t("common.delete")}</Button>
           </div>
         </div>
       </Dialog>

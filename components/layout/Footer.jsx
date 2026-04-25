@@ -114,7 +114,7 @@ const Footer = () => {
             </p>
 
             {/* Social Links */}
-            <div className="flex items-center gap-4 justify-center md:justify-start">
+            <div className="flex items-center gap-4 justify-center md:justify-start flex-wrap">
               {[
                 {
                   icon: <Instagram />,
@@ -136,12 +136,18 @@ const Footer = () => {
                   href: socials.facebook,
                   label: "Facebook",
                 },
+                ...(socials.linktree ? [{
+                  icon: <SiLinktree className="text-xl" />,
+                  href: socials.linktree,
+                  label: "Linktree",
+                  customColor: "hover:bg-[#39E09B] hover:border-[#39E09B]",
+                }] : []),
               ].map((social, index) => (
                 <Link
                   key={index}
                   href={social.href || "#"}
                   target="_blank"
-                  className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 group shadow-lg active:scale-90"
+                  className={`w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 ${social.customColor || "hover:bg-primary hover:border-primary"} hover:text-white transition-all duration-300 group shadow-lg active:scale-90`}
                   aria-label={social.label}
                   title={social.label}
                 >
@@ -151,6 +157,21 @@ const Footer = () => {
                 </Link>
               ))}
             </div>
+
+            {/* QR Code */}
+            {socials.qrCode && (
+              <div className="flex justify-center md:justify-start mt-2">
+                <div className="w-24 h-24 rounded-xl overflow-hidden border border-white/10 bg-white p-1 shadow-lg">
+                  <Image
+                    src={socials.qrCode}
+                    alt="QR Code"
+                    width={88}
+                    height={88}
+                    className="object-contain w-full h-full"
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Column 2: Quick Links */}
@@ -166,11 +187,6 @@ const Footer = () => {
                 { label: t("footer.withDriver"), href: "/with-driver" },
                 { label: t("footer.companies"), href: "/corporate" },
                 { label: t("navbar.blog"), href: "/blog" },
-                { 
-                  label: "جميع روابطنا (Links)", 
-                  href: socials.linktree || "#",
-                  icon: <SiLinktree className="text-[#39E09B] text-sm" /> 
-                },
               ].map((link, index) => (
                 <li key={index}>
                   <Link
@@ -180,7 +196,7 @@ const Footer = () => {
                     title={link.label}
                   >
                     <div className="hidden md:flex items-center gap-2">
-                       {link.icon || <KeyboardArrowLeft className="text-gray-600 group-hover:text-orange-500 transition-colors" />}
+                       <KeyboardArrowLeft className="text-gray-600 group-hover:text-orange-500 transition-colors" />
                     </div>
                     <span className="group-hover:translate-x-[-6px] transition-transform">
                       {link.label}
@@ -236,7 +252,9 @@ const Footer = () => {
                   </span>
                   <a
                     href={`https://wa.me/${contact.whatsapp.replace(/\+/g, "")}`}
-                    className="text-xl md:text-2xl font-black text-white hover:text-orange-400 dir-ltr transition-colors tracking-tighter"
+                    className="text-xl md:text-2xl font-black text-white hover:text-orange-400 transition-colors tracking-tighter"
+                    dir="ltr"
+                    style={{ unicodeBidi: "embed", direction: "ltr" }}
                   >
                     {contact.whatsapp.startsWith("+") ? contact.whatsapp : `+${contact.whatsapp}`}
                   </a>
