@@ -84,7 +84,6 @@ export default function BookingPage() {
     endDate: "",
   });
   const [numberOfDays, setNumberOfDays] = useState(1);
-  const [driverHours, setDriverHours] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [kmPerDay, setKmPerDay] = useState(300);
   const [idCardFile, setIdCardFile] = useState(null);
@@ -244,7 +243,7 @@ export default function BookingPage() {
         phoneNumber,
         kmPerDay,
         numberOfDays: diffDays,
-        driverHours: Number(driverHours || 0),
+        driverHours: (car?.category === "with_driver" && Number(numberOfDays || 1) < 1) ? Math.round(Number(numberOfDays || 1) * 24) : 0,
         startDate: dates.startDate,
         endDate: dates.endDate,
         idCardImageUrl: idCardUrl,
@@ -297,9 +296,11 @@ export default function BookingPage() {
   const tieredPricing = getTieredPricing(car, diffDays, t);
   let totalPrice = Math.round(tieredPricing.rate * diffDays);
   
+  // Auto-compute driver hours from the selected duration (4h→4, 8h→8, 12h→12, full days→0)
+  const computedDriverHours = (car?.category === "with_driver" && diffDays < 1) ? Math.round(diffDays * 24) : 0;
   const driverDaysMultiplier = diffDays < 1 ? 1 : diffDays;
-  if (car?.category === "with_driver" && driverHours) {
-    totalPrice += Math.round((car?.driverHourlyRate || 0) * Number(driverHours) * driverDaysMultiplier);
+  if (car?.category === "with_driver" && computedDriverHours > 0) {
+    totalPrice += Math.round((car?.driverHourlyRate || 0) * computedDriverHours * driverDaysMultiplier);
   }
   const appliedTierLabel = t("booking.appliedTier");
   const datePlaceholder = t("booking.datePlaceholder");
@@ -556,36 +557,7 @@ export default function BookingPage() {
                         />
                       </div>
                     </Grid>
-                    {car?.category === "with_driver" && (
-                      <Grid item xs={12} sm={6}>
-                        <div className="relative">
-                          <TextField
-                            label={t("booking.driverHours") || "ساعات السائق باليوم"}
-                            type="number"
-                            fullWidth
-                            size="small"
-                            value={driverHours}
-                            onChange={(e) => setDriverHours(e.target.value)}
-                            required
-                            sx={{
-                              "& .MuiOutlinedInput-root": {
-                                borderRadius: 3,
-                                bgcolor: "rgba(255,255,255,0.03)",
-                                color: "white",
-                                "& fieldset": { borderColor: "rgba(255,255,255,0.1)" },
-                                "&.Mui-focused fieldset": { borderColor: "#f97316" },
-                              },
-                              "& .MuiInputLabel-root": {
-                                color: "rgba(255,255,255,0.4)",
-                                fontWeight: "bold",
-                                fontSize: "0.85rem",
-                              },
-                              "& .MuiInputLabel-root.Mui-focused": { color: "#f97316" },
-                            }}
-                          />
-                        </div>
-                      </Grid>
-                    )}
+
                   </Grid>
                 </section>
 
@@ -881,13 +853,13 @@ export default function BookingPage() {
                         : `${diffDays} ${t("booking.days")}`}
                     </span>
                   </div>
-                  {car?.category === "with_driver" && driverHours > 0 && (
+                  {car?.category === "with_driver" && computedDriverHours > 0 && (
                     <div className="flex justify-between items-center text-xs sm:text-sm">
                       <span className="text-slate-400 font-bold">
-                        {t("booking.driverHourlyRate") || "تكلفة السائق (لليوم الواحد)"}:
+                        {t("booking.driverHourlyRate") || "تكلفة السائق"}:
                       </span>
                       <span className="font-black text-white">
-                        {Math.round((car?.driverHourlyRate || 0) * Number(driverHours) * (diffDays < 1 ? 1 : diffDays))} {t("common.currency")}
+                        {Math.round((car?.driverHourlyRate || 0) * computedDriverHours * driverDaysMultiplier)} {t("common.currency")}
                       </span>
                     </div>
                   )}
