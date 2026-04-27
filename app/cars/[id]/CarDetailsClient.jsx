@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { carService, reviewService } from "@/services/api";
@@ -45,6 +45,8 @@ export default function CarDetailsClient({ initialCarData }) {
   const reviews = reviewsResponse?.data?.reviews || [];
   const reviewsCount = reviewsResponse?.data?.pagination?.total || 0;
 
+  const [selectedImage, setSelectedImage] = useState(null);
+
   if (carLoading && !car) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -71,6 +73,11 @@ export default function CarDetailsClient({ initialCarData }) {
     car.images?.[0] ||
     "/images/car-home.png";
 
+  const displayImage = selectedImage || imageUrl;
+  const galleryImages = car.images?.length > 0 
+    ? car.images.map(img => img.url || img) 
+    : [imageUrl];
+
   return (
     <div
       className="min-h-screen bg-[#020617] relative overflow-hidden pt-24 pb-20"
@@ -86,7 +93,7 @@ export default function CarDetailsClient({ initialCarData }) {
           <div className="lg:col-span-7 order-1 lg:order-1">
             <div className="relative h-[280px] sm:h-[350px] md:h-[400px] lg:h-[500px] rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/10 group">
               <Image
-                src={imageUrl}
+                src={displayImage}
                 alt={`${car.name || ""} ${car.brand || ""} ${car.model || ""} - تأجير سيارة من C4R`}
                 fill
                 className="object-cover"
@@ -133,22 +140,29 @@ export default function CarDetailsClient({ initialCarData }) {
             </div>
 
             {/* Image Gallery (Thumbnails) */}
-            <div className="grid grid-cols-4 gap-2 sm:gap-3 md:gap-4 mt-3 sm:mt-4 md:mt-6">
-              {[1, 2, 3, 4].map((i) => (
-                <div
-                  key={i}
-                  className="relative h-14 sm:h-18 md:h-20 lg:h-28 rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden border-2 border-white/10 hover:border-primary transition-all duration-300 cursor-pointer opacity-70 hover:opacity-100 hover:scale-105"
-                >
-                  <Image
-                    src={imageUrl}
-                    alt={`${car.name || "سيارة"} - صورة ${i}`}
-                    fill
-                    className="object-cover"
-                    loading="lazy"
-                  />
-                </div>
-              ))}
-            </div>
+            {galleryImages.length > 1 && (
+              <div className="grid grid-cols-4 gap-2 sm:gap-3 md:gap-4 mt-3 sm:mt-4 md:mt-6">
+                {galleryImages.slice(0, 4).map((img, i) => (
+                  <div
+                    key={i}
+                    onClick={() => setSelectedImage(img)}
+                    className={`relative h-14 sm:h-18 md:h-20 lg:h-28 rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden border-2 transition-all duration-300 cursor-pointer ${
+                      displayImage === img
+                        ? "border-primary opacity-100 scale-105"
+                        : "border-white/10 opacity-70 hover:opacity-100 hover:border-primary/50"
+                    }`}
+                  >
+                    <Image
+                      src={img}
+                      alt={`${car.name || "سيارة"} - صورة ${i + 1}`}
+                      fill
+                      className="object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Left: Info Section */}

@@ -60,7 +60,12 @@ export const AuthProvider = ({ children }) => {
       const cachedUser = localStorage.getItem("c4r_user");
       if (cachedUser) {
         try {
-          setUser(JSON.parse(cachedUser));
+          const parsedUser = JSON.parse(cachedUser);
+          if (parsedUser && typeof parsedUser === 'object' && parsedUser._id && parsedUser.role) {
+            setUser(parsedUser);
+          } else {
+            localStorage.removeItem("c4r_user");
+          }
         } catch (e) {
           localStorage.removeItem("c4r_user");
         }
