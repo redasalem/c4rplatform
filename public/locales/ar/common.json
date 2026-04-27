@@ -391,6 +391,8 @@
         "error": "فشل في إضافة السيارة، يرجى مراجعة البيانات المدخلة",
         "orderLabel": "ترتيب العرض (1 للأعلى)",
         "warningFill": "يرجى ملء جميع الحقول المطلوبة",
+        "driverHourlyRateLabel": "سعر الساعة للسائق (ريال)",
+        "driverHourlyRatePlaceholder": "سعر ساعة السائق",
         "categories": {
           "regular": "للأفراد (بدون سائق)",
           "with_driver": "بسائق",
@@ -423,7 +425,9 @@
         "success": "تم تحديث بيانات السيارة وحفظ التغييرات بنجاح",
         "error": "تعذر حفظ التعديلات، خطأ في مزامنة البيانات",
         "orderLabel": "ترتيب العرض (1 للأعلى)",
-        "warningFill": "يرجى ملء جميع الحقول المطلوبة"
+        "warningFill": "يرجى ملء جميع الحقول المطلوبة",
+        "driverHourlyRateLabel": "سعر الساعة للسائق (ريال)",
+        "driverHourlyRatePlaceholder": "سعر ساعة السائق"
       },
       "reviews": {
         "title": "إدارة التقييمات",
@@ -624,6 +628,8 @@
     "loginRequired": "سجّل دخولك أولاً لإتمام الحجز",
     "adminCannotBook": "الحجز مخصص للعملاء فقط.",
     "bookNow": "احجز الآن",
+    "driverHours": "ساعات السائق باليوم",
+    "driverHourlyRate": "تكلفة السائق (لليوم الواحد)",
     "datePlaceholder": "يوم / شهر / سنة",
     "submitError": "فشل إرسال طلب الحجز",
     "uploadError": "فشل رفع الملف",

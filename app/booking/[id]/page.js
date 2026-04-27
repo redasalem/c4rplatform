@@ -84,6 +84,7 @@ export default function BookingPage() {
     endDate: "",
   });
   const [numberOfDays, setNumberOfDays] = useState(1);
+  const [driverHours, setDriverHours] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [kmPerDay, setKmPerDay] = useState(300);
   const [idCardFile, setIdCardFile] = useState(null);
@@ -219,17 +220,19 @@ export default function BookingPage() {
       return;
     }
 
-    if (!idCardFile || !licenseFile) {
-      toast.error(t("booking.validation.documents"));
-      return;
+    if (car?.category !== "with_driver") {
+      if (!idCardFile || !licenseFile) {
+        toast.error(t("booking.validation.documents"));
+        return;
+      }
     }
 
     setUploading(true);
     try {
       // 1. Upload Images Securely
       const [idCardUrl, licenseUrl] = await Promise.all([
-        uploadToSecureAPI(idCardFile),
-        uploadToSecureAPI(licenseFile),
+        idCardFile ? uploadToSecureAPI(idCardFile) : Promise.resolve(""),
+        licenseFile ? uploadToSecureAPI(licenseFile) : Promise.resolve(""),
       ]);
 
       // 2. Calculate Days
@@ -241,6 +244,7 @@ export default function BookingPage() {
         phoneNumber,
         kmPerDay,
         numberOfDays: diffDays,
+        driverHours: Number(driverHours || 0),
         startDate: dates.startDate,
         endDate: dates.endDate,
         idCardImageUrl: idCardUrl,
@@ -291,7 +295,12 @@ export default function BookingPage() {
     "/images/car-home.png";
   const diffDays = Number(numberOfDays || 1);
   const tieredPricing = getTieredPricing(car, diffDays, t);
-  const totalPrice = Math.round(tieredPricing.rate * diffDays);
+  let totalPrice = Math.round(tieredPricing.rate * diffDays);
+  
+  const driverDaysMultiplier = diffDays < 1 ? 1 : diffDays;
+  if (car?.category === "with_driver" && driverHours) {
+    totalPrice += Math.round((car?.driverHourlyRate || 0) * Number(driverHours) * driverDaysMultiplier);
+  }
   const appliedTierLabel = t("booking.appliedTier");
   const datePlaceholder = t("booking.datePlaceholder");
   const datePlaceholderPosition =
@@ -547,6 +556,36 @@ export default function BookingPage() {
                         />
                       </div>
                     </Grid>
+                    {car?.category === "with_driver" && (
+                      <Grid item xs={12} sm={6}>
+                        <div className="relative">
+                          <TextField
+                            label={t("dashboard.admin.addCar.driverHours", "ساعات السائق باليوم")}
+                            type="number"
+                            fullWidth
+                            size="small"
+                            value={driverHours}
+                            onChange={(e) => setDriverHours(e.target.value)}
+                            required
+                            sx={{
+                              "& .MuiOutlinedInput-root": {
+                                borderRadius: 3,
+                                bgcolor: "rgba(255,255,255,0.03)",
+                                color: "white",
+                                "& fieldset": { borderColor: "rgba(255,255,255,0.1)" },
+                                "&.Mui-focused fieldset": { borderColor: "#f97316" },
+                              },
+                              "& .MuiInputLabel-root": {
+                                color: "rgba(255,255,255,0.4)",
+                                fontWeight: "bold",
+                                fontSize: "0.85rem",
+                              },
+                              "& .MuiInputLabel-root.Mui-focused": { color: "#f97316" },
+                            }}
+                          />
+                        </div>
+                      </Grid>
+                    )}
                   </Grid>
                 </section>
 
@@ -648,6 +687,7 @@ export default function BookingPage() {
                   </Select>
                 </FormControl>
 
+                {car?.category !== "with_driver" && (
                 <section>
                   <div className="flex items-center gap-2 mb-3 sm:mb-5 text-white">
                     <div className="p-1.5 sm:p-2 bg-primary/20 rounded-lg border border-primary/30">
@@ -729,6 +769,7 @@ export default function BookingPage() {
                     </Grid>
                   </Grid>
                 </section>
+                )}
 
                 <div className="bg-primary/5 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-primary/20 flex items-start gap-2 sm:gap-3">
                   <CheckCircleOutline
@@ -838,6 +879,16 @@ export default function BookingPage() {
                       {diffDays} {t("booking.days")}
                     </span>
                   </div>
+                  {car?.category === "with_driver" && driverHours > 0 && (
+                    <div className="flex justify-between items-center text-xs sm:text-sm">
+                      <span className="text-slate-400 font-bold">
+                        {t("dashboard.admin.addCar.driverHourlyRate", "تكلفة السائق")}:
+                      </span>
+                      <span className="font-black text-white">
+                        {Math.round((car?.driverHourlyRate || 0) * Number(driverHours) * (diffDays < 1 ? 1 : diffDays))} {t("common.currency")}
+                      </span>
+                    </div>
+                  )}
                   <div className="flex justify-between items-center text-xs sm:text-sm font-black">
                     <span className="text-slate-400 font-bold">
                       {t("booking.vat")}:

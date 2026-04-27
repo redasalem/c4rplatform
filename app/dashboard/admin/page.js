@@ -1964,6 +1964,7 @@ function AddCarDialog({ open, onClose }) {
     region: "riyadh",
     category: "regular",
     pricePerDay: "",
+    driverHourlyRate: "",
     priceWeekly: "",
     priceHalfMonth: "",
     priceMonthly: "",
@@ -2031,6 +2032,7 @@ function AddCarDialog({ open, onClose }) {
         region: "riyadh",
         category: "regular",
         pricePerDay: "",
+        driverHourlyRate: "",
         priceWeekly: "",
         priceHalfMonth: "",
         priceMonthly: "",
@@ -2085,6 +2087,7 @@ function AddCarDialog({ open, onClose }) {
 
       payload.year = parseIntSafe(formData.year);
       payload.pricePerDay = parseFloatSafe(formData.pricePerDay);
+      payload.driverHourlyRate = parseFloatSafe(formData.driverHourlyRate);
       payload.priceWeekly = parseFloatSafe(formData.priceWeekly);
       payload.priceHalfMonth = parseFloatSafe(formData.priceHalfMonth);
       payload.priceMonthly = parseFloatSafe(formData.priceMonthly);
@@ -2381,6 +2384,27 @@ function AddCarDialog({ open, onClose }) {
                 }}
                 sx={inputStyle}
               />
+              {formData.category === "with_driver" && (
+                <TextField
+                  label={t("dashboard.admin.addCar.driverHourlyRate", "سعر الساعة")}
+                  placeholder="0.00"
+                  fullWidth
+                  type="number"
+                  variant="outlined"
+                  value={formData.driverHourlyRate}
+                  onChange={(e) =>
+                    setFormData({ ...formData, driverHourlyRate: e.target.value })
+                  }
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AttachMoney className="text-primary" />
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={inputStyle}
+                />
+              )}
             </div>
 
             <TextField
@@ -2469,6 +2493,7 @@ function EditCarDialog({ open, car, onClose }) {
     region: "riyadh",
     category: "regular",
     pricePerDay: "",
+    driverHourlyRate: "",
     priceWeekly: "",
     priceHalfMonth: "",
     priceMonthly: "",
@@ -2489,6 +2514,7 @@ function EditCarDialog({ open, car, onClose }) {
         region: car.region || "riyadh",
         category: car.category || "regular",
         pricePerDay: car.pricePerDay || "",
+        driverHourlyRate: car.driverHourlyRate || "",
         priceWeekly: car.priceWeekly || "",
         priceHalfMonth: car.priceHalfMonth || "",
         priceMonthly: car.priceMonthly || "",
@@ -2597,6 +2623,7 @@ function EditCarDialog({ open, car, onClose }) {
 
       payload.year = parseIntSafe(formData.year);
       payload.pricePerDay = parseFloatSafe(formData.pricePerDay);
+      payload.driverHourlyRate = parseFloatSafe(formData.driverHourlyRate);
       payload.priceWeekly = parseFloatSafe(formData.priceWeekly);
       payload.priceHalfMonth = parseFloatSafe(formData.priceHalfMonth);
       payload.priceMonthly = parseFloatSafe(formData.priceMonthly);
@@ -2892,6 +2919,27 @@ function EditCarDialog({ open, car, onClose }) {
                 }}
                 sx={inputStyle}
               />
+              {formData.category === "with_driver" && (
+                <TextField
+                  label={t("dashboard.admin.editCar.driverHourlyRate", "سعر الساعة")}
+                  placeholder="0.00"
+                  fullWidth
+                  type="number"
+                  variant="outlined"
+                  value={formData.driverHourlyRate}
+                  onChange={(e) =>
+                    setFormData({ ...formData, driverHourlyRate: e.target.value })
+                  }
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AttachMoney className="text-primary" />
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={inputStyle}
+                />
+              )}
             </div>
 
             <TextField

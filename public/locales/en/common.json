@@ -350,6 +350,8 @@
         "error": "Failed to add car, please review the input data",
         "orderLabel": "Display Order (1 is top)",
         "warningFill": "Please fill all required fields",
+        "driverHourlyRateLabel": "Driver Hourly Rate (SAR)",
+        "driverHourlyRatePlaceholder": "Enter hourly rate",
         "categories": {
           "regular": "Individual (Self-drive)",
           "with_driver": "With Driver",
@@ -382,7 +384,9 @@
         "success": "Car details updated and changes saved successfully",
         "error": "Unable to save edits, data synchronization error",
         "orderLabel": "Display Order (1 is top)",
-        "warningFill": "Please fill all required fields"
+        "warningFill": "Please fill all required fields",
+        "driverHourlyRateLabel": "Driver Hourly Rate (SAR)",
+        "driverHourlyRatePlaceholder": "Enter hourly rate"
       },
       "reviews": {
         "title": "Manage Reviews",
@@ -583,6 +587,8 @@
     "loginRequired": "Please login first to complete your booking",
     "adminCannotBook": "Booking is for customers only.",
     "bookNow": "Book Now",
+    "driverHours": "Driver hours per day",
+    "driverHourlyRate": "Driver cost (per day)",
     "datePlaceholder": "DD / MM / YYYY",
     "submitError": "Failed to submit booking request",
     "uploadError": "Failed to upload file",
