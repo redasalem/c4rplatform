@@ -876,7 +876,9 @@ export default function BookingPage() {
                       {t("booking.duration")}:
                     </span>
                     <span className="font-black text-white">
-                      {diffDays} {t("booking.days")}
+                      {diffDays < 1
+                        ? `${Math.round(diffDays * 24)} ${t("common.hours")}`
+                        : `${diffDays} ${t("booking.days")}`}
                     </span>
                   </div>
                   {car?.category === "with_driver" && driverHours > 0 && (
