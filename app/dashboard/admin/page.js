@@ -2386,8 +2386,8 @@ function AddCarDialog({ open, onClose }) {
               />
               {formData.category === "with_driver" && (
                 <TextField
-                  label={t("dashboard.admin.addCar.driverHourlyRate", "سعر الساعة")}
-                  placeholder="0.00"
+                  label={t("dashboard.admin.addCar.driverHourlyRateLabel") || "سعر الساعة للسائق (ريال)"}
+                  placeholder={t("dashboard.admin.addCar.driverHourlyRatePlaceholder") || "سعر ساعة السائق"}
                   fullWidth
                   type="number"
                   variant="outlined"
@@ -2921,8 +2921,8 @@ function EditCarDialog({ open, car, onClose }) {
               />
               {formData.category === "with_driver" && (
                 <TextField
-                  label={t("dashboard.admin.editCar.driverHourlyRate", "سعر الساعة")}
-                  placeholder="0.00"
+                  label={t("dashboard.admin.editCar.driverHourlyRateLabel") || "سعر الساعة للسائق (ريال)"}
+                  placeholder={t("dashboard.admin.editCar.driverHourlyRatePlaceholder") || "سعر ساعة السائق"}
                   fullWidth
                   type="number"
                   variant="outlined"

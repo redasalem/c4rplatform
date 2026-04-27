@@ -560,7 +560,7 @@ export default function BookingPage() {
                       <Grid item xs={12} sm={6}>
                         <div className="relative">
                           <TextField
-                            label={t("dashboard.admin.addCar.driverHours", "ساعات السائق باليوم")}
+                            label={t("booking.driverHours") || "ساعات السائق باليوم"}
                             type="number"
                             fullWidth
                             size="small"
@@ -882,7 +882,7 @@ export default function BookingPage() {
                   {car?.category === "with_driver" && driverHours > 0 && (
                     <div className="flex justify-between items-center text-xs sm:text-sm">
                       <span className="text-slate-400 font-bold">
-                        {t("dashboard.admin.addCar.driverHourlyRate", "تكلفة السائق")}:
+                        {t("booking.driverHourlyRate") || "تكلفة السائق (لليوم الواحد)"}:
                       </span>
                       <span className="font-black text-white">
                         {Math.round((car?.driverHourlyRate || 0) * Number(driverHours) * (diffDays < 1 ? 1 : diffDays))} {t("common.currency")}
