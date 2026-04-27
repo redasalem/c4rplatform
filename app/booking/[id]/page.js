@@ -294,13 +294,16 @@ export default function BookingPage() {
     "/images/car-home.png";
   const diffDays = Number(numberOfDays || 1);
   const tieredPricing = getTieredPricing(car, diffDays, t);
-  let totalPrice = Math.round(tieredPricing.rate * diffDays);
-  
-  // Auto-compute driver hours from the selected duration (4h→4, 8h→8, 12h→12, full days→0)
-  const computedDriverHours = (car?.category === "with_driver" && diffDays < 1) ? Math.round(diffDays * 24) : 0;
-  const driverDaysMultiplier = diffDays < 1 ? 1 : diffDays;
-  if (car?.category === "with_driver" && computedDriverHours > 0) {
-    totalPrice += Math.round((car?.driverHourlyRate || 0) * computedDriverHours * driverDaysMultiplier);
+  let totalPrice = 0;
+  const isHourlyWithDriver = car?.category === "with_driver" && diffDays < 1;
+  const computedDriverHours = isHourlyWithDriver ? Math.round(diffDays * 24) : 0;
+
+  if (isHourlyWithDriver) {
+    // Hourly booking: price is strictly (hourly rate * hours)
+    totalPrice = Math.round((car?.driverHourlyRate || 0) * computedDriverHours);
+  } else {
+    // Daily booking
+    totalPrice = Math.round(tieredPricing.rate * diffDays);
   }
   const appliedTierLabel = t("booking.appliedTier");
   const datePlaceholder = t("booking.datePlaceholder");
@@ -827,42 +830,45 @@ export default function BookingPage() {
                 />
 
                 <div className="space-y-2 sm:space-y-3 relative z-10">
-                  <div className="flex justify-between items-center text-xs sm:text-sm">
-                    <span className="text-slate-400 font-bold">
-                      {t("booking.dailyPrice")}:
-                    </span>
-                    <span className="font-black text-white">
-                      {tieredPricing.rate} {t("common.currency")}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs sm:text-sm">
-                    <span className="text-slate-400 font-bold">
-                      {appliedTierLabel}:
-                    </span>
-                    <span className="font-black text-white">
-                      {tieredPricing.label}
-                    </span>
-                  </div>
+                  {isHourlyWithDriver ? (
+                    <div className="flex justify-between items-center text-xs sm:text-sm">
+                      <span className="text-slate-400 font-bold">
+                        {t("booking.driverHourlyRate") || "التكلفة بالساعة"}:
+                      </span>
+                      <span className="font-black text-white">
+                        {car?.driverHourlyRate || 0} {t("common.currency")}
+                      </span>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex justify-between items-center text-xs sm:text-sm">
+                        <span className="text-slate-400 font-bold">
+                          {t("booking.dailyPrice")}:
+                        </span>
+                        <span className="font-black text-white">
+                          {tieredPricing.rate} {t("common.currency")}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center text-xs sm:text-sm">
+                        <span className="text-slate-400 font-bold">
+                          {appliedTierLabel}:
+                        </span>
+                        <span className="font-black text-white">
+                          {tieredPricing.label}
+                        </span>
+                      </div>
+                    </>
+                  )}
                   <div className="flex justify-between items-center text-xs sm:text-sm">
                     <span className="text-slate-400 font-bold">
                       {t("booking.duration")}:
                     </span>
                     <span className="font-black text-white">
-                      {diffDays < 1
-                        ? `${Math.round(diffDays * 24)} ${t("common.hours")}`
+                      {isHourlyWithDriver
+                        ? `${computedDriverHours} ${t("common.hours")}`
                         : `${diffDays} ${t("booking.days")}`}
                     </span>
                   </div>
-                  {car?.category === "with_driver" && computedDriverHours > 0 && (
-                    <div className="flex justify-between items-center text-xs sm:text-sm">
-                      <span className="text-slate-400 font-bold">
-                        {t("booking.driverHourlyRate") || "تكلفة السائق"}:
-                      </span>
-                      <span className="font-black text-white">
-                        {Math.round((car?.driverHourlyRate || 0) * computedDriverHours * driverDaysMultiplier)} {t("common.currency")}
-                      </span>
-                    </div>
-                  )}
                   <div className="flex justify-between items-center text-xs sm:text-sm font-black">
                     <span className="text-slate-400 font-bold">
                       {t("booking.vat")}:
