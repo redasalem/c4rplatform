@@ -200,9 +200,16 @@ export default function BookingPage() {
       return;
     }
 
-    if (end <= start) {
-      toast.error(t("booking.validation.endDate"));
-      return;
+    if (numberOfDays < 1) {
+      if (end < start) {
+        toast.error(t("booking.validation.endDate"));
+        return;
+      }
+    } else {
+      if (end <= start) {
+        toast.error(t("booking.validation.endDate"));
+        return;
+      }
     }
 
     // Phone Validation (WhatsApp)
