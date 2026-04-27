@@ -637,7 +637,9 @@ function BookingsSection() {
               <div className="space-y-2 sm:space-y-3 mb-3 sm:mb-8">
                 <div className="flex justify-between items-center px-1 md:px-2">
                   <span className="text-[8px] sm:text-xs text-slate-500 font-bold">
-                    {booking.numberOfDays} {t("dashboard.user.bookings.days")}
+                    {booking.numberOfDays < 1 
+                      ? `${Math.round(booking.numberOfDays * 24)} ${t("common.hours")}` 
+                      : `${booking.numberOfDays} ${t("dashboard.user.bookings.days")}`}
                   </span>
                   <span className="text-[8px] sm:text-xs text-slate-500 font-bold">
                     {t("dashboard.user.bookings.total")}{" "}

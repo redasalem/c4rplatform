@@ -1056,7 +1056,9 @@ function ManageBookings() {
                     </div>
                     <div className="flex justify-between items-center text-xs sm:text-sm pt-2 sm:pt-4 border-t border-white/5">
                       <span className="text-slate-500 font-bold text-[9px] sm:text-sm">
-                        {t("dashboard.admin.bookings.cost")}
+                        {booking.numberOfDays < 1 
+                          ? `${Math.round(booking.numberOfDays * 24)} ${t("common.hours")}` 
+                          : `${booking.numberOfDays} ${t("dashboard.admin.bookings.days")}`}
                       </span>
                       <span className="font-black text-primary text-base sm:text-2xl tracking-tighter">
                         {booking.totalPrice}{" "}

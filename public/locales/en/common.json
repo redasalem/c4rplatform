@@ -635,6 +635,7 @@
   "common": {
     "loading": "Loading...",
     "currency": "SAR",
+    "hours": "hours",
     "error": "An error occurred",
     "retry": "Retry",
     "save": "Save",
