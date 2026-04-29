@@ -579,7 +579,7 @@
     "title": "Confirm Booking",
     "startDate": "Start Date",
     "endDate": "End Date",
-    "totalDays": "Total Days",
+    "totalDays": "Number of days or hours",
     "totalPrice": "Total Price",
     "confirmButton": "Confirm Booking",
     "successMessage": "Booking successful",
