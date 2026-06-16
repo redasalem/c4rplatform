@@ -17,10 +17,10 @@ export async function generateMetadata({ searchParams }) {
     : "تابع أحدث أخبار السيارات، نصائح الصيانة، وعروض الإيجار في السعودية عبر مدونة C4R.";
 
   const canonical = q 
-    ? "https://c4rplatform.com/blog"
+    ? "https://c4rplatform-redasalem.vercel.app/blog"
     : page > 1 
-      ? `https://c4rplatform.com/blog?page=${page}`
-      : "https://c4rplatform.com/blog";
+      ? `https://c4rplatform-redasalem.vercel.app/blog?page=${page}`
+      : "https://c4rplatform-redasalem.vercel.app/blog";
 
   return {
     title,
@@ -84,13 +84,13 @@ export default async function BlogPage({ searchParams }) {
         "@type": "ListItem",
         "position": 1,
         "name": "الرئيسية",
-        "item": "https://c4rplatform.com",
+        "item": "https://c4rplatform-redasalem.vercel.app",
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "المدونة",
-        "item": "https://c4rplatform.com/blog",
+        "item": "https://c4rplatform-redasalem.vercel.app/blog",
       },
     ],
   };

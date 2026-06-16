@@ -7,6 +7,6 @@ export default function robots() {
         disallow: ["/dashboard/", "/booking/", "/auth/", "/api/", "/admin/"],
       },
     ],
-    sitemap: "https://c4rplatform.com/sitemap.xml",
+    sitemap: "https://c4rplatform-redasalem.vercel.app/sitemap.xml",
   };
 }

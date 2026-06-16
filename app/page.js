@@ -8,7 +8,7 @@ export const metadata = {
   title: "أرخص تأجير سيارات في السعودية | أسعار تبدأ من 200 ريال | C4R",
   description: "منصة C4R هي الخيار الأول لتأجير السيارات في المملكة. تصفح عروض تبدأ من 200 ريال لليوم. حجز أونلاين سريع وسهل في الرياض وجدة وكافة المدن KSA.",
   alternates: {
-    canonical: "https://c4rplatform.com",
+    canonical: "https://c4rplatform-redasalem.vercel.app",
   },
 };
 
@@ -67,8 +67,8 @@ export default function Home() {
     "alternateName": ["سي فور آر لتأجير السيارات", "C4R Car Rental Saudi Arabia"],
     "description": "منصة لتأجير السيارات في السعودية أونلاين بأسعار تبدأ من 200 ريال. حجز سيارة فخمة أو اقتصادية بأرخص الأسعار.",
     "keywords": "تأجير سيارات في السعودية, أرخص تأجير سيارات, تأجير سيارات الرياض, rent a car KSA, car rental Saudi",
-    "url": "https://c4rplatform.com",
-    "logo": "https://c4rplatform.com/images/logo.jpeg",
+    "url": "https://c4rplatform-redasalem.vercel.app",
+    "logo": "https://c4rplatform-redasalem.vercel.app/images/logo.jpeg",
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "+966554118873",
@@ -88,7 +88,7 @@ export default function Home() {
     "@type": "WebSite",
     "name": "C4R Platform",
     "alternateName": "منصة سي فور آر",
-    "url": "https://c4rplatform.com",
+    "url": "https://c4rplatform-redasalem.vercel.app",
   };
 
   return (

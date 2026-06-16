@@ -7,10 +7,10 @@ export const metadata = {
   openGraph: {
     title: "من نحن | C4R أفضل منصة لتأجير السيارات في السعودية",
     description: "تعرف على منصة C4R، الوجهة الأولى لتأجير السيارات في المملكة بخيارات متنوعة وأسعار تنافسية.",
-    url: "https://c4rplatform.com/about",
+    url: "https://c4rplatform-redasalem.vercel.app/about",
   },
   alternates: {
-    canonical: "https://c4rplatform.com/about",
+    canonical: "https://c4rplatform-redasalem.vercel.app/about",
   },
 };
 

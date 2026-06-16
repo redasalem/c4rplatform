@@ -7,10 +7,10 @@ export const metadata = {
   openGraph: {
     title: "تأجير سيارات فخمة مع سائق | خدمة VIP توصيل واستقبال - C4R",
     description: "أفضل خدمة تأجير سيارات بسائق في المملكة. سيارات فخمة واقتصادية بأسعار تنافسية.",
-    url: "https://c4rplatform.com/with-driver",
+    url: "https://c4rplatform-redasalem.vercel.app/with-driver",
   },
   alternates: {
-    canonical: "https://c4rplatform.com/with-driver",
+    canonical: "https://c4rplatform-redasalem.vercel.app/with-driver",
   },
 };
 
@@ -23,13 +23,13 @@ export default function WithDriverPage() {
         "@type": "ListItem",
         "position": 1,
         "name": "الرئيسية",
-        "item": "https://c4rplatform.com",
+        "item": "https://c4rplatform-redasalem.vercel.app",
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "سيارة مع سائق",
-        "item": "https://c4rplatform.com/with-driver",
+        "item": "https://c4rplatform-redasalem.vercel.app/with-driver",
       },
     ],
   };

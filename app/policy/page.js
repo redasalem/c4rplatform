@@ -6,10 +6,10 @@ export const metadata = {
   openGraph: {
     title: "سياسة الإلغاء والاسترجاع | منصة C4R لتأجير السيارات",
     description: "سياسة الإلغاء والاسترجاع لخدمات تأجير السيارات مع C4R.",
-    url: "https://c4rplatform.com/policy",
+    url: "https://c4rplatform-redasalem.vercel.app/policy",
   },
   alternates: {
-    canonical: "https://c4rplatform.com/policy",
+    canonical: "https://c4rplatform-redasalem.vercel.app/policy",
   },
 };
 

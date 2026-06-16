@@ -60,7 +60,7 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title,
       description: desc,
-      url: `https://c4rplatform.com/cars/${carSlug}`,
+      url: `https://c4rplatform-redasalem.vercel.app/cars/${carSlug}`,
       type: "website",
       images: car.image
         ? [
@@ -80,7 +80,7 @@ export async function generateMetadata({ params }) {
       images: car.image ? [car.image] : [],
     },
     alternates: {
-      canonical: `https://c4rplatform.com/cars/${carSlug}`,
+      canonical: `https://c4rplatform-redasalem.vercel.app/cars/${carSlug}`,
     },
   };
 }
@@ -113,7 +113,7 @@ export default async function CarDetailsPage({ params }) {
             1,
           ).toISOString().split("T")[0],
           "availability": "https://schema.org/InStock",
-          "url": `https://c4rplatform.com/cars/${carSlug}`,
+          "url": `https://c4rplatform-redasalem.vercel.app/cars/${carSlug}`,
         },
         "aggregateRating": {
           "@type": "AggregateRating",
@@ -132,13 +132,13 @@ export default async function CarDetailsPage({ params }) {
         "@type": "ListItem",
         "position": 1,
         "name": "الرئيسية",
-        "item": "https://c4rplatform.com",
+        "item": "https://c4rplatform-redasalem.vercel.app",
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "السيارات",
-        "item": "https://c4rplatform.com/cars",
+        "item": "https://c4rplatform-redasalem.vercel.app/cars",
       },
       ...(car
         ? [
@@ -146,7 +146,7 @@ export default async function CarDetailsPage({ params }) {
               "@type": "ListItem",
               "position": 3,
               "name": carName,
-              "item": `https://c4rplatform.com/cars/${carSlug}`,
+              "item": `https://c4rplatform-redasalem.vercel.app/cars/${carSlug}`,
             },
           ]
         : []),

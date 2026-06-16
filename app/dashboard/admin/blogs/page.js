@@ -188,7 +188,7 @@ const EliteSEOModule = ({ formData, setFormData, t }) => {
             <div className="w-7 h-7 bg-slate-100 rounded-full flex items-center justify-center text-[#4285f4] text-xs font-bold">G</div>
             <div className="flex flex-col text-right">
               <span className="text-[11px] text-[#202124] font-medium leading-none">Google Search</span>
-              <span className="text-[10px] text-[#70757a] leading-none">https://c4rplatform.com › blog</span>
+              <span className="text-[10px] text-[#70757a] leading-none">https://c4rplatform-redasalem.vercel.app › blog</span>
             </div>
           </div>
           <div className="space-y-1">

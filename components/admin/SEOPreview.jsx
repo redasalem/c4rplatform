@@ -21,7 +21,7 @@ const StatusText = ({ status, okText, warningText, errorText }) => {
 
 const SEOPreview = React.memo(({ title, metaTitle, metaDescription, slug, image, relatedCars = [], formData }) => {
   const { t, i18n } = useTranslation("common");
-  const siteUrl = "https://c4rplatform.com";
+  const siteUrl = "https://c4rplatform-redasalem.vercel.app";
   const mounted = useSyncExternalStore(
     subscribeToHydration,
     () => true,

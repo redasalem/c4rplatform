@@ -7,10 +7,10 @@ export const metadata = {
   openGraph: {
     title: "تشكيلة سيارات للإيجار | سيارات فارهة واقتصادية | C4R",
     description: "تصفح أسطول سيارات C4R واحجز سيارتك المفضلة اليوم بأسعار تبدأ من 200 ريال.",
-    url: "https://c4rplatform.com/cars",
+    url: "https://c4rplatform-redasalem.vercel.app/cars",
   },
   alternates: {
-    canonical: "https://c4rplatform.com/cars",
+    canonical: "https://c4rplatform-redasalem.vercel.app/cars",
   },
 };
 
@@ -23,13 +23,13 @@ export default function AllCarsPage() {
         "@type": "ListItem",
         "position": 1,
         "name": "الرئيسية",
-        "item": "https://c4rplatform.com",
+        "item": "https://c4rplatform-redasalem.vercel.app",
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "السيارات",
-        "item": "https://c4rplatform.com/cars",
+        "item": "https://c4rplatform-redasalem.vercel.app/cars",
       },
     ],
   };

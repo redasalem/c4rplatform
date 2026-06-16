@@ -1,4 +1,4 @@
-const BASE_URL = "https://c4rplatform.com";
+const BASE_URL = "https://c4rplatform-redasalem.vercel.app";
 const API_URL = "https://c4r-platform-backend.vercel.app/api";
 
 export default async function sitemap() {
@@ -47,26 +47,26 @@ export default async function sitemap() {
   // Dynamic blog routes — fetch all published blog posts with pagination
   let blogRoutes = [
     {
-        url: `${BASE_URL}/blog`,
-        lastModified: new Date(),
-        changeFrequency: "daily",
-        priority: 0.8,
+      url: `${BASE_URL}/blog`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.8,
     }
   ];
-  
+
   try {
     let page = 1;
     let hasMore = true;
-    
+
     while (hasMore) {
       const res = await fetch(`${API_URL}/blogs?status=published&page=${page}&limit=100&select=slug,_id,updatedAt`, {
         next: { revalidate: 3600 },
       });
-      
+
       if (!res.ok) break;
-      
+
       const { data: blogs, pagination } = await res.json();
-      
+
       blogs
         .filter((blog) => blog.slug || blog._id)
         .forEach((blog) => {
@@ -77,7 +77,7 @@ export default async function sitemap() {
             priority: 0.7,
           });
         });
-      
+
       hasMore = pagination && pagination.next;
       page++;
     }

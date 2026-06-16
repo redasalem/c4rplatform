@@ -6,10 +6,10 @@ export const metadata = {
   openGraph: {
     title: "الشروط والأحكام | منصة C4R لتأجير السيارات",
     description: "اطلع على شروط وأحكام تأجير السيارات مع منصة C4R.",
-    url: "https://c4rplatform.com/terms",
+    url: "https://c4rplatform-redasalem.vercel.app/terms",
   },
   alternates: {
-    canonical: "https://c4rplatform.com/terms",
+    canonical: "https://c4rplatform-redasalem.vercel.app/terms",
   },
 };
 

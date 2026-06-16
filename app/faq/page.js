@@ -7,10 +7,10 @@ export const metadata = {
   openGraph: {
     title: "الأسئلة الشائعة | منصة C4R لتأجير السيارات",
     description: "كل ما تود معرفته عن تأجير السيارات في السعودية مع C4R.",
-    url: "https://c4rplatform.com/faq",
+    url: "https://c4rplatform-redasalem.vercel.app/faq",
   },
   alternates: {
-    canonical: "https://c4rplatform.com/faq",
+    canonical: "https://c4rplatform-redasalem.vercel.app/faq",
   },
 };
 

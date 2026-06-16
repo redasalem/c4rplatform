@@ -39,7 +39,7 @@ export const metadata = {
     "Rent a car Riyadh",
   ],
   category: "Car Rental",
-  metadataBase: new URL("https://c4rplatform.com"),
+  metadataBase: new URL("https://c4rplatform-redasalem.vercel.app"),
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
   },
@@ -55,10 +55,10 @@ export const metadata = {
     },
   },
   alternates: {
-    canonical: "https://c4rplatform.com",
+    canonical: "https://c4rplatform-redasalem.vercel.app",
     languages: {
-      "ar-SA": "https://c4rplatform.com",
-      "x-default": "https://c4rplatform.com",
+      "ar-SA": "https://c4rplatform-redasalem.vercel.app",
+      "x-default": "https://c4rplatform-redasalem.vercel.app",
     },
   },
   icons: {
@@ -70,13 +70,13 @@ export const metadata = {
     title: "منصة C4R | أفضل تأجير سيارات في السعودية | Car Rental KSA",
     description:
       "احجز مع منصة C4R أفضل وأرخص سيارات للإيجار في السعودية. تأجير سيارات فخمة واقتصادية. بأسعار تبدأ من 200 ريال. Best car rental KSA.",
-    url: "https://c4rplatform.com",
+    url: "https://c4rplatform-redasalem.vercel.app",
     siteName: "C4R Platform",
     locale: "ar_SA",
     type: "website",
     images: [
       {
-        url: "https://c4rplatform.com/images/og-image.jpg",
+        url: "https://c4rplatform-redasalem.vercel.app/images/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "C4R Platform - أفضل تأجير سيارات في السعودية | Best Car Rental KSA",
@@ -108,12 +108,12 @@ export default function RootLayout({ children }) {
                   "@graph": [
                     {
                       "@type": "CarRental",
-                      "@id": "https://c4rplatform.com/#carrental",
+                      "@id": "https://c4rplatform-redasalem.vercel.app/#carrental",
                       "name": "C4R Platform | سي فور آر لتأجير السيارات",
                       "alternateName": "C4R Car Rental Saudi Arabia",
                       "description": "Best and affordable car rental services in Saudi Arabia starting from 200 SAR. Rent cheap, luxury, and economy cars in Riyadh, Jeddah, and Eastern Province.",
-                      "logo": "https://c4rplatform.com/images/logo.jpeg",
-                      "url": "https://c4rplatform.com",
+                      "logo": "https://c4rplatform-redasalem.vercel.app/images/logo.jpeg",
+                      "url": "https://c4rplatform-redasalem.vercel.app",
                       "telephone": "+966554118873",
                       "priceRange": "SAR 200 - SAR 5000",
                       "address": {
@@ -136,8 +136,8 @@ export default function RootLayout({ children }) {
                     },
                     {
                       "@type": "WebSite",
-                      "@id": "https://c4rplatform.com/#website",
-                      "url": "https://c4rplatform.com/",
+                      "@id": "https://c4rplatform-redasalem.vercel.app/#website",
+                      "url": "https://c4rplatform-redasalem.vercel.app/",
                       "name": "C4R Platform | سي فور آر لتأجير السيارات",
                       "description": "منصة C4R لتأجير السيارات الفاخرة والاقتصادية في المملكة العربية السعودية بأسعار تبدأ من 200 ريال.",
                       "inLanguage": "ar-SA",
@@ -145,7 +145,7 @@ export default function RootLayout({ children }) {
                         "@type": "SearchAction",
                         "target": {
                           "@type": "EntryPoint",
-                          "urlTemplate": "https://c4rplatform.com/cars?search={search_term_string}"
+                          "urlTemplate": "https://c4rplatform-redasalem.vercel.app/cars?search={search_term_string}"
                         },
                         "query-input": "required name=search_term_string"
                       }

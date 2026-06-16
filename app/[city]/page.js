@@ -14,7 +14,7 @@ export async function generateMetadata({ params }) {
     title: `أرخص تأجير سيارات في ${cityName} | أسعار تبدأ من 200 ريال | C4R`,
     description: `أفضل عروض تأجير السيارات في ${cityName} بأسعار تبدأ من 200 ريال. احجز سيارتك أونلاين بأفضل الأسعار. تأجير يومي وشهري للسيارات الاقتصادية والفخمة. Affordable car rental in ${city} from 200 SAR.`,
     alternates: {
-      canonical: `https://c4rplatform.com/${city}`,
+      canonical: `https://c4rplatform-redasalem.vercel.app/${city}`,
     },
   };
 }
@@ -36,13 +36,13 @@ export default async function CityPage({ params }) {
         "@type": "ListItem",
         "position": 1,
         "name": "الرئيسية",
-        "item": "https://c4rplatform.com",
+        "item": "https://c4rplatform-redasalem.vercel.app",
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": `تأجير سيارات في ${cityName}`,
-        "item": `https://c4rplatform.com/${city}`,
+        "item": `https://c4rplatform-redasalem.vercel.app/${city}`,
       },
     ],
   };
@@ -52,9 +52,9 @@ export default async function CityPage({ params }) {
       "@context": "https://schema.org",
       "@type": "AutoRental",
       "name": "تأجير سيارات الرياض - C4R",
-      "url": "https://c4rplatform.com/riyadh",
+      "url": "https://c4rplatform-redasalem.vercel.app/riyadh",
       "description": "أرخص خدمات تأجير السيارات في الرياض بأسعار تبدأ من 200 ريال.",
-      "image": "https://c4rplatform.com/images/logo.jpeg",
+      "image": "https://c4rplatform-redasalem.vercel.app/images/logo.jpeg",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Riyadh",
@@ -72,9 +72,9 @@ export default async function CityPage({ params }) {
       "@context": "https://schema.org",
       "@type": "AutoRental",
       "name": "تأجير سيارات جدة - C4R",
-      "url": "https://c4rplatform.com/jeddah",
+      "url": "https://c4rplatform-redasalem.vercel.app/jeddah",
       "description": "أرخص خدمات تأجير السيارات في جدة بأسعار تبدأ من 200 ريال.",
-      "image": "https://c4rplatform.com/images/logo.jpeg",
+      "image": "https://c4rplatform-redasalem.vercel.app/images/logo.jpeg",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Jeddah",
@@ -92,9 +92,9 @@ export default async function CityPage({ params }) {
       "@context": "https://schema.org",
       "@type": "AutoRental",
       "name": "تأجير سيارات الشرقية - C4R",
-      "url": "https://c4rplatform.com/eastern",
+      "url": "https://c4rplatform-redasalem.vercel.app/eastern",
       "description": "أرخص خدمات تأجير السيارات في الدمام والخبر بأسعار تبدأ من 200 ريال.",
-      "image": "https://c4rplatform.com/images/logo.jpeg",
+      "image": "https://c4rplatform-redasalem.vercel.app/images/logo.jpeg",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Dammam",

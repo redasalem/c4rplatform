@@ -7,10 +7,10 @@ export const metadata = {
   openGraph: {
     title: "تأجير سيارات أفراد | عروض حصرية يومية وشهرية - C4R",
     description: "اطلع على أفضل عروض الإيجار اليومي والشهري للسيارات في السعودية بأسعار تبدأ من 200 ريال.",
-    url: "https://c4rplatform.com/individuals",
+    url: "https://c4rplatform-redasalem.vercel.app/individuals",
   },
   alternates: {
-    canonical: "https://c4rplatform.com/individuals",
+    canonical: "https://c4rplatform-redasalem.vercel.app/individuals",
   },
 };
 
@@ -23,13 +23,13 @@ export default function IndividualsPage() {
         "@type": "ListItem",
         "position": 1,
         "name": "الرئيسية",
-        "item": "https://c4rplatform.com",
+        "item": "https://c4rplatform-redasalem.vercel.app",
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "خدمات الأفراد",
-        "item": "https://c4rplatform.com/individuals",
+        "item": "https://c4rplatform-redasalem.vercel.app/individuals",
       },
     ],
   };

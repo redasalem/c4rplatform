@@ -7,10 +7,10 @@ export const metadata = {
   openGraph: {
     title: "تأجير سيارات للشركات | عروض وخصومات حصرية - C4R",
     description: "حلول تأجير السيارات للشركات والمؤسسات بأسعار مميزة وعقود مرنة بأسعار تبدأ من 200 ريال.",
-    url: "https://c4rplatform.com/corporate",
+    url: "https://c4rplatform-redasalem.vercel.app/corporate",
   },
   alternates: {
-    canonical: "https://c4rplatform.com/corporate",
+    canonical: "https://c4rplatform-redasalem.vercel.app/corporate",
   },
 };
 
@@ -23,13 +23,13 @@ export default function CorporatePage() {
         "@type": "ListItem",
         "position": 1,
         "name": "الرئيسية",
-        "item": "https://c4rplatform.com",
+        "item": "https://c4rplatform-redasalem.vercel.app",
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "خدمات الشركات",
-        "item": "https://c4rplatform.com/corporate",
+        "item": "https://c4rplatform-redasalem.vercel.app/corporate",
       },
     ],
   };
