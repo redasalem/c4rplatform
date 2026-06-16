@@ -44,7 +44,7 @@ api.interceptors.response.use(
         toast.error(`خطأ في الخادم: يرجى المحاولة لاحقاً.`);
       }
     } else {
-      toast.error("تعذر الاتصال بالخادم. يرجى التحقق من الشبكة.");
+      // Network error - silently reject without toast
     }
     return Promise.reject(error);
   },
